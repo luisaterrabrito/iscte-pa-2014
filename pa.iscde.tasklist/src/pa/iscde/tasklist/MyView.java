@@ -13,7 +13,7 @@ import pt.iscte.pidesco.extensibility.PidescoView;
 public class MyView implements PidescoView {
 
 	public MyView() {
-		// TODO Auto-generated constructor stub
+		System.out.println("OLAAAAA");
 	}
 
 	@Override
