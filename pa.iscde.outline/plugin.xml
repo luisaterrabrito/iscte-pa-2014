@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="OsMelhoresParaSempre"
+         name="Os Melhores Mesmo"
+         point="pa.iscde.team">
+      <member
+            name="oi"
+            quote="Coiso Coiso"
+            user="pdcsa">
+      </member>
+   </extension>
+   <extension
+         id="AMinhaVista"
+         name="Oi"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.outline.view.AMinhaView">
+      </view>
+   </extension>
+
+</plugin>
