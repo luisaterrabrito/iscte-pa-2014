@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="team" name="Project team" schema="schema/pa.iscde.team.exsd"/>
+   <extension
+         id="product"
+         name="ISCDE"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="pt.iscte.pidesco.app"
+            description="Course Project, Advanced Programming, ISCTE-IUL, 2014"
+            name="ISCDE - The IDE of ISCTE">
+         <property
+               name="windowImages"
+               value="images/iscte.png">
+         </property>
+         <property
+               name="aboutImage"
+               value="images/iscde.png">
+         </property>
+         <property
+               name="aboutText"
+               value="Course Project, Advanced Programming, ISCTE-IUL, 2014">
+         </property>
+         <property
+               name="appName"
+               value="ISCDE - The IDE of ISCTE">
+         </property>
+      </product>
+   </extension>
+   <extension
+         id="teams"
+         name="Teams"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pt.iscte.pa.iscde.TeamView"
+            icon="iscte.png">
+      </view>
+   </extension>
+   <extension
+         id="scumbag"
+         name="System Architect"
+         point="pa.iscde.team">
+      <member
+            name="André Santos"
+            photo="scumbag.jpg"
+            quote="&quot;Create main? Nope. Cria Águia/J&quot; (by: LEI)"
+            user="alssl">
+      </member>
+   </extension>
+
+</plugin>
