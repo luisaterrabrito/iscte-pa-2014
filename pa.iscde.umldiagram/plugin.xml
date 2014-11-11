@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="umldiagram"
+         name="umldiagram"
+         point="pa.iscde.team">
+      <member
+            name="nuno"
+            quote="54378"
+            user="nbcot">
+      </member>
+      <member
+            name="diogo"
+            quote="54411"
+            user="drbps">
+      </member>
+   </extension>
+   <extension
+         id="view"
+         name="myview"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.umldiagram.MyView">
+      </view>
+   </extension>
+   <extension
+         id="view"
+         name="myview"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.umldiagram.MyView">
+      </view>
+   </extension>
+
+</plugin>
