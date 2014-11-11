@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="pt.iscte.pidesco.javaeditor.internal.SimpleJavaEditor"
+            default="true"
+            extensions="java"
+            icon="images/javafile.gif"
+            id="pt.iscte.pidesco.javaeditor"
+            name="Simple Java editor">
+         <contentTypeBinding
+               contentTypeId="org.eclipse.jdt.core.javaSource">
+         </contentTypeBinding>
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="pt.iscte.pidesco.javaeditor.internal.Startup">
+      </startup>
+   </extension>
+   <extension
+         id="packagefocus"
+         name="Package filter"
+         point="pt.iscte.pidesco.projectbrowser.filter">
+      <filter
+            class="pt.iscte.pidesco.javaeditor.PackageFocusFilter">
+      </filter>
+   </extension>
+   <extension
+         id="packagefocus"
+         name="Package focus"
+         point="pt.iscte.pidesco.tool">
+      <tool
+            class="pt.iscte.pidesco.javaeditor.PackageFocusTool"
+            description="Focus on the package of the opened class"
+            icon="package_filter.gif"
+            toggle="true"
+            view="pt.iscte.pidesco.projectbrowser.tree">
+      </tool>
+   </extension>
+
+</plugin>

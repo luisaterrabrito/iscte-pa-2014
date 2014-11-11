@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="filter" name="Project Browser Filter" schema="schema/filter.exsd"/>
+   <extension
+         id="tree"
+         name="Project Browser"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pt.iscte.pidesco.projectbrowser.internal.ProjectBrowserView"
+            icon="proj.gif">
+      </view>
+   </extension>
+   <extension
+         id="refresh"
+         name="Refresh"
+         point="pt.iscte.pidesco.tool">
+      <tool
+            class="pt.iscte.pidesco.projectbrowser.internal.RefreshCommand"
+            description="Refreshes the source tree"
+            icon="refresh.gif"
+            toggle="false"
+            view="pt.iscte.pidesco.projectbrowser.tree">
+      </tool>
+   </extension>
+
+</plugin>
