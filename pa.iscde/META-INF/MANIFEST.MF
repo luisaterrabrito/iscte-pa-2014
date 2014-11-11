@@ -10,3 +10,4 @@ Require-Bundle: pt.iscte.pidesco;bundle-version="0.1.0",
  pt.iscte.pidesco.javaeditor;bundle-version="1.1.0",
  org.eclipse.swt;bundle-version="3.103.1"
 Bundle-ActivationPolicy: lazy
+Bundle-Vendor: alssl
