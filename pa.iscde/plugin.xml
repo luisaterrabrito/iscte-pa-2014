@@ -33,7 +33,7 @@
          name="Teams"
          point="pt.iscte.pidesco.view">
       <view
-            class="pt.iscte.pa.iscde.TeamView"
+            class="pa.iscde.TeamView"
             icon="iscte.png">
       </view>
    </extension>

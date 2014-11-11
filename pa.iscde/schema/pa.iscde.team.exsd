@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="pt.iscte.pidesco" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="pa.iscde" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="pt.iscte.pidesco" id="pt.iscte.pidesco.team" name="Team"/>
+         <meta.schema plugin="pa.iscde" id="pa.iscde.team" name="Team"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point is to register project teams with one or two members.
       </documentation>
    </annotation>
 
@@ -15,6 +15,9 @@
          <appinfo>
             <meta.element />
          </appinfo>
+         <documentation>
+            This extension point is to register project teams with one or two members.
+         </documentation>
       </annotation>
       <complexType>
          <sequence minOccurs="0" maxOccurs="2">
@@ -23,21 +26,21 @@
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  This extension point is to register project teams with one or two members.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Team id: should be equal to the team component id. For instance, if a team develops the component &quot;pa.iscde.outline&quot;, this id should be &quot;outline&quot;.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Team name.
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
@@ -48,32 +51,39 @@
    </element>
 
    <element name="member">
+      <annotation>
+         <documentation>
+            Team member.
+         </documentation>
+      </annotation>
       <complexType>
-         <attribute name="user" type="string" use="required">
+         <attribute name="user" type="string" use="default" value="user">
             <annotation>
                <documentation>
-                  
+                  ISCTE username of the team member, e.g. &quot;alssl&quot;
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="name" type="string" use="required">
+         <attribute name="name" type="string" use="default" value="member name">
             <annotation>
                <documentation>
-                  
+                  Name of the team member.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="photo" type="string">
             <annotation>
                <documentation>
-                  
+                  Photo of the team member. 
+
+Assuming that the picture is inside a folder &quot;images&quot;, simply write the file name (e.g. &quot;scumbag.jpg&quot; if this file exists in a root folder named &quot;images&quot;). Images will be cropped to 100x100 pixels, so ideally use a picture with this dimension.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="quote" type="string">
             <annotation>
                <documentation>
-                  
+                  If the team member is inspired,  he or she can write a quote in this field.
                </documentation>
             </annotation>
          </attribute>
@@ -85,7 +95,7 @@
          <meta.section type="since"/>
       </appinfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         PA 2014
       </documentation>
    </annotation>
 
@@ -94,7 +104,7 @@
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         [Enter extension point usage example here.]
+         Too trivial to exemplify.
       </documentation>
    </annotation>
 
@@ -103,18 +113,10 @@
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         [Enter API information here.]
+         There is no programming involved, it&apos;s just about configuration.
       </documentation>
    </annotation>
 
-   <annotation>
-      <appinfo>
-         <meta.section type="implementation"/>
-      </appinfo>
-      <documentation>
-         [Enter information about supplied implementation of this extension point.]
-      </documentation>
-   </annotation>
 
 
 </schema>
