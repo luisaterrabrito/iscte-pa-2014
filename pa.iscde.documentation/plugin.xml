@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="docTeam"
+         name="Programador"
+         point="pa.iscde.team">
+      <member
+            name="David Franco"
+            quote="Be Bad!!!"
+            user="dgfoa">
+      </member>
+      <member
+            name="João Gonçalves"
+            user="user">
+      </member>
+   </extension>
+   <extension
+         id="docView"
+         name="Documentation View"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pt.iscte.pidesco.documentation.internal.DocumentationView">
+      </view>
+   </extension>
+
+</plugin>
