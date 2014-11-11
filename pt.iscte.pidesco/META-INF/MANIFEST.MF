@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Pidesco Core (RCP Application)
+Bundle-SymbolicName: pt.iscte.pidesco;singleton:=true
+Bundle-Version: 0.1
+Bundle-Activator: pt.iscte.pidesco.app.internal.PidescoActivator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.ui
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Export-Package: pt.iscte.pidesco.extensibility
