@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="taskList"
+         name="TL"
+         point="pa.iscde.team">
+      <member
+            name="João Paulino"
+            user="jmmpo11">
+      </member>
+      <member
+            name="Filipe Martins"
+            user="fafms">
+      </member>
+   </extension>
+   <extension
+         id="myview"
+         name="Minha Vista"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.tasklist.MyView">
+      </view>
+   </extension>
+
+</plugin>
