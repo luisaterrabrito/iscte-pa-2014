@@ -15,12 +15,14 @@
          </contentTypeBinding>
       </editor>
    </extension>
+
    <extension
          point="org.eclipse.ui.startup">
       <startup
             class="pt.iscte.pidesco.javaeditor.internal.Startup">
       </startup>
    </extension>
+
    <extension
          id="packagefocus"
          name="Package filter"
@@ -36,8 +38,8 @@
       <tool
             class="pt.iscte.pidesco.javaeditor.PackageFocusTool"
             description="Focus on the package of the opened class"
+            hasState="true"
             icon="package_filter.gif"
-            toggle="true"
             view="pt.iscte.pidesco.projectbrowser.tree">
       </tool>
    </extension>
