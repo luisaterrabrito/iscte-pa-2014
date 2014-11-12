@@ -1,4 +1,4 @@
-package pt.iscte.pidesco.app.internal;
+package pt.iscte.pidesco.internal;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -17,7 +17,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 
-import pt.iscte.pidesco.extensibility.PidescoUI;
+import pt.iscte.pidesco.extensibility.PidescoExtensionPoint;
+import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
 public class PidescoActivator extends AbstractUIPlugin {
@@ -26,22 +27,6 @@ public class PidescoActivator extends AbstractUIPlugin {
 	
 	static {
 		PLUGIN_ID = FrameworkUtil.getBundle(PidescoActivator.class).getSymbolicName();
-	}
-	
-	public enum ExtensionPoint {
-		VIEW,
-		TOOL,
-		TEAM;
-		
-		private IExtensionRegistry reg = Platform.getExtensionRegistry();
-		
-		public String getId() {
-			return PLUGIN_ID + "." + name().toLowerCase();
-		}
-		
-		public IExtension[] getExtensions() {
-			return reg.getExtensionPoint(getId()).getExtensions();
-		}
 	}
 	
 	// singleton instance
@@ -93,14 +78,14 @@ public class PidescoActivator extends AbstractUIPlugin {
 	private void loadPlugins() throws CoreException {
 		components = new HashMap<String, ViewComponent>();
 		
-		for(IExtension viewExtension : ExtensionPoint.VIEW.getExtensions()) {
+		for(IExtension viewExtension : PidescoExtensionPoint.VIEW.getExtensions()) {
 			String pluginId = viewExtension.getContributor().getName();
 			String viewId = viewExtension.getUniqueIdentifier();
 			String viewTitle = viewExtension.getLabel();
 			
 			IConfigurationElement comp = viewExtension.getConfigurationElements()[0];
 			PidescoView c = (PidescoView) comp.createExecutableExtension("class");
-			String iconPath = PidescoUI.IMAGES_FOLDER + "/" + comp.getAttribute("icon");
+			String iconPath = PidescoServicesImpl.IMAGES_FOLDER + "/" + comp.getAttribute("icon");
 			ImageDescriptor icon = null;
 			if(iconPath != null && !iconPath.isEmpty()) {
 				try {
@@ -124,6 +109,7 @@ public class PidescoActivator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		context.registerService(PidescoServices.class, new PidescoServicesImpl(context), null);
 		loadPlugins();
 	}
 

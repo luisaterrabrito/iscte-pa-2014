@@ -10,7 +10,7 @@
       <application
             visible="true">
          <run
-               class="pt.iscte.pidesco.app.internal.Application">
+               class="pt.iscte.pidesco.internal.Application">
          </run>
       </application>
    </extension>
@@ -19,7 +19,7 @@
          name="ISCDE Perspective"
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="pt.iscte.pidesco.app.internal.Perspective"
+            class="pt.iscte.pidesco.internal.Perspective"
             fixed="false"
             id="pt.iscte.pidesco.perspective"
             name="Pidesco">
@@ -30,7 +30,7 @@
          point="org.eclipse.ui.views">
       <view
             allowMultiple="true"
-            class="pt.iscte.pidesco.app.internal.AbstractPidescoView"
+            class="pt.iscte.pidesco.internal.AbstractPidescoView"
             id="pt.iscte.pidesco.view"
             name="Pidesco View"
             restorable="true">

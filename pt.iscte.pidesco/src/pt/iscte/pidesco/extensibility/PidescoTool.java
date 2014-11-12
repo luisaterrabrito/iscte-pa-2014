@@ -2,7 +2,9 @@ package pt.iscte.pidesco.extensibility;
 
 /**
  * Represents a Pidesco tool that can be attached to a view. 
- * A concrete tool may optionally consider to be in active/inactive mode (toggle button).
+ * - A concrete tool may optionally consider to be in active/inactive mode (toggle button).
+ * - There must exist a zero-argument constructor
+ * - Objects should be stateless, i.e. should have no instance attributes.
  */
 public interface PidescoTool {
 

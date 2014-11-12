@@ -1,4 +1,4 @@
-package pt.iscte.pidesco.app.internal;
+package pt.iscte.pidesco.internal;
 
 import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;

@@ -1,5 +1,6 @@
-package pt.iscte.pidesco.app.internal;
+package pt.iscte.pidesco.internal;
 
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,16 +23,18 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.Bundle;
 
-import pt.iscte.pidesco.app.internal.PidescoActivator.ViewComponent;
+import pt.iscte.pidesco.extensibility.PidescoExtensionPoint;
+import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoTool;
-import pt.iscte.pidesco.extensibility.PidescoUI;
+import pt.iscte.pidesco.internal.PidescoActivator.ViewComponent;
 
 public class AbstractPidescoView extends ViewPart {
 
-	public static final String VIEW_ID = "pt.iscte.pidesco.view";
-	private String imgPath = PidescoUI.IMAGES_FOLDER + "/";
+	private static String IMAGES_FLODER_PATH = PidescoServices.IMAGES_FOLDER + "/";
+	
 	private ViewComponent vcomponent;
-
+	private Composite parent;
+	
 	@Override
 	public void init(IViewSite site) throws PartInitException {
 		super.init(site);
@@ -42,24 +45,30 @@ public class AbstractPidescoView extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		this.parent = parent;
 		setPartName(vcomponent.viewTitle);
 		if(vcomponent.icon != null)
 			setTitleImage(vcomponent.icon.createImage());
 		setTitleToolTip("Contributor: " + vcomponent.pluginId);
 		parent.setLayout(new FillLayout());
-		Map<String, Image> imagesMap = buildImageMap();
+		Map<String, Image> imagesMap = Collections.unmodifiableMap(buildImageMap());
 		vcomponent.createContents(parent, imagesMap);
 	}
+	
+	@Override
+	public void setFocus() {
+		parent.setFocus();
+	}
+	
 
 	private Map<String, Image> buildImageMap() {
-		
 		Map<String, Image> imagesMap = new HashMap<String, Image>();
 		Bundle bundle = Platform.getBundle(vcomponent.pluginId);
-		Enumeration<String> imgs = bundle.getEntryPaths(imgPath);
+		Enumeration<String> imgs = bundle.getEntryPaths(IMAGES_FLODER_PATH);
 		if(imgs != null) {
 			while(imgs.hasMoreElements()) {
 				String path = imgs.nextElement();
-				String key = path.substring(imgPath.length());
+				String key = path.substring(IMAGES_FLODER_PATH.length());
 				try {
 					ImageDescriptor desc = PidescoActivator.imageDescriptorFromPlugin(vcomponent.pluginId, path);
 					if(desc != null) {
@@ -77,7 +86,7 @@ public class AbstractPidescoView extends ViewPart {
 
 
 	private void fillLocalToolBar(IToolBarManager manager) {
-		for(IExtension ext : PidescoActivator.ExtensionPoint.TOOL.getExtensions()) {
+		for(IExtension ext : PidescoExtensionPoint.TOOL.getExtensions()) {
 			IConfigurationElement c = ext.getConfigurationElements()[0];
 
 			if(c.getAttribute("view").equals(vcomponent.viewId)) {
@@ -85,7 +94,7 @@ public class AbstractPidescoView extends ViewPart {
 				final String toolName = ext.getLabel();
 				try {
 					final PidescoTool tool = (PidescoTool) c.createExecutableExtension("class");
-					boolean toggle = Boolean.parseBoolean(c.getAttribute("toggle"));
+					boolean toggle = Boolean.parseBoolean(c.getAttribute("hasState"));
 					final Action action = new Action(toolName, toggle ? IAction.AS_CHECK_BOX : IAction.AS_PUSH_BUTTON) {
 						public void run() {
 							tool.run(isChecked());
@@ -94,7 +103,7 @@ public class AbstractPidescoView extends ViewPart {
 
 					action.setText(toolName);
 					action.setToolTipText(c.getAttribute("description") + "\n" + "Contributor: " + contributor);
-					String iconPath = imgPath + c.getAttribute("icon");
+					String iconPath = IMAGES_FLODER_PATH + c.getAttribute("icon");
 					ImageDescriptor icon = PidescoActivator.imageDescriptorFromPlugin(contributor, iconPath);
 					if(icon != null)
 						action.setImageDescriptor(icon);
@@ -110,8 +119,5 @@ public class AbstractPidescoView extends ViewPart {
 	}
 
 	
-	@Override
-	public void setFocus() {
-
-	}
+	
 }

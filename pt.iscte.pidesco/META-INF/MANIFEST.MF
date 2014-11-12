@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Pidesco Core (RCP Application)
 Bundle-SymbolicName: pt.iscte.pidesco;singleton:=true
 Bundle-Version: 0.1
-Bundle-Activator: pt.iscte.pidesco.app.internal.PidescoActivator
+Bundle-Activator: pt.iscte.pidesco.internal.PidescoActivator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.ui
