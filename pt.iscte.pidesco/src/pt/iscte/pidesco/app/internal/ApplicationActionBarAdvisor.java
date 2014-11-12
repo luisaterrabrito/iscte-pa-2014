@@ -7,6 +7,7 @@ import java.util.List;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -22,7 +23,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	protected void fillMenuBar(IMenuManager menuBar) {
-
 		MenuManager viewsMenu = new MenuManager("&Views", "views");
 		menuBar.add(viewsMenu);
 		List<ViewComponent> components = new ArrayList<ViewComponent>(PidescoActivator.getInstance().getComponents());
@@ -41,6 +41,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 				}
 
 				@Override
+				public ImageDescriptor getImageDescriptor() {
+					return vc.icon == null ? super.getImageDescriptor() : vc.icon;
+				}
+				
+				@Override
 				public void run() {
 					try {
 						IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -52,5 +57,4 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 			});
 	}
-
 }

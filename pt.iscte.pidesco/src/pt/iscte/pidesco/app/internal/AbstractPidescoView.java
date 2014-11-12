@@ -43,7 +43,8 @@ public class AbstractPidescoView extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		setPartName(vcomponent.viewTitle);
-		setTitleImage(vcomponent.icon);
+		if(vcomponent.icon != null)
+			setTitleImage(vcomponent.icon.createImage());
 		setTitleToolTip("Contributor: " + vcomponent.pluginId);
 		parent.setLayout(new FillLayout());
 		Map<String, Image> imagesMap = buildImageMap();
@@ -87,7 +88,7 @@ public class AbstractPidescoView extends ViewPart {
 					boolean toggle = Boolean.parseBoolean(c.getAttribute("toggle"));
 					final Action action = new Action(toolName, toggle ? IAction.AS_CHECK_BOX : IAction.AS_PUSH_BUTTON) {
 						public void run() {
-							tool.execute(isChecked());
+							tool.run(isChecked());
 						}
 					};
 
@@ -108,6 +109,7 @@ public class AbstractPidescoView extends ViewPart {
 		}
 	}
 
+	
 	@Override
 	public void setFocus() {
 

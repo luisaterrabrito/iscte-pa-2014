@@ -58,9 +58,9 @@ public class PidescoActivator extends AbstractUIPlugin {
 		final String pluginId;
 		final String viewId;
 		final String viewTitle;
-		final Image icon;
+		final ImageDescriptor icon;
 		
-		ViewComponent(PidescoView component, String pluginId, String viewId, String viewTitle, Image icon) {
+		ViewComponent(PidescoView component, String pluginId, String viewId, String viewTitle, ImageDescriptor icon) {
 			this.component = component;
 			this.pluginId = pluginId;
 			this.viewId = viewId;
@@ -101,10 +101,10 @@ public class PidescoActivator extends AbstractUIPlugin {
 			IConfigurationElement comp = viewExtension.getConfigurationElements()[0];
 			PidescoView c = (PidescoView) comp.createExecutableExtension("class");
 			String iconPath = PidescoUI.IMAGES_FOLDER + "/" + comp.getAttribute("icon");
-			Image icon = null;
+			ImageDescriptor icon = null;
 			if(iconPath != null && !iconPath.isEmpty()) {
 				try {
-					icon = imageDescriptorFromPlugin(pluginId, iconPath).createImage();
+					icon = imageDescriptorFromPlugin(pluginId, iconPath);
 				}
 				catch(RuntimeException e) {
 					logPluginError(pluginId, "could not load view icon '" + iconPath + "'");

@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="pt.iscte.pidesco.app" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="pt.iscte.pidesco" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="pt.iscte.pidesco.app" id="pt.iscte.pidesco.app.view" name="Pidesco View"/>
+         <meta.schema plugin="pt.iscte.pidesco" id="pt.iscte.pidesco.view" name="Pidesco View"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         Extension point for providing a Pidesco view.
       </documentation>
    </annotation>
 
@@ -30,7 +30,7 @@
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  View id. Use a single token (e.g., &quot;myview&quot;).
                </documentation>
                <appinfo>
                   <meta.attribute kind="identifier"/>
@@ -40,7 +40,7 @@
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Human-readable name of the view. It will be used in the tab title text.
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
@@ -55,7 +55,7 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  A class that provides the view contents.
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":pt.iscte.pidesco.extensibility.PidescoView"/>
@@ -65,7 +65,7 @@
          <attribute name="icon" type="string">
             <annotation>
                <documentation>
-                  
+                  An optional icon associated with the view. The icon will be used in the view tab and application menu. Write a filename of an image (preferrebly GIF or PNG, e.g. &quot;icon.png&quot;) that is contained in a folder named &quot;images&quot; of the contributor plugin.
                </documentation>
             </annotation>
          </attribute>
@@ -81,21 +81,13 @@
       </documentation>
    </annotation>
 
-   <annotation>
-      <appinfo>
-         <meta.section type="examples"/>
-      </appinfo>
-      <documentation>
-         [Enter extension point usage example here.]
-      </documentation>
-   </annotation>
 
    <annotation>
       <appinfo>
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         [Enter API information here.]
+         Pidesco views must implement the interface pt.iscte.pidesco.extensibility.PidescoView
       </documentation>
    </annotation>
 
