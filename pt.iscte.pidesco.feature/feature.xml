@@ -17,21 +17,21 @@
    </license>
 
    <plugin
-         id="pt.iscte.pidesco.app"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="pt.iscte.pidesco.filebrowser"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="pt.iscte.pidesco.javaeditor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="pt.iscte.pidesco"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="pt.iscte.pidesco.projectbrowser"
          download-size="0"
          install-size="0"
          version="0.0.0"
