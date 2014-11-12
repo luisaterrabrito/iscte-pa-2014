@@ -20,14 +20,25 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
-import pt.iscte.pidesco.extensibility.PidescoUI;
+import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
 public class TeamView implements PidescoView {
 
-	private static final String EXT_POINT_ID = "pa.iscde.team";
+	public static final String EXT_POINT_ID = "pa.iscde.team";
 
+	private PidescoServices services;
+	
+	public TeamView() {
+		BundleContext context = FrameworkUtil.getBundle(TeamView.class).getBundleContext();
+		ServiceReference<PidescoServices> ref = context.getServiceReference(PidescoServices.class);
+		services = context.getService(ref);
+	}
+	
 	@Override
 	public void createContents(Composite area, Map<String, Image> imageMap) {
 		Display display = area.getDisplay();
@@ -60,7 +71,7 @@ public class TeamView implements PidescoView {
 						
 				String fileName = member.getAttribute("photo");
 				if(fileName != null) {
-					Image i = PidescoUI.getImageFromPlugin(ext.getContributor().getName(), fileName);
+					Image i = services.getImageFromPlugin(ext.getContributor().getName(), fileName);
 					if(i != null)
 						img = i;
 				}
