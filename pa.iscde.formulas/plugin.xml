@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="formulas"
+         name="Formulas Team"
+         point="pa.iscde.team">
+      <member
+            name="Gonçalo Horta"
+            photo="gonçalo.jpg"
+            user="gmsha">
+      </member>
+      <member
+            name="Tiago Saraiva"
+            photo="tiago.jpg"
+            user="tmsas">
+      </member>
+   </extension>
+   <extension
+         id="formulas"
+         name="Formulas"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.formulas.FormulasView"
+            icon="mathfunction.gif">
+      </view>
+   </extension>
+
+</plugin>
