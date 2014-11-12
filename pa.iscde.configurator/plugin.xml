@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="idConfigurator"
+         name="Configurator"
+         point="pa.iscde.team">
+          <member
+            name="João Medeiros"
+            quote="38094"
+            user="jdgms">
+      </member>
+      <member
+            name="Luís Dias"
+            quote="54416"
+            user="ljgds">
+      </member>
+   </extension>
+
+</plugin>
