@@ -6,7 +6,7 @@ import pt.iscte.pidesco.extensibility.PidescoTool;
 public class RefreshCommand implements PidescoTool {
 
 	@Override
-	public void execute(boolean selected) {
+	public void run(boolean selected) {
 		ProjectBrowserView.getInstance().refresh();
 	}
 

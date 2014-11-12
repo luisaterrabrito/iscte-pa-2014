@@ -7,10 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -26,11 +24,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
-import pt.iscte.pidesco.extensibility.PidescoUI;
+import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.projectbrowser.extensibility.ProjectBrowserFilter;
 import pt.iscte.pidesco.projectbrowser.model.ClassElement;
@@ -57,10 +55,16 @@ public class ProjectBrowserView implements PidescoView {
 	private Map<String, Filter> filtersMap;
 	private Set<String> activeFilters;
 	
+	private static PidescoServices services;
+	
 	public ProjectBrowserView() {
 		filtersMap = new HashMap<String, ProjectBrowserView.Filter>();
 		activeFilters = new HashSet<String>();
 		loadFilters();
+		
+	    BundleContext context = FrameworkUtil.getBundle(ProjectBrowserListener.class).getBundleContext();
+	    ServiceReference<PidescoServices> ref = context.getServiceReference(PidescoServices.class);
+	    services = context.getService(ref);
 	}
 	
 	private void loadFilters() {
@@ -134,7 +138,7 @@ public class ProjectBrowserView implements PidescoView {
 
 	public static ProjectBrowserView getInstance() {
 		if(instance == null)
-			PidescoUI.openView(VIEW_ID);
+			services.openView(VIEW_ID);
 			
 		return instance;
 	}
@@ -142,7 +146,6 @@ public class ProjectBrowserView implements PidescoView {
 
 
 	private static class Filter extends ViewerFilter {
-
 		private final ProjectBrowserFilter filter;
 		
 		public Filter(ProjectBrowserFilter filter) {
@@ -155,8 +158,9 @@ public class ProjectBrowserView implements PidescoView {
 			SourceElement child = (SourceElement) element;
 			return filter.include(child, parent);
 		}
-		
 	}
+	
+	
 
 	private static class ViewContentProvider implements IStructuredContentProvider, ITreeContentProvider {
 
@@ -233,7 +237,7 @@ public class ProjectBrowserView implements PidescoView {
 				IStructuredSelection s = (IStructuredSelection) viewer.getSelection();
 				if(s.size() == 1) {
 					SourceElement e = (SourceElement) s.getFirstElement();
-					for(ProjectBrowserListener l : Activator.getInstance().getListeners()) {
+					for(ProjectBrowserListener l : ProjectBrowserActivator.getInstance().getListeners()) {
 						l.doubleClick(e);
 					}
 				}

@@ -3,10 +3,10 @@
 <schema targetNamespace="pt.iscte.pidesco.projectbrowser" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="pt.iscte.pidesco.projectbrowser" id="filter" name="Project Browser Filter"/>
+         <meta.schema plugin="pt.iscte.pidesco.projectbrowser" id="pt.iscte.pidesco.projectbrowser.filter" name="Project Browser Filter"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point is to define filters that can be activated/deactivated in the Project Browser view.
       </documentation>
    </annotation>
 
@@ -30,7 +30,7 @@
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Filter id, which is used to activation/deactivation.
                </documentation>
                <appinfo>
                   <meta.attribute kind="identifier"/>
@@ -40,7 +40,7 @@
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Human-readable name for the filter.
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
@@ -55,7 +55,7 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Filter class for deciding which elements of the source tree to include or not.
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":pt.iscte.pidesco.projectbrowser.extensibility.ProjectBrowserFilter"/>
@@ -88,7 +88,8 @@
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         [Enter API information here.]
+         Filters are activated/deactivated using the operation:
+ProjectBrowserServices.activateFilter(filterId)
       </documentation>
    </annotation>
 
