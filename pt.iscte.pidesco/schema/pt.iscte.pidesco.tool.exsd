@@ -3,7 +3,7 @@
 <schema targetNamespace="pt.iscte.pidesco" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="pt.iscte.pidesco" id="pt.iscte.pidesco.command" name="Pidesco command"/>
+         <meta.schema plugin="pt.iscte.pidesco" id="pt.iscte.pidesco.tool" name="Pidesco Tool"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
@@ -30,14 +30,17 @@
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Tool id. Use a single token (e.g., &quot;myview&quot;)
                </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier"/>
+               </appinfo>
             </annotation>
          </attribute>
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Human-readable name of the tool. It will be used when no icon is available.
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
@@ -52,31 +55,31 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  A class that provides the tool behavior.
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":pt.iscte.pidesco.extensibility.PidescoTool"/>
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="toggle" type="boolean" use="default" value="false">
+         <attribute name="hasState" type="boolean" use="default" value="false">
             <annotation>
                <documentation>
-                  
+                  Is the tool to be used in active/inactive mode (toggle button)? Set to true if yes, false otherwise (default).
                </documentation>
             </annotation>
          </attribute>
          <attribute name="icon" type="string">
             <annotation>
                <documentation>
-                  
+                  Tool icon, used in the tool bars.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="view" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The id of the view where the tool icon will be placed.
                </documentation>
                <appinfo>
                   <meta.attribute kind="identifier" basedOn="pt.iscte.pidesco.view/@point"/>
@@ -86,7 +89,7 @@
          <attribute name="description" type="string">
             <annotation>
                <documentation>
-                  
+                  Tool description to be used in tooltips.
                </documentation>
             </annotation>
          </attribute>
