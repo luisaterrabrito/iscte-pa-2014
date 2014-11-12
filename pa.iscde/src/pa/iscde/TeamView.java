@@ -91,7 +91,7 @@ public class TeamView implements PidescoView {
 				email.setBackground(white);
 			}
 			// line break
-			new Label(comp, SWT.NONE).setLayoutData(new GridData(50,50));;
+			new Label(comp, SWT.NONE).setLayoutData(new GridData(50,50));
 			new Label(comp, SWT.NONE);
 		}	
 

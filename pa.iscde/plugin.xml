@@ -20,11 +20,11 @@
          </property>
          <property
                name="aboutText"
-               value="Course Project, Advanced Programming, ISCTE-IUL, 2014">
+               value="ISCDE - The IDE of ISCTE, Advanced Programming, ISCTE-IUL, 2014">
          </property>
          <property
                name="appName"
-               value="ISCDE - The IDE of ISCTE">
+               value="ISCDE">
          </property>
       </product>
    </extension>
