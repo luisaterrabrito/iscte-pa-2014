@@ -2,18 +2,11 @@ package pt.iscte.pidesco.javaeditor.service;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.StringBufferInputStream;
 import java.util.Map;
 import java.util.Scanner;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.IRegion;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.AST;

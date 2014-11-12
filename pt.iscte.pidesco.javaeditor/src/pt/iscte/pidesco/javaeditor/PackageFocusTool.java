@@ -5,6 +5,7 @@ import java.io.File;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoTool;
 import pt.iscte.pidesco.javaeditor.internal.JavaEditorActivator;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorFileListener;
@@ -14,23 +15,25 @@ public class PackageFocusTool implements PidescoTool {
 
 	private static final String FILTER_ID = "pt.iscte.pidesco.javaeditor.packagefocus";
 
-	private ProjectBrowserServices browser;
-
-	public PackageFocusTool() {
-		BundleContext context = JavaEditorActivator.getInstance().getContext();
-		ServiceReference<ProjectBrowserServices> ref = context.getServiceReference(ProjectBrowserServices.class);
-		browser = context.getService(ref);
-	}
-
 	@Override
-	public void execute(boolean selected) {
+	public void run(boolean selected) {
+
+		BundleContext context = JavaEditorActivator.getInstance().getContext();
+
+		ServiceReference<PidescoServices> ref1 = context.getServiceReference(PidescoServices.class);
+		final PidescoServices services = context.getService(ref1);
+
+		ServiceReference<ProjectBrowserServices> ref2 = context.getServiceReference(ProjectBrowserServices.class);
+		ProjectBrowserServices browser = context.getService(ref2);
+
+
 		if(selected) {
 			browser.activateFilter(FILTER_ID);
 			JavaEditorActivator.getInstance().addListener(
 					new JavaEditorFileListener.Adapter() {
 						@Override
 						public void fileOpened(File file) {
-							browser.refreshTree();
+							services.runTool(ProjectBrowserServices.REFRESH_TOOL_ID, true);
 						}
 					});
 		}

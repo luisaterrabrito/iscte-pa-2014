@@ -9,7 +9,6 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.ide.FileStoreEditorInput;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -81,7 +80,6 @@ public class JavaEditorActivator implements BundleActivator, IPartListener2 {
 	@Override
 	public void partBroughtToTop(IWorkbenchPartReference partRef) {
 		if(partRef.getId().equals(SimpleJavaEditor.EDITOR_ID)) {
-			System.out.println("top " + partRef.getId());
 			IEditorPart part = (IEditorPart) partRef.getPart(true);
 			IEditorInput input = part.getEditorInput();
 			String path = ((FileStoreEditorInput) input).getURI().getPath();
