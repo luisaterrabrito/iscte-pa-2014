@@ -112,6 +112,25 @@ public class ConvetionsView implements PidescoView {
 				
 			}
 		});
+		
+		Button botaoverifySize = new Button(viewArea, SWT.PUSH);
+		botaoverifySize.setSize(10, 20);
+		botaoverifySize.setText("Verify Size");
+		
+		botaoverifySize.addListener(SWT.Selection, new Listener() {
+			
+			@Override
+			public void handleEvent(Event event) {
+				if(verifySize(texto.getText())){
+					
+							dialog.setText("Warning");
+							dialog.setMessage("O texto é muito grande");
+							dialog.open();
+				};
+				
+				
+			}
+		});
 
 	}
 	
@@ -143,6 +162,17 @@ public class ConvetionsView implements PidescoView {
 		return false;
 		
 		
+		
+	}
+	
+	
+	public boolean verifySize(String word){
+		
+		if(word.length()>=10){
+			return true;
+		}
+		
+		return false;
 		
 	}
 	
