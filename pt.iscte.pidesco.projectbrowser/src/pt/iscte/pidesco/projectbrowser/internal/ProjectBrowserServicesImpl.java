@@ -23,14 +23,11 @@ public class ProjectBrowserServicesImpl implements ProjectBrowserServices {
 	}
 	
 	public void addListener(ProjectBrowserListener listener) {
-		Activator.getInstance().addListener(listener);
+		ProjectBrowserActivator.getInstance().addListener(listener);
 	}
 	
 	public void removeListener(ProjectBrowserListener listener) {
-		Activator.getInstance().removeListener(listener);
+		ProjectBrowserActivator.getInstance().removeListener(listener);
 	}
-	
-	
-	
 	
 }

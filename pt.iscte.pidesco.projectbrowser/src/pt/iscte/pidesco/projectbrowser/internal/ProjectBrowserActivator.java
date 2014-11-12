@@ -3,7 +3,6 @@ package pt.iscte.pidesco.projectbrowser.internal;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -11,9 +10,9 @@ import org.osgi.framework.ServiceRegistration;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserListener;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
-public class Activator implements BundleActivator {
+public class ProjectBrowserActivator implements BundleActivator {
 
-	private static Activator instance;
+	private static ProjectBrowserActivator instance;
 	private Set<ProjectBrowserListener> listeners;
 	private ServiceRegistration<ProjectBrowserServices> service;
 	
@@ -29,7 +28,7 @@ public class Activator implements BundleActivator {
 		service.unregister();
 	}
 	
-	public static Activator getInstance() {
+	public static ProjectBrowserActivator getInstance() {
 		return instance;
 	}
 	

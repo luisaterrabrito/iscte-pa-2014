@@ -1,8 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Source Tree
+Bundle-Name: Project Browser
 Bundle-SymbolicName: pt.iscte.pidesco.projectbrowser;singleton:=true
-Bundle-Version: 0.1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.ui;bundle-version="3.106.0",
  org.eclipse.core.runtime;bundle-version="3.10.0",
@@ -13,5 +12,6 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.106.0",
 Export-Package: pt.iscte.pidesco.projectbrowser.extensibility,
  pt.iscte.pidesco.projectbrowser.model,
  pt.iscte.pidesco.projectbrowser.service
-Bundle-Activator: pt.iscte.pidesco.projectbrowser.internal.Activator
+Bundle-Activator: pt.iscte.pidesco.projectbrowser.internal.ProjectBrowserActivator
 Bundle-ActivationPolicy: lazy
+Bundle-Version: 0.1
