@@ -1,4 +1,4 @@
-package pt.iscte.pidesco.app.internal;
+package pt.iscte.pidesco.internal;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +14,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
-import pt.iscte.pidesco.app.internal.PidescoActivator.ViewComponent;
+import pt.iscte.pidesco.extensibility.PidescoExtensionPoint;
+import pt.iscte.pidesco.internal.PidescoActivator.ViewComponent;
 
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
@@ -49,7 +50,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 				public void run() {
 					try {
 						IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-						page.showView(PidescoActivator.ExtensionPoint.VIEW.getId(), vc.getSecondaryId(), IWorkbenchPage.VIEW_ACTIVATE);
+						page.showView(PidescoExtensionPoint.VIEW.getId(), vc.getSecondaryId(), IWorkbenchPage.VIEW_ACTIVATE);
 					} catch (PartInitException e) {
 						e.printStackTrace();
 					}
