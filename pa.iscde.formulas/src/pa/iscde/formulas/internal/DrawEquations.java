@@ -9,9 +9,9 @@ public class DrawEquations implements PidescoTool {
 	}
 
 	@Override
-	public void execute(boolean selected) {
-		// TODO Auto-generated method stub
-
+	public void run(boolean activate) {
+		
 	}
+
 
 }
