@@ -11,7 +11,7 @@ public class QuadraticFormula implements Formula{
 
 	@Override
 	public String methodCode() {
-		String methodCode = "private double[] quadraticFormula(int a, int b, int c){\nint a,b,c;";
+		String methodCode = "";
 	
 		return methodCode;
 	}
