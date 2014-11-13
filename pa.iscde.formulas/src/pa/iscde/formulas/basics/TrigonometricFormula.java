@@ -21,7 +21,8 @@ public class TrigonometricFormula implements Formula{
 
 	@Override
 	public String[] inputs() {
-		return null;
+		String[] inputs = {"cos(x)","sin(x)","tan(x)","sad","asdda","sda"};
+		return inputs;
 	}
 	
 	
