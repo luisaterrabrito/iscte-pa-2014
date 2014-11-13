@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="id1"
+         name="Filter Search"
+         point="pa.iscde.team">
+      <member
+            name="Luis Murilhas"
+            photo="murilhas.png"
+            quote="33515"
+            user="lcmms">
+      </member>
+      <member
+            name="David Almas"
+            photo="almas.png"
+            quote="33524"
+            user="debas">
+      </member>
+   </extension>
+   <extension
+         id="id1"
+         name="name"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.filtersearch.SearchView">
+      </view>
+   </extension>
+
+</plugin>
