@@ -6,14 +6,17 @@ public class TrigonometricFormula implements Formula{
 	public String setName() {
 		return "trigonometric";
 	}
-	
+
 	@Override
-	public String setCode(String[] inputs) {
-		String aux = "teste";
-		for (int i = 0; i < inputs.length; i++) {
-			aux+=inputs[i];
-		}
-		return aux;
+	public String methodCode() {
+		return null;
 	}
+
+	@Override
+	public String result(String[] inputs) {
+		return null;
+	}
+	
+	
 
 }
