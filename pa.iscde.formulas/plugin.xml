@@ -21,9 +21,33 @@
          name="Formulas"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.formulas.FormulasView"
+            class="pa.iscde.viewformulas.FormulasView"
             icon="mathfunction.gif">
       </view>
+   </extension>
+   <extension
+         id="calc"
+         name="Calculadora"
+         point="pt.iscte.pidesco.tool">
+      <tool
+            class="pa.iscde.formulas.internal.Calculator"
+            description="Calculator for equations"
+            icon="calculator.gif"
+            toggle="false"
+            view="pa.iscde.formulas.formulas">
+      </tool>
+   </extension>
+   <extension
+         id="drawEq"
+         name="Draw Equations"
+         point="pt.iscte.pidesco.tool">
+      <tool
+            class="pa.iscde.formulas.internal.DrawEquations"
+            description="Draw Mathematical Equations"
+            icon="draw.gif"
+            toggle="false"
+            view="pa.iscde.formulas.formulas">
+      </tool>
    </extension>
 
 </plugin>
