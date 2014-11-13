@@ -6,14 +6,17 @@ public class QuadraticFormula implements Formula{
 	public String setName() {
 		return "quadratic";
 	}
-	
+
 	@Override
-	public String setCode(String[] inputs) {
-		String aux = "teste";
-		for (int i = 0; i < inputs.length; i++) {
-			aux+=inputs[i];
-		}
-		return aux;
+	public String methodCode() {
+		String methodCode = "private int quadraticFormula(int a, int b, int c){\n";
+		return methodCode;
 	}
+
+	@Override
+	public String result(String[] inputs) {
+		return null;
+	}
+	
 
 }
