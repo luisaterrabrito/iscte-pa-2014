@@ -1,8 +1,9 @@
 package pa.iscde.formulas.engineering;
 
 import pa.iscde.formulas.Formula;
+import pa.iscde.formulas.FormulaClass;
 
-public class T implements Formula{
+public class T extends FormulaClass implements Formula{
 	
 	@Override
 	public String name() {

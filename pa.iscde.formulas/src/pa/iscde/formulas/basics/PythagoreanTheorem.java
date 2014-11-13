@@ -1,30 +1,43 @@
 package pa.iscde.formulas.basics;
 
 import pa.iscde.formulas.Formula;
+import pa.iscde.formulas.FormulaClass;
 
-public class PythagoreanTheorem implements Formula{
+public class PythagoreanTheorem extends FormulaClass implements Formula{
 
 	@Override
 	public String name() {
-		return "pythagoreantheorem";
-	}
-
-	@Override
-	public String methodCode() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Pythagoreantheorem";
 	}
 
 	@Override
 	public String result(String[] inputs) {
-		// TODO Auto-generated method stub
-		return null;
+		String AC_str = inputs[0];
+		String OC_str = inputs[1];
+		String H_str = inputs[2];
+		double ac;
+		double oc;
+		double h;
+		if(AC_str.equals("")){
+			oc = Double.parseDouble(OC_str);
+			h = Double.parseDouble(H_str);
+			return "Adjacent  cathetus:"+String.valueOf(Math.sqrt((h*h)-(oc*oc)));
+		}else if(OC_str.equals("")){
+			ac = Double.parseDouble(AC_str);
+			h = Double.parseDouble(H_str);
+			return "Opposite Cathetus:"+String.valueOf(Math.sqrt((h*h)-(ac*ac)));
+		}else{
+			ac = Double.parseDouble(AC_str);
+			oc = Double.parseDouble(OC_str);
+			return "Hypotenuse:"+String.valueOf(Math.sqrt(((ac*ac)+(oc*oc))));
+		}
 	}
-
+	
+	
 	@Override
 	public String[] inputs() {
-		// TODO Auto-generated method stub
-		return null;
+		String[] inputs = {"A.C","O.C","H"};
+		return inputs;
 	}
 
 }
