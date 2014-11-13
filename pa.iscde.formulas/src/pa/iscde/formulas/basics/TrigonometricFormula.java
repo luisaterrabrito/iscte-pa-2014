@@ -1,22 +1,18 @@
 package pa.iscde.formulas.basics;
 
 import pa.iscde.formulas.Formula;
+import pa.iscde.formulas.FormulaClass;
 
-public class TrigonometricFormula implements Formula{
+public class TrigonometricFormula extends FormulaClass implements Formula{
 	
 	@Override
 	public String name() {
-		return "trigonometric";
-	}
-
-	@Override
-	public String methodCode() {
-		return null;
+		return "Trignometric";
 	}
 
 	@Override
 	public String result(String[] inputs) {
-		return null;
+		return "";
 	}
 
 	@Override

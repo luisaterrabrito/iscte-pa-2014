@@ -1,19 +1,13 @@
 package pa.iscde.formulas.basics;
 
 import pa.iscde.formulas.Formula;
+import pa.iscde.formulas.FormulaClass;
 
-public class QuadraticFormula implements Formula{
+public class QuadraticFormula extends FormulaClass implements Formula{
 	
 	@Override
 	public String name() {
-		return "quadratic";
-	}
-
-	@Override
-	public String methodCode() {
-		String methodCode = "";
-	
-		return methodCode;
+		return "Quadratic";
 	}
 
 	@Override
@@ -21,6 +15,11 @@ public class QuadraticFormula implements Formula{
 		int a,b,c;
 		double root,x,y;
 		String result = "";
+		for (int i = 0; i < inputs.length; i++) {
+			if(inputs[i].equals("")){
+				inputs[i]="0";
+			}
+		}
 		a = Integer.parseInt(inputs[0]);
 		b = Integer.parseInt(inputs[1]);
 		c= Integer.parseInt(inputs[2]);
@@ -34,8 +33,7 @@ public class QuadraticFormula implements Formula{
 			result = (-b/(2*a))+"+("+i+")"+" and "+(-b/(2*a))+"-("+i+")";
 		}
 		return result;
-	}
-	
+	}	
 	
 
 	@Override

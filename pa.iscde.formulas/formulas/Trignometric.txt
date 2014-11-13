@@ -1,0 +1,5 @@
+@Override
+	public String[] inputs() {
+		String[] inputs = {"cos(x)","sin(x)","tan(x)","sad","asdda","sda"};
+		return inputs;
+	}
