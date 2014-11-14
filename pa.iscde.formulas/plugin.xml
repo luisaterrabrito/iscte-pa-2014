@@ -21,7 +21,7 @@
          name="Formulas"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.viewformulas.FormulasView"
+            class="pa.iscde.formulas.view.FormulasView"
             icon="mathfunction.gif">
       </view>
    </extension>
@@ -30,7 +30,7 @@
          name="Calculadora"
          point="pt.iscte.pidesco.tool">
       <tool
-            class="pa.iscde.formulas.internal.Calculator"
+            class="pa.iscde.formulas.tools.Calculator"
             description="Calculator for equations"
             icon="calculator.gif"
             toggle="false"
@@ -42,7 +42,7 @@
          name="Draw Equations"
          point="pt.iscte.pidesco.tool">
       <tool
-            class="pa.iscde.formulas.internal.DrawEquations"
+            class="pa.iscde.formulas.tools.DrawEquations"
             description="Draw Mathematical Equations"
             icon="draw.gif"
             toggle="false"

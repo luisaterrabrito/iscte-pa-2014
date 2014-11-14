@@ -1,4 +1,4 @@
-package pa.iscde.util;
+package pa.iscde.formulas.util;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;

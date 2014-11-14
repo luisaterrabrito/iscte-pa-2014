@@ -1,6 +1,5 @@
-package pa.iscde.viewformulas;
+package pa.iscde.formulas.view;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -32,15 +31,9 @@ public class FormulasView implements PidescoView {
 	
 	
 	
-	public FormulasView() throws IOException, InstantiationException, IllegalAccessException {
-		//list with math basic formulas
-		//final List<PojoClass> pojoClasses = PojoClassFactory.getPojoClassesRecursively("pa.iscde.formulas.basics", null);
-		//for (PojoClass pojoClass : pojoClasses) {
-//			Formula f = (Formula) pojoClass.getClazz().newInstance();
-//			System.out.println(f.name());
-			//System.out.println(pojoClass);
-		//}
+	public FormulasView() {
 		
+		 
 		basic_formulas.add(new QuadraticFormula());
 		basic_formulas.add(new TrigonometricFormula());		
 		basic_formulas.add(new PythagoreanTheorem());
@@ -52,6 +45,8 @@ public class FormulasView implements PidescoView {
 		allFormulas.put("Finance",finance_formulas);
 		allFormulas.put("Statistics",statistics_formulas);
 	}
+	
+	
 	
 	
 	
