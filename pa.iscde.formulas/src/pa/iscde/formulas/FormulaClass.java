@@ -15,6 +15,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import pa.iscde.util.InfoWindow;
+
 
 public class FormulaClass implements Formula{
 
@@ -70,24 +72,28 @@ public class Listener implements SelectionListener{
 		}
 		
 		private void createWindow(final Shell dialog) {
-			System.out.println("EINDA");
 			dialog.setText(formula.name()+" Formula Inputs:");
 			dialog.setLayout(new GridLayout(2, true));
 			
-			
+			Label label_info = new Label(dialog, SWT.NONE);
+			label_info.setText("Leave empty to calculate");
+			label_info.setLayoutData(new GridData(GridData.FILL));
+			Label lb = new Label(dialog, SWT.NONE);
+			lb.setText("");
+			lb.setLayoutData(new GridData(GridData.CENTER));
 			for (String input : formula.inputs()) {
-				Label Input = new Label(dialog, SWT.NONE);
-				Input.setText(""+input+":");
-				Input.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+				Label label = new Label(dialog, SWT.NONE);
+				label.setText(""+input+":");
+				label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 				Text input_text = new Text(dialog, SWT.BORDER);
 				input_text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-				((GridData) input_text.getLayoutData()).widthHint = 200;
+				((GridData) input_text.getLayoutData()).widthHint = 100;
 				inputs_text.add(input_text);
 			}
 
 			Button ok = new Button(dialog, SWT.PUSH);
-			ok.setText("OK");
+			ok.setText("Calculate");
 			ok.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			ok.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent event) {
@@ -99,9 +105,18 @@ public class Listener implements SelectionListener{
 							results[i] = inputs_text.get(i).getText();
 					}
 					String solution = formula.result(results);
-					System.out.println(solution);
-					System.out.println(formula.methodCode());
-					dialog.dispose();
+					boolean isEmpty = false;
+					for (Text result : inputs_text) {
+						if(result.getText().equals("")){
+							result.setText(solution);
+							isEmpty = true;
+						}
+					}
+					if(!isEmpty){
+						InfoWindow.createWindow(formula.name(),solution);
+						dialog.dispose();
+					}
+					
 				}
 			});
 

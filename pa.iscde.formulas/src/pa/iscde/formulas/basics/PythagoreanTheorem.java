@@ -21,15 +21,15 @@ public class PythagoreanTheorem extends FormulaClass implements Formula{
 		if(AC_str.equals("")){
 			oc = Double.parseDouble(OC_str);
 			h = Double.parseDouble(H_str);
-			return "Adjacent  cathetus:"+String.valueOf(Math.sqrt((h*h)-(oc*oc)));
+			return String.valueOf(Math.sqrt((h*h)-(oc*oc)));
 		}else if(OC_str.equals("")){
 			ac = Double.parseDouble(AC_str);
 			h = Double.parseDouble(H_str);
-			return "Opposite Cathetus:"+String.valueOf(Math.sqrt((h*h)-(ac*ac)));
+			return String.valueOf(Math.sqrt((h*h)-(ac*ac)));
 		}else{
 			ac = Double.parseDouble(AC_str);
 			oc = Double.parseDouble(OC_str);
-			return "Hypotenuse:"+String.valueOf(Math.sqrt(((ac*ac)+(oc*oc))));
+			return String.valueOf(Math.sqrt(((ac*ac)+(oc*oc))));
 		}
 	}
 	
