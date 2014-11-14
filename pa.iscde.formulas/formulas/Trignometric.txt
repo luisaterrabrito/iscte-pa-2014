@@ -1,5 +1,10 @@
-@Override
-	public String[] inputs() {
-		String[] inputs = {"cos(x)","sin(x)","tan(x)","sad","asdda","sda"};
-		return inputs;
+private Double TrignometricCalculateCos(double senx) {
+			double aux = 1-(Math.pow(senx, 2));
+			return Math.sqrt(aux);
 	}
+	
+	private Double TrignometricCalculateSen(double cosx) {
+			double aux = 1-(Math.pow(cosx, 2));
+			return Math.sqrt(aux);
+	}
+	
