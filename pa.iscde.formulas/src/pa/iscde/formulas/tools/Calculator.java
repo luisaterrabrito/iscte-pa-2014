@@ -1,10 +1,10 @@
-package pa.iscde.formulas.internal;
+package pa.iscde.formulas.tools;
 
 import pt.iscte.pidesco.extensibility.PidescoTool;
 
-public class DrawEquations implements PidescoTool {
+public class Calculator implements PidescoTool {
 
-	public DrawEquations() {
+	public Calculator() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -13,6 +13,5 @@ public class DrawEquations implements PidescoTool {
 		
 	}
 
-
+	
 }
-

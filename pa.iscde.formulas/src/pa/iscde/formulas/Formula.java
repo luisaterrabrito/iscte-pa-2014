@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import pa.iscde.util.InfoWindow;
+import pa.iscde.formulas.util.InfoWindow;
 
 
 public abstract class Formula{
@@ -39,19 +39,14 @@ public abstract class Formula{
 	}
 	
 	public SelectionListener getListener() {
-		return new Listener(this);
+		return new Listener();
 	}
 	
 	
 	
 public class Listener implements SelectionListener{
 		
-		private Formula formula;
 		private ArrayList<Text> inputs_text = new ArrayList<Text>();
-		
-		public Listener(Formula formula) {
-			this.formula=formula;
-		}
 		
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -61,7 +56,7 @@ public class Listener implements SelectionListener{
 		}
 		
 		private void createWindow(final Shell dialog) {
-			dialog.setText(formula.name()+" Formula Inputs:");
+			dialog.setText(name()+" Formula Inputs:");
 			dialog.setLayout(new GridLayout(2, true));
 			
 			Label label_info = new Label(dialog, SWT.NONE);
@@ -70,7 +65,7 @@ public class Listener implements SelectionListener{
 			Label lb = new Label(dialog, SWT.NONE);
 			lb.setText("");
 			lb.setLayoutData(new GridData(GridData.CENTER));
-			for (String input : formula.inputs()) {
+			for (String input : inputs()) {
 				Label label = new Label(dialog, SWT.NONE);
 				label.setText(""+input+":");
 				label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -93,7 +88,7 @@ public class Listener implements SelectionListener{
 						else
 							results[i] = inputs_text.get(i).getText();
 					}
-					String solution = formula.result(results);
+					String solution = result(results);
 					boolean isEmpty = false;
 					for (Text result : inputs_text) {
 						if(result.getText().equals("")){
@@ -102,7 +97,7 @@ public class Listener implements SelectionListener{
 						}
 					}
 					if(!isEmpty){
-						InfoWindow.createWindow(formula.name(),solution);
+						InfoWindow.createWindow(name(),solution);
 						dialog.dispose();
 					}
 					
