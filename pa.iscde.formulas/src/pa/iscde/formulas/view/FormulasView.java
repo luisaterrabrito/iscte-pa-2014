@@ -22,12 +22,13 @@ import pt.iscte.pidesco.extensibility.PidescoView;
 
 public class FormulasView implements PidescoView {
 	
-	
 	private HashMap<String,LinkedList<Formula>> allFormulas = new HashMap<String, LinkedList<Formula>>();
 	private LinkedList<Formula> basic_formulas = new LinkedList<Formula>();
 	private LinkedList<Formula> engineering_formulas = new LinkedList<Formula>();
 	private LinkedList<Formula> finance_formulas = new LinkedList<Formula>();
 	private LinkedList<Formula> statistics_formulas = new LinkedList<Formula>();
+	
+	private static HashMap<Button,Formula> buttons = new HashMap<Button,Formula>();
 	
 	
 	
@@ -52,6 +53,7 @@ public class FormulasView implements PidescoView {
 	
 	@Override
 	public void createContents(final Composite viewArea, Map<String, Image> imageMap) {
+		System.out.println("IN");
 		viewArea.setLayout(new GridLayout());
 		TabFolder tabFolder = new TabFolder(viewArea, SWT.CLOSE);  
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
@@ -66,17 +68,31 @@ public class FormulasView implements PidescoView {
 	
 	
 	private Composite createTabContent( Composite parent, LinkedList<Formula> formulas ) {
-		 
 	    Composite c = new Composite( parent, SWT.NONE );
 	    c.setLayout( new GridLayout( formulas.size(), false ));
 	 
 	    for( Formula formula : formulas ) {
 	    	Button button = new Button(c, SWT.PUSH);
 	    	button.setText(formula.name());
-	    	button.addSelectionListener(formula.getListener());
+    		button.addSelectionListener(formula.getCodeEjectorListener());
+	    	buttons.put(button,formula);
 	    }
 	 
 	    return c;
+	}
+
+
+	public static void setFormulaEjector(){
+		
+	}
+
+
+	public static void setCalculatorMode() {
+		for (Button button : buttons.keySet()) {
+			if(buttons.get(button).getCurrentListener()!=null)
+				button.removeSelectionListener(buttons.get(button).getCurrentListener());
+			button.addSelectionListener(buttons.get(button).getCalculatorListener());
+		}
 	}
 	
 	
