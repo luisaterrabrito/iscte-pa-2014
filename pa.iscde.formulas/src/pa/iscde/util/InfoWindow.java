@@ -13,7 +13,7 @@ public class InfoWindow {
 	
 	public static void createWindow(String title, String solution) {
 		final Shell dialog = new Shell(new Shell(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		dialog.setText(title+ "results:");
+		dialog.setText(title+ " results:");
 		dialog.setLayout(new GridLayout(1, true));
 		Label label_info = new Label(dialog, SWT.NONE);
 		label_info.setText(solution);
