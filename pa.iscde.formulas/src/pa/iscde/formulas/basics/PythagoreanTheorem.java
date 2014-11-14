@@ -1,9 +1,8 @@
 package pa.iscde.formulas.basics;
 
 import pa.iscde.formulas.Formula;
-import pa.iscde.formulas.FormulaClass;
 
-public class PythagoreanTheorem extends FormulaClass implements Formula{
+public class PythagoreanTheorem extends Formula {
 
 	@Override
 	public String name() {

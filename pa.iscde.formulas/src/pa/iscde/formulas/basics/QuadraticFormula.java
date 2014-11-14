@@ -1,9 +1,8 @@
 package pa.iscde.formulas.basics;
 
 import pa.iscde.formulas.Formula;
-import pa.iscde.formulas.FormulaClass;
 
-public class QuadraticFormula extends FormulaClass implements Formula{
+public class QuadraticFormula extends Formula {
 	
 	@Override
 	public String name() {

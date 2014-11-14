@@ -1,9 +1,9 @@
 package pa.iscde.formulas.basics;
 
 
-import pa.iscde.formulas.FormulaClass;
+import pa.iscde.formulas.Formula;
 
-public class Areas extends FormulaClass{
+public class Areas extends Formula{
 
 	@Override
 	public String methodCode() {
@@ -70,6 +70,18 @@ public class Areas extends FormulaClass{
 		double aux = (Math.sqrt(3))/4;
 		double area = aux*(side*side);
 		return String.valueOf(area);
+	}
+
+	@Override
+	public String[] inputs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String name() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
