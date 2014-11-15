@@ -8,7 +8,7 @@ import org.osgi.framework.ServiceReference;
 import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoTool;
 import pt.iscte.pidesco.javaeditor.internal.JavaEditorActivator;
-import pt.iscte.pidesco.javaeditor.service.JavaEditorFileListener;
+import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 public class PackageFocusTool implements PidescoTool {
@@ -30,7 +30,7 @@ public class PackageFocusTool implements PidescoTool {
 		if(selected) {
 			browser.activateFilter(FILTER_ID);
 			JavaEditorActivator.getInstance().addListener(
-					new JavaEditorFileListener.Adapter() {
+					new JavaEditorListener.Adapter() {
 						@Override
 						public void fileOpened(File file) {
 							services.runTool(ProjectBrowserServices.REFRESH_TOOL_ID, true);
