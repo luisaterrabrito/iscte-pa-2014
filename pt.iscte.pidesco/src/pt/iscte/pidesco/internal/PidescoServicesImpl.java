@@ -61,9 +61,7 @@ public class PidescoServicesImpl implements PidescoServices {
 	@Override
 	public void runTool(String toolId, boolean activate) {
 		Assert.isNotNull(toolId, "tool id cannot be null");
-		if(!tools.containsKey(toolId))
-			throw new RuntimeException("toolId '" + toolId + "' does not exist");
-		
+		Assert.isTrue(tools.containsKey(toolId), "toolId '" + toolId + "' does not exist");
 		tools.get(toolId).run(activate);
 		
 	}
