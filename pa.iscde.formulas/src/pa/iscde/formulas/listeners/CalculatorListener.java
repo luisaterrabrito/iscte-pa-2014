@@ -3,12 +3,16 @@ package pa.iscde.formulas.listeners;
 import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -27,11 +31,40 @@ public class CalculatorListener implements SelectionListener{
 		
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			final Shell dialog = new Shell(new Shell(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 			inputs_text.clear();
-			createWindow(dialog);
+			if(formula.name().equals("Areas") || formula.name().equals("Volumes")){
+				createSelection(new Shell(new Shell(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL));
+			}else{
+				createWindow(new Shell(new Shell(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL));
+			}
+			
+			
 		}
 		
+		private void createSelection(final Shell shell) {
+			  shell.setText(formula.name()+" selector");
+			  final Combo combo = new Combo (shell, SWT.READ_ONLY);
+			  combo.add("Select a option to calculate");
+			  combo.setItems (formula.inputs());
+			  combo.select(0);
+			  Rectangle clientArea = shell.getClientArea ();
+			  combo.setBounds (clientArea.x, clientArea.y, 200, 200);
+			  combo.addModifyListener(new ModifyListener() {
+				
+				@Override
+				public void modifyText(ModifyEvent e) {
+					String[] string = new String[1];
+					string[0] = combo.getItem(combo.getSelectionIndex());
+					formula.result(string);
+					shell.dispose();
+					createWindow(new Shell(new Shell(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL));
+				}
+			});
+			  shell.pack ();
+			  shell.open ();
+			
+		}
+
 		private void createWindow(final Shell dialog) {
 			dialog.setText(formula.name()+" Formula Inputs:");
 			dialog.setLayout(new GridLayout(2, false));

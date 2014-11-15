@@ -14,21 +14,25 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
 import pa.iscde.formulas.Formula;
+import pa.iscde.formulas.basics.Areas;
 import pa.iscde.formulas.basics.PythagoreanTheorem;
 import pa.iscde.formulas.basics.QuadraticFormula;
 import pa.iscde.formulas.basics.TrigonometricFormula;
-import pa.iscde.formulas.engineering.T;
+import pa.iscde.formulas.basics.Volumes;
+import pa.iscde.formulas.engineering.FriisFormula;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
 public class FormulasView implements PidescoView {
 	
 	private HashMap<String,LinkedList<Formula>> allFormulas = new HashMap<String, LinkedList<Formula>>();
+	private static HashMap<Button,Formula> buttons = new HashMap<Button,Formula>();
+	
 	private LinkedList<Formula> basic_formulas = new LinkedList<Formula>();
 	private LinkedList<Formula> engineering_formulas = new LinkedList<Formula>();
 	private LinkedList<Formula> finance_formulas = new LinkedList<Formula>();
 	private LinkedList<Formula> statistics_formulas = new LinkedList<Formula>();
 	
-	private static HashMap<Button,Formula> buttons = new HashMap<Button,Formula>();
+	
 	
 	
 	
@@ -38,8 +42,9 @@ public class FormulasView implements PidescoView {
 		basic_formulas.add(new QuadraticFormula());
 		basic_formulas.add(new TrigonometricFormula());		
 		basic_formulas.add(new PythagoreanTheorem());
-		
-		engineering_formulas.add(new T());
+		basic_formulas.add(new Areas());
+		basic_formulas.add(new Volumes());
+		engineering_formulas.add(new FriisFormula());
 		//map with all formulas
 		allFormulas.put("Basic",basic_formulas);
 		allFormulas.put("Engineering",engineering_formulas);
@@ -53,7 +58,6 @@ public class FormulasView implements PidescoView {
 	
 	@Override
 	public void createContents(final Composite viewArea, Map<String, Image> imageMap) {
-		System.out.println("IN");
 		viewArea.setLayout(new GridLayout());
 		TabFolder tabFolder = new TabFolder(viewArea, SWT.CLOSE);  
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
