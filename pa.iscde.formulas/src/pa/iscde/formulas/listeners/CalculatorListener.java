@@ -120,13 +120,17 @@ public class CalculatorListener implements SelectionListener{
 			cancel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			cancel.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent event) {
-					formula.result(null);
+					if(formula.name().equals("Areas") || formula.name().equals("Volumes")){
+						formula.result(null);
+					}
 					dialog.dispose();
 				}
 			});
 			dialog.addListener(SWT.Close, new Listener() {
 			      public void handleEvent(Event event) {
-			    	  formula.result(null);
+			    	  if(formula.name().equals("Areas") || formula.name().equals("Volumes")){
+			    		  formula.result(null);
+			    	  }
 			      }
 			});
 
