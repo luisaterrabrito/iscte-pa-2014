@@ -20,12 +20,12 @@ import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
 
-public class FormulaImage {
+public class DrawEquationUtil {
 
 	private Composite viewArea;
 	private String formula_string;
 
-	public FormulaImage(Composite viewArea2, String formula_string) {
+	public DrawEquationUtil(Composite viewArea2, String formula_string) {
 		this.viewArea = viewArea2;
 		this.formula_string = formula_string;
 	}
