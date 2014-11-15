@@ -1,5 +1,6 @@
 package pa.iscde.formulas.view;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -20,17 +21,22 @@ import pa.iscde.formulas.basics.QuadraticFormula;
 import pa.iscde.formulas.basics.TrigonometricFormula;
 import pa.iscde.formulas.basics.Volumes;
 import pa.iscde.formulas.engineering.FriisFormula;
+import pa.iscde.formulas.util.FormulaImage;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
 public class FormulasView implements PidescoView {
 	
-	private HashMap<String,LinkedList<Formula>> allFormulas = new HashMap<String, LinkedList<Formula>>();
+	private static HashMap<String,LinkedList<Formula>> allFormulas = new HashMap<String, LinkedList<Formula>>();
 	private static HashMap<Button,Formula> buttons = new HashMap<Button,Formula>();
 	
 	private LinkedList<Formula> basic_formulas = new LinkedList<Formula>();
 	private LinkedList<Formula> engineering_formulas = new LinkedList<Formula>();
 	private LinkedList<Formula> finance_formulas = new LinkedList<Formula>();
 	private LinkedList<Formula> statistics_formulas = new LinkedList<Formula>();
+	
+	private static Composite viewArea;
+	private static TabFolder tabFolder;
+	private static boolean formulasMode = true;
 	
 	
 	
@@ -58,8 +64,14 @@ public class FormulasView implements PidescoView {
 	
 	@Override
 	public void createContents(final Composite viewArea, Map<String, Image> imageMap) {
+		FormulasView.viewArea = viewArea;
+		createTabs();
+	}
+	
+	
+	private static void createTabs() {
 		viewArea.setLayout(new GridLayout());
-		TabFolder tabFolder = new TabFolder(viewArea, SWT.CLOSE);  
+		tabFolder = new TabFolder(viewArea, SWT.CLOSE);  
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
 		tabFolder.setLayoutData(data);
 		for (String area : allFormulas.keySet()) {
@@ -69,12 +81,10 @@ public class FormulasView implements PidescoView {
 		}	
         viewArea.pack();
 	}
-	
-	
-	private Composite createTabContent( Composite parent, LinkedList<Formula> formulas ) {
+
+	private static Composite createTabContent(Composite parent, LinkedList<Formula> formulas ) {
 	    Composite c = new Composite( parent, SWT.NONE );
 	    c.setLayout( new GridLayout( formulas.size(), false ));
-	 
 	    for( Formula formula : formulas ) {
 	    	Button button = new Button(c, SWT.PUSH);
 	    	button.setText(formula.name());
@@ -92,11 +102,25 @@ public class FormulasView implements PidescoView {
 
 
 	public static void setCalculatorMode() {
+		if(!formulasMode){
+			createTabs();
+		}
+		formulasMode = true;
 		for (Button button : buttons.keySet()) {
 			if(buttons.get(button).getCurrentListener()!=null)
 				button.removeSelectionListener(buttons.get(button).getCurrentListener());
 			button.addSelectionListener(buttons.get(button).getCalculatorListener());
 		}
+	}
+
+
+
+	public static void setDrawEquaitonMode() throws IOException {
+		formulasMode = false;
+		buttons.clear();
+		tabFolder.dispose();
+		FormulaImage formulaImage = new FormulaImage(viewArea,"asd"); 
+		viewArea.setBackgroundImage(formulaImage.getImage());
 	}
 	
 	
