@@ -75,9 +75,7 @@ public class FormulasView implements PidescoView {
 	
 	
 	private static void createTabs() {
-		Group group1 = new Group(viewArea, SWT.NULL);
-		group1.setText("Teste");
-		tabFolder = new TabFolder(group1, SWT.FILL);  
+		tabFolder = new TabFolder(viewArea, SWT.FILL);  
 		for (String area : allFormulas.keySet()) {
 			TabItem tab = new TabItem(tabFolder,SWT.CLOSE);
 			tab.setText(area);
