@@ -33,7 +33,7 @@
             class="pa.iscde.formulas.tools.Calculator"
             description="Calculator for equations"
             icon="calculator.gif"
-            toggle="false"
+            toggle="true"
             view="pa.iscde.formulas.formulas">
       </tool>
    </extension>
@@ -45,7 +45,7 @@
             class="pa.iscde.formulas.tools.DrawEquations"
             description="Draw Mathematical Equations"
             icon="draw.gif"
-            toggle="false"
+            toggle="true"
             view="pa.iscde.formulas.formulas">
       </tool>
    </extension>
