@@ -29,7 +29,10 @@ public class Areas extends Formula{
 	@Override
 	public String result(String[] inputs) {
 		double area,height,side;
-		if(areaSelector==null){
+		if(inputs==null){
+			inptuss = INPUTS;
+			areaSelector = null;
+		}else if(areaSelector==null){
 			switch(inputs[0]){
 			case "Square":
 				String[] in = {"Side"};
