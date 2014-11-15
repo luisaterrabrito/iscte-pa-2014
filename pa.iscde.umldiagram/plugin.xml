@@ -7,29 +7,33 @@
          point="pa.iscde.team">
       <member
             name="nuno"
+            photo="nuno.gif"
             quote="54378"
             user="nbcot">
       </member>
       <member
             name="diogo"
+            photo="peres.gif"
             quote="54411"
             user="drbps">
       </member>
    </extension>
    <extension
-         id="view"
-         name="myview"
+         id="umlview"
+         name="UML View"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.umldiagram.MyView">
+            class="pa.iscde.umldiagram.UmlView"
+            icon="icon.gif">
       </view>
    </extension>
    <extension
-         id="view"
-         name="myview"
+         id="umlview"
+         name="UML View"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.umldiagram.MyView">
+            class="pa.iscde.umldiagram.UmlView"
+            icon="icon.gif">
       </view>
    </extension>
 
