@@ -1,5 +1,7 @@
 package pt.iscte.pidesco.projectbrowser.service;
 
+import java.util.Collection;
+
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 
 /**
@@ -17,7 +19,7 @@ public interface ProjectBrowserListener {
 	 * Invoked whenever the selection of elements in the tree changes.
 	 * @param selection (non-null) collection of elements of the new selection, which may be empty
 	 */
-	void selectionChanged(Iterable<SourceElement> selection);
+	void selectionChanged(Collection<SourceElement> selection);
 	
 	
 	/**
@@ -37,7 +39,7 @@ public interface ProjectBrowserListener {
 		 * Does nothing.
 		 */
 		@Override
-		public void selectionChanged(Iterable<SourceElement> selection) {
+		public void selectionChanged(Collection<SourceElement> selection) {
 			
 		}
 	}

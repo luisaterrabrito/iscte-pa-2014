@@ -10,7 +10,7 @@ public interface ProjectBrowserServices {
 	/**
 	 * Id of the refresh tool
 	 */
-	public static final String REFRESH_TOOL_ID = "refresh";
+	public static final String REFRESH_TOOL_ID = "pt.iscte.pidesco.projectbrowser.refresh";
 	
 	/**
 	 * Obtain the root of the tree.
