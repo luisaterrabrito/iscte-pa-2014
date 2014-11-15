@@ -29,7 +29,10 @@ public class Volumes extends Formula{
 		@Override
 		public String result(String[] inputs) {
 			double volume,height,side,a,b,c,radius;
-			if(areaSelector==null){
+			if(inputs==null){
+				inptuss = INPUTS;
+				areaSelector = null;
+			}else if(areaSelector==null){
 				switch(inputs[0]){
 				case "Cube":
 					String[] in = {"Side"};
