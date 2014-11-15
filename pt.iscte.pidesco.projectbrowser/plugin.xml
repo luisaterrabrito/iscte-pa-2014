@@ -16,7 +16,7 @@
          name="Refresh"
          point="pt.iscte.pidesco.tool">
       <tool
-            class="pt.iscte.pidesco.projectbrowser.internal.RefreshCommand"
+            class="pt.iscte.pidesco.projectbrowser.internal.RefreshTool"
             description="Refreshes the source tree"
             icon="refresh.gif"
             hasState="false"

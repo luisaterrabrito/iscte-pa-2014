@@ -1,8 +1,10 @@
 package pt.iscte.pidesco.projectbrowser.internal;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,10 +15,12 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -44,7 +48,7 @@ public class ProjectBrowserView implements PidescoView {
 	
 	private static ProjectBrowserView instance;
 	
-	private TreeViewer viewer;
+	private TreeViewer tree;
 	private PackageElement invisibleRoot;
 
 	private File rootPath;
@@ -89,8 +93,8 @@ public class ProjectBrowserView implements PidescoView {
 	public void activateFilter(String id) {
 		if(filtersMap.containsKey(id)) {
 			activeFilters.add(id);
-			viewer.addFilter(filtersMap.get(id));
-			viewer.expandAll();
+			tree.addFilter(filtersMap.get(id));
+			tree.expandAll();
 		}
 		else {
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Filter not found", "Filter with id=" + id + " not found");
@@ -100,8 +104,8 @@ public class ProjectBrowserView implements PidescoView {
 	public void deactivateFilter(String id) {
 		if(filtersMap.containsKey(id)) {
 			activeFilters.remove(id);
-			viewer.removeFilter(filtersMap.get(id));
-			viewer.collapseAll();
+			tree.removeFilter(filtersMap.get(id));
+			tree.expandAll();
 		}
 		else {
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Filter not found", "Filter with id=" + id + " not found");
@@ -114,25 +118,26 @@ public class ProjectBrowserView implements PidescoView {
 		rootPath = new File(ResourcesPlugin.getWorkspace().getRoot().getLocation().toString());
 		packageIcon = images.get("package.gif");
 		classIcon = images.get("class.gif");
-		viewer = new TreeViewer(viewArea, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-		viewer.setContentProvider(new ViewContentProvider());
-		viewer.setLabelProvider(new ViewLabelProvider());
+		tree = new TreeViewer(viewArea, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		tree.setContentProvider(new ViewContentProvider());
+		tree.setLabelProvider(new ViewLabelProvider());
 		
-		hookDoubleClickAction();
+		addDoubleClickListener();
+		addSelectionListener();
 		refresh();
 	}
 
 	public void refresh() {
-		Object[] expanded = viewer.getExpandedElements();
+		Object[] expanded = tree.getExpandedElements();
 
 		invisibleRoot = scan(rootPath);
-		viewer.setInput(invisibleRoot);
+		tree.setInput(invisibleRoot);
 		
 		if(!activeFilters.isEmpty())
-			viewer.expandAll();
+			tree.expandAll();
 		else
 			for(Object o : expanded)
-				viewer.expandToLevel(o, TreeViewer.ALL_LEVELS);
+				tree.expandToLevel(o, TreeViewer.ALL_LEVELS);
 	}
 
 
@@ -231,15 +236,28 @@ public class ProjectBrowserView implements PidescoView {
 
 
 
-	private void hookDoubleClickAction() {
-		viewer.addDoubleClickListener(new IDoubleClickListener() {
+	private void addDoubleClickListener() {
+		tree.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
-				IStructuredSelection s = (IStructuredSelection) viewer.getSelection();
+				IStructuredSelection s = (IStructuredSelection) tree.getSelection();
 				if(s.size() == 1) {
 					SourceElement e = (SourceElement) s.getFirstElement();
 					for(ProjectBrowserListener l : ProjectBrowserActivator.getInstance().getListeners()) {
 						l.doubleClick(e);
 					}
+				}
+			}
+		});
+	}
+	
+	private void addSelectionListener() {
+		tree.addSelectionChangedListener(new ISelectionChangedListener() {	
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+				List<SourceElement> list = Collections.unmodifiableList(selection.toList());
+				for(ProjectBrowserListener l : ProjectBrowserActivator.getInstance().getListeners()) {
+					l.selectionChanged(list);
 				}
 			}
 		});
