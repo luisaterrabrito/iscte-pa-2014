@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import javax.swing.tree.VariableHeightLayoutCache;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;

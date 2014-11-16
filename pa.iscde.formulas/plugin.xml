@@ -34,7 +34,6 @@
             description="Calculator for equations"
             hasState="true"
             icon="calculator.gif"
-            toggle="true"
             view="pa.iscde.formulas.formulas">
       </tool>
    </extension>
@@ -47,7 +46,6 @@
             description="Draw Mathematical Equations"
             hasState="true"
             icon="draw.gif"
-            toggle="true"
             view="pa.iscde.formulas.formulas">
       </tool>
    </extension>
