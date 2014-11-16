@@ -20,7 +20,7 @@ public class SearchView implements PidescoView {
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		SearchView.viewArea = viewArea;
-		Button b = new Button(null, SWT.PUSH);
+		Button b = new Button(viewArea, SWT.PUSH);
 		b.setText("TESTE");
 		b.setBounds(10, 10, 50, 20);
 	}
