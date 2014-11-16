@@ -91,6 +91,7 @@ public class CalculatorListener implements SelectionListener{
 			ok.setText("Calculate");
 			ok.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			ok.addSelectionListener(new SelectionAdapter() {
+				@Override
 				public void widgetSelected(SelectionEvent event) {
 					String[] results = new String[inputs_text.size()];
 					for (int i = 0; i < results.length; i++) {
@@ -119,6 +120,7 @@ public class CalculatorListener implements SelectionListener{
 			cancel.setText("Cancel");
 			cancel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			cancel.addSelectionListener(new SelectionAdapter() {
+				@Override
 				public void widgetSelected(SelectionEvent event) {
 					if(formula.name().equals("Areas") || formula.name().equals("Volumes")){
 						formula.result(null);
@@ -127,7 +129,8 @@ public class CalculatorListener implements SelectionListener{
 				}
 			});
 			dialog.addListener(SWT.Close, new Listener() {
-			      public void handleEvent(Event event) {
+			      @Override
+				public void handleEvent(Event event) {
 			    	  if(formula.name().equals("Areas") || formula.name().equals("Volumes")){
 			    		  formula.result(null);
 			    	  }

@@ -10,7 +10,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -37,7 +36,7 @@ public class FormulasView implements PidescoView {
 	
 	private static Composite viewArea;
 	private static TabFolder tabFolder;
-	private static boolean formulasMode = true;
+	private static boolean drawFormulas = false;
 	private static Label formulasBoard;
 	
 	
@@ -98,17 +97,26 @@ public class FormulasView implements PidescoView {
 	}
 
 
-	public static void setFormulaEjector(){
-		
+	public static void setFormulaInjector(){
+		if(drawFormulas){
+			formulasBoard.dispose();
+			createTabs();
+		}
+		drawFormulas = false;
+		for (Button button : buttons.keySet()) {
+			if(buttons.get(button).getCurrentListener()!=null)
+				button.removeSelectionListener(buttons.get(button).getCurrentListener());
+			button.addSelectionListener(buttons.get(button).getCodeEjectorListener());
+		}
 	}
 
 
 	public static void setCalculatorMode() {
-		if(!formulasMode){
+		if(drawFormulas){
 			formulasBoard.dispose();
 			createTabs();
 		}
-		formulasMode = true;
+		drawFormulas = false;
 		for (Button button : buttons.keySet()) {
 			if(buttons.get(button).getCurrentListener()!=null)
 				button.removeSelectionListener(buttons.get(button).getCurrentListener());
@@ -119,7 +127,7 @@ public class FormulasView implements PidescoView {
 
 
 	public static void setDrawEquaitonMode() throws IOException {
-		formulasMode = false;
+		drawFormulas = true;
 		buttons.clear();
 		tabFolder.dispose();
 		DrawEquationUtil formulaImage = new DrawEquationUtil(viewArea,"\\int\\frac {V_m} {K_M+S}"); 
