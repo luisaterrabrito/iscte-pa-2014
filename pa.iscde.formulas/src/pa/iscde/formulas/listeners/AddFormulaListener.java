@@ -20,6 +20,8 @@ public class AddFormulaListener implements SelectionListener{
 
 	private int inputsNumber =0;
 	private String [] inputsName;
+	private String formulaNameString;
+	private String categoryNameString;
 	private ArrayList<Text> inputs_text = new ArrayList<Text>();
 
 	public AddFormulaListener(){
@@ -42,6 +44,22 @@ public class AddFormulaListener implements SelectionListener{
 		final Text input_text = new Text(dialog, SWT.BORDER);
 		input_text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		((GridData) input_text.getLayoutData()).widthHint = 100;
+		
+		Label category = new Label(dialog, SWT.NONE);
+		category.setText("Category: ");
+		category.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		final Text input_text_category = new Text(dialog, SWT.BORDER);
+		input_text_category.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		((GridData) input_text_category.getLayoutData()).widthHint = 100;
+		
+		Label formulaName = new Label(dialog, SWT.NONE);
+		formulaName.setText("Formula Name: ");
+		formulaName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		final Text input_text_name= new Text(dialog, SWT.BORDER);
+		input_text_name.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		((GridData) input_text_name.getLayoutData()).widthHint = 100;
 
 		Button ok = new Button(dialog, SWT.PUSH);
 		ok.setText("Continue");
@@ -49,8 +67,10 @@ public class AddFormulaListener implements SelectionListener{
 		ok.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
+				categoryNameString=input_text_category.getText();
+				formulaNameString=input_text_name.getText();
 				inputsNumber = Integer.parseInt(input_text.getText());
-				createInputsNameWindow(new Shell(new Shell(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL), inputsNumber);
+				createFormulaWindow(new Shell(new Shell(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL), inputsNumber);
 				dialog.dispose();
 			}
 		});
@@ -61,18 +81,12 @@ public class AddFormulaListener implements SelectionListener{
 		cancel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
-				//				if(formula.name().equals("Areas") || formula.name().equals("Volumes")){
-				//					formula.result(null);
-				//				}
 				dialog.dispose();
 			}
 		});
 		dialog.addListener(SWT.Close, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				//		    	  if(formula.name().equals("Areas") || formula.name().equals("Volumes")){
-				//		    		  formula.result(null);
-				//  }
 			}
 		});
 
@@ -82,15 +96,12 @@ public class AddFormulaListener implements SelectionListener{
 
 	}
 
-	private void createInputsNameWindow(final Shell shell, final int inputsNumber) {
-		shell.setText("Formula Inputs:");
+	private void createFormulaWindow(final Shell shell, final int inputsNumber) {
+		shell.setText("Formula Specification");
 		shell.setLayout(new GridLayout(2, false));
-		Label label_info = new Label(shell, SWT.NONE);
-		label_info.setText("Name of the inputs");
-		label_info.setLayoutData(new GridData(GridData.FILL));
-		Label lb = new Label(shell, SWT.NONE);
-		lb.setText("");
-		lb.setLayoutData(new GridData(GridData.CENTER));
+//		Label lb = new Label(shell, SWT.NONE);
+//		lb.setText("");
+//		lb.setLayoutData(new GridData(GridData.CENTER));
 
 		for (int i = 0; i < inputsNumber; i++) {
 			Label label = new Label(shell, SWT.NONE);
@@ -99,9 +110,23 @@ public class AddFormulaListener implements SelectionListener{
 			label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			Text input_text = new Text(shell, SWT.BORDER);
 			input_text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			input_text.setSize(100, 50);
 			((GridData) input_text.getLayoutData()).widthHint = 100;
 			inputs_text.add(input_text);
 		}
+		shell.setLayout(new GridLayout(1, false));
+		Label label_algorithm = new Label(shell, SWT.NONE);
+		label_algorithm.setText("Type your algorithm");
+		label_algorithm.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Text t_algorithm = new Text(shell, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
+		t_algorithm.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		Label label_java_code = new Label(shell, SWT.NONE);
+		label_java_code.setText("Type your java code");
+		label_java_code.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Text t_code = new Text(shell, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
+		t_code.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
 		Button ok = new Button(shell, SWT.PUSH);
 		ok.setText("Continue");
 		ok.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -112,12 +137,11 @@ public class AddFormulaListener implements SelectionListener{
 				for (int i = 0; i < inputsName.length; i++) {
 					inputsName[i] = inputs_text.get(i).getText();
 				}
-				createCodeWindow(new Shell(new Shell(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL), inputsName);
+				//createCodeWindow(new Shell(new Shell(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL), inputsName);
 				shell.dispose();
 			}
 
 		});
-
 		Button cancel = new Button(shell, SWT.PUSH);
 		cancel.setText("Cancel");
 		cancel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -128,47 +152,46 @@ public class AddFormulaListener implements SelectionListener{
 			}
 		});
 		shell.setDefaultButton(ok);
-		shell.pack();
 		shell.open();
 	}
 
-	private void createCodeWindow(final Shell shell, String[] inputsName) {
-		shell.setText("Formula code:");
-		shell.setLayout(new GridLayout(1, false));
-		Label label_info = new Label(shell, SWT.NONE);
-		label_info.setText("Type your formula code");
-		label_info.setLayoutData(new GridData(GridData.FILL));
-		Label lb = new Label(shell, SWT.NONE);
-		lb.setText("");
-		lb.setLayoutData(new GridData(GridData.CENTER));
-		Text t = new Text(shell, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
-		t.setLayoutData(new GridData(GridData.FILL_BOTH));
-		t.setText("//The inputs will be stored in the 'String[]inputs' received in your function. "+ "Inputs: ");
-		String text="";
-		for (int i = 0; i < inputsName.length; i++) {
-			if(i==0){
-				text=t.getText();
-				text+= "Input[" + i +"]= " + inputsName[i] +",";
-			}else if(i!=inputsName.length-1&&i!=0){
-				text+= "Input[" + i +"]= " + inputsName[i] +", " ;
-			}else{
-				text+= "Input[" + i +"]= " + inputsName[i];	
-			}
-		}
-		t.setText(text);
-		Button ok = new Button(shell, SWT.PUSH);
-		ok.setText("Continue");
-		ok.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		ok.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				//criar aqui o ficheiro
-				shell.dispose();
-			}
-		});
-		shell.setDefaultButton(ok);
-		shell.open();
-	}
+//	private void createCodeWindow(final Shell shell, String[] inputsName) {
+//		shell.setText("Formula code:");
+//		shell.setLayout(new GridLayout(1, false));
+//		Label label_info = new Label(shell, SWT.NONE);
+//		label_info.setText("Type your formula code");
+//		label_info.setLayoutData(new GridData(GridData.FILL));
+//		Label lb = new Label(shell, SWT.NONE);
+//		lb.setText("");
+//		lb.setLayoutData(new GridData(GridData.CENTER));
+//		Text t = new Text(shell, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
+//		t.setLayoutData(new GridData(GridData.FILL_BOTH));
+//		t.setText("//The inputs will be stored in the 'String[]inputs' received in your function. "+ "Inputs: ");
+//		String text="";
+//		for (int i = 0; i < inputsName.length; i++) {
+//			if(i==0){
+//				text=t.getText();
+//				text+= "Input[" + i +"]= " + inputsName[i] +",";
+//			}else if(i!=inputsName.length-1&&i!=0){
+//				text+= "Input[" + i +"]= " + inputsName[i] +", " ;
+//			}else{
+//				text+= "Input[" + i +"]= " + inputsName[i];	
+//			}
+//		}
+//		t.setText(text);
+//		Button ok = new Button(shell, SWT.PUSH);
+//		ok.setText("Continue");
+//		ok.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		ok.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent event) {
+//				//criar aqui o ficheiro
+//				shell.dispose();
+//			}
+//		});
+//		shell.setDefaultButton(ok);
+//		shell.open();
+//	}
 
 	@Override
 	public void widgetSelected(SelectionEvent e) {
