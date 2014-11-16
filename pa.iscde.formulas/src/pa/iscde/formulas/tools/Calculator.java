@@ -7,8 +7,13 @@ public class Calculator implements PidescoTool {
 
 	@Override
 	public void run(boolean activate) {
-		System.out.println("CALCULATOR MODE");
-		FormulasView.setCalculatorMode();
+		if(activate){
+			System.out.println("CALCULATOR MODE");
+			FormulasView.setCalculatorMode();
+		}else{
+			System.out.println("FORMULA INJECTOR MODE");
+			FormulasView.setFormulaInjector();
+		}
 	}
 
 	

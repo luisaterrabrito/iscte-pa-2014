@@ -22,6 +22,7 @@ public class InfoWindow {
 		ok.setText("OK");
 		ok.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ok.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				dialog.dispose();
 			}
