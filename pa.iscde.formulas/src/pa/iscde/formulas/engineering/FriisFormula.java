@@ -11,6 +11,9 @@ public class FriisFormula extends Formula{
 
 	@Override
 	public String result(String[] inputs) {
+		if(inputs[0].equals("")){
+			return "Inputs not valid";
+		}else{
 		double pt = Double.valueOf(inputs[0]);
 		double gt = Double.valueOf(inputs[1]);
 		double gr = Double.valueOf(inputs[2]);
@@ -22,6 +25,7 @@ public class FriisFormula extends Formula{
 		double downCalculation = Math.pow(aux, 2);
 		double result = ((topCalculation/downCalculation)*pt);
 		return String.valueOf(result);
+		}
 	}	
 	
 

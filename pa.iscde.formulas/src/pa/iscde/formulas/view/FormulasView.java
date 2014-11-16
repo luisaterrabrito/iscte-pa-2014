@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import javax.swing.tree.VariableHeightLayoutCache;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
@@ -20,7 +22,16 @@ import pa.iscde.formulas.basics.PythagoreanTheorem;
 import pa.iscde.formulas.basics.QuadraticFormula;
 import pa.iscde.formulas.basics.TrigonometricFormula;
 import pa.iscde.formulas.basics.Volumes;
+import pa.iscde.formulas.engineering.DecibelConverter;
 import pa.iscde.formulas.engineering.FriisFormula;
+import pa.iscde.formulas.engineering.MovementEquations;
+import pa.iscde.formulas.finance.NumberOfPayments;
+import pa.iscde.formulas.finance.PresentValue;
+import pa.iscde.formulas.finance.VALCalculation;
+import pa.iscde.formulas.statistic.Mean;
+import pa.iscde.formulas.statistic.Median;
+import pa.iscde.formulas.statistic.StandardDeviation;
+import pa.iscde.formulas.statistic.Variance;
 import pa.iscde.formulas.util.DrawEquationUtil;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
@@ -51,7 +62,20 @@ public class FormulasView implements PidescoView {
 		basic_formulas.add(new PythagoreanTheorem());
 		basic_formulas.add(new Areas());
 		basic_formulas.add(new Volumes());
+		
 		engineering_formulas.add(new FriisFormula());
+		engineering_formulas.add(new DecibelConverter());
+		engineering_formulas.add(new MovementEquations());
+		
+		finance_formulas.add(new VALCalculation());
+		finance_formulas.add(new NumberOfPayments());
+		finance_formulas.add(new PresentValue());
+		
+		statistics_formulas.add(new Mean());
+		statistics_formulas.add(new Median());
+		statistics_formulas.add(new StandardDeviation());
+		statistics_formulas.add(new Variance());
+		
 		//map with all formulas
 		allFormulas.put("Basic",basic_formulas);
 		allFormulas.put("Engineering",engineering_formulas);

@@ -20,6 +20,9 @@ public class Variance extends Formula{
 
 	@Override
 	public String result(String[] inputs) {
+		if(inputs[0].equals("")){
+			return "Inputs not valid";
+		}else{
 		double [] values = getValues(inputs[0]);
 		double aux=0;
 		double mean = getMean(values);
@@ -27,6 +30,7 @@ public class Variance extends Formula{
 			aux+=(mean-values[i])*(mean-values[i]);
 		}
 		return String.valueOf((aux/values.length));
+		}
 	}
 
 	private double getMean(double[] values) {

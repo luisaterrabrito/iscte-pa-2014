@@ -17,6 +17,9 @@ public class NumberOfPayments extends Formula{
 
 	@Override
 	public String result(String[] inputs) {
+		if(inputs[0].equals("")){
+			return "Inputs not valid";
+		}else{
 		double rate = (Double.parseDouble(inputs[0])/100);
 		double futureValue = Double.parseDouble(inputs[1]);
 		double periodicPayment = Double.parseDouble(inputs[2]);
@@ -25,6 +28,7 @@ public class NumberOfPayments extends Formula{
 		double downOperation = Math.log10(1+rate);
 			
 		return String.valueOf((upperOperation/downOperation));
+		}
 	}
 	
 	

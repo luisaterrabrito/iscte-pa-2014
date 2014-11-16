@@ -20,6 +20,9 @@ public class VALCalculation extends Formula {
 
 	@Override
 	public String result(String[] inputs) {
+		if(inputs[0].equals("")){
+			return "Inputs not valid";
+		}else{
 		int n = Integer.parseInt(inputs[0]);
 		double[] cashFlows = getCashFlows(inputs[1]);
 		double rate = (Double.parseDouble(inputs[2])/100);
@@ -28,6 +31,7 @@ public class VALCalculation extends Formula {
 			aux += auxiliarFunction(i,cashFlows[i], rate); 
 		}
 		return String.valueOf(aux);
+		}
 	}
 
 	private double auxiliarFunction(int i, double cfi,double rate) {

@@ -19,6 +19,9 @@ public class MovementEquations extends Formula{
 
 	@Override
 	public String result(String[] inputs) {
+		if(inputs[0].equals("")){
+			return "Inputs not valid";
+		}else{
 		double xo = Double.parseDouble(inputs[0]);
 		double vox = Double.parseDouble(inputs[1]);
 		double yo = Double.parseDouble(inputs[2]);
@@ -29,6 +32,7 @@ public class MovementEquations extends Formula{
 		double aux= (GRAVITY/2)*Math.pow(t, 2);
 		double y = yo +(voy*t) -aux;
 		return "x = " + x +"e y = " + y;
+		}
 	}
 
 }
