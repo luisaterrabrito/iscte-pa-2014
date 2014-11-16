@@ -26,5 +26,15 @@
             class="pa.iscde.filtersearch.SearchView">
       </view>
    </extension>
+   <extension
+         id="id1"
+         name="name"
+         point="pt.iscte.pidesco.tool">
+      <tool
+            class="pa.iscde.filtersearch.PidescoTool1"
+            hasState="false"
+            view="pa.iscde.filtersearch.tool1">
+      </tool>
+   </extension>
 
 </plugin>
