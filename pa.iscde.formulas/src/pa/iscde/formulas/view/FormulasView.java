@@ -22,6 +22,7 @@ import pa.iscde.formulas.basics.QuadraticFormula;
 import pa.iscde.formulas.basics.TrigonometricFormula;
 import pa.iscde.formulas.basics.Volumes;
 import pa.iscde.formulas.engineering.DecibelConverter;
+import pa.iscde.formulas.engineering.ElectronicsFormulas;
 import pa.iscde.formulas.engineering.FriisFormula;
 import pa.iscde.formulas.engineering.MovementEquations;
 import pa.iscde.formulas.finance.NumberOfPayments;
@@ -65,6 +66,7 @@ public class FormulasView implements PidescoView {
 		engineering_formulas.add(new FriisFormula());
 		engineering_formulas.add(new DecibelConverter());
 		engineering_formulas.add(new MovementEquations());
+		engineering_formulas.add(new ElectronicsFormulas());
 		
 		finance_formulas.add(new VALCalculation());
 		finance_formulas.add(new NumberOfPayments());

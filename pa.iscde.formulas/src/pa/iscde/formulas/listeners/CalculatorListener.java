@@ -36,7 +36,7 @@ public class CalculatorListener implements SelectionListener{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			inputs_text.clear();
-			if(formula.name().equals("Areas") || formula.name().equals("Volumes")){
+			if(formula.name().equals("Areas") || formula.name().equals("Volumes")|| formula.name().equals("Electronic Formulas")){
 				createSelection(new Shell(new Shell(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL));
 			}else{
 				createWindow(new Shell(new Shell(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL));
