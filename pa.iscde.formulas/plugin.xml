@@ -49,5 +49,17 @@
             view="pa.iscde.formulas.formulas">
       </tool>
    </extension>
+   <extension
+         id="id1"
+         name="name"
+         point="pt.iscte.pidesco.tool">
+      <tool
+            class="pa.iscde.formulas.tools.AddFormula"
+            description="Add new formulas"
+            hasState="false"
+            icon="newformula.gif"
+            view="pa.iscde.formulas.formulas">
+      </tool>
+   </extension>
 
 </plugin>

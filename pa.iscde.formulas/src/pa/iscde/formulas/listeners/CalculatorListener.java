@@ -127,7 +127,7 @@ public class CalculatorListener implements SelectionListener{
 			cancel.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent event) {
-					if(formula.name().equals("Areas") || formula.name().equals("Volumes")){
+					if(formula.name().equals("Areas") || formula.name().equals("Volumes")||formula.name().equals("Electronic Formulas")){
 						formula.result(null);
 					}
 					dialog.dispose();
@@ -136,7 +136,7 @@ public class CalculatorListener implements SelectionListener{
 			dialog.addListener(SWT.Close, new Listener() {
 			      @Override
 				public void handleEvent(Event event) {
-			    	  if(formula.name().equals("Areas") || formula.name().equals("Volumes")){
+			    	  if(formula.name().equals("Areas") || formula.name().equals("Volumes")||formula.name().equals("Electronic Formulas")){
 			    		  formula.result(null);
 			    	  }
 			      }
