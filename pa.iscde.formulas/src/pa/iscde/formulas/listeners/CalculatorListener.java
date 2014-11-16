@@ -1,6 +1,8 @@
 package pa.iscde.formulas.listeners;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -95,10 +97,13 @@ public class CalculatorListener implements SelectionListener{
 				public void widgetSelected(SelectionEvent event) {
 					String[] results = new String[inputs_text.size()];
 					for (int i = 0; i < results.length; i++) {
-						if(inputs_text.get(i).getText()==null || inputs_text.get(i).getText() == "" || !isNumeric(inputs_text.get(i).getText()))
-							results[i] = "";
-						else
+						if(isMultipleInput(inputs_text.get(i).getText())){
 							results[i] = inputs_text.get(i).getText();
+						}else if(inputs_text.get(i).getText()==null || inputs_text.get(i).getText() == "" || !isNumeric(inputs_text.get(i).getText())){
+							results[i] = "";
+						}else{
+							results[i] = inputs_text.get(i).getText();
+						}
 					}
 					String solution = formula.result(results);
 					boolean isEmpty = false;
@@ -145,6 +150,21 @@ public class CalculatorListener implements SelectionListener{
 		
 		private boolean isNumeric(String str){
 		    return str.matches("-?\\d+(.\\d+)?");
+		}
+		
+		private boolean isMultipleInput(String string){
+			System.out.println("chegeui aqui");
+			List<String> inputs = Arrays.asList(string.split(","));
+			boolean inputsAreNumbers = false;
+			for (int i = 0; i <inputs.size(); i++) {
+				System.out.println("inputs: " + inputs.get(i));
+				if(isNumeric(inputs.get(i))){
+					inputsAreNumbers=true;
+				}else{
+					inputsAreNumbers=false;
+				}
+			}
+			return inputsAreNumbers;
 		}
 
 		@Override

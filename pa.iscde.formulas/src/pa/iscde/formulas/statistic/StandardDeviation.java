@@ -20,6 +20,9 @@ public class StandardDeviation extends Formula{
 
 	@Override
 	public String result(String[] inputs) {
+		if(inputs[0].equals("")){
+			return "Inputs not valid";
+		}else{
 		double [] values = getValues(inputs[0]);
 		double aux=0;
 		double mean = getMean(values);
@@ -28,6 +31,7 @@ public class StandardDeviation extends Formula{
 		}
 		double result = Math.sqrt(aux/values.length);
 		return String.valueOf(result);
+		}
 	}
 
 	private double getMean(double[] values) {

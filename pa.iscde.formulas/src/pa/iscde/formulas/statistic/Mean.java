@@ -20,12 +20,18 @@ public class Mean extends Formula{
 
 	@Override
 	public String result(String[] inputs) {
+		if(inputs[0].equals("")){
+			return "Inputs not valid";
+		}else{
 		double [] values = getValues(inputs[0]);
 		double aux=0;
 		for (int i = 0; i < values.length; i++) {
 			aux+=values[i];
 		}
-		return String.valueOf((aux/values.length));
+		System.out.println("aux:" + aux + " tamanho: " + values.length);
+		double result = aux/values.length;
+		return String.valueOf((result));
+		}
 	}
 
 	private double[] getValues(String string) {

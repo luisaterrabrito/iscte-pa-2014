@@ -20,6 +20,9 @@ public class Median extends Formula{
 
 	@Override
 	public String result(String[] inputs) {
+		if(inputs[0].equals("")){
+			return "Inputs not valid";
+		}else{
 		double [] values = getValues(inputs[0]);
 		double [] b = new double[values.length];
 		System.arraycopy(values, 0, b, 0, b.length);
@@ -31,6 +34,7 @@ public class Median extends Formula{
 		}else{
 			double aux = b[b.length / 2];
 			return String.valueOf(aux);
+		}
 		}
 	}
 
