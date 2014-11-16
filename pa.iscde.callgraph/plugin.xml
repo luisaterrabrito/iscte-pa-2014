@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="MyTeam"
+         name="Minha Equipa"
+         point="pa.iscde.team">
+      <member
+            name="xiixixmember name"
+            quote="swag"
+            user="coco">
+      </member>
+   </extension>
+   <extension
+         id="myview"
+         name="MinhaVista"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.mycomp.MyView">
+      </view>
+   </extension>
+
+</plugin>
