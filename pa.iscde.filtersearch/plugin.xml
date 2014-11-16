@@ -19,22 +19,13 @@
       </member>
    </extension>
    <extension
-         id="id1"
-         name="name"
+         id="searchtool"
+         name="Search Tool"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.filtersearch.SearchView">
+            class="pa.iscde.filtersearch.SearchView"
+            icon="searchtool.gif">
       </view>
-   </extension>
-   <extension
-         id="id1"
-         name="name"
-         point="pt.iscte.pidesco.tool">
-      <tool
-            class="pa.iscde.filtersearch.PidescoTool1"
-            hasState="false"
-            view="pa.iscde.filtersearch.tool1">
-      </tool>
    </extension>
 
 </plugin>
