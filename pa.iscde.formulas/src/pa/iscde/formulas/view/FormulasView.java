@@ -1,19 +1,25 @@
 package pa.iscde.formulas.view;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 import pa.iscde.formulas.Formula;
 import pa.iscde.formulas.basics.Areas;
@@ -28,12 +34,15 @@ import pa.iscde.formulas.engineering.MovementEquations;
 import pa.iscde.formulas.finance.NumberOfPayments;
 import pa.iscde.formulas.finance.PresentValue;
 import pa.iscde.formulas.finance.VALCalculation;
+import pa.iscde.formulas.listeners.CodeEjectorListener;
 import pa.iscde.formulas.statistic.Mean;
 import pa.iscde.formulas.statistic.Median;
 import pa.iscde.formulas.statistic.StandardDeviation;
 import pa.iscde.formulas.statistic.Variance;
 import pa.iscde.formulas.util.DrawEquationUtil;
+import pa.iscde.formulas.util.EquationFinder;
 import pt.iscte.pidesco.extensibility.PidescoView;
+import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class FormulasView implements PidescoView {
 	
@@ -50,13 +59,20 @@ public class FormulasView implements PidescoView {
 	private static boolean drawFormulas = false;
 	private static Label formulasBoard;
 	
-	
-	
+	private static FormulasView formulasView;
+	private static JavaEditorServices javaeditor;
+	private static File fileTarget;
 	
 	
 	public FormulasView() {
+		Bundle bundle = FrameworkUtil.getBundle(this.getClass());
+		BundleContext context = bundle.getBundleContext();
+		ServiceReference<JavaEditorServices> ref = context.getServiceReference(JavaEditorServices.class);
+		JavaEditorServices javaeditor = context.getService(ref);
 		
-		 
+		FormulasView.javaeditor=javaeditor;
+		//FormulasView.fileTarget = javaeditor.getOpenedFile();
+		
 		basic_formulas.add(new QuadraticFormula());
 		basic_formulas.add(new TrigonometricFormula());		
 		basic_formulas.add(new PythagoreanTheorem());
@@ -87,11 +103,19 @@ public class FormulasView implements PidescoView {
 	}
 	
 	
+	public static FormulasView getInstance(){
+		return formulasView;
+	}
 	
+	public static void setTarget(JavaEditorServices javaeditor, File file){
+		FormulasView.javaeditor = javaeditor;
+		FormulasView.fileTarget = file;
+	}
 	
 	
 	@Override
 	public void createContents(final Composite viewArea, Map<String, Image> imageMap) {
+		FormulasView.formulasView=this;
 		FormulasView.viewArea = viewArea;
 		viewArea.setLayout(new GridLayout());
 		createTabs();
@@ -114,7 +138,9 @@ public class FormulasView implements PidescoView {
 	    for( Formula formula : formulas ) {
 	    	Button button = new Button(c, SWT.PUSH);
 	    	button.setText(formula.name());
-    		button.addSelectionListener(formula.getCodeEjectorListener());
+	    	CodeEjectorListener codeejector = (CodeEjectorListener) formula.getCodeEjectorListener();
+    		codeejector.setTarget(javaeditor);
+	    	button.addSelectionListener(codeejector);
 	    	buttons.put(button,formula);
 	    }
 	 
@@ -131,7 +157,10 @@ public class FormulasView implements PidescoView {
 		for (Button button : buttons.keySet()) {
 			if(buttons.get(button).getCurrentListener()!=null)
 				button.removeSelectionListener(buttons.get(button).getCurrentListener());
-			button.addSelectionListener(buttons.get(button).getCodeEjectorListener());
+			
+			CodeEjectorListener codeEjectorListener = (CodeEjectorListener) buttons.get(button).getCodeEjectorListener();
+			codeEjectorListener.setTarget(javaeditor);
+			button.addSelectionListener(codeEjectorListener);
 		}
 	}
 
@@ -149,15 +178,20 @@ public class FormulasView implements PidescoView {
 		}
 	}
 
-
+	
 
 	public static void setDrawEquaitonMode() throws IOException {
 		drawFormulas = true;
 		buttons.clear();
 		tabFolder.dispose();
-		DrawEquationUtil formulaImage = new DrawEquationUtil(viewArea,"\\int\\frac {V_m} {K_M+S}"); 
-		formulasBoard = new Label(viewArea,SWT.NONE);
-		formulasBoard.setImage(formulaImage.getImage());
+
+		EquationFinder eq = new EquationFinder(fileTarget);
+		for (String equation : eq.getEquations().values()) {
+			DrawEquationUtil formulaImage = new DrawEquationUtil(viewArea,equation); 
+			formulasBoard = new Label(viewArea,SWT.NONE);
+			formulasBoard.setImage(formulaImage.getImage());
+		}
+		
 		viewArea.pack();
 	}
 	
