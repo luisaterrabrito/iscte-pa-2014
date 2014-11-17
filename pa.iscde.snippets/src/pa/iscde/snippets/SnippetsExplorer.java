@@ -1,20 +1,16 @@
 package pa.iscde.snippets;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
 
 public class SnippetsExplorer extends Composite {
 	private Text text;
@@ -59,10 +55,20 @@ public class SnippetsExplorer extends Composite {
 		Composite addComposite = new Composite(this, SWT.NONE);
 		addComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		addComposite.setLayout(new FillLayout(SWT.HORIZONTAL));
-
+		
 		Button addNewButton = new Button(addComposite, SWT.NONE);
+		//My listener - Diogo
+		Listener listener =  new Listener() {
+		      public void handleEvent(Event e) {
+			        switch (e.type) {
+			        case SWT.Selection:
+			          System.out.println("Button pressed");
+			          break;
+			        }
+			      }
+			    };
 		addNewButton.setText("Add New Snippet");
-
+		addNewButton.addListener(SWT.Selection, listener);
 	}
 
 	@Override
