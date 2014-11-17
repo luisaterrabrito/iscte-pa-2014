@@ -8,7 +8,8 @@ import java.util.Scanner;
 
 public class EquationFinder {
 	
-	char as = '"';
+	char aux1 = '"';
+	char aux2 = '+';
 	
 	private HashMap<Integer,String> equations = new HashMap<Integer,String>();
 	
@@ -21,7 +22,7 @@ public class EquationFinder {
 		Scanner s = new Scanner(file);
 		while(s.hasNext()){
 			String line = s.nextLine();
-			if(line.contains("/"))
+			if(line.contains("/") || line.contains("Math.sqrt"))
 				equations.put(lines,delimitateLine(line));
 			lines++;
 		}
@@ -29,7 +30,7 @@ public class EquationFinder {
 	}
 
 	private String delimitateLine(String line) {
-		String result = line.replace("(", "{").replace(")","}").replace("String", "").replace("int", "").replace(Character.toString(as), "").replace(";","");
+		String result = line.replace("(", "{").replace(")","}").replace("String", "").replace("int", "").replace(Character.toString(aux1), "").replace(";","").replace("return", "");
 		return convertMath(result);
 	}
 	
