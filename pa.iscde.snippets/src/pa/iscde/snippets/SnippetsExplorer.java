@@ -12,6 +12,8 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import pa.iscde.snippets.gui.CodeView;
+
 public class SnippetsExplorer extends Composite {
 	private Text text;
 
@@ -21,7 +23,7 @@ public class SnippetsExplorer extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public SnippetsExplorer(Composite parent, int style) {
+	public SnippetsExplorer(final Composite parent, int style) {
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
 
@@ -62,8 +64,10 @@ public class SnippetsExplorer extends Composite {
 		      public void handleEvent(Event e) {
 			        switch (e.type) {
 			        case SWT.Selection:
-			          System.out.println("Button pressed");
-			          break;
+			        	new CodeView().createContents(parent, null);
+			        	parent.layout();
+			        	System.out.println("Button pressed");
+			        	break;
 			        }
 			      }
 			    };
