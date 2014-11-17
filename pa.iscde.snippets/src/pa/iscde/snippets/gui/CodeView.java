@@ -74,7 +74,7 @@ public class CodeView implements PidescoView {
 		gridLayoutButton.numColumns = 3;
 		bottomButtonComposite.setLayout(gridLayoutButton);
 		Button closeButton = new Button(bottomButtonComposite, SWT.PUSH);
-		closeButton.setText("Return");
+		closeButton.setText("Discard");
 		closeButton.addListener(SWT.Selection, new Listener() {
 
 			@Override
