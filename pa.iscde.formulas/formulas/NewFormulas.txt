@@ -1,0 +1,10 @@
+1# Statistic, Indutance,2, current@voltage
+2# este e o algoritmo linha 1
+2# este e o algoritmo linha 2
+3# este e o codigo java
+End
+1# Finance, financas,4, current@voltage@val@np
+2# este e o algoritmo de financas linha 1
+2# este e o algoritmo de financas linha 2
+3# este e o codigo java de financas
+End
