@@ -3,7 +3,7 @@
 <plugin>
    <extension
          id="id1"
-         name="name"
+         name="Snippets"
          point="pt.iscte.pidesco.view">
       <view
             class="pa.iscde.snippets.PidescoView1">

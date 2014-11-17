@@ -66,7 +66,7 @@ public class CodeView implements PidescoView {
 		GridData snippetCodeTextLayoutGridData = new GridData(SWT.FILL,
 				SWT.CENTER, true, false, 1, 1);
 		snippetCodeTextLayoutGridData.widthHint = 200;
-		snippetCodeTextLayoutGridData.heightHint = 200;
+		snippetCodeTextLayoutGridData.heightHint = 500;
 		snippetCodeTextComposite.setLayoutData(snippetCodeTextLayoutGridData);
 
 		Composite bottomButtonComposite = new Composite(mainComposite, SWT.None);
