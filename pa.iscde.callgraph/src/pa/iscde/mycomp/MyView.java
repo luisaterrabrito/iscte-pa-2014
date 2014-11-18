@@ -1,6 +1,6 @@
 package pa.iscde.mycomp;
 
-import java.util.Map;
+import java.util.Map; 
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -9,7 +9,10 @@ import org.eclipse.swt.widgets.Label;
 
 import pt.iscte.pidesco.extensibility.PidescoView;
 
-public class MyView implements PidescoView {
+public class MyView implements PidescoView{
+	
+	private Label label;
+	private Composite viewArea;
 
 	public MyView() {
 		// TODO Auto-generated constructor stub
@@ -17,7 +20,8 @@ public class MyView implements PidescoView {
 
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
-		Label label = new Label(viewArea, SWT.None);
+		this.viewArea = viewArea;
+		label = new Label(viewArea, SWT.None);
 		label.setText("ola mundo");
 	}
 
