@@ -9,17 +9,12 @@ public class DrawEquations implements PidescoTool {
 	
 	@Override
 	public void run(boolean activate) {
-		if(activate){
 			System.out.println("DRAW EQUATION MODE");
 			try {
 				FormulasView.setDrawEquaitonMode();
 			} catch (IOException e) {
 			e.printStackTrace();
 			}
-		}else{
-			System.out.println("FORMULA INJECTOR MODE");
-			FormulasView.setFormulaInjector();
-		}
 	}
 
 

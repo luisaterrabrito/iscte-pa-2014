@@ -2,8 +2,10 @@ package pa.iscde.formulas.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.Scanner;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 
 
 public class EquationFinder {
@@ -11,7 +13,7 @@ public class EquationFinder {
 	char aux1 = '"';
 	char aux2 = '+';
 	
-	private HashMap<Integer,String> equations = new HashMap<Integer,String>();
+	private Multimap<String,Integer> equations = ArrayListMultimap.create();
 	
 	public EquationFinder(File file) throws FileNotFoundException {
 		analyseFile(file);
@@ -23,7 +25,7 @@ public class EquationFinder {
 		while(s.hasNext()){
 			String line = s.nextLine();
 			if(line.contains("/") || line.contains("Math.sqrt"))
-				equations.put(lines,delimitateLine(line));
+				equations.put(delimitateLine(line),lines);
 			lines++;
 		}
 		s.close();
@@ -42,7 +44,7 @@ public class EquationFinder {
 		return result;
 	}
 
-	public HashMap<Integer,String> getEquations(){
+	public Multimap<String,Integer> getEquations(){
 		return equations;
 	}
 

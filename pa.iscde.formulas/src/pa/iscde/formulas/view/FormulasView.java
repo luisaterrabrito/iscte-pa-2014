@@ -2,6 +2,7 @@ package pa.iscde.formulas.view;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -9,11 +10,14 @@ import java.util.Map;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.osgi.framework.Bundle;
@@ -57,7 +61,7 @@ public class FormulasView implements PidescoView {
 	private static Composite viewArea;
 	private static TabFolder tabFolder;
 	private static boolean drawFormulas = false;
-	private static Label formulasBoard;
+	private static LinkedList<Label> formulasBoard;
 	
 	private static FormulasView formulasView;
 	private static JavaEditorServices javaeditor;
@@ -117,7 +121,7 @@ public class FormulasView implements PidescoView {
 	public void createContents(final Composite viewArea, Map<String, Image> imageMap) {
 		FormulasView.formulasView=this;
 		FormulasView.viewArea = viewArea;
-		viewArea.setLayout(new GridLayout());
+		viewArea.setLayout(new GridLayout(1,false));
 		createTabs();
 	}
 	
@@ -150,7 +154,7 @@ public class FormulasView implements PidescoView {
 
 	public static void setFormulaInjector(){
 		if(drawFormulas){
-			formulasBoard.dispose();
+			clearFormulasBoard();
 			createTabs();
 		}
 		drawFormulas = false;
@@ -165,9 +169,19 @@ public class FormulasView implements PidescoView {
 	}
 
 
+	private static void clearFormulasBoard() {
+		if(!formulasBoard.isEmpty()){
+			for (Label label : formulasBoard) {
+				label.dispose();
+			}
+			formulasBoard.clear();
+		}
+	}
+
+
 	public static void setCalculatorMode() {
 		if(drawFormulas){
-			formulasBoard.dispose();
+			clearFormulasBoard();
 			createTabs();
 		}
 		drawFormulas = false;
@@ -184,12 +198,14 @@ public class FormulasView implements PidescoView {
 		drawFormulas = true;
 		buttons.clear();
 		tabFolder.dispose();
-
+		formulasBoard = new LinkedList<Label>();
+		clearFormulasBoard();
 		EquationFinder eq = new EquationFinder(fileTarget);
-		for (String equation : eq.getEquations().values()) {
+		for (String equation : eq.getEquations().keySet()) {
 			DrawEquationUtil formulaImage = new DrawEquationUtil(viewArea,equation); 
-			formulasBoard = new Label(viewArea,SWT.NONE);
-			formulasBoard.setImage(formulaImage.getImage());
+			Label label = new Label(viewArea,SWT.NONE);
+			label.setImage(formulaImage.getImage());
+			formulasBoard.add(label);
 		}
 		
 		viewArea.pack();
