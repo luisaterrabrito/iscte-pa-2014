@@ -34,9 +34,9 @@ public class UmlActivator implements BundleActivator {
 			public void selectionChanged(Collection<SourceElement> selection) {
 				
 				UmlView umlview = UmlView.getInstance();
+				umlview.clearGraph();
 				umlview.setBrowserServices(browserServices);
-				umlview.paintUml(selection);
-				
+				umlview.paintUml(selection.iterator().next());
 				
 			}
 		});
