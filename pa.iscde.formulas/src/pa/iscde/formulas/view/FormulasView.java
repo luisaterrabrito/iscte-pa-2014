@@ -9,7 +9,9 @@ import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -20,6 +22,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Text;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -121,7 +124,7 @@ public class FormulasView implements PidescoView {
 	public void createContents(final Composite viewArea, Map<String, Image> imageMap) {
 		FormulasView.formulasView=this;
 		FormulasView.viewArea = viewArea;
-		viewArea.setLayout(new GridLayout(1,false));
+		viewArea.setLayout(new GridLayout(2,false));
 		createTabs();
 	}
 	
@@ -200,16 +203,28 @@ public class FormulasView implements PidescoView {
 		tabFolder.dispose();
 		formulasBoard = new LinkedList<Label>();
 		clearFormulasBoard();
+		//viewArea.setBackground(new Color(viewArea.getDisplay(), 255,255,255));
 		EquationFinder eq = new EquationFinder(fileTarget);
 		for (String equation : eq.getEquations().keySet()) {
 			DrawEquationUtil formulaImage = new DrawEquationUtil(viewArea,equation); 
+			Text text = new Text(viewArea, SWT.NONE);
+			String lines = "";
+			int aux = 0;
+				for (Integer line : eq.getEquations().get(equation)) {
+					aux ++;
+					if(eq.getEquations().get(equation).size()>1 && aux!= eq.getEquations().get(equation).size())
+						lines +=line+",";
+					else
+						lines +=line;
+				}
+			text.setText("Line: "+ lines);
 			Label label = new Label(viewArea,SWT.NONE);
 			label.setImage(formulaImage.getImage());
 			formulasBoard.add(label);
 		}
-		
 		viewArea.pack();
 	}
+	
 	
 	
 	
