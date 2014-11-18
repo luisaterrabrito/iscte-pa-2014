@@ -8,19 +8,22 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.zest.core.widgets.Graph;
 
 import pt.iscte.pidesco.extensibility.PidescoView;
 
 /**
- * 
  * @author Nuno e Diogo
- *
  */
 public class UmlView implements PidescoView {
-
+	private static UmlView umlView;
+	private Graph graph;
+	
 	public UmlView() {
-		// TODO Auto-generated constructor stub
+		umlView = this;
 	}
+	
+	
 
 	@Override
 	public void createContents(Composite viewArea,
@@ -29,8 +32,11 @@ public class UmlView implements PidescoView {
 		viewArea.setBackgroundImage(img);
 		Label l = new Label(viewArea, SWT.NONE);
 		l.setText("Diagrama UML: ");
-		// TODO Auto-generated method stub
 		
+	}
+
+	public static UmlView getInstance() {
+		return umlView;
 	}
 
 }
