@@ -1,7 +1,5 @@
 package pa.iscte.dropcode.gui;
 
-import java.util.List;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Composite;
@@ -13,7 +11,7 @@ public class DropRow extends Composite {
 
 	public DropRow(Composite parent, int style, DropAble dropable) {
 		super(parent, style);
-		addCombo(DropModifier.getVisibilityModifiers(), dropable.getModifier());
+		addCombo(DropModifier.getVisibilityModifiers(), dropable.getVisibilityModifier());
 		setName(dropable.name());
 		// TODO: Add Modifier addButton();
 	}
