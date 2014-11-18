@@ -36,15 +36,18 @@ public class SnippetsView implements PidescoView {
 	
 	public void createExplorer(){
 		new SnippetsExplorer(viewArea, SWT.NONE);
+		viewArea.layout();
 	}
 	
 	// With file
 	public void createSnippetCode(File snp){
 		new SnippetCode(snp, viewArea, SWT.NONE);
+		viewArea.layout();
 	}
 
 	//Without file
 	public void createSnippetCode(){
 		new SnippetCode(viewArea, SWT.NONE);
+		viewArea.layout();
 	}
 }

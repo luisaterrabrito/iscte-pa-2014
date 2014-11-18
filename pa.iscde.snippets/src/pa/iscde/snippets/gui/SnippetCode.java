@@ -20,19 +20,18 @@ public class SnippetCode extends Composite {
 	public SnippetCode(File f, Composite viewArea, int style) {
 		super(viewArea, style);
 		fileToUse = f;
-		createContents(viewArea);
+		createContents();
 	}
 	
 	public SnippetCode(Composite viewArea, int style){
 		super(viewArea, style);
-		createContents(viewArea);
+		createContents();
 	}
 
-	public void createContents(final Composite viewArea) {
-		final Composite mainComposite = new Composite(viewArea, SWT.None);
-		mainComposite.setLayout(new GridLayout(1, false));
+	public void createContents() {
+		this.setLayout(new GridLayout(1, false));
 
-		Composite nameAndEditComposite = new Composite(mainComposite, SWT.None);
+		Composite nameAndEditComposite = new Composite(this, SWT.None);
 		GridLayout gridLayoutNameAndEdit = new GridLayout();
 		gridLayoutNameAndEdit.numColumns = 2;
 		nameAndEditComposite.setLayout(gridLayoutNameAndEdit);
@@ -65,7 +64,7 @@ public class SnippetCode extends Composite {
 		editComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
 
-		Composite snippetCodeTextComposite = new Composite(mainComposite,
+		Composite snippetCodeTextComposite = new Composite(this,
 				SWT.None);
 		snippetCodeTextComposite.setLayout(new FillLayout(SWT.HORIZONTAL
 				| SWT.VERTICAL));
@@ -78,7 +77,7 @@ public class SnippetCode extends Composite {
 		snippetCodeTextLayoutGridData.heightHint = 500;
 		snippetCodeTextComposite.setLayoutData(snippetCodeTextLayoutGridData);
 
-		Composite bottomButtonComposite = new Composite(mainComposite, SWT.None);
+		Composite bottomButtonComposite = new Composite(this, SWT.None);
 		GridLayout gridLayoutButton = new GridLayout();
 		gridLayoutButton.numColumns = 3;
 		bottomButtonComposite.setLayout(gridLayoutButton);
@@ -90,9 +89,8 @@ public class SnippetCode extends Composite {
 			public void handleEvent(Event event) {
 				switch (event.type) {
 				case SWT.Selection:
-					mainComposite.dispose();
+					dispose();
 					SnippetsView.getInstance().createExplorer();
-					viewArea.layout();
 					System.out.println("Button pressed");
 					break;
 				}
