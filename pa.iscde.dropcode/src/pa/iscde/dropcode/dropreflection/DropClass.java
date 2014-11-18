@@ -1,5 +1,6 @@
 package pa.iscde.dropcode.dropreflection;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -16,7 +17,7 @@ public class DropClass {
 	public DropClass(JavaEditorServices javaEditor) {
 
 		// CONSTRUCT THE JAVA CLASS //
-		
+
 		ASTVisitor visitor = new ASTVisitor() {
 
 			@Override
@@ -34,8 +35,7 @@ public class DropClass {
 				// ADD METHODS //
 				return false;
 			}
-			
-			
+
 		};
 		javaEditor.parseFile(javaEditor.getOpenedFile(), visitor);
 
@@ -43,6 +43,10 @@ public class DropClass {
 
 	public DropField getField(String name) {
 		return fields.get(name);
+	}
+
+	public Collection<DropField> getFields() {
+		return fields.values();
 	}
 
 	public DropMethod getMethod(String name) {
