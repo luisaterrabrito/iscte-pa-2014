@@ -1,4 +1,4 @@
-package pa.iscde.snippets;
+package pa.iscde.snippets.gui;
 
 import java.io.File;
 
@@ -14,11 +14,8 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import pa.iscde.snippets.gui.CodeView;
-
 public class SnippetsExplorer extends Composite {
 	private Text text;
-	final private Composite PARENT;
 	final private File SNIPPETS_FOLDER = null; 
 
 	/**
@@ -29,7 +26,6 @@ public class SnippetsExplorer extends Composite {
 	 */
 	public SnippetsExplorer(final Composite parent, int style) {
 		super(parent, style);
-		this.PARENT = parent;
 		setLayout(new GridLayout(1, false));
 
 		Composite searchComposite = new Composite(this, SWT.NONE);
@@ -69,7 +65,8 @@ public class SnippetsExplorer extends Composite {
 		      public void handleEvent(Event e) {
 			        switch (e.type) {
 			        case SWT.Selection:
-			        	new CodeView();
+			        	dispose();
+			        	SnippetsView.getInstance().createSnippetCode();
 			        	parent.layout();
 			        	System.out.println("Button pressed");
 			        	break;
@@ -81,6 +78,5 @@ public class SnippetsExplorer extends Composite {
 	}
 
 	private void loadSnippets(){
-		
 	}
 }
