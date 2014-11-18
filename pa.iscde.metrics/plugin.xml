@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="metrics"
+         name="metrics"
+         point="pa.iscde.team">
+      <member
+            name="luisa"
+            user="mlcst">
+      </member>
+   </extension>
+   <extension
+         id="metrics"
+         name="Metrics"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.metrics.MetricsView">
+      </view>
+   </extension>
+
+</plugin>
