@@ -15,7 +15,7 @@ public class AMinhaView implements PidescoView{
 		
 		Image image = imageMap.get("ada.jpg");
 		Label lbl = new Label(viewArea, SWT.NONE);
-		lbl.setText("Coisas às baldas aqui dentro");
+		lbl.setText("Coisas");
 		viewArea.setBackgroundImage(image);
 		
 	}
