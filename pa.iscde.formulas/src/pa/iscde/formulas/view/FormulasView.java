@@ -225,9 +225,5 @@ public class FormulasView implements PidescoView {
 		viewArea.pack();
 	}
 	
-	
-	
-	
-	
 
 }
