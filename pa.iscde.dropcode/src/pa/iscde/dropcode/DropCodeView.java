@@ -3,19 +3,12 @@ package pa.iscde.dropcode;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 
-import pa.iscde.dropcode.dropreflection.DropAble;
 import pa.iscde.dropcode.dropreflection.DropClass;
 import pa.iscde.dropcode.dropreflection.DropField;
 import pa.iscte.dropcode.gui.DropRow;
