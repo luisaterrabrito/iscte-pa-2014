@@ -17,11 +17,13 @@ import pt.iscte.pidesco.extensibility.PidescoView;
 
 public class DropCodeView implements PidescoView {
 
+	public static DropCodeView getInstance() {
+		return null;
+	}
+
 	@Override
 	public void createContents(Composite c, Map<String, Image> images) {
 
-		
-		
 		// int halign = SWT.CENTER, valign = SWT.FILL, hspan = 5, vspan = 0;
 		// boolean hexcess = true, vexcess = false;
 		// GridData layout = new GridData(halign, valign, hexcess, vexcess,
