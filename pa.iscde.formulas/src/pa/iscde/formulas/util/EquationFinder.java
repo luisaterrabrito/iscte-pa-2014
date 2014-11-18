@@ -31,17 +31,32 @@ public class EquationFinder {
 		s.close();
 	}
 	
-	public String removeA(String string){
-		if(!string.contains(Character.toString(aux1))){
-			return string;
+	public String removeA(String str){
+		String aux = str;
+		aux = aux.replace(" ", "");
+
+		boolean copy = false;
+		String finalStr = "";
+
+		for (int i = 0; i < aux.length()-1; i++) {
+			char currentChar = aux.charAt(i);
+			char nextChar = aux.charAt(i+1);
+
+			if(currentChar == '+' && nextChar == '"'){
+				copy = false;
+			} else if(currentChar == '"' && nextChar == '+'){
+				copy = false;
+			} else {
+				if(copy){
+					finalStr += currentChar;
+				}
+
+				if(!copy){
+					copy = true;
+				}
+			}
 		}
-		int indexC = string.indexOf(Character.toString(aux1));
-		if(string.charAt(indexC-1)==aux2){
-			return string.substring(0, indexC-2).concat(string.substring(indexC,string.length()-1));
-		}else if(string.charAt(indexC+1)==aux2){
-			return string.substring(0, indexC).concat(string.substring(indexC+2,string.length()-1));
-		}
-		return string;
+		return finalStr;
 	}
 
 	private String delimitateLine(String line) {
