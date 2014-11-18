@@ -9,7 +9,6 @@ import org.osgi.framework.ServiceReference;
 import pa.iscde.dropcode.dropreflection.DropClass;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
-import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 public class DropCodeActivator implements BundleActivator {
 
@@ -27,9 +26,9 @@ public class DropCodeActivator implements BundleActivator {
 				.getServiceReference(JavaEditorServices.class);
 		final JavaEditorServices javaEditor = context.getService(editorRef);
 
-		ServiceReference<ProjectBrowserServices> browserRef = context
-				.getServiceReference(ProjectBrowserServices.class);
-		ProjectBrowserServices javaBrowser = context.getService(browserRef);
+		// ServiceReference<ProjectBrowserServices> browserRef = context
+		// .getServiceReference(ProjectBrowserServices.class);
+		// ProjectBrowserServices javaBrowser = context.getService(browserRef);
 
 		javaEditor.addListener(new JavaEditorListener() {
 
