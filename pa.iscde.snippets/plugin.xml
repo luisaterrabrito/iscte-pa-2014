@@ -6,7 +6,7 @@
          name="Snippets"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.snippets.PidescoView1">
+            class="pa.iscde.snippets.SnippetsView">
       </view>
    </extension>
    <extension

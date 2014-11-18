@@ -1,5 +1,7 @@
 package pa.iscde.snippets;
 
+import java.io.File;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -16,6 +18,8 @@ import pa.iscde.snippets.gui.CodeView;
 
 public class SnippetsExplorer extends Composite {
 	private Text text;
+	final private Composite PARENT;
+	final private File SNIPPETS_FOLDER = null; 
 
 	/**
 	 * Create the composite.
@@ -25,6 +29,7 @@ public class SnippetsExplorer extends Composite {
 	 */
 	public SnippetsExplorer(final Composite parent, int style) {
 		super(parent, style);
+		this.PARENT = parent;
 		setLayout(new GridLayout(1, false));
 
 		Composite searchComposite = new Composite(this, SWT.NONE);
@@ -64,7 +69,7 @@ public class SnippetsExplorer extends Composite {
 		      public void handleEvent(Event e) {
 			        switch (e.type) {
 			        case SWT.Selection:
-			        	new CodeView().createContents(parent, null);
+			        	new CodeView();
 			        	parent.layout();
 			        	System.out.println("Button pressed");
 			        	break;
@@ -75,8 +80,7 @@ public class SnippetsExplorer extends Composite {
 		addNewButton.addListener(SWT.Selection, listener);
 	}
 
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
+	private void loadSnippets(){
+		
 	}
 }
