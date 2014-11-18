@@ -13,19 +13,17 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import pa.iscde.snippets.SnippetsView;
-
-public class CodeView extends Composite {
+public class SnippetCode extends Composite {
 //TODO: Change to extend composite
 	private File fileToUse;
 	
-	public CodeView(File f, Composite viewArea, int style) {
+	public SnippetCode(File f, Composite viewArea, int style) {
 		super(viewArea, style);
 		fileToUse = f;
 		createContents(viewArea);
 	}
 	
-	public CodeView(Composite viewArea, int style){
+	public SnippetCode(Composite viewArea, int style){
 		super(viewArea, style);
 		createContents(viewArea);
 	}
@@ -93,7 +91,7 @@ public class CodeView extends Composite {
 				switch (event.type) {
 				case SWT.Selection:
 					mainComposite.dispose();
-					(new SnippetsView()).createContents(viewArea, null);
+					SnippetsView.getInstance().createExplorer();
 					viewArea.layout();
 					System.out.println("Button pressed");
 					break;
