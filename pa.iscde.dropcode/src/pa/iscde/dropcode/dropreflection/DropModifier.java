@@ -1,0 +1,13 @@
+package pa.iscde.dropcode.dropreflection;
+
+public enum DropModifier {
+	PUBLIC(0), PROTECTED(0), PRIVATE(0), //
+	FINAL(1), STATIC(2), ABSTRACT(3);
+	// SYNCHRONIZED(3), TRANSIENT(5), VOLATILE(7), NATIVE(6);
+
+	int id;
+
+	private DropModifier(int id) {
+		this.id = id;
+	}
+}
