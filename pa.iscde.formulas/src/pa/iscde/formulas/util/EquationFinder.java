@@ -25,13 +25,27 @@ public class EquationFinder {
 		while(s.hasNext()){
 			String line = s.nextLine();
 			if(line.contains("/") || line.contains("Math.sqrt"))
-				equations.put(delimitateLine(line),lines);
+				equations.put(delimitateLine(removeA(frac(line))),lines);
 			lines++;
 		}
 		s.close();
 	}
+	
+	public String removeA(String string){
+		if(!string.contains(Character.toString(aux1))){
+			return string;
+		}
+		int indexC = string.indexOf(Character.toString(aux1));
+		if(string.charAt(indexC-1)==aux2){
+			return string.substring(0, indexC-2).concat(string.substring(indexC,string.length()-1));
+		}else if(string.charAt(indexC+1)==aux2){
+			return string.substring(0, indexC).concat(string.substring(indexC+2,string.length()-1));
+		}
+		return string;
+	}
 
 	private String delimitateLine(String line) {
+		//x = (-b+(Math.sqrt(root)))/(2*a); ----> x = \\frac{-b+\\sqrt{root}}{2*a}
 		String result = line.replace("(", "{").replace(")","}").replace("String", "").replace("int", "").replace(Character.toString(aux1), "").replace(";","").replace("return", "");
 		return convertMath(result);
 	}
@@ -46,6 +60,39 @@ public class EquationFinder {
 
 	public Multimap<String,Integer> getEquations(){
 		return equations;
+	}
+	
+	public static String frac(String str) {
+		
+		if(!str.contains("/"))
+			return str;
+		
+		
+
+		int indexOfDiv = str.indexOf("/");
+		int counter = 0;
+		boolean foundParenteses = false;
+		int indexBeginFrac = -1;
+
+		// Encontra inicio
+		for (int i = indexOfDiv; i > 0; i--) {
+			if(str.charAt(i) == ')'){
+				counter++;
+				foundParenteses = true;
+			}
+
+			if(str.charAt(i) == '(')
+				counter--;
+
+			if(foundParenteses && counter == 0){
+				indexBeginFrac = i;
+				return str.substring(0, indexBeginFrac) + "\\frac" + str.substring(indexBeginFrac, indexOfDiv) + str.substring(indexOfDiv + 1, str.length());
+			}
+			
+			
+		}
+		return str;
+			
 	}
 
 }

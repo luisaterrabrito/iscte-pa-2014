@@ -64,7 +64,7 @@ public class FormulasView implements PidescoView {
 	private static Composite viewArea;
 	private static TabFolder tabFolder;
 	private static boolean drawFormulas = false;
-	private static LinkedList<Label> formulasBoard;
+	private static HashMap<Label,Text> formulasBoard;
 	
 	private static FormulasView formulasView;
 	private static JavaEditorServices javaeditor;
@@ -174,8 +174,11 @@ public class FormulasView implements PidescoView {
 
 	private static void clearFormulasBoard() {
 		if(!formulasBoard.isEmpty()){
-			for (Label label : formulasBoard) {
+			for (Label label : formulasBoard.keySet()) {
 				label.dispose();
+			}
+			for (Text text : formulasBoard.values()) {
+				text.dispose();
 			}
 			formulasBoard.clear();
 		}
@@ -201,7 +204,7 @@ public class FormulasView implements PidescoView {
 		drawFormulas = true;
 		buttons.clear();
 		tabFolder.dispose();
-		formulasBoard = new LinkedList<Label>();
+		formulasBoard = new HashMap<Label,Text>();
 		clearFormulasBoard();
 		//viewArea.setBackground(new Color(viewArea.getDisplay(), 255,255,255));
 		EquationFinder eq = new EquationFinder(fileTarget);
@@ -220,7 +223,7 @@ public class FormulasView implements PidescoView {
 			text.setText("Line: "+ lines);
 			Label label = new Label(viewArea,SWT.NONE);
 			label.setImage(formulaImage.getImage());
-			formulasBoard.add(label);
+			formulasBoard.put(label,text);
 		}
 		viewArea.pack();
 	}
