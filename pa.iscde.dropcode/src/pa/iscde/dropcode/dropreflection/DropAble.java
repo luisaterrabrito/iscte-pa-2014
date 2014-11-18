@@ -8,15 +8,27 @@ public class DropAble {
 	private HashMap<String, DropAnnotation> annotations;
 	private HashSet<DropModifier> modifiers;
 
+	public DropAble() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String name() {
 		return name;
 	}
 
 	public void setModifiers(int modifiers) {
-		
+
 		System.out.println("DropAble.setModifiers()");
-		
-		// TODO ADD MODIFIERS
+
+		// TODO: Add Modifiers
+	}
+
+	public DropModifier getVisibilityModifier() {
+		for (DropModifier m : modifiers) {
+			if (m.id == 0)
+				return m;
+		}
+		return DropModifier.PACKAGE_PRIVATE;
 	}
 
 	public boolean isModifierPresent(DropModifier modifier) {
