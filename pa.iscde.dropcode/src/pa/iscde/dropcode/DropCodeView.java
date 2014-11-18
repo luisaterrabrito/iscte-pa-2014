@@ -17,6 +17,8 @@ import pt.iscte.pidesco.extensibility.PidescoView;
 
 public class DropCodeView implements PidescoView {
 
+	int d;
+	
 	public static DropCodeView getInstance() {
 		return null;
 	}
