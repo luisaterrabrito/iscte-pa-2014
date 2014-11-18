@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="dropcode"
+         name="DropCode"
+         point="pa.iscde.team">
+      <member
+            name="Miguel Torres"
+            photo="miguel.jpg"
+            quote="Tenho fome!"
+            user="mgpft">
+      </member>
+      <member
+            name="Adriano Fernandes"
+            photo="adriano.jpg"
+            quote="Epa não faz sentido..."
+            user="ajlfs">
+      </member>
+   </extension>
+   <extension
+         id="dropcode"
+         name="DropCode"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.dropcode.DropCodeView"
+            icon="dropcode_icon.png">
+      </view>
+   </extension>
+
+</plugin>
