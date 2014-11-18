@@ -10,4 +10,8 @@ public enum DropModifier {
 	private DropModifier(int id) {
 		this.id = id;
 	}
+
+	public DropModifier[] getVisibilityModifiers() {
+		return new DropModifier[] { PUBLIC, PROTECTED, PRIVATE };
+	}
 }
