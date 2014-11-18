@@ -1,10 +1,8 @@
 package pa.iscde.snippets.gui;
 
 import java.io.File;
-import java.util.Map;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -15,8 +13,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import pa.iscde.snippets.PidescoView1;
-import pt.iscte.pidesco.extensibility.PidescoView;
+import pa.iscde.snippets.SnippetsView;
 
 public class CodeView extends Composite {
 //TODO: Change to extend composite
@@ -96,7 +93,7 @@ public class CodeView extends Composite {
 				switch (event.type) {
 				case SWT.Selection:
 					mainComposite.dispose();
-					(new PidescoView1()).createContents(viewArea, null);
+					(new SnippetsView()).createContents(viewArea, null);
 					viewArea.layout();
 					System.out.println("Button pressed");
 					break;
