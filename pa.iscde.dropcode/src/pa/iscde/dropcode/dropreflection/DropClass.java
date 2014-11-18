@@ -16,6 +16,9 @@ public class DropClass {
 
 	public DropClass(JavaEditorServices javaEditor) {
 
+		fields = new HashMap<>();
+		methods = new HashMap<>();
+
 		// CONSTRUCT THE JAVA CLASS //
 
 		ASTVisitor visitor = new ASTVisitor() {
