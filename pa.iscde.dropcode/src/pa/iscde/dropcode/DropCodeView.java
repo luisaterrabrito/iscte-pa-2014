@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 import pa.iscde.dropcode.dropreflection.DropAble;
 import pa.iscde.dropcode.dropreflection.DropClass;
+import pa.iscde.dropcode.dropreflection.DropField;
 import pa.iscte.dropcode.gui.DropRow;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
@@ -59,39 +60,38 @@ public class DropCodeView implements PidescoView {
 		// Button b = new Button(c, SWT.CHECK);
 		// b.setText("És Elite");
 
-		
 		DropClass dClass = DropCodeActivator.getDropClass();
-		
+
 		ExpandBar bar = new ExpandBar(comp, SWT.V_SCROLL);
-		
+
 		Composite compFields = new Composite(bar, SWT.NONE);
 		FillLayout fillLayout = new FillLayout();
 		fillLayout.type = SWT.VERTICAL;
 		compFields.setLayout(fillLayout);
-		
-		DropAble dropA = new DropAble();
-		
-		DropRow row = new DropRow(compFields, SWT.NONE, dropA);
-		
-	    ExpandItem fields = new ExpandItem (bar, SWT.NONE, 0);
+
+		for (DropField df : dClass.getFields()) {
+			new DropRow(compFields, SWT.NONE, df);
+		}
+
+		ExpandItem fields = new ExpandItem(bar, SWT.NONE, 0);
 		fields.setText("Fields");
 		fields.setHeight(compFields.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		fields.setControl(compFields);
-		
-		ExpandItem constructors = new ExpandItem (bar, SWT.NONE, 1);
+
+		ExpandItem constructors = new ExpandItem(bar, SWT.NONE, 1);
 		constructors.setText("Constructors");
-		
-		for(int c = 0; c != 5; c++){
-			
+
+		for (int c = 0; c != 5; c++) {
+
 		}
-		
-		ExpandItem methods = new ExpandItem (bar, SWT.NONE, 2);
+
+		ExpandItem methods = new ExpandItem(bar, SWT.NONE, 2);
 		methods.setText("Methods");
-		
-		for(int m = 0; m != 5; m++){
-			
+
+		for (int m = 0; m != 5; m++) {
+
 		}
-		
+
 	}
 
 }
