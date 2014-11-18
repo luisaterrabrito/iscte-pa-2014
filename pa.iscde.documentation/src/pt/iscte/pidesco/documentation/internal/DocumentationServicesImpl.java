@@ -7,12 +7,12 @@ public class DocumentationServicesImpl implements IDocumentationServices {
 
 	@Override
 	public void addListener(IDocumentationListener listener) {
-		Activator.getInstance().addListener(listener);
+		DocumentationActivator.getInstance().addListener(listener);
 	}
 
 	@Override
 	public void removeListener(IDocumentationListener listener) {
-		Activator.getInstance().removeListener(listener);
+		DocumentationActivator.getInstance().removeListener(listener);
 	}
 
 }
