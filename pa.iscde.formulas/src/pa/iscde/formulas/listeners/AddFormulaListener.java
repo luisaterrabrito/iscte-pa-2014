@@ -1,15 +1,9 @@
 package pa.iscde.formulas.listeners;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
+
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -258,16 +252,17 @@ public class AddFormulaListener implements SelectionListener{
 //			e.printStackTrace();
 //		}
 		
-		try {
-			FileWriter writer = new FileWriter(new File(classloader.getResource("formulas\\NewFormulas.txt").getPath()),true);
-			PrintWriter out = new PrintWriter(writer);
-			out.println(string+System.lineSeparator()+javaCode);
-			out.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+//		try {
+//			FileWriter writer = new FileWriter(new File(classloader.getResource("formulas\\NewFormulas.txt").getPath()),true);
+//			PrintWriter out = new PrintWriter(writer);
+//			out.println(string+System.lineSeparator()+javaCode);
+//			out.close();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+	
 	}
 }
 

@@ -56,7 +56,7 @@
       <tool
             class="pa.iscde.formulas.tools.DrawEquations"
             description="Draw Mathematical Equations"
-            hasState="true"
+            hasState="false"
             icon="draw.gif"
             view="pa.iscde.formulas.formulas">
       </tool>
