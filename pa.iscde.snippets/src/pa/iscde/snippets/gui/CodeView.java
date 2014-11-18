@@ -1,5 +1,6 @@
 package pa.iscde.snippets.gui;
 
+import java.io.File;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
@@ -14,12 +15,25 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import pa.iscde.snippets.PidescoView1;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
-public class CodeView implements PidescoView {
+public class CodeView extends Composite {
+//TODO: Change to extend composite
+	private File fileToUse;
+	
+	public CodeView(File f, Composite viewArea, int style) {
+		super(viewArea, style);
+		fileToUse = f;
+		createContents(viewArea);
+	}
+	
+	public CodeView(Composite viewArea, int style){
+		super(viewArea, style);
+		createContents(viewArea);
+	}
 
-	@Override
-	public void createContents(final Composite viewArea, Map<String, Image> imageMap) {
+	public void createContents(final Composite viewArea) {
 		final Composite mainComposite = new Composite(viewArea, SWT.None);
 		mainComposite.setLayout(new GridLayout(1, false));
 
@@ -82,6 +96,7 @@ public class CodeView implements PidescoView {
 				switch (event.type) {
 				case SWT.Selection:
 					mainComposite.dispose();
+					(new PidescoView1()).createContents(viewArea, null);
 					viewArea.layout();
 					System.out.println("Button pressed");
 					break;
