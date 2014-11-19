@@ -17,4 +17,4 @@ Import-Package: org.eclipse.swt.graphics,
  org.eclipse.swt.widgets,
  pt.iscte.pidesco.extensibility
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: pa.iscde.umldiagram.utils.UmlActivator
+Bundle-Activator: pa.iscde.umldiagram.activator.UmlActivator

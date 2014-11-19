@@ -1,4 +1,4 @@
-package pa.iscde.umldiagram.utils;
+package pa.iscde.umldiagram.activator;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -36,8 +36,7 @@ public class UmlActivator implements BundleActivator {
 				UmlView umlview = UmlView.getInstance();
 				umlview.clearGraph();
 				umlview.setBrowserServices(browserServices);
-				umlview.paintUml(selection.iterator().next());
-				
+				umlview.paintUml(selection);
 			}
 		});
 			
