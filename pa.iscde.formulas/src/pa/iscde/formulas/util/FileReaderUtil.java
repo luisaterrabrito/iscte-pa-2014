@@ -40,6 +40,8 @@ public class FileReaderUtil {
 				allFormulas+="END";
 				s.close();
 			}
+			}else{
+				return null;
 			}
 		} catch (CoreException e) {
 			e.printStackTrace();
