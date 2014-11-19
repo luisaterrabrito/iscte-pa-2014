@@ -3,6 +3,7 @@ package pa.iscde.formulas.listeners;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -28,6 +29,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import pa.iscde.formulas.InsertFormulaFormat;
+import pa.iscde.formulas.view.FormulasView;
 
 
 public class AddFormulaListener implements SelectionListener{
@@ -203,11 +205,11 @@ public class AddFormulaListener implements SelectionListener{
 			IFolder folder = project.getFolder("formulas");
 			IFile file = folder.getFile(formulaNameString+".txt");
 
-			//			Isto da todos os ficheiros daquela pastas		 
-			//IResource[] members = folder.members();
-			//		 for (int i = 0; i < members.length; i++) {
-			//			System.out.println("nomes dos ficheiros: " +members[i].getName());
-			//		}
+			//	Isto da todos os ficheiros daquela pastas		 
+			IResource[] members = folder.members();
+					 for (int i = 0; i < members.length; i++) {
+						System.out.println("nomes dos ficheiros: " +members[i].getName());
+					}
 
 			if (!project.exists()) project.create(null);
 			if (!project.isOpen()) project.open(null);
@@ -220,21 +222,7 @@ public class AddFormulaListener implements SelectionListener{
 				file.create(source, IResource.NONE, null);
 				file.setCharset("UTF-8", null);
 			}
-
-			//esta parte é para ler os ficheiros daquela pasta
-//			IFile f = folder.getFile(formulaNameString+".txt");
-//			InputStream is =f.getContents();
-//
-//			Scanner s = new Scanner(is, "UTF-8");
-//			String string ="";
-//			while(s.hasNext()){
-//				string += s.nextLine();
-//			}
-//			s.close();
-//			System.out.println("este é o to string " + string.toString());
-//			String a = new String (string);
-//			System.out.println("outra forma " +a);
-//
+			
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
@@ -281,5 +269,7 @@ public class AddFormulaListener implements SelectionListener{
 		//	new ReadFormulaFromFile("");
 
 	}
+
+	
 }
 

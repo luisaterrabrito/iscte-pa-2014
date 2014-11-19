@@ -38,6 +38,7 @@ public class InsertFormulaFormat {
 		String firstLine = "111"+category+","+formulaName+","+String.valueOf(nrInputs)+","+allInputs;
 		String secondLine="222"+algorithm.replace("\n", "«"); 
 		String thirdLine ="333"+ codeJava.replace("\n", "«");
+		
 		allStringsToTheFile.add(firstLine);
 		allStringsToTheFile.add(secondLine);
 		allStringsToTheFile.add(thirdLine);

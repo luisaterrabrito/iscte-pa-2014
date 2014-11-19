@@ -1,6 +1,7 @@
 package pa.iscde.formulas.view;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import pa.iscde.formulas.Formula;
+import pa.iscde.formulas.NewFormula;
 import pa.iscde.formulas.basics.Areas;
 import pa.iscde.formulas.basics.PythagoreanTheorem;
 import pa.iscde.formulas.basics.QuadraticFormula;
@@ -48,6 +50,7 @@ import pa.iscde.formulas.statistic.StandardDeviation;
 import pa.iscde.formulas.statistic.Variance;
 import pa.iscde.formulas.util.DrawEquationUtil;
 import pa.iscde.formulas.util.EquationFinder;
+import pa.iscde.formulas.util.FileReaderUtil;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
@@ -79,7 +82,7 @@ public class FormulasView implements PidescoView {
 		
 		FormulasView.javaeditor=javaeditor;
 		//FormulasView.fileTarget = javaeditor.getOpenedFile();
-		
+		loadFormulas();
 		basic_formulas.add(new QuadraticFormula());
 		basic_formulas.add(new TrigonometricFormula());		
 		basic_formulas.add(new PythagoreanTheorem());
@@ -110,6 +113,48 @@ public class FormulasView implements PidescoView {
 	}
 	
 	
+	private void loadFormulas() {
+		String[] aux = FileReaderUtil.readFile().split("END");
+		for (int i = 0; i < aux.length; i++) {
+			createFormula(aux[i]);
+		}
+	}
+	
+	private void createFormula(String string) {
+		String[] lines1 = string.split("222");
+		String[] lines2  = lines1[1].split("333");
+		String line_1 = lines1[0].split("111")[1];
+		String line_2 = lines2[0];
+		String line_3  = lines2[1];
+		String categoryString = line_1.split(",")[0];
+		String formulaName = line_1.split(",")[1];
+		int inputsNumber = Integer.parseInt(line_1.split(",")[2]);
+		String [] inputs = new String[inputsNumber];
+		for (int i = 0; i < inputsNumber; i++) {
+			if(i==inputsNumber-1)
+				inputs[i] = line_1.split(",")[3].split(";")[i].split("\\s")[0];
+			else
+				inputs[i] = line_1.split(",")[3].split(";")[i];
+			System.out.println(inputs[i]);
+		}
+		switch (categoryString) {
+		case "Basics":
+			basic_formulas.add(new NewFormula(formulaName, inputs, line_2.replace("«", System.lineSeparator()), line_3.replace("«", System.lineSeparator())));
+			break;
+		case "Engineering":
+			engineering_formulas.add(new NewFormula(formulaName, inputs, line_2.replace("«", System.lineSeparator()), line_3.replace("«", System.lineSeparator())));
+			break;
+		case "Statistic":
+			statistics_formulas.add(new NewFormula(formulaName, inputs, line_2.replace("«", System.lineSeparator()), line_3.replace("«", System.lineSeparator())));
+			break;
+		case "Finance":
+			finance_formulas.add(new NewFormula(formulaName, inputs, line_2.replace("«", System.lineSeparator()), line_3.replace("«", System.lineSeparator())));
+			break;
+
+		}
+	}
+
+
 	public static FormulasView getInstance(){
 		return formulasView;
 	}
