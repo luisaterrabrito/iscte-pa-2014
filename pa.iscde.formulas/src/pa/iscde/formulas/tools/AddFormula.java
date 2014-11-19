@@ -8,7 +8,7 @@ public class AddFormula implements PidescoTool{
 	@Override
 	public void run(boolean activate) {
 		new AddFormulaListener();
-		System.out.println("add new formula mode");
+		System.out.println("ADD NEW FORMULA MODE");
 
 	}
 

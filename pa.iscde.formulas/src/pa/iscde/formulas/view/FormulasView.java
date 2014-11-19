@@ -59,10 +59,10 @@ public class FormulasView implements PidescoView {
 	private static HashMap<String,LinkedList<Formula>> allFormulas = new HashMap<String, LinkedList<Formula>>();
 	private static HashMap<Button,Formula> buttons = new HashMap<Button,Formula>();
 	
-	private LinkedList<Formula> basic_formulas = new LinkedList<Formula>();
-	private LinkedList<Formula> engineering_formulas = new LinkedList<Formula>();
-	private LinkedList<Formula> finance_formulas = new LinkedList<Formula>();
-	private LinkedList<Formula> statistics_formulas = new LinkedList<Formula>();
+	private static LinkedList<Formula> basic_formulas = new LinkedList<Formula>();
+	private static LinkedList<Formula> engineering_formulas = new LinkedList<Formula>();
+	private static LinkedList<Formula> finance_formulas = new LinkedList<Formula>();
+	private static LinkedList<Formula> statistics_formulas = new LinkedList<Formula>();
 	
 	private static Composite viewArea;
 	private static TabFolder tabFolder;
@@ -121,8 +121,9 @@ public class FormulasView implements PidescoView {
 			}
 		}
 	}
+		
 	
-	private void createFormula(String string) {
+	private static void createFormula(String string) {
 		String[] lines1 = string.split("222");
 		String[] lines2  = lines1[1].split("333");
 		String line_1 = lines1[0].split("111")[1];
@@ -272,6 +273,13 @@ public class FormulasView implements PidescoView {
 			formulasBoard.put(label,text);
 		}
 		viewArea.pack();
+	}
+
+
+	public static void loadAllFormulas(String formula) {
+		tabFolder.dispose();
+		createFormula(formula);
+		createTabs();
 	}
 	
 

@@ -3,7 +3,6 @@ package pa.iscde.formulas.listeners;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -38,6 +37,7 @@ public class AddFormulaListener implements SelectionListener{
 	private String [] inputsName;
 	private String formulaNameString;
 	private String categoryNameString;
+	private InsertFormulaFormat iff;
 	private ArrayList<Text> inputs_text = new ArrayList<Text>();
 
 	public AddFormulaListener(){
@@ -196,7 +196,7 @@ public class AddFormulaListener implements SelectionListener{
 	}
 
 	private void addFormulaToFile(String javaCode, String algorithm, String formulaNameString, String categoryNameString, String[] inputsName) {
-		InsertFormulaFormat iff = new InsertFormulaFormat(categoryNameString, formulaNameString, inputsName, inputsNumber, algorithm, javaCode);
+		iff = new InsertFormulaFormat(categoryNameString, formulaNameString, inputsName, inputsNumber, algorithm, javaCode);
 
 		try{
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
@@ -226,48 +226,7 @@ public class AddFormulaListener implements SelectionListener{
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-
-
-		//Bundle bundle = FrameworkUtil.getBundle(FormulasView.class);
-		//URL entry = bundle.getEntry("formulas/NewFormulas.txt");
-		//String path = entry.toURI().getPath();
-		//			 IWorkspace workspace = ResourcesPlugin.getWorkspace(); 
-		//			 IWorkspaceRoot root = workspace.getRoot();
-		//			 IPath fullPath = root.getLocation();
-
-		//		 IProject myWebProject = root.getProject("Teste");
-		//		   // open if necessary
-		//		   if (myWebProject.exists() && !myWebProject.isOpen())
-		//			try {
-		//				myWebProject.open(null);
-		//			} catch (CoreException e1) {
-		//				e1.printStackTrace();
-		//			}
-		//		 
-		//		 IFolder formulasFolder = myWebProject.getFolder("formulas");
-		//		   if (formulasFolder.exists()) {
-		//		      // create a new file
-		//		      IFile newLogo = formulasFolder.getFile("newLogo.png");
-		//		      FileInputStream fileStream;
-		//			try {
-		//				fileStream = new FileInputStream("teste.txt");
-		//				newLogo.create(fileStream, false, null);
-		//			} catch (FileNotFoundException e) {
-		//				// TODO Auto-generated catch block
-		//				e.printStackTrace();
-		//			} catch (CoreException e) {
-		//				// TODO Auto-generated catch block
-		//				e.printStackTrace();
-		//			}
-		//		     
-		//		   }
-		//		 
-		//		 
-		//	
-
-
-		//	new ReadFormulaFromFile("");
-
+		FormulasView.loadAllFormulas(iff.getFormula());
 	}
 
 	

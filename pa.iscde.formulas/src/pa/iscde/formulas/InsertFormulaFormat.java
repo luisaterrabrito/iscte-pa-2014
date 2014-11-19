@@ -36,7 +36,7 @@ public class InsertFormulaFormat {
 			}
 		}
 		String firstLine = "111"+category+","+formulaName+","+String.valueOf(nrInputs)+","+allInputs;
-		String secondLine="222"+"//You should insert this code on your class\n"+algorithm.replace("\n", "«"); 
+		String secondLine="222"+algorithm.replace("\n", "«"); 
 		String thirdLine ="333"+ codeJava.replace("\n", "«");
 		
 		allStringsToTheFile.add(firstLine);
@@ -58,6 +58,14 @@ public class InsertFormulaFormat {
 		byte[] bytes = baos.toByteArray();
 		return bytes;
 
+		}
+	
+		public String getFormula(){
+			String aux = "";
+			for (String string : allStringsToTheFile) {
+				aux +=string;
+			}
+			return aux;
 		}
 
 	}
