@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         id="snippets"
+         id="id1"
          name="Snippets"
          point="pt.iscte.pidesco.view">
       <view
