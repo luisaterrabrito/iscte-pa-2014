@@ -114,11 +114,11 @@ public class FormulasView implements PidescoView {
 	
 	
 	private void loadFormulas() {
-		String[] aux = FileReaderUtil.readFile().split("END");
-		if(!aux.equals("")){
-		for (int i = 0; i < aux.length; i++) {
-			createFormula(aux[i]);
-		}
+		String aux = FileReaderUtil.readFile();
+		if(aux!=null){
+			for (int i = 0; i < aux.split("END").length; i++) {
+				createFormula(aux.split("END")[i]);
+			}
 		}
 	}
 	
