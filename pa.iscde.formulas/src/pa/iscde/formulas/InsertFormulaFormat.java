@@ -36,23 +36,29 @@ public class InsertFormulaFormat {
 			}
 		}
 		String firstLine = "111"+category+","+formulaName+","+String.valueOf(nrInputs)+","+allInputs;
-		String[] splitArrayAlgorithm = algorithm.split("\n");
-		for (int i = 0; i < splitArrayAlgorithm.length; i++) {
-			splitArrayAlgorithm[i]="222"+splitArrayAlgorithm[i];
-		}
-		String[] splitArrayJavaCode = codeJava.split("\n");
-		for (int i = 0; i < splitArrayJavaCode.length; i++) {
-			splitArrayJavaCode[i]="333"+splitArrayJavaCode[i];
-		}
+		String secondLine="222"+algorithm.replace("\n", "«"); 
+		String thirdLine ="333"+ codeJava.replace("\n", "«");
 		allStringsToTheFile.add(firstLine);
-		for (int i = 0; i < splitArrayAlgorithm.length; i++) {
-			allStringsToTheFile.add(splitArrayAlgorithm[i]);
-		}
-		for (int i = 0; i < splitArrayJavaCode.length; i++) {
-			allStringsToTheFile.add(splitArrayJavaCode[i]);
-		}
+		allStringsToTheFile.add(secondLine);
+		allStringsToTheFile.add(thirdLine);
 		
-		// write to byte array
+//		String[] splitArrayAlgorithm = algorithm.split("\n");
+//		for (int i = 0; i < splitArrayAlgorithm.length; i++) {
+//			splitArrayAlgorithm[i]="222"+splitArrayAlgorithm[i];
+//		}
+//		String[] splitArrayJavaCode = codeJava.split("\n");
+//		for (int i = 0; i < splitArrayJavaCode.length; i++) {
+//			splitArrayJavaCode[i]="333"+splitArrayJavaCode[i];
+//		}
+//		allStringsToTheFile.add(firstLine);
+//		for (int i = 0; i < splitArrayAlgorithm.length; i++) {
+//			allStringsToTheFile.add(splitArrayAlgorithm[i]);
+//		}
+//		for (int i = 0; i < splitArrayJavaCode.length; i++) {
+//			allStringsToTheFile.add(splitArrayJavaCode[i]);
+//		}
+//		
+//		// write to byte array
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(baos);
 		for (String element : allStringsToTheFile) {

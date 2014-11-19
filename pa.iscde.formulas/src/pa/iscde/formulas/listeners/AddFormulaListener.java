@@ -139,7 +139,7 @@ public class AddFormulaListener implements SelectionListener{
 			((GridData) input_text.getLayoutData()).widthHint = 100;
 			inputs_text.add(input_text);
 		}
-		
+
 		//shell.setLayout(new GridLayout(1, false));
 		Label label_algorithm = new Label(shell, SWT.NONE);
 		label_algorithm.setText("Type your algorithm");
@@ -199,81 +199,91 @@ public class AddFormulaListener implements SelectionListener{
 
 	private void addFormulaToFile(String javaCode, String algorithm, String formulaNameString, String categoryNameString, String[] inputsName) {
 		InsertFormulaFormat iff = new InsertFormulaFormat(categoryNameString, formulaNameString, inputsName, inputsNumber, algorithm, javaCode);
-		 
-		 try{
-		 IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		 IWorkspaceRoot root = workspace.getRoot();
-		 IProject project  = root.getProject("Teste");
-		 IFolder folder = project.getFolder("formulas");
-		 IFile file = folder.getFile(formulaNameString+".txt");
-		 
-		 if (!project.exists()) project.create(null);
-		 if (!project.isOpen()) project.open(null);
-		 if (!folder.exists()) 
-		     folder.create(IResource.NONE, true, null);
-		 if (!file.exists()) {
-			 
-		     byte[] bytes = iff.createText();
-		     InputStream source = new ByteArrayInputStream(bytes);
-		     file.create(source, IResource.NONE, null);
-		 }
-		 } catch (CoreException e) {
+
+		try{
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+			IWorkspaceRoot root = workspace.getRoot();
+			IProject project  = root.getProject("Teste");
+			IFolder folder = project.getFolder("formulas");
+			IFile file = folder.getFile(formulaNameString+".txt");
+
+			//			Isto da todos os ficheiros daquela pastas		 
+			//IResource[] members = folder.members();
+			//		 for (int i = 0; i < members.length; i++) {
+			//			System.out.println("nomes dos ficheiros: " +members[i].getName());
+			//		}
+
+			if (!project.exists()) project.create(null);
+			if (!project.isOpen()) project.open(null);
+			if (!folder.exists()) 
+				folder.create(IResource.NONE, true, null);
+			if (!file.exists()) {
+
+				byte[] bytes = iff.createText();
+				InputStream source = new ByteArrayInputStream(bytes);
+				file.create(source, IResource.NONE, null);
+				file.setCharset("UTF-8", null);
+			}
+
+			//esta parte é para ler os ficheiros daquela pasta
+//			IFile f = folder.getFile(formulaNameString+".txt");
+//			InputStream is =f.getContents();
+//
+//			Scanner s = new Scanner(is, "UTF-8");
+//			String string ="";
+//			while(s.hasNext()){
+//				string += s.nextLine();
+//			}
+//			s.close();
+//			System.out.println("este é o to string " + string.toString());
+//			String a = new String (string);
+//			System.out.println("outra forma " +a);
+//
+		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-		 
-		 
-			//Bundle bundle = FrameworkUtil.getBundle(FormulasView.class);
-			//URL entry = bundle.getEntry("formulas/NewFormulas.txt");
-			//String path = entry.toURI().getPath();
-//			 IWorkspace workspace = ResourcesPlugin.getWorkspace(); 
-//			 IWorkspaceRoot root = workspace.getRoot();
-//			 IPath fullPath = root.getLocation();
-		 
-//		 IProject myWebProject = root.getProject("Teste");
-//		   // open if necessary
-//		   if (myWebProject.exists() && !myWebProject.isOpen())
-//			try {
-//				myWebProject.open(null);
-//			} catch (CoreException e1) {
-//				e1.printStackTrace();
-//			}
-//		 
-//		 IFolder formulasFolder = myWebProject.getFolder("formulas");
-//		   if (formulasFolder.exists()) {
-//		      // create a new file
-//		      IFile newLogo = formulasFolder.getFile("newLogo.png");
-//		      FileInputStream fileStream;
-//			try {
-//				fileStream = new FileInputStream("teste.txt");
-//				newLogo.create(fileStream, false, null);
-//			} catch (FileNotFoundException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (CoreException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		     
-//		   }
-//		 
-//		 
-//	
-		
-		
-		new ReadFormulaFromFile("");
-		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-		InputStream is = classloader.getResourceAsStream("formulas\\NewFormulas.txt");
-		Scanner s = new Scanner(is);
-		String string ="";
-		while(s.hasNext()){
-			string += s.nextLine();
-		}
-		s.close();
 
-		
-		
-	
-	
+
+		//Bundle bundle = FrameworkUtil.getBundle(FormulasView.class);
+		//URL entry = bundle.getEntry("formulas/NewFormulas.txt");
+		//String path = entry.toURI().getPath();
+		//			 IWorkspace workspace = ResourcesPlugin.getWorkspace(); 
+		//			 IWorkspaceRoot root = workspace.getRoot();
+		//			 IPath fullPath = root.getLocation();
+
+		//		 IProject myWebProject = root.getProject("Teste");
+		//		   // open if necessary
+		//		   if (myWebProject.exists() && !myWebProject.isOpen())
+		//			try {
+		//				myWebProject.open(null);
+		//			} catch (CoreException e1) {
+		//				e1.printStackTrace();
+		//			}
+		//		 
+		//		 IFolder formulasFolder = myWebProject.getFolder("formulas");
+		//		   if (formulasFolder.exists()) {
+		//		      // create a new file
+		//		      IFile newLogo = formulasFolder.getFile("newLogo.png");
+		//		      FileInputStream fileStream;
+		//			try {
+		//				fileStream = new FileInputStream("teste.txt");
+		//				newLogo.create(fileStream, false, null);
+		//			} catch (FileNotFoundException e) {
+		//				// TODO Auto-generated catch block
+		//				e.printStackTrace();
+		//			} catch (CoreException e) {
+		//				// TODO Auto-generated catch block
+		//				e.printStackTrace();
+		//			}
+		//		     
+		//		   }
+		//		 
+		//		 
+		//	
+
+
+		//	new ReadFormulaFromFile("");
+
 	}
 }
 
