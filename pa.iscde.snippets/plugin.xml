@@ -10,9 +10,21 @@
       </view>
    </extension>
    <extension
-         id="1"
-         name="Diogo Pedroso - Rui Madeira"
+         id="snippets"
+         name="Snippets"
          point="pa.iscde.team">
+      <member
+            name="Diogo Pedroso"
+            photo="unknown.png"
+            quote="&quot;Sugar Honey Iced Tea &quot; (by: Unknown)"
+            user="dbipo">
+      </member>
+      <member
+            name="Rui Madeira"
+            photo="unknown.png"
+            quote="&quot;NÃÃÃOOOoooo... &quot; (by: Rui Madeira)"
+            user="rnnma">
+      </member>
    </extension>
 
 </plugin>
