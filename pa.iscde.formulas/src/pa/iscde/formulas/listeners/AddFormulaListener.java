@@ -1,10 +1,20 @@
 package pa.iscde.formulas.listeners;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -20,6 +30,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import pa.iscde.formulas.InsertFormulaFormat;
 import pa.iscde.formulas.ReadFormulaFromFile;
 
 
@@ -54,10 +65,6 @@ public class AddFormulaListener implements SelectionListener{
 		String items[] = { "Basics", "Finance", "Statistic", "Engineering"};
 		c.setItems(items);
 
-		//	final Text input_text_category = new Text(dialog, SWT.BORDER);
-		//	input_text_category.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//	((GridData) input_text_category.getLayoutData()).widthHint = 100;
-
 		Label formulaName = new Label(dialog, SWT.NONE);
 		formulaName.setText("Formula Name: ");
 		formulaName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -81,7 +88,6 @@ public class AddFormulaListener implements SelectionListener{
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				categoryNameString=c.getText();
-				System.out.println("category: " + categoryNameString);
 				formulaNameString=input_text_name.getText();
 				if(isNumeric(input_text.getText())){
 					inputsNumber = Integer.parseInt(input_text.getText());
@@ -120,7 +126,7 @@ public class AddFormulaListener implements SelectionListener{
 
 	private void createFormulaWindow(final Shell shell, final int inputsNumber) {
 		shell.setText("Formula Specification");
-		shell.setLayout(new GridLayout(2, false));
+		shell.setLayout(new GridLayout(1, false));
 
 		for (int i = 0; i < inputsNumber; i++) {
 			Label label = new Label(shell, SWT.NONE);
@@ -133,7 +139,8 @@ public class AddFormulaListener implements SelectionListener{
 			((GridData) input_text.getLayoutData()).widthHint = 100;
 			inputs_text.add(input_text);
 		}
-		shell.setLayout(new GridLayout(1, false));
+		
+		//shell.setLayout(new GridLayout(1, false));
 		Label label_algorithm = new Label(shell, SWT.NONE);
 		label_algorithm.setText("Type your algorithm");
 		label_algorithm.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -156,7 +163,6 @@ public class AddFormulaListener implements SelectionListener{
 				for (int i = 0; i < inputsName.length; i++) {
 					inputsName[i] = inputs_text.get(i).getText();
 				}
-				System.out.println("codigo: " +  t_code.getText() + " algoritmo: " + t_algorithm.getText());
 				try {
 					addFormulaToFile(t_code.getText(),t_algorithm.getText(),formulaNameString,categoryNameString,inputsName);
 				} catch (Exception e) {
@@ -192,6 +198,68 @@ public class AddFormulaListener implements SelectionListener{
 	}
 
 	private void addFormulaToFile(String javaCode, String algorithm, String formulaNameString, String categoryNameString, String[] inputsName) {
+		InsertFormulaFormat iff = new InsertFormulaFormat(categoryNameString, formulaNameString, inputsName, inputsNumber, algorithm, javaCode);
+		 
+		 try{
+		 IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		 IWorkspaceRoot root = workspace.getRoot();
+		 IProject project  = root.getProject("Teste");
+		 IFolder folder = project.getFolder("formulas");
+		 IFile file = folder.getFile(formulaNameString+".txt");
+		 
+		 if (!project.exists()) project.create(null);
+		 if (!project.isOpen()) project.open(null);
+		 if (!folder.exists()) 
+		     folder.create(IResource.NONE, true, null);
+		 if (!file.exists()) {
+			 
+		     byte[] bytes = iff.createText();
+		     InputStream source = new ByteArrayInputStream(bytes);
+		     file.create(source, IResource.NONE, null);
+		 }
+		 } catch (CoreException e) {
+			e.printStackTrace();
+		}
+		 
+		 
+			//Bundle bundle = FrameworkUtil.getBundle(FormulasView.class);
+			//URL entry = bundle.getEntry("formulas/NewFormulas.txt");
+			//String path = entry.toURI().getPath();
+//			 IWorkspace workspace = ResourcesPlugin.getWorkspace(); 
+//			 IWorkspaceRoot root = workspace.getRoot();
+//			 IPath fullPath = root.getLocation();
+		 
+//		 IProject myWebProject = root.getProject("Teste");
+//		   // open if necessary
+//		   if (myWebProject.exists() && !myWebProject.isOpen())
+//			try {
+//				myWebProject.open(null);
+//			} catch (CoreException e1) {
+//				e1.printStackTrace();
+//			}
+//		 
+//		 IFolder formulasFolder = myWebProject.getFolder("formulas");
+//		   if (formulasFolder.exists()) {
+//		      // create a new file
+//		      IFile newLogo = formulasFolder.getFile("newLogo.png");
+//		      FileInputStream fileStream;
+//			try {
+//				fileStream = new FileInputStream("teste.txt");
+//				newLogo.create(fileStream, false, null);
+//			} catch (FileNotFoundException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (CoreException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		     
+//		   }
+//		 
+//		 
+//	
+		
+		
 		new ReadFormulaFromFile("");
 		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 		InputStream is = classloader.getResourceAsStream("formulas\\NewFormulas.txt");
@@ -202,66 +270,9 @@ public class AddFormulaListener implements SelectionListener{
 		}
 		s.close();
 
-		//tentativa 1
-//		BufferedWriter writer =null;
-//		try{
-//			writer = new BufferedWriter(new FileWriter("formulas\\NewFormulas.txt"));
-//			writer.write(string+System.lineSeparator()+javaCode);
-//		}catch(IOException e){
-//			e.printStackTrace();
-//		}finally{
-//			try{
-//				if(writer!=null)
-//					writer.close();
-//			}catch (IOException e){
-//				e.printStackTrace();
-//			}
-//		}
-		
-		//tentativa 2
-//		FileOutputStream fop = null;
-//		File file;
-//		String content= string+System.lineSeparator()+javaCode;
-//		try{
-//			file = new File("formulas\\NewFormulas.txt");
-//			fop= new FileOutputStream(file);
-//			byte[]contentInBytes = content.getBytes();
-//			fop.write(contentInBytes);
-//			fop.flush();
-//			fop.close();
-//		}catch(IOException e){
-//			e.printStackTrace();
-//		}finally{
-//			try{
-//				if(fop!=null){
-//					fop.close();
-//				}
-//			}catch(IOException e){
-//				e.printStackTrace();
-//			}
-//		}
 		
 		
-		//tentativa 3
-//		try {
-//			PrintWriter writer = new PrintWriter(new File(classloader.getResource("formulas\\NewFormulas.txt").getPath()));
-//			//PrintWriter writer = new PrintWriter(new File(this.getClass().getResource("formulas\\NewFormulas.txt").getPath()));
-//			writer.println(string+System.lineSeparator()+javaCode);
-//			writer.close();
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		}
-		
-//		try {
-//			FileWriter writer = new FileWriter(new File(classloader.getResource("formulas\\NewFormulas.txt").getPath()),true);
-//			PrintWriter out = new PrintWriter(writer);
-//			out.println(string+System.lineSeparator()+javaCode);
-//			out.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
+	
 	
 	}
 }
