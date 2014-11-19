@@ -19,7 +19,7 @@
          name="Code Convetions View"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.conventions.ConvetionsView">
+            class="pa.iscde.conventions.ConventionsView">
       </view>
    </extension>
 
