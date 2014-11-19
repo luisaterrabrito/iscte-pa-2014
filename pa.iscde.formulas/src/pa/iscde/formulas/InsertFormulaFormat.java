@@ -42,22 +42,6 @@ public class InsertFormulaFormat {
 		allStringsToTheFile.add(secondLine);
 		allStringsToTheFile.add(thirdLine);
 		
-//		String[] splitArrayAlgorithm = algorithm.split("\n");
-//		for (int i = 0; i < splitArrayAlgorithm.length; i++) {
-//			splitArrayAlgorithm[i]="222"+splitArrayAlgorithm[i];
-//		}
-//		String[] splitArrayJavaCode = codeJava.split("\n");
-//		for (int i = 0; i < splitArrayJavaCode.length; i++) {
-//			splitArrayJavaCode[i]="333"+splitArrayJavaCode[i];
-//		}
-//		allStringsToTheFile.add(firstLine);
-//		for (int i = 0; i < splitArrayAlgorithm.length; i++) {
-//			allStringsToTheFile.add(splitArrayAlgorithm[i]);
-//		}
-//		for (int i = 0; i < splitArrayJavaCode.length; i++) {
-//			allStringsToTheFile.add(splitArrayJavaCode[i]);
-//		}
-//		
 //		// write to byte array
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(baos);
