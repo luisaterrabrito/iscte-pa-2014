@@ -7,15 +7,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.lang.model.element.Element;
-
-import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.core.widgets.GraphNode;
 import org.osgi.framework.Bundle;
@@ -27,7 +24,6 @@ import pa.iscde.umldiagram.utils.UmlVisitor;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
-import pt.iscte.pidesco.projectbrowser.model.PackageElement.Visitor;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
@@ -39,14 +35,11 @@ public class UmlView implements PidescoView {
 	private Graph umlGraph;
 	private Bundle bundle = FrameworkUtil.getBundle(UmlView.class);
 	private BundleContext context  = bundle.getBundleContext();
-	private JavaEditorServices javaServices;
 	private ServiceReference<JavaEditorServices> ref = context.getServiceReference(JavaEditorServices.class);
-	private ProjectBrowserServices browserServices;
-	
+	private JavaEditorServices javaServices = context.getService(ref);
 	
 	public UmlView() {
 		umlView = this;
-		javaServices = context.getService(ref);
 	}
 
 	@Override
@@ -72,6 +65,7 @@ public class UmlView implements PidescoView {
 				//loop all java classes
 				for(SourceElement classes : p.getChildren()){
 					if(classes.isClass()){
+						System.out.println(classes.getName());
 						//this method is responsable for representing the javaclass on UML graph
 						paintNode(classes);
 					}else{
@@ -93,27 +87,30 @@ public class UmlView implements PidescoView {
 	}
 
 	private void paintNode(SourceElement classes) {
-		
-		UmlVisitor visitor = UmlVisitor.getInstance();
+		UmlVisitor visitor = new UmlVisitor();
 		javaServices.parseFile(classes.getFile(), visitor);
 		GraphNode node = new GraphNode(umlGraph, SWT.NONE);
-		node.setText(classes.getName().replace(".java", ""));
+		node.setText("Class "+classes.getName().replace(".java", "")+"\n");
+		node.setText(node.getText()+"---------------------------"+"\n");
+		for (int i = 0; i < visitor.getFields().size(); i++) {
+			Object field = visitor.getFields().get(i).fragments().get(0);
+			String fieldName = ((VariableDeclarationFragment) field).getName().toString();
+			node.setText(node.getText()+fieldName+" :"+visitor.getFields().get(i).getType()+"\n");
+		}
+		node.setText(node.getText()+"___________________________"+"\n");
 		for (int i = 0; i < visitor.getMethods().size(); i++) {
-			//node.
+			if(!visitor.getMethods().get(i).isConstructor()){
+				if(visitor.getMethods().get(i).getReturnType2()!=null){
+					node.setText(node.getText()+"- "+visitor.getMethods().get(i).getName()+" :"+visitor.getMethods().get(i).getReturnType2().toString()+"\n");
+				}else{
+					node.setText(node.getText()+"- "+visitor.getMethods().get(i).getName()+" : Void"+"\n");
+				}
+			}
 		}
 		
 		
 	}
-
-
-
-	public void setBrowserServices(ProjectBrowserServices browserServices) {
-		this.browserServices=browserServices;
-		
-	}
-
-
-
+	
 	public void clearGraph() {
 		while(umlGraph.getConnections().iterator().hasNext()){
 			umlGraph.getConnections().remove(umlGraph.getConnections().iterator().next()) ; 
