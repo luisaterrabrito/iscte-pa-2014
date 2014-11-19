@@ -20,9 +20,16 @@ public class FileReaderUtil {
 		IProject project  = root.getProject("Teste");
 		IFolder folder = project.getFolder("formulas");
 		String allFormulas = "";
+		
 		try{
-			//		Isto da todos os ficheiros daquela pastas		 
+			if (!project.exists()) project.create(null);
+			if (!project.isOpen()) project.open(null);
+			if (!folder.exists()) 
+				folder.create(IResource.NONE, true, null);
+			//		Isto da todos os ficheiros daquela pastas	
+			
 			IResource[] members = folder.members();
+			if(members.length!=0){
 			for (int i = 0; i < members.length; i++) {
 				IFile f = folder.getFile(members[i].getName());
 				InputStream is =f.getContents();
@@ -32,6 +39,7 @@ public class FileReaderUtil {
 				}
 				allFormulas+="END";
 				s.close();
+			}
 			}
 		} catch (CoreException e) {
 			e.printStackTrace();

@@ -115,8 +115,10 @@ public class FormulasView implements PidescoView {
 	
 	private void loadFormulas() {
 		String[] aux = FileReaderUtil.readFile().split("END");
+		if(!aux.equals("")){
 		for (int i = 0; i < aux.length; i++) {
 			createFormula(aux[i]);
+		}
 		}
 	}
 	
@@ -135,7 +137,6 @@ public class FormulasView implements PidescoView {
 				inputs[i] = line_1.split(",")[3].split(";")[i].split("\\s")[0];
 			else
 				inputs[i] = line_1.split(",")[3].split(";")[i];
-			System.out.println(inputs[i]);
 		}
 		switch (categoryString) {
 		case "Basics":
