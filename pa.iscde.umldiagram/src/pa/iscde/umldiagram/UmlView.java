@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
@@ -65,7 +66,6 @@ public class UmlView implements PidescoView {
 				//loop all java classes
 				for(SourceElement classes : p.getChildren()){
 					if(classes.isClass()){
-						System.out.println(classes.getName());
 						//this method is responsable for representing the javaclass on UML graph
 						paintNode(classes);
 					}else{
@@ -86,9 +86,18 @@ public class UmlView implements PidescoView {
 		}
 	}
 
-	private void paintNode(SourceElement classes) {
+	private synchronized void paintNode(SourceElement classes) {
+		
 		UmlVisitor visitor = new UmlVisitor();
 		javaServices.parseFile(classes.getFile(), visitor);
+		if(!visitor.getEnums().isEmpty() && visitor.getMethods().isEmpty()){
+			paintEnum(visitor);
+		}else{
+			paintClass(classes, visitor);
+		}
+	}
+	
+	private void paintClass(SourceElement classes, UmlVisitor visitor) {
 		GraphNode node = new GraphNode(umlGraph, SWT.NONE);
 		node.setText("Class "+classes.getName().replace(".java", "")+"\n");
 		node.setText(node.getText()+"---------------------------"+"\n");
@@ -108,24 +117,21 @@ public class UmlView implements PidescoView {
 			}
 		}
 		
+	}
+
+	private void paintEnum(UmlVisitor visitor) {
+		GraphNode node = new GraphNode(umlGraph, SWT.NONE);
+		node.setText("Enum "+visitor.getEnums().get(0).getName()+"\n");
+		node.setText(node.getText()+"---------------------------"+"\n");
+		node.setText(node.getText()+visitor.getEnums().get(0).enumConstants());
 		
 	}
-	
-	public void clearGraph() {
-		while(umlGraph.getConnections().iterator().hasNext()){
-			umlGraph.getConnections().remove(umlGraph.getConnections().iterator().next()) ; 
+
+	public synchronized void clearGraph() {
+		List<GraphNode> nodes = new ArrayList<GraphNode>(umlGraph.getNodes());
+		for(GraphNode n : nodes){
+		  n.dispose();
 		}
-		while(umlGraph.getNodes().iterator().hasNext()){
-			umlGraph.getNodes().remove(umlGraph.getNodes().iterator().next()) ; 
-			
-		}
-		
-		umlGraph.redraw();
-		umlGraph.applyLayout();
-		umlGraph.redraw();
-		umlGraph.getParent().update();
-		umlGraph.getParent().redraw();
-		
 	}
 
 }
