@@ -19,7 +19,7 @@ import pt.iscte.pidesco.extensibility.PidescoView;
 public class SnippetsView implements PidescoView {
 	private Composite viewArea;
 	private static SnippetsView instance;
-	private File snippetsRootFolder;
+	private static File snippetsRootFolder;
 
 	public static SnippetsView getInstance() {
 		return instance;
@@ -30,18 +30,22 @@ public class SnippetsView implements PidescoView {
 		instance = this;
 
 		this.viewArea = viewArea;
-		
+
 		URL fileURL;
 		try {
 			fileURL = new URL("platform:/plugin/pa.iscde.snippets/Snippets");
 			System.out.println(FileLocator.resolve(fileURL).toString());
-			snippetsRootFolder = new File(FileLocator.resolve(fileURL).getPath());
+			snippetsRootFolder = new File(FileLocator.resolve(fileURL)
+					.getPath());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		createExplorer();
+	}
+
+	public static File getSnippetsRootFolder() {
+		return snippetsRootFolder;
 	}
 
 	public void createExplorer() {
