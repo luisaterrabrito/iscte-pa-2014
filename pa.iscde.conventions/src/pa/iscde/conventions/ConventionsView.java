@@ -2,7 +2,16 @@ package pa.iscde.conventions;
 
 import java.awt.Color;
 import java.awt.TextArea;
+import java.awt.Window.Type;
+import java.lang.invoke.MethodType;
 import java.util.Map;
+
+
+
+
+
+
+
 
 
 
@@ -36,13 +45,17 @@ import java.util.Map;
 import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.ConstructorInvocation;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.Initializer;
+import org.eclipse.jdt.core.dom.InstanceofExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.NullLiteral;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.PopupList;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -63,6 +76,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import pt.iscte.pidesco.extensibility.PidescoView;
+import pt.iscte.pidesco.javaeditor.service.AnnotationType;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 
@@ -97,16 +111,17 @@ public class ConventionsView implements PidescoView {
 			@Override
 			public boolean visit(MethodDeclaration node) {
 				
-				if(!node.isConstructor()){
-					System.out.println(node.getName());
-					
-				}
+				
 
 				
 				return true;
 			}
 			
+
 			
+			
+			
+		
 			
 			
 		};
@@ -119,7 +134,7 @@ public class ConventionsView implements PidescoView {
 		//Verificar classes.
 		final Button botao = new Button(viewArea, SWT.CHECK);
 		botao.setSize(10, 20);
-		botao.setText("CheckFirstLetter");
+		botao.setText("CheckFirstLetterClass");
 		botao.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
@@ -145,13 +160,40 @@ public class ConventionsView implements PidescoView {
 		//Verificar Metodos
 		final Button botaoMaior = new Button(viewArea, SWT.CHECK);
 		botaoMaior.setSize(10, 20);
-		botaoMaior.setText("CheckFirstLetterUpper");
+		botaoMaior.setText("CheckFirstLetterUpperMethod");
 		botaoMaior.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				if(botaoMaior.getSelection()){
 					
+					ASTVisitor v = new ASTVisitor() {
+						
+						
+						@Override
+						public boolean visit(MethodDeclaration node) {
+
+							if(checkFirstLetterLowerCase(node.getName().getFullyQualifiedName())){
+								System.out.println(node.toString().length() + "   =  "+ node.getBody().getLength());
+								System.out.println();
+								
+								int sizeType= node.getReturnType2().toString().length();
+								int sizeParameters= node.parameters().toString().length();
+								int sizeMethod = node.getLength()-node.getBody().getLength()-sizeParameters-sizeType;
+								int offset =node.getStartPosition();	
+								
+								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "O metodo começa com letra maiuscula", offset, sizeMethod);
+							}
+														
+							
+
+							
+							return true;
+						}
+					
+					};
+					
+					javaServices.parseFile(javaServices.getOpenedFile(), v);
 				}
 			}
 			
