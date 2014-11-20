@@ -16,10 +16,10 @@
    </extension>
    <extension
          id="myview"
-         name="Minha Vista"
+         name="Task View"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.tasklist.MyView">
+            class="pa.iscde.tasklist.TaskView">
       </view>
    </extension>
 
