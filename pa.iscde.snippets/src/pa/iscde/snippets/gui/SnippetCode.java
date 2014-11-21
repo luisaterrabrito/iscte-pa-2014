@@ -122,7 +122,7 @@ public class SnippetCode extends Composite {
 	}
 
 	private void setLanguagesBox() {
-		File root = SnippetsView.getSnippetsRootFolder();
+		File root = SnippetsView.getInstance().getSnippetsRootFolder();
 		languages = new ArrayList<String>();
 		if (root.isDirectory()) {
 			File[] subFolders = root.listFiles();

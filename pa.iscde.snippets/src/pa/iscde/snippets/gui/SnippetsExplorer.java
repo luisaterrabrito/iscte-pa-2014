@@ -6,11 +6,15 @@ import java.util.HashMap;
 import java.util.Set;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -25,6 +29,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
+import org.eclipse.swt.widgets.Label;
 
 public class SnippetsExplorer extends Composite {
 	private Text searchText;
@@ -44,7 +49,7 @@ public class SnippetsExplorer extends Composite {
 		setLayout(new GridLayout(1, false));
 
 		Composite searchComposite = new Composite(this, SWT.NONE);
-		GridLayout gl_searchComposite = new GridLayout(2, false);
+		GridLayout gl_searchComposite = new GridLayout(1, false);
 		gl_searchComposite.marginRight = -5;
 		gl_searchComposite.marginLeft = -5;
 		searchComposite.setLayout(gl_searchComposite);
@@ -53,37 +58,42 @@ public class SnippetsExplorer extends Composite {
 
 		searchText = new Text(searchComposite, SWT.BORDER);
 		searchText.setFont(SWTResourceManager.getFont("Segoe UI", 11,
-				SWT.NORMAL));
+				SWT.ITALIC));
 		searchText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
+		searchText.setText("Search Snippets...");
 		searchText.addModifyListener(new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if (searchText.getText().equals(""))
+				if (searchText.getText().equals("")) {
 					filterByLanguage();
-				else
-					search();
+				} else {
+					if (!searchText.getText().equals("Search Snippets...")) {
+						filterByLanguage();
+						search();
+					}
+				}
 			}
 		});
-		searchText.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.keyCode == SWT.CR)
-					search();
-			}
-		});
+		searchText.addFocusListener(new FocusListener() {
 
-		Button btnNewButton = new Button(searchComposite, SWT.NONE);
-		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				search();
+			public void focusLost(FocusEvent e) {
+				if (searchText.getText().equals("")) {
+					searchText.setFont(SWTResourceManager.getFont("Segoe UI",
+							11, SWT.ITALIC));
+					searchText.setText("Search Snippets...");
+				}
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				searchText.setFont(SWTResourceManager.getFont("Segoe UI", 11,
+						SWT.NORMAL));
+				searchText.setText("");
 			}
 		});
-		btnNewButton.setFont(SWTResourceManager.getFont("Segoe UI", 11,
-				SWT.NORMAL));
-		btnNewButton.setText("Search");
 
 		Composite chooseComposite = new Composite(this, SWT.NONE);
 		chooseComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
@@ -112,9 +122,9 @@ public class SnippetsExplorer extends Composite {
 				| SWT.READ_ONLY);
 		snippetsList.setFont(SWTResourceManager.getFont("Segoe UI", 12,
 				SWT.NORMAL));
-		snippetsList.addSelectionListener(new SelectionAdapter() {
+		snippetsList.addMouseListener(new MouseAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void mouseDoubleClick(MouseEvent e) {
 				SnippetsView.getInstance().createSnippetCode(
 						filteredSnippets.get(snippetsList.getItem(snippetsList
 								.getSelectionIndex())));
@@ -140,6 +150,8 @@ public class SnippetsExplorer extends Composite {
 
 		addNewButton.setText("Add New Snippet");
 
+		languagesCombo.setFocus();
+
 		loadSnippets();
 	}
 
@@ -151,7 +163,7 @@ public class SnippetsExplorer extends Composite {
 		languagesCombo.add("All");
 		languagesCombo.select(0);
 
-		File root = SnippetsView.getSnippetsRootFolder();
+		File root = SnippetsView.getInstance().getSnippetsRootFolder();
 		if (root.isDirectory()) {
 			File[] subFolders = root.listFiles();
 			for (int i = 0; i < subFolders.length; i++) {
