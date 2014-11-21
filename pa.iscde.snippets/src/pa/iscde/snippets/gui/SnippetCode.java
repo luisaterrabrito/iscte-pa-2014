@@ -1,6 +1,10 @@
 package pa.iscde.snippets.gui;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -14,18 +18,51 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 public class SnippetCode extends Composite {
-//TODO: Change to extend composite
 	private File fileToUse;
-	
+	private Text snippetNameTextBox;
+	private Text snippetCodeText;
+
 	public SnippetCode(File f, Composite viewArea, int style) {
 		super(viewArea, style);
 		fileToUse = f;
 		createContents();
+		setSnippetTextAndName();
 	}
-	
-	public SnippetCode(Composite viewArea, int style){
+
+	public SnippetCode(Composite viewArea, int style) {
 		super(viewArea, style);
 		createContents();
+	}
+
+	private void setSnippetTextAndName() {
+		snippetNameTextBox.setText(getFileName(fileToUse));
+		String code = "";
+		snippetNameTextBox.setText(getFileName(fileToUse));
+		for (String s : getFileCode(fileToUse))
+			code += s + "\n";
+		snippetCodeText.setText(code);
+	}
+
+	private String getFileName(File f) {
+		return f.getName().replace(".snp", "");
+	}
+
+	private ArrayList<String> getFileCode(File f) {
+		ArrayList<String> lines = new ArrayList<String>();
+		f.setReadOnly();
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader(f));
+			String line;
+			while ((line = reader.readLine()) != null) {
+				lines.add(line);
+			}
+			;
+		} catch (IOException e) {
+			System.err.println("File Not Found");
+		}
+		;
+		return lines;
 	}
 
 	public void createContents() {
@@ -46,8 +83,7 @@ public class SnippetCode extends Composite {
 		Label snippetNameTextLabel = new Label(snippetNameComposite, SWT.None);
 		snippetNameTextLabel.setText("Snippet Name: ");
 		// Snippet Name Text Box
-		Text snippetNameTextBox = new Text(snippetNameComposite, SWT.FILL);
-		snippetNameTextBox.setText("Hey");
+		snippetNameTextBox = new Text(snippetNameComposite, SWT.FILL);
 		snippetNameTextBox.setEditable(true);
 		snippetNameTextBox.setSize(50, 50);
 
@@ -64,11 +100,10 @@ public class SnippetCode extends Composite {
 		editComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
 
-		Composite snippetCodeTextComposite = new Composite(this,
-				SWT.None);
+		Composite snippetCodeTextComposite = new Composite(this, SWT.None);
 		snippetCodeTextComposite.setLayout(new FillLayout(SWT.HORIZONTAL
 				| SWT.VERTICAL));
-		Text snippetCodeText = new Text(snippetCodeTextComposite, SWT.MULTI
+		snippetCodeText = new Text(snippetCodeTextComposite, SWT.MULTI
 				| SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		snippetCodeText.setText("Hello");
 		GridData snippetCodeTextLayoutGridData = new GridData(SWT.FILL,

@@ -115,10 +115,10 @@ public class SnippetsExplorer extends Composite {
 		snippetsList.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				dispose();
 				SnippetsView.getInstance().createSnippetCode(
 						filteredSnippets.get(snippetsList.getItem(snippetsList
 								.getSelectionIndex())));
+				dispose();
 			}
 		});
 
