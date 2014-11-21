@@ -1,17 +1,21 @@
 package pa.iscde.filtersearch.view;
 
+import java.awt.im.InputContext;
+import java.io.Console;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -33,6 +37,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import pt.iscte.pidesco.extensibility.PidescoView;
+import pt.iscte.pidesco.projectbrowser.model.ClassElement;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
@@ -53,7 +58,9 @@ public class SearchView implements PidescoView {
 
 	private Image packageIcon;
 	private Image classIcon;
-	
+
+	private 	PackageElement pe;
+
 	public SearchView() {
 		Bundle bundle = FrameworkUtil.getBundle(SearchView.class);
 		BundleContext context  = bundle.getBundleContext();
@@ -75,7 +82,7 @@ public class SearchView implements PidescoView {
 
 		packageIcon = images.get("murilhas.png");
 		classIcon = images.get("almas.png");
-		
+
 		GridLayout gridLayout = new GridLayout(4, false);
 		gridLayout.verticalSpacing = 8;
 
@@ -112,29 +119,9 @@ public class SearchView implements PidescoView {
 		gridData =  new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL);
 		gridData.horizontalSpan = 3;
 		gridData.grabExcessVerticalSpace = true;
-		
-		ModifyListener modifyListener = new ModifyListener() {
-		   
-			@Override
-			public void modifyText(ModifyEvent e) {
-				String text = "";
 
-				if(searchText.getText().isEmpty()){
-					for (String s : _list) {
-							text += s + '\n';
-					}
-				}else{
-					for (String s : _list) {
-						if(s.contains(searchText.getText()))
-							text += s + '\n';
-					}
-				}
 
-					results.setText(text);
-			}
-		};
 
-		searchText.addModifyListener(modifyListener);
 
 		results.setLayoutData(gridData);
 
@@ -144,26 +131,54 @@ public class SearchView implements PidescoView {
 		tree = new TreeViewer(viewArea, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		tree.setContentProvider(new ViewContentProvider());
 		tree.setLabelProvider(new ViewLabelProvider());
-		
-		PackageElement invisibleRoot = getPackage();
-		
-		String s ="";
-		for(SourceElement e : root.getChildren()){
 
-			if(e.isPackage()) {
-				s += e.getName() + '\n';
-				_list.add(e.getName());
-				PackageElement pack = new PackageElement(null, "", e.getFile());
-				for(File child : e.getFile().listFiles()) {
-					if(!child.getName().startsWith("."))
-						s+= scanRec(child, pack);
+		final PackageElement invisibleRoot = scan(root.getFile());
+
+
+		tree.setInput(invisibleRoot);
+		tree.collapseAll();
+
+
+
+		ModifyListener modifyListener = new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+
+
+				//tree.collapseAll();
+
+				ViewerFilterClass filter = new ViewerFilterClass(searchText.getText());
+
+
+				//					if(o.getName().contains(searchText.getText()))
+
+				tree.setInput(invisibleRoot);
+				if(!searchText.getText().isEmpty()){
+					tree.addFilter(filter);
+					//tree.expandToLevel(o, TreeViewer.ALL_LEVELS);
+				} else {
+					tree.resetFilters();
 				}
 
-				results.setText(s);
 			}
-		}
-
-
+			//				String text = "";
+			//
+			//				if(searchText.getText().isEmpty()){
+			//					for (String s : _list) {
+			//							text += s + '\n';
+			//					}
+			//				}else{
+			//					for (String s : _list) {
+			//						if(s.contains(searchText.getText()))
+			//							text += s + '\n';
+			//					}
+			//				}
+			//
+			//					results.setText(text);
+			//			}
+		};
+		searchText.addModifyListener(modifyListener);
 
 
 		// Search Button
@@ -184,100 +199,141 @@ public class SearchView implements PidescoView {
 					dialog.setMessage("Do you really want to do this?");
 					//					results.setText(browserServices.searchMethod(searchText.getText()));
 					// open dialog and await user selection
-					
-
-						dialog.open(); 
-					}
-				}
-			};
-
-			searchButton.addListener(SWT.Selection, listener);
-
-		}
-
-		private PackageElement getPackage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-		public void addText(String string) {
-			results.setText(string);
-		}
 
 
-
-		private static String scanRec(File f, PackageElement p) {
-			String s = "";
-			if(f.isFile() && f.getName().endsWith(".java")) {
-				s += '\t' +  f.getName() + '\n';
-				_list.add(f.getName());
-			}
-			else if(f.isDirectory()) {
-				PackageElement childPack = new PackageElement(p, f.getName(), f);
-				for(File child : f.listFiles()) {
-					scanRec(child, childPack);
+					dialog.open(); 
 				}
 			}
-			return s;
-		}
+		};
 
-		
-		/**
-		 * 
-		 * 
-		 * 		OUTRAS CLASSES
-		 * 
-		 * 
-		 * @author LuisMurilhas
-		 *
-		 */
-		
-		
-		class ViewLabelProvider extends LabelProvider {
+		searchButton.addListener(SWT.Selection, listener);
 
-			public String getText(Object obj) {
-				return obj.toString();
-			}
-			public Image getImage(Object obj) {
-				return ((SourceElement) obj).isPackage() ? packageIcon : classIcon;
-			}
-		}	
-		
-		private static class ViewContentProvider implements IStructuredContentProvider, ITreeContentProvider {
-
-			private static final Object[] EMPTY = new Object[0];
-			
-			public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-
-			}
-
-			public void dispose() {
-
-			}
-
-			public Object[] getElements(Object parent) {
-				return getChildren(parent);
-
-			}
-
-			public Object getParent(Object child) {
-				return ((SourceElement)child).getParent();
-			}
-
-			public Object[] getChildren(Object parent) {
-				if (parent instanceof PackageElement)
-					return ((PackageElement)parent).getChildren().toArray();
-				else
-					return EMPTY;
-			}
-
-			public boolean hasChildren(Object parent) {
-				return parent instanceof PackageElement && ((PackageElement)parent).hasChildren();
-			}
-
-		}
-
-		
-		
-		
 	}
+
+	public void addText(String string) {
+		results.setText(string);
+	}
+
+	private static PackageElement scan(File root) {
+		PackageElement pack = new PackageElement(null, "", root);
+		for(File child : root.listFiles()) {
+			if(!child.getName().startsWith("."))
+				scanRec(child, pack);
+		}
+		return pack;
+	}
+
+	private static void scanRec(File f, PackageElement p) {
+		if(f.isFile() && f.getName().endsWith(".java")) {
+			new ClassElement(p, f);
+		}
+		else if(f.isDirectory()) {
+			PackageElement childPack = new PackageElement(p, f.getName(), f);
+			for(File child : f.listFiles()) {
+				scanRec(child, childPack);
+			}
+		}
+	}
+
+
+
+
+	//
+	//		private static String scanRec(File f, PackageElement p) {
+	//			String s = "";
+	//			if(f.isFile() && f.getName().endsWith(".java")) {
+	//				s += '\t' +  f.getName() + '\n';
+	//				_list.add(f.getName());
+	//			}
+	//			else if(f.isDirectory()) {
+	//				PackageElement childPack = new PackageElement(p, f.getName(), f);
+	//				for(File child : f.listFiles()) {
+	//					scanRec(child, childPack);
+	//				}
+	//			}
+	//			return s;
+	//		}
+
+
+	/**
+	 * 
+	 * 
+	 * 		OUTRAS CLASSES
+	 * 
+	 * 
+	 * @author LuisMurilhas
+	 *
+	 */
+
+
+	class ViewLabelProvider extends LabelProvider {
+
+		public String getText(Object obj) {
+			return obj.toString();
+		}
+		public Image getImage(Object obj) {
+			return ((SourceElement) obj).isPackage() ? packageIcon : classIcon;
+		}
+	}	
+
+	private static class ViewContentProvider implements IStructuredContentProvider, ITreeContentProvider {
+
+		private static final Object[] EMPTY = new Object[0];
+
+		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
+
+		}
+
+		public void dispose() {
+
+		}
+
+		public Object[] getElements(Object parent) {
+			return getChildren(parent);
+
+		}
+
+		public Object getParent(Object child) {
+			return ((SourceElement)child).getParent();
+		}
+
+		public Object[] getChildren(Object parent) {
+			if (parent instanceof PackageElement)
+				return ((PackageElement)parent).getChildren().toArray();
+			else
+				return EMPTY;
+		}
+
+		public boolean hasChildren(Object parent) {
+			return parent instanceof PackageElement && ((PackageElement)parent).hasChildren();
+		}
+
+	}
+
+	private static class ViewerFilterClass extends ViewerFilter{
+
+		private String s;
+
+		public ViewerFilterClass(String text) {
+			this.s = text;
+		}
+
+		@Override
+		public boolean select(Viewer viewer, Object parentElement,
+				Object element) {
+			if (s == null || s.length() == 0) {
+				return true;
+			}
+			PackageElement p = (PackageElement) element;
+			if (p.getName().contains(s)) {
+				return true;
+			}
+
+			return false;
+		}
+	}
+
+}
+
+
+
