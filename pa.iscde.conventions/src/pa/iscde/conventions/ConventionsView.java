@@ -42,9 +42,17 @@ import java.util.Map;
 
 
 
+
+
+
+
 import javax.swing.text.StyledEditorKit.ForegroundAction;
 
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
+import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.ConstructorInvocation;
@@ -140,14 +148,59 @@ public class ConventionsView implements PidescoView {
 			public void widgetSelected(SelectionEvent e){
 
 				if(botao.getSelection()){
-					if(checkFirstLetterLowerCase(javaServices.getOpenedFile().getName())){
-						//marcar o nome da classe.
-						System.out.println("A classe " +javaServices.getOpenedFile().getName() + " começa com letra Minuscula");
-					}else{
-						//apagar quando ja tiver a fazer highlight
-						System.out.println("A classe " +javaServices.getOpenedFile().getName() + " começa com letra Maiuscula");
+				
+					
+					
+
+					ASTVisitor v = new ASTVisitor() {
+
+						
+						
+						
+						@Override
+						public boolean visit(MethodDeclaration node) {
+
+							int sizeMethod = 0;
+							int offset = 0;
+							
+							if(node.isConstructor()){
+								
+								if(checkFirstLetterLowerCase(node.getName().getFullyQualifiedName())){
+				
+									sizeMethod = node.getName().getLength();
+								//offset é o inicio do primeiro caracter.
+								//Length é o tamanho da seleção.
+									offset =node.getName().getStartPosition();	
+								
+
+									javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.ERROR, "O nome da classe não pode começar com letra minuscula", offset, sizeMethod);
+								}
+							
+							
+								
+							
+							}
+
+
+
+							return true;
+						}
+
 					};
-				}
+
+					javaServices.parseFile(javaServices.getOpenedFile(), v);
+					
+				}	
+					
+//					if(checkFirstLetterLowerCase(javaServices.getOpenedFile().getName())){
+//						
+//						//marcar o nome da classe.
+//						System.out.println("A classe " +javaServices.getOpenedFile().getName() + " começa com letra Minuscula");
+//					}else{
+//						//apagar quando ja tiver a fazer highlight
+//						System.out.println("A classe " +javaServices.getOpenedFile().getName() + " começa com letra Maiuscula");
+//					};
+//				}
 			}
 
 
@@ -166,22 +219,36 @@ public class ConventionsView implements PidescoView {
 			public void widgetSelected(SelectionEvent e){
 				if(botaoMaior.getSelection()){
 
+					
+					
+					
+					
 					ASTVisitor v = new ASTVisitor() {
 
-
+						
+						
+						
 						@Override
 						public boolean visit(MethodDeclaration node) {
 
-							if(checkFirstLetterLowerCase(node.getName().getFullyQualifiedName())){
-								System.out.println(node.toString().length() + "   =  "+ node.getBody().getLength());
-								System.out.println();
+							int sizeMethod = 0;
+							int offset = 0;
+							
+							if(!node.isConstructor()){
+								if(!checkFirstLetterLowerCase(node.getName().getFullyQualifiedName())){
+				
+									sizeMethod = node.getName().getLength();
+								//offset é o inicio do primeiro caracter.
+								//Length é o tamanho da seleção.
+									offset =node.getName().getStartPosition();	
+								
 
-								int sizeType= node.getReturnType2().toString().length();
-								int sizeParameters= node.parameters().toString().length();
-								int sizeMethod = node.getLength()-node.getBody().getLength()-sizeParameters-sizeType;
-								int offset =node.getStartPosition();	
-
-								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "O metodo começa com letra maiuscula", offset, sizeMethod);
+									javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "O metodo começa com letra maiuscula", offset, sizeMethod);
+								}
+							
+							
+								
+							
 							}
 
 
@@ -192,28 +259,17 @@ public class ConventionsView implements PidescoView {
 					};
 
 					javaServices.parseFile(javaServices.getOpenedFile(), v);
-				}
+				
+			}else{
+				
 			}
 
 
-
-		});
-
-
-		final Button botaoProtectedWords = new Button(viewArea, SWT.CHECK);
-		botaoProtectedWords.setSize(10, 20);
-		botaoProtectedWords.setText("ProtectedWords");
-		botaoProtectedWords.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				if(botaoProtectedWords.getSelection()){
-
-				}
 			}
-
-
 		});
+
+
+		
 
 
 
@@ -226,11 +282,51 @@ public class ConventionsView implements PidescoView {
 			public void widgetSelected(SelectionEvent e){
 				if(botaoverifySize.getSelection()){
 
-				}
+					
+					
+					
+					
+					ASTVisitor v = new ASTVisitor() {
+
+						
+						
+						
+						@Override
+						public boolean visit(MethodDeclaration node) {
+
+							int sizeMethod = 0;
+							int offset = 0;
+							
+							if(!node.isConstructor()){
+																	
+								if(verifySize(node.getName().getFullyQualifiedName())){
+									
+									sizeMethod = node.getName().getLength();
+									//offset é o inicio do primeiro caracter.
+									//Length é o tamanho da seleção.
+									offset =node.getName().getStartPosition();	
+									
+									javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "O nome do metodo é demasiado grande", offset, sizeMethod);
+									
+								}
+							
+							}
+
+
+
+							return true;
+						}
+
+					};
+
+					javaServices.parseFile(javaServices.getOpenedFile(), v);
+				
+			}else{
+				
 			}
 
 
-
+			}
 		});
 
 
@@ -250,31 +346,12 @@ public class ConventionsView implements PidescoView {
 
 	}
 
-	public boolean protectedWords(String word){
-		String[] protectedwords = {"private", "protected", "public", "abstract", "class", "extends", "final", 
-				"implements", "interface", "new", "static", "strictfp", "synchronized", "transient", "volatile", "break", "case", 
-				"continue", "default", "do", "else", "for", "if", "instanceof", "return", "switch", "while", "assert", "catch", "finally",
-				"throw", "throws", "try", "import", "package", "boolean", "byte", "char", "double", "float", "int", "long", "short", 
-				"super", "this", "void", "const", "goto", "null", "true", "false"};
-
-
-
-		for(String s : protectedwords){
-			if(word.equals((s))){
-				return true;
-			}
-		}
-
-		return false;
-
-
-
-	}
+	
 
 
 	public boolean verifySize(String word){
 
-		if(word.length()>=10){
+		if(word.length()>=20){
 			return true;
 		}
 

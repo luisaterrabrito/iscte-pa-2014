@@ -19,7 +19,8 @@
          name="Code Convetions View"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.conventions.ConventionsView">
+            class="pa.iscde.conventions.ConventionsView"
+            icon="exc_catch.gif">
       </view>
    </extension>
 
