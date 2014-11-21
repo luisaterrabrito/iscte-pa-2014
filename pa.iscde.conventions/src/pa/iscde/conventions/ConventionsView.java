@@ -215,7 +215,6 @@ public class ConventionsView implements PidescoView {
 			}
 			
 			
-			
 		});
 		
 		
