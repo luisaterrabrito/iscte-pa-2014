@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -23,51 +26,62 @@ public class SnippetCode extends Composite {
 	private Text snippetCodeText;
 	private FileOperations fileOperations;
 	private Combo languagesCombo;
-	ArrayList<String> languages;
-
+	private ArrayList<String> languages;
+	private Button editButton;
+	
 	public SnippetCode(File f, Composite viewArea, int style) {
 		super(viewArea, style);
 		fileOperations = new FileOperations(f);
 		createContents();
 		setSnippetTextAndName();
 		setSelectedFileLanguage();
+		snippetNameTextBox.setEnabled(false);
+    	snippetCodeText.setEnabled(false);
+    	languagesCombo.setEnabled(false);
 	}
 
 	public SnippetCode(Composite viewArea, int style) {
 		super(viewArea, style);
 		createContents();
+		editButton.setSelection(true);
 		selectDefaultLanguage();
 	}
 
 	public void createContents() {
 		this.setLayout(new GridLayout(1, false));
-
 		Composite nameAndEditAndLanguageSelectComposite = new Composite(this,
 				SWT.None);
 		GridLayout gridLayoutNameAndEdit = new GridLayout();
 		gridLayoutNameAndEdit.numColumns = 3;
+		gridLayoutNameAndEdit.makeColumnsEqualWidth = true;
 		nameAndEditAndLanguageSelectComposite.setLayout(gridLayoutNameAndEdit);
 		nameAndEditAndLanguageSelectComposite.setLayoutData(new GridData(
 				GridData.FILL_HORIZONTAL));
-
+		
 		Composite snippetNameComposite = new Composite(
 				nameAndEditAndLanguageSelectComposite, SWT.None);
 		FillLayout fillLayout = new FillLayout(SWT.HORIZONTAL);
 		snippetNameComposite.setLayout(fillLayout);
+		
 		// Snippet Name Label
 		Label snippetNameTextLabel = new Label(snippetNameComposite, SWT.None);
 		snippetNameTextLabel.setText("Snippet Name: ");
+		
 		// Snippet Name Text Box
 		snippetNameTextBox = new Text(snippetNameComposite, SWT.FILL);
-		snippetNameTextBox.setEditable(true);
 		snippetNameTextBox.setSize(50, 50);
-		// Snippet Type ComboBox
+		
+		// Snippet Language Type ComboBox
 		Composite chooseComposite = new Composite(
-				nameAndEditAndLanguageSelectComposite, SWT.NONE);
+				nameAndEditAndLanguageSelectComposite, SWT.None);
 		chooseComposite.setLayout(fillLayout);
-		languagesCombo = new Combo(chooseComposite, SWT.NONE | SWT.READ_ONLY);
+		Label languagesLabel = new Label(chooseComposite, SWT.None);
+		languagesLabel.setText("Language: ");
+		languagesCombo = new Combo(chooseComposite, SWT.FILL | SWT.READ_ONLY);
 		setLanguagesBox();
-
+		languagesCombo.setSize(50, 50);
+		
+		// Edit CheckBox 
 		Composite editComposite = new Composite(
 				nameAndEditAndLanguageSelectComposite, SWT.None);
 		GridLayout gridLayoutEdit = new GridLayout();
@@ -77,11 +91,28 @@ public class SnippetCode extends Composite {
 		gridLayoutEdit.marginLeft = -5;
 		editComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
-		Button editButton = new Button(editComposite, SWT.CHECK);
+		editButton = new Button(editComposite, SWT.CHECK);
 		editButton.setText("Edit");
+		editButton.addSelectionListener(new SelectionAdapter()
+		{
+		    @Override
+		    public void widgetSelected(SelectionEvent e)
+		    {
+		        if (editButton.getSelection()){
+		        	snippetNameTextBox.setEnabled(true);
+		        	snippetCodeText.setEnabled(true);
+		        	languagesCombo.setEnabled(true);
+		        }else{
+		        	snippetNameTextBox.setEnabled(false);
+		        	snippetCodeText.setEnabled(false);
+		        	languagesCombo.setEnabled(false);
+		        }     
+		    }
+		});
 		editComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
-
+		
+		
 		Composite snippetCodeTextComposite = new Composite(this, SWT.None);
 		snippetCodeTextComposite.setLayout(new FillLayout(SWT.HORIZONTAL
 				| SWT.VERTICAL));
