@@ -23,7 +23,7 @@
          name="Search Tool"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.filtersearch.SearchView"
+            class="pa.iscde.filtersearch.view.SearchView"
             icon="searchtool.gif">
       </view>
    </extension>
