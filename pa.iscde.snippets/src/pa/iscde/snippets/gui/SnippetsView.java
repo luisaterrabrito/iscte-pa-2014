@@ -44,7 +44,7 @@ public class SnippetsView implements PidescoView {
 		createExplorer();
 	}
 
-	public static File getSnippetsRootFolder() {
+	public File getSnippetsRootFolder() {
 		return snippetsRootFolder;
 	}
 
