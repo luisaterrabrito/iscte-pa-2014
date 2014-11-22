@@ -22,10 +22,13 @@ public class DropCodeView implements PidescoView {
 		return instance;
 	}
 
+	private ExpandBar bar;
+
 	@Override
 	public void createContents(Composite comp, Map<String, Image> images) {
 
 		instance = this;
+		bar = new ExpandBar(comp, SWT.V_SCROLL);
 
 		// int halign = SWT.CENTER, valign = SWT.FILL, hspan = 5, vspan = 0;
 		// boolean hexcess = true, vexcess = false;
@@ -53,16 +56,18 @@ public class DropCodeView implements PidescoView {
 		// Button b = new Button(c, SWT.CHECK);
 		// b.setText("És Elite");
 
-		DropClass dClass = DropCodeActivator.getDropClass();
+	}
 
-		ExpandBar bar = new ExpandBar(comp, SWT.V_SCROLL);
+	public void update() {
+
+		DropClass dropClass = DropCodeActivator.getDropClass();
 
 		Composite compFields = new Composite(bar, SWT.NONE);
 		FillLayout fillLayout = new FillLayout();
 		fillLayout.type = SWT.VERTICAL;
 		compFields.setLayout(fillLayout);
 
-		for (DropField df : dClass.getFields()) {
+		for (DropField df : dropClass.getFields()) {
 			new DropRow(compFields, SWT.NONE, df);
 		}
 
@@ -84,7 +89,6 @@ public class DropCodeView implements PidescoView {
 		for (int m = 0; m != 5; m++) {
 
 		}
-
 	}
 
 }
