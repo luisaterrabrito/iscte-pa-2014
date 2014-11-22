@@ -3,35 +3,31 @@ package pa.iscde.snippets.gui;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.eclipse.swt.widgets.Label;
 
 public class SnippetsExplorer extends Composite {
+	private static SnippetsExplorer instance = null;
+	private GridData gridData;
 	private Text searchText;
 	private HashMap<File, ArrayList<File>> loadedSnippets;
 	private HashMap<String, File> filteredSnippets;
@@ -44,9 +40,18 @@ public class SnippetsExplorer extends Composite {
 	 * @param parent
 	 * @param style
 	 */
+	public static SnippetsExplorer getInstance() {
+		return instance;
+	}
+
 	public SnippetsExplorer(final Composite parent, int style) {
 		super(parent, style);
+
+		instance = this;
+
 		setLayout(new GridLayout(1, false));
+		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		this.setLayoutData(gridData);
 
 		Composite searchComposite = new Composite(this, SWT.NONE);
 		GridLayout gl_searchComposite = new GridLayout(1, false);
@@ -125,10 +130,10 @@ public class SnippetsExplorer extends Composite {
 		snippetsList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
+				hideUnhide();
 				SnippetsView.getInstance().createSnippetCode(
 						filteredSnippets.get(snippetsList.getItem(snippetsList
 								.getSelectionIndex())));
-				dispose();
 			}
 		});
 
@@ -141,7 +146,7 @@ public class SnippetsExplorer extends Composite {
 		addNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				dispose();
+				hideUnhide();
 				SnippetsView.getInstance().createSnippetCode();
 			}
 		});
@@ -150,8 +155,16 @@ public class SnippetsExplorer extends Composite {
 
 		addNewButton.setText("Add New Snippet");
 
+		addDisposeListener(new DisposeListener() {
+			
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				instance = null;
+			}
+		});
+		
 		languagesCombo.setFocus();
-
+		
 		loadSnippets();
 	}
 
@@ -231,5 +244,10 @@ public class SnippetsExplorer extends Composite {
 			filteredSnippets = found;
 			refreshSnippetsList();
 		}
+	}
+
+	protected void hideUnhide() {
+		gridData.exclude = !gridData.exclude;
+		setVisible(!gridData.exclude);
 	}
 }

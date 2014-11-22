@@ -2,17 +2,14 @@ package pa.iscde.snippets.gui;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.osgi.framework.Bundle;
 
 import pt.iscte.pidesco.extensibility.PidescoView;
 
@@ -31,10 +28,11 @@ public class SnippetsView implements PidescoView {
 
 		this.viewArea = viewArea;
 
+		viewArea.setLayout(new GridLayout(1, false));
+
 		URL fileURL;
 		try {
 			fileURL = new URL("platform:/plugin/pa.iscde.snippets/Snippets");
-			System.out.println(FileLocator.resolve(fileURL).toString());
 			snippetsRootFolder = new File(FileLocator.resolve(fileURL)
 					.getPath());
 		} catch (IOException e) {
@@ -49,19 +47,24 @@ public class SnippetsView implements PidescoView {
 	}
 
 	public void createExplorer() {
-		new SnippetsExplorer(viewArea, SWT.NONE);
+		if (SnippetsExplorer.getInstance() == null)
+			new SnippetsExplorer(viewArea, SWT.NONE);
+		else
+			SnippetsExplorer.getInstance().hideUnhide();
 		viewArea.layout();
 	}
 
 	// With file
 	public void createSnippetCode(File snp) {
 		new SnippetCode(snp, viewArea, SWT.NONE);
+		viewArea.pack();
 		viewArea.layout();
 	}
 
 	// Without file
 	public void createSnippetCode() {
 		new SnippetCode(viewArea, SWT.NONE);
+		viewArea.pack();
 		viewArea.layout();
 	}
 }
