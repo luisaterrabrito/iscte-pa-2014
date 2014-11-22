@@ -2,6 +2,8 @@ package pa.iscde.dropcode;
 
 import java.io.File;
 
+import javax.swing.JOptionPane;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -20,6 +22,9 @@ public class DropCodeActivator implements BundleActivator {
 
 	@Override
 	public void start(BundleContext context) throws Exception {
+
+		// context.registerService(DropCodeActivator.class, this, null);
+
 		DropCodeView.getInstance();
 
 		ServiceReference<JavaEditorServices> editorRef = context
@@ -44,6 +49,8 @@ public class DropCodeActivator implements BundleActivator {
 			@Override
 			public void fileOpened(File file) {
 				dropClass = new DropClass(javaEditor);
+				DropCodeView.getInstance().update();
+				System.out.println("fileOpened()");
 			}
 
 			@Override

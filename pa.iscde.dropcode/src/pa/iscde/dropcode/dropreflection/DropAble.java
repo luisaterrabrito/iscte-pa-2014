@@ -9,7 +9,8 @@ public class DropAble {
 	private HashSet<DropModifier> modifiers;
 
 	public DropAble() {
-		// TODO Auto-generated constructor stub
+		modifiers = new HashSet<>();
+		annotations = new HashMap<>();
 	}
 
 	public String name() {
