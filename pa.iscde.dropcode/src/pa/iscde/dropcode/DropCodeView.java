@@ -1,11 +1,14 @@
 package pa.iscde.dropcode;
 
+import java.awt.List;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 
@@ -23,12 +26,18 @@ public class DropCodeView implements PidescoView {
 	}
 
 	private ExpandBar bar;
+	private Composite compFields;
 
 	@Override
 	public void createContents(Composite comp, Map<String, Image> images) {
 
 		instance = this;
 		bar = new ExpandBar(comp, SWT.V_SCROLL);
+
+		compFields = new Composite(bar, SWT.NONE);
+		FillLayout fillLayout = new FillLayout();
+		fillLayout.type = SWT.VERTICAL;
+		compFields.setLayout(fillLayout);
 
 		// int halign = SWT.CENTER, valign = SWT.FILL, hspan = 5, vspan = 0;
 		// boolean hexcess = true, vexcess = false;
@@ -59,13 +68,8 @@ public class DropCodeView implements PidescoView {
 	}
 
 	public void update() {
-
+		
 		DropClass dropClass = DropCodeActivator.getDropClass();
-
-		Composite compFields = new Composite(bar, SWT.NONE);
-		FillLayout fillLayout = new FillLayout();
-		fillLayout.type = SWT.VERTICAL;
-		compFields.setLayout(fillLayout);
 
 		for (DropField df : dropClass.getFields()) {
 			new DropRow(compFields, SWT.NONE, df);
@@ -79,16 +83,17 @@ public class DropCodeView implements PidescoView {
 		ExpandItem constructors = new ExpandItem(bar, SWT.NONE, 1);
 		constructors.setText("Constructors");
 
-		for (int c = 0; c != 5; c++) {
-
-		}
-
 		ExpandItem methods = new ExpandItem(bar, SWT.NONE, 2);
 		methods.setText("Methods");
 
-		for (int m = 0; m != 5; m++) {
-
+	}
+	
+	public void clear(){
+		
+		for (Control c : compFields.getChildren()) {
+			c.dispose();
 		}
+
 	}
 
 }
