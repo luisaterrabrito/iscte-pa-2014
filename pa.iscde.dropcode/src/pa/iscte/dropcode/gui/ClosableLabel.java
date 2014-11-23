@@ -43,7 +43,7 @@ public class ClosableLabel extends Composite {
 		});
 	}
 
-	private interface ClosableLabelEvent {
+	public interface ClosableLabelEvent {
 
 		public void clicked();
 	}
