@@ -2,8 +2,6 @@ package pa.iscde.dropcode;
 
 import java.io.File;
 
-import javax.swing.JOptionPane;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -15,6 +13,7 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 public class DropCodeActivator implements BundleActivator {
 
 	private static DropClass dropClass;
+	private JavaEditorServices javaEditor;
 
 	public static DropClass getDropClass() {
 		return dropClass;
@@ -29,7 +28,7 @@ public class DropCodeActivator implements BundleActivator {
 
 		ServiceReference<JavaEditorServices> editorRef = context
 				.getServiceReference(JavaEditorServices.class);
-		final JavaEditorServices javaEditor = context.getService(editorRef);
+		javaEditor = context.getService(editorRef);
 
 		// ServiceReference<ProjectBrowserServices> browserRef = context
 		// .getServiceReference(ProjectBrowserServices.class);
@@ -48,15 +47,19 @@ public class DropCodeActivator implements BundleActivator {
 
 			@Override
 			public void fileOpened(File file) {
-				dropClass = new DropClass(javaEditor);
-				DropCodeView.getInstance().update();
-				System.out.println("fileOpened()");
+				openFile(file);
 			}
 
 			@Override
 			public void fileClosed(File file) {
 			}
 		});
+
+		// IF THERE IS AN OPENED FILE AT START
+		System.out.println(javaEditor);
+		// if (javaEditor.getOpenedFile() != null) {
+		// openFile(javaEditor.getOpenedFile());
+		// }
 	}
 
 	@Override
@@ -65,4 +68,12 @@ public class DropCodeActivator implements BundleActivator {
 
 	}
 
+	private void openFile(File file) {
+		if (file == null)
+			return;
+
+		dropClass = new DropClass(javaEditor);
+		DropCodeView.getInstance().update();
+		System.out.println("fileOpened()");
+	}
 }
