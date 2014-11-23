@@ -14,6 +14,7 @@ public class ClosableLabel extends Composite {
 	private Label button;
 	public static Image image_down;
 	public static Image image_up;
+	private static final Color backgroundColor = new Color(null, 200, 200, 200);
 
 	public ClosableLabel(Composite parent, int style, String text) {
 		super(parent, style);
@@ -23,7 +24,8 @@ public class ClosableLabel extends Composite {
 
 		setLayout(new RowLayout(SWT.HORIZONTAL));
 		Label label = new Label(this, SWT.CENTER);
-		label.setBackground(new Color(null, 200, 200, 200));
+		label.setBackground(backgroundColor);
+		setBackground(backgroundColor);
 		label.setText(text);
 		button = new Label(this, SWT.PUSH);
 		button.setImage(image_up);
