@@ -15,8 +15,10 @@ public class ClosableLabel extends Composite {
 		super(parent, style);
 
 		setLayout(new RowLayout(SWT.HORIZONTAL));
+		
+		new Label(this, SWT.CENTER).setText(text);
 		button = new Button(this, SWT.PUSH);
-		new Label(this, SWT.NONE).setText(text);
+		button.setText("X");
 	}
 
 	public void addMouseAdapter(MouseListener listener) {
