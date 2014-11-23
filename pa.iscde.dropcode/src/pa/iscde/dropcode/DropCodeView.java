@@ -107,6 +107,7 @@ public class DropCodeView implements PidescoView {
 		c.add("protected");
 		c.add("none");
 		c.select(0);
+		c.setEditable(false);
 
 		ClosableLabel.image_up = IMAGE_UP;
 		ClosableLabel.image_down = IMAGE_DOWN;
@@ -129,6 +130,7 @@ public class DropCodeView implements PidescoView {
 		c2.add("double");
 		c2.add("String");
 		c2.select(0);
+		c2.setEditable(true);
 
 		Text t = new Text(compField1, SWT.SINGLE);
 		t.setMessage("Name");
