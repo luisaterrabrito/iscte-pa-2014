@@ -51,48 +51,42 @@ public class SnippetCode extends Composite {
 		this.setLayout(new GridLayout(1, false));
 		Composite nameAndEditAndLanguageSelectComposite = new Composite(this,
 				SWT.None);
-		GridLayout gridLayoutNameAndEdit = new GridLayout();
-		gridLayoutNameAndEdit.numColumns = 3;
-		gridLayoutNameAndEdit.makeColumnsEqualWidth = true;
-		nameAndEditAndLanguageSelectComposite.setLayout(gridLayoutNameAndEdit);
-		nameAndEditAndLanguageSelectComposite.setLayoutData(new GridData(
-				GridData.FILL_HORIZONTAL));
+		GridLayout gl_nameAndEditAndLanguageSelectComposite = new GridLayout(6, false);
+		gl_nameAndEditAndLanguageSelectComposite.marginWidth = 0;
+		nameAndEditAndLanguageSelectComposite.setLayout(gl_nameAndEditAndLanguageSelectComposite);
+		GridData gd_nameAndEditAndLanguageSelectComposite = new GridData(
+				GridData.FILL_HORIZONTAL);
+		gd_nameAndEditAndLanguageSelectComposite.verticalAlignment = SWT.FILL;
+		nameAndEditAndLanguageSelectComposite.setLayoutData(gd_nameAndEditAndLanguageSelectComposite);
 		
 		Composite snippetNameComposite = new Composite(
 				nameAndEditAndLanguageSelectComposite, SWT.None);
-		FillLayout fillNameLayout = new FillLayout(SWT.HORIZONTAL);
-		snippetNameComposite.setLayout(fillNameLayout);
+		snippetNameComposite.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1));
+		snippetNameComposite.setLayout(null);
 		
 		// Snippet Name Label
 		Label snippetNameTextLabel = new Label(snippetNameComposite, SWT.None);
+		snippetNameTextLabel.setBounds(4, 5, 81, 15);
 		snippetNameTextLabel.setText("Snippet Name: ");
 		
 		// Snippet Name Text Box
 		snippetNameTextBox = new Text(snippetNameComposite, SWT.FILL);
-		snippetNameTextBox.setSize(50, 50);
+		snippetNameTextBox.setText("New Snippet (1)");
+		snippetNameTextBox.setBounds(91, 5, 126, 15);
 		
-		// Snippet Language Type ComboBox
-		Composite chooseComposite = new Composite(
-				nameAndEditAndLanguageSelectComposite, SWT.None);
-		chooseComposite.setLayout(null);
-		Label languagesLabel = new Label(chooseComposite, SWT.None);
-		languagesLabel.setBounds(0, 3, 56, 23);
+		Composite composite = new Composite(nameAndEditAndLanguageSelectComposite, SWT.NONE);
+		composite.setLayout(null);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		Label languagesLabel = new Label(composite, SWT.None);
+		languagesLabel.setBounds(10, 5, 58, 15);
 		languagesLabel.setText("Language: ");
-		languagesCombo = new Combo(chooseComposite, SWT.FILL | SWT.READ_ONLY);
-		languagesCombo.setBounds(62, 0, 95, 23);
+		languagesCombo = new Combo(composite, SWT.FILL | SWT.READ_ONLY);
+		languagesCombo.setBounds(74, 1, 183, 23);
 		setLanguagesBox();
-		
-		// Edit CheckBox 
-		Composite editComposite = new Composite(
-				nameAndEditAndLanguageSelectComposite, SWT.None);
-		GridLayout gridLayoutEdit = new GridLayout();
-		gridLayoutEdit.numColumns = 2;
-		editComposite.setLayout(gridLayoutEdit);
-		gridLayoutEdit.marginRight = -5;
-		gridLayoutEdit.marginLeft = -5;
-		editComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
-		editButton = new Button(editComposite, SWT.CHECK);
+		new Label(nameAndEditAndLanguageSelectComposite, SWT.NONE);
+		new Label(nameAndEditAndLanguageSelectComposite, SWT.NONE);
+		new Label(nameAndEditAndLanguageSelectComposite, SWT.NONE);
+		editButton = new Button(nameAndEditAndLanguageSelectComposite, SWT.CHECK);
 		editButton.setText("Edit");
 		editButton.addSelectionListener(new SelectionAdapter()
 		{
@@ -110,9 +104,6 @@ public class SnippetCode extends Composite {
 		        }     
 		    }
 		});
-		editComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 1, 1));
-		new Label(editComposite, SWT.NONE);
 		
 		
 		Composite snippetCodeTextComposite = new Composite(this, SWT.None);
@@ -122,16 +113,19 @@ public class SnippetCode extends Composite {
 				| SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		snippetCodeText.setText("Insert Code Here...");
 		GridData snippetCodeTextLayoutGridData = new GridData(SWT.FILL,
-				SWT.CENTER, true, false, 1, 1);
+				SWT.FILL, true, true, 1, 1);
 		snippetCodeTextLayoutGridData.widthHint = 200;
-		snippetCodeTextLayoutGridData.heightHint = 500;
+		snippetCodeTextLayoutGridData.heightHint = 580;
 		snippetCodeTextComposite.setLayoutData(snippetCodeTextLayoutGridData);
 
 		Composite bottomButtonComposite = new Composite(this, SWT.None);
 		GridLayout gridLayoutButton = new GridLayout();
 		gridLayoutButton.numColumns = 3;
 		bottomButtonComposite.setLayout(gridLayoutButton);
-		Button closeButton = new Button(bottomButtonComposite, SWT.PUSH);
+		Button closeButton = new Button(bottomButtonComposite, SWT.NONE);
+		GridData gd_closeButton = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 2);
+		gd_closeButton.widthHint = 215;
+		closeButton.setLayoutData(gd_closeButton);
 		closeButton.setText("Discard");
 		closeButton.addListener(SWT.Selection, new Listener() {
 
@@ -146,11 +140,17 @@ public class SnippetCode extends Composite {
 				}
 			}
 		});
-		Button saveButton = new Button(bottomButtonComposite, SWT.PUSH);
+		Button saveButton = new Button(bottomButtonComposite, SWT.NONE);
+		GridData gd_saveButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 2);
+		gd_saveButton.widthHint = 215;
+		saveButton.setLayoutData(gd_saveButton);
 		saveButton.setText("Save");
-		Button useSnippetButton = new Button(bottomButtonComposite, SWT.PUSH);
+		Button useSnippetButton = new Button(bottomButtonComposite, SWT.NONE);
+		GridData gd_useSnippetButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 2);
+		gd_useSnippetButton.widthHint = 215;
+		useSnippetButton.setLayoutData(gd_useSnippetButton);
 		useSnippetButton.setText("Use");
-		bottomButtonComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+		bottomButtonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
 				true, false, 1, 1));
 	}
 
