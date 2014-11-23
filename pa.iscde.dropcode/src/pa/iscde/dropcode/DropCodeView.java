@@ -6,6 +6,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -134,6 +135,7 @@ public class DropCodeView implements PidescoView {
 
 		Text t = new Text(compField1, SWT.SINGLE);
 		t.setMessage("Name");
+
 	}
 
 	public void clear() {
