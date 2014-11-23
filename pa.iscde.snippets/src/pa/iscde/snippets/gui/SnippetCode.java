@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import pa.iscde.snippets.fileoperations.FileOperations;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 public class SnippetCode extends Composite {
 	private Text snippetNameTextBox;
@@ -66,27 +67,35 @@ public class SnippetCode extends Composite {
 		
 		// Snippet Name Label
 		Label snippetNameTextLabel = new Label(snippetNameComposite, SWT.None);
-		snippetNameTextLabel.setBounds(4, 5, 81, 15);
+		snippetNameTextLabel.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
+		snippetNameTextLabel.setBounds(0, 3, 102, 20);
 		snippetNameTextLabel.setText("Snippet Name: ");
 		
 		// Snippet Name Text Box
 		snippetNameTextBox = new Text(snippetNameComposite, SWT.FILL);
+		snippetNameTextBox.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
 		snippetNameTextBox.setText("New Snippet (1)");
-		snippetNameTextBox.setBounds(91, 5, 126, 15);
+		snippetNameTextBox.setBounds(101, 3, 126, 22);
+
+		new Label(nameAndEditAndLanguageSelectComposite, SWT.NONE);
 		
 		Composite composite = new Composite(nameAndEditAndLanguageSelectComposite, SWT.NONE);
 		composite.setLayout(null);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		GridData gd_composite = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
+		gd_composite.heightHint = 33;
+		composite.setLayoutData(gd_composite);
 		Label languagesLabel = new Label(composite, SWT.None);
-		languagesLabel.setBounds(10, 5, 58, 15);
+		languagesLabel.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
+		languagesLabel.setBounds(0, 3, 70, 19);
 		languagesLabel.setText("Language: ");
 		languagesCombo = new Combo(composite, SWT.FILL | SWT.READ_ONLY);
-		languagesCombo.setBounds(74, 1, 183, 23);
+		languagesCombo.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
+		languagesCombo.setBounds(73, 0, 185, 28);		
 		setLanguagesBox();
 		new Label(nameAndEditAndLanguageSelectComposite, SWT.NONE);
 		new Label(nameAndEditAndLanguageSelectComposite, SWT.NONE);
-		new Label(nameAndEditAndLanguageSelectComposite, SWT.NONE);
 		editButton = new Button(nameAndEditAndLanguageSelectComposite, SWT.CHECK);
+		editButton.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
 		editButton.setText("Edit");
 		editButton.addSelectionListener(new SelectionAdapter()
 		{
@@ -111,11 +120,12 @@ public class SnippetCode extends Composite {
 				| SWT.VERTICAL));
 		snippetCodeText = new Text(snippetCodeTextComposite, SWT.MULTI
 				| SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
+		snippetCodeText.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
 		snippetCodeText.setText("Insert Code Here...");
 		GridData snippetCodeTextLayoutGridData = new GridData(SWT.FILL,
 				SWT.FILL, true, true, 1, 1);
 		snippetCodeTextLayoutGridData.widthHint = 200;
-		snippetCodeTextLayoutGridData.heightHint = 580;
+		snippetCodeTextLayoutGridData.heightHint = 565;
 		snippetCodeTextComposite.setLayoutData(snippetCodeTextLayoutGridData);
 
 		Composite bottomButtonComposite = new Composite(this, SWT.None);
@@ -123,6 +133,7 @@ public class SnippetCode extends Composite {
 		gridLayoutButton.numColumns = 3;
 		bottomButtonComposite.setLayout(gridLayoutButton);
 		Button closeButton = new Button(bottomButtonComposite, SWT.NONE);
+		closeButton.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
 		GridData gd_closeButton = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 2);
 		gd_closeButton.widthHint = 215;
 		closeButton.setLayoutData(gd_closeButton);
@@ -141,11 +152,13 @@ public class SnippetCode extends Composite {
 			}
 		});
 		Button saveButton = new Button(bottomButtonComposite, SWT.NONE);
+		saveButton.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
 		GridData gd_saveButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 2);
 		gd_saveButton.widthHint = 215;
 		saveButton.setLayoutData(gd_saveButton);
 		saveButton.setText("Save");
 		Button useSnippetButton = new Button(bottomButtonComposite, SWT.NONE);
+		useSnippetButton.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
 		GridData gd_useSnippetButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 2);
 		gd_useSnippetButton.widthHint = 215;
 		useSnippetButton.setLayoutData(gd_useSnippetButton);
