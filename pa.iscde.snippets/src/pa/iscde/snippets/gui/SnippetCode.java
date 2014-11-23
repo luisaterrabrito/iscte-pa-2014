@@ -60,8 +60,8 @@ public class SnippetCode extends Composite {
 		
 		Composite snippetNameComposite = new Composite(
 				nameAndEditAndLanguageSelectComposite, SWT.None);
-		FillLayout fillLayout = new FillLayout(SWT.HORIZONTAL);
-		snippetNameComposite.setLayout(fillLayout);
+		FillLayout fillNameLayout = new FillLayout(SWT.HORIZONTAL);
+		snippetNameComposite.setLayout(fillNameLayout);
 		
 		// Snippet Name Label
 		Label snippetNameTextLabel = new Label(snippetNameComposite, SWT.None);
@@ -74,12 +74,13 @@ public class SnippetCode extends Composite {
 		// Snippet Language Type ComboBox
 		Composite chooseComposite = new Composite(
 				nameAndEditAndLanguageSelectComposite, SWT.None);
-		chooseComposite.setLayout(fillLayout);
+		chooseComposite.setLayout(null);
 		Label languagesLabel = new Label(chooseComposite, SWT.None);
+		languagesLabel.setBounds(0, 3, 56, 23);
 		languagesLabel.setText("Language: ");
 		languagesCombo = new Combo(chooseComposite, SWT.FILL | SWT.READ_ONLY);
+		languagesCombo.setBounds(62, 0, 95, 23);
 		setLanguagesBox();
-		languagesCombo.setSize(50, 50);
 		
 		// Edit CheckBox 
 		Composite editComposite = new Composite(
@@ -111,6 +112,7 @@ public class SnippetCode extends Composite {
 		});
 		editComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
+		new Label(editComposite, SWT.NONE);
 		
 		
 		Composite snippetCodeTextComposite = new Composite(this, SWT.None);
