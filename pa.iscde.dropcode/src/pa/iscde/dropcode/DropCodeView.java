@@ -7,7 +7,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
-import org.eclipse.swt.widgets.Label;
 
 import pa.iscde.dropcode.dropreflection.DropClass;
 import pa.iscde.dropcode.dropreflection.DropField;
@@ -73,7 +72,17 @@ public class DropCodeView implements PidescoView {
 			// updateConstructors();
 			// updateMethods();
 		}
+		fields.layout();
+		fieldsBarItem.setHeight(fields.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+
+		// constructors.layout();
+		// constructorsBarItem.setHeight(constructors.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+
+		// methods.layout();
+		// methods.setHeight(methods.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+
 		bar.layout();
+
 	}
 
 	private void clearFields() {
@@ -89,58 +98,5 @@ public class DropCodeView implements PidescoView {
 			new DropRow(fields, SWT.NONE, df);
 		}
 
-		fields.layout();
-		fieldsBarItem.setHeight(fields.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-
 	}
-
-	// private void createFieldContent() {
-	// Composite compField1 = new Composite(compFields, SWT.NONE);
-	// RowLayout layout = new RowLayout();
-	// compField1.setLayout(layout);
-	//
-	// CCombo c = new CCombo(compField1, SWT.NONE);
-	// c.add("public");
-	// c.add("private");
-	// c.add("protected");
-	// c.add("none");
-	// c.select(0);
-	// c.setEditable(false);
-	//
-	// ClosableLabel.image_up = IMAGE_UP;
-	// ClosableLabel.image_down = IMAGE_DOWN;
-	//
-	// ClosableLabel cl = new ClosableLabel(compField1, SWT.NONE, "static");
-	// ClosableLabel cl2 = new ClosableLabel(compField1, SWT.NONE, "final");
-	// ClosableLabel cl3 = new ClosableLabel(compField1, SWT.NONE, "abstract");
-	//
-	// cl2.addMouseAdapter(new ClosableLabelEvent() {
-	// @Override
-	// public void clicked() {
-	// System.out.println("Clicked!");
-	// }
-	// });
-	//
-	// CCombo c2 = new CCombo(compField1, SWT.NONE);
-	// c2.add("int");
-	// c2.add("boolean");
-	// c2.add("char");
-	// c2.add("double");
-	// c2.add("String");
-	// c2.select(0);
-	// c2.setEditable(true);
-	//
-	// Text t = new Text(compField1, SWT.SINGLE);
-	// t.setMessage("Name");
-	//
-	// }
-	//
-	// private void clear() {
-	//
-	// for (Control c : compFields.getChildren()) {
-	// c.dispose();
-	// }
-	//
-	// }
-
 }
