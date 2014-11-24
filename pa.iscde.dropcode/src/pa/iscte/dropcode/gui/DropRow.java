@@ -20,7 +20,7 @@ public class DropRow extends Composite {
 		setLayout(layout);
 		if (dropable instanceof DropField) {
 			addCombo_visibility_modifier(dropable);
-//			addCombo_other_modifiers(dropable);
+			// addCombo_other_modifiers(dropable);
 			setContent(dropable.name());
 			addCombo_type(dropable);
 			addTextfield_name(dropable);
@@ -75,7 +75,17 @@ public class DropRow extends Composite {
 
 	private void addTextfield_name(DropAble dropable) {
 		Text t = new Text(this, SWT.SINGLE);
-		t.setMessage(dropable.name());
+		switch (dropable.getClass().getSimpleName()) {
+		case "DropField":
+			t.setMessage("<name of field>");
+			break;
+		case "DropMethod":
+			t.setMessage("<name of method>");
+			break;
+
+		}
+
+		t.setText(dropable.name());
 	}
 
 	private void setContent(String name) {
