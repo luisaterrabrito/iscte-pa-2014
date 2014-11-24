@@ -2,12 +2,10 @@ package pa.iscde.dropcode.dropreflection;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.swt.graphics.Image;
 
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
