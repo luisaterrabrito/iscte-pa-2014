@@ -14,4 +14,8 @@ public enum DropModifier {
 	public static DropModifier[] getVisibilityModifiers() {
 		return new DropModifier[] { PUBLIC, PROTECTED, PRIVATE };
 	}
+
+	public static DropModifier[] getOtherModifiers() {
+		return new DropModifier[] { FINAL, STATIC, ABSTRACT };
+	}
 }
