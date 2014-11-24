@@ -72,10 +72,10 @@ public class SnippetCode extends Composite {
 		snippetNameTextLabel.setText("Snippet Name: ");
 		
 		// Snippet Name Text Box
-		snippetNameTextBox = new Text(snippetNameComposite, SWT.FILL);
+		snippetNameTextBox = new Text(snippetNameComposite, SWT.BORDER);
 		snippetNameTextBox.setFont(SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL));
 		snippetNameTextBox.setText("New Snippet (1)");
-		snippetNameTextBox.setBounds(101, 3, 126, 22);
+		snippetNameTextBox.setBounds(103, 1, 126, 25);
 
 		new Label(nameAndEditAndLanguageSelectComposite, SWT.NONE);
 		
