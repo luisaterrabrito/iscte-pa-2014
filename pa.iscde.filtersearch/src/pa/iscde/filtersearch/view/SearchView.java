@@ -80,8 +80,8 @@ public class SearchView implements PidescoView {
 		final Shell shell = new Shell();
 		instance = this;
 
-		packageIcon = images.get("murilhas.png");
-		classIcon = images.get("almas.png");
+		packageIcon = images.get("package_obj.gif");
+		classIcon = images.get("classes.gif");
 
 		GridLayout gridLayout = new GridLayout(4, false);
 		gridLayout.verticalSpacing = 8;
@@ -151,7 +151,7 @@ public class SearchView implements PidescoView {
 				ViewerFilterClass filter = new ViewerFilterClass(searchText.getText());
 
 
-				//					if(o.getName().contains(searchText.getText()))
+				//	if(o.getName().contains(searchText.getText()))
 
 				tree.setInput(invisibleRoot);
 				if(!searchText.getText().isEmpty()){
