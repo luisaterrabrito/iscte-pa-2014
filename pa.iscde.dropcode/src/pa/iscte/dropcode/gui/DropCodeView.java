@@ -1,4 +1,4 @@
-package pa.iscde.dropcode;
+package pa.iscte.dropcode.gui;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -8,10 +8,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 
+import pa.iscde.dropcode.DropCodeActivator;
 import pa.iscde.dropcode.dropreflection.DropClass;
 import pa.iscde.dropcode.dropreflection.DropField;
-import pa.iscte.dropcode.gui.ClosableLabel;
-import pa.iscte.dropcode.gui.DropRow;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
 public class DropCodeView implements PidescoView {
