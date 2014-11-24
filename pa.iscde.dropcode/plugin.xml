@@ -23,7 +23,7 @@
          name="DropCode"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.dropcode.DropCodeView"
+            class="pa.iscte.dropcode.gui.DropCodeView"
             icon="dropcode_icon.png">
       </view>
    </extension>
