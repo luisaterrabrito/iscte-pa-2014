@@ -20,8 +20,8 @@ public class DropRow extends Composite {
 		setLayout(layout);
 		if (dropable instanceof DropField) {
 			addCombo_visibility_modifier(dropable);
-			addCombo_other_modifiers(dropable);
-			setContent();
+//			addCombo_other_modifiers(dropable);
+			setContent(dropable.name());
 			addCombo_type(dropable);
 			addTextfield_name(dropable);
 		}
@@ -65,9 +65,9 @@ public class DropRow extends Composite {
 		CCombo combo = new CCombo(this, SWT.NONE);
 		for (int i = 0; i != types.length; i++) {
 			combo.add(types[i].name().toLowerCase());
-			if (types[i].toString().toLowerCase().equals(dropable.getType())){
+			if (types[i].toString().toLowerCase().equals(dropable.getType())) {
 				combo.select(i);
-				
+
 			}
 		}
 		combo.setEditable(true);
@@ -78,18 +78,17 @@ public class DropRow extends Composite {
 		t.setMessage(dropable.name());
 	}
 
-	private void setContent() {
+	private void setContent(String name) {
 
-		ClosableLabel cl = new ClosableLabel(this, SWT.NONE, "static");
-		ClosableLabel cl2 = new ClosableLabel(this, SWT.NONE, "final");
-		ClosableLabel cl3 = new ClosableLabel(this, SWT.NONE, "abstract");
-
-		cl2.addMouseAdapter(new ClosableLabelEvent() {
-			@Override
-			public void clicked() {
-				System.out.println("Clicked!");
-			}
-		});
+		if (name.equals("jButton1")) {
+			ClosableLabel cl = new ClosableLabel(this, SWT.NONE, "static");
+			ClosableLabel cl2 = new ClosableLabel(this, SWT.NONE, "final");
+			ClosableLabel cl3 = new ClosableLabel(this, SWT.NONE, "abstract");
+		} else if (name.equals("jTextField1")) {
+			ClosableLabel cl2 = new ClosableLabel(this, SWT.NONE, "final");
+		} else {
+			ClosableLabel cl = new ClosableLabel(this, SWT.NONE, "static");
+		}
 
 	}
 
