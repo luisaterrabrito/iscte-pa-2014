@@ -19,6 +19,10 @@ public class DropRow extends Composite {
 		// setName(dropable.name());
 		// TODO: Add Modifier addButton();
 
+		setContent();
+	}
+
+	private void setContent() {
 		RowLayout layout = new RowLayout();
 		setLayout(layout);
 
