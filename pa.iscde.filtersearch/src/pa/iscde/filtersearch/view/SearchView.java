@@ -1,14 +1,7 @@
 package pa.iscde.filtersearch.view;
 
-import java.awt.im.InputContext;
-import java.io.Console;
 import java.io.File;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -44,29 +37,22 @@ import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 public class SearchView implements PidescoView {
 
+	@SuppressWarnings("unused")
 	private static Composite viewArea;
 	private static SearchView instance;
 	private ProjectBrowserServices browserServices;
-	private static Set<String> _list ;
-
-
-	private TreeViewer tree;
-
-	private Text searchText;
-
-	private Text results;
-
+	
+	private TreeViewer tree;	
 	private Image packageIcon;
 	private Image classIcon;
 
-	private 	PackageElement pe;
+	private Text searchText;
 
 	public SearchView() {
 		Bundle bundle = FrameworkUtil.getBundle(SearchView.class);
 		BundleContext context  = bundle.getBundleContext();
 		ServiceReference<ProjectBrowserServices> ref2 = context.getServiceReference(ProjectBrowserServices.class);
 		browserServices = context.getService(ref2);
-		_list = new HashSet<String>();
 
 	}
 
@@ -76,16 +62,16 @@ public class SearchView implements PidescoView {
 
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> images) {
+		
 		SearchView.viewArea = viewArea;
-		final Shell shell = new Shell();
 		instance = this;
-
+		final Shell shell = new Shell();
+		
 		packageIcon = images.get("package_obj.gif");
 		classIcon = images.get("classes.gif");
 
 		GridLayout gridLayout = new GridLayout(4, false);
 		gridLayout.verticalSpacing = 8;
-
 		viewArea.setLayout(gridLayout);
 
 		// Search
@@ -115,30 +101,28 @@ public class SearchView implements PidescoView {
 		label = new Label(viewArea, SWT.NULL);
 		label.setText("Results:");
 
-		results = new Text(viewArea,SWT.WRAP| SWT.MULTI| SWT.BORDER| SWT.H_SCROLL| SWT.V_SCROLL);
-		gridData =  new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL);
-		gridData.horizontalSpan = 3;
-		gridData.grabExcessVerticalSpace = true;
+		//		results = new Text(viewArea,SWT.WRAP| SWT.MULTI| SWT.BORDER| SWT.H_SCROLL| SWT.V_SCROLL);
+		//		gridData =  new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL);
+		//		gridData.horizontalSpan = 3;
+		//		gridData.grabExcessVerticalSpace = true;
+		//		results.setLayoutData(gridData);
 
 
-
-
-		results.setLayoutData(gridData);
-
-
+		// TreeViewer
+		
 		PackageElement root = browserServices.getRootPackage();
-
+		System.out.println("Root Package:" + root.getName().toString());
 		tree = new TreeViewer(viewArea, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		tree.setContentProvider(new ViewContentProvider());
 		tree.setLabelProvider(new ViewLabelProvider());
 
 		final PackageElement invisibleRoot = scan(root.getFile());
-
-
+		System.out.println("Insisible Root: " + invisibleRoot.getName().toString());
 		tree.setInput(invisibleRoot);
-		tree.collapseAll();
+		tree.expandAll();
 
 
+		// Listener de alterações no searchText
 
 		ModifyListener modifyListener = new ModifyListener() {
 
@@ -162,26 +146,31 @@ public class SearchView implements PidescoView {
 				}
 
 			}
-			//				String text = "";
-			//
-			//				if(searchText.getText().isEmpty()){
-			//					for (String s : _list) {
-			//							text += s + '\n';
-			//					}
-			//				}else{
-			//					for (String s : _list) {
-			//						if(s.contains(searchText.getText()))
-			//							text += s + '\n';
-			//					}
-			//				}
-			//
-			//					results.setText(text);
-			//			}
+
+			/**
+			 *							String text = "";
+
+							if(searchText.getText().isEmpty()){
+								for (String s : _list) {
+										text += s + '\n';
+								}
+							}else{
+								for (String s : _list) {
+									if(s.contains(searchText.getText()))
+										text += s + '\n';
+								}
+							}
+
+								results.setText(text);
+						} 
+			 */
+
 		};
 		searchText.addModifyListener(modifyListener);
 
 
 		// Search Button
+		
 		final Button searchButton = new Button(viewArea, SWT.PUSH);
 		searchButton.setText("Enter");
 
@@ -197,7 +186,7 @@ public class SearchView implements PidescoView {
 					MessageBox dialog =  new MessageBox(shell, SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
 					dialog.setText("SEARCH CONFIRMATION");
 					dialog.setMessage("Do you really want to do this?");
-					//					results.setText(browserServices.searchMethod(searchText.getText()));
+					// results.setText(browserServices.searchMethod(searchText.getText()));
 					// open dialog and await user selection
 
 
@@ -210,9 +199,7 @@ public class SearchView implements PidescoView {
 
 	}
 
-	public void addText(String string) {
-		results.setText(string);
-	}
+
 
 	private static PackageElement scan(File root) {
 		PackageElement pack = new PackageElement(null, "", root);
@@ -238,30 +225,34 @@ public class SearchView implements PidescoView {
 
 
 
-	//
-	//		private static String scanRec(File f, PackageElement p) {
-	//			String s = "";
-	//			if(f.isFile() && f.getName().endsWith(".java")) {
-	//				s += '\t' +  f.getName() + '\n';
-	//				_list.add(f.getName());
-	//			}
-	//			else if(f.isDirectory()) {
-	//				PackageElement childPack = new PackageElement(p, f.getName(), f);
-	//				for(File child : f.listFiles()) {
-	//					scanRec(child, childPack);
-	//				}
-	//			}
-	//			return s;
-	//		}
-
-
 	/**
 	 * 
-	 * 
-	 * 		OUTRAS CLASSES
-	 * 
-	 * 
-	 * @author LuisMurilhas
+
+			private static String scanRec(File f, PackageElement p) {
+				String s = "";
+				if(f.isFile() && f.getName().endsWith(".java")) {
+					s += '\t' +  f.getName() + '\n';
+					_list.add(f.getName());
+				}
+				else if(f.isDirectory()) {
+					PackageElement childPack = new PackageElement(p, f.getName(), f);
+					for(File child : f.listFiles()) {
+						scanRec(child, childPack);
+					}
+				}
+				return s;
+			}
+	 */
+
+
+	
+	
+	
+	
+	/**
+	 *  ##########################################
+	 * 				OUTRAS CLASSES
+	 *  ##########################################
 	 *
 	 */
 
@@ -276,6 +267,7 @@ public class SearchView implements PidescoView {
 		}
 	}	
 
+	
 	private static class ViewContentProvider implements IStructuredContentProvider, ITreeContentProvider {
 
 		private static final Object[] EMPTY = new Object[0];
@@ -310,6 +302,8 @@ public class SearchView implements PidescoView {
 
 	}
 
+	
+	
 	private static class ViewerFilterClass extends ViewerFilter{
 
 		private String s;
@@ -319,8 +313,7 @@ public class SearchView implements PidescoView {
 		}
 
 		@Override
-		public boolean select(Viewer viewer, Object parentElement,
-				Object element) {
+		public boolean select(Viewer viewer, Object parentElement,	Object element) {
 			if (s == null || s.length() == 0) {
 				return true;
 			}
@@ -334,6 +327,3 @@ public class SearchView implements PidescoView {
 	}
 
 }
-
-
-
