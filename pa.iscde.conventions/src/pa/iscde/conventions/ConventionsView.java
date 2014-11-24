@@ -46,6 +46,12 @@ import java.util.Map;
 
 
 
+
+
+
+
+
+
 import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 import org.eclipse.jdt.core.dom.AST;
@@ -56,14 +62,20 @@ import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.ConstructorInvocation;
+import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.InstanceofExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.NullLiteral;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.PopupList;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -116,15 +128,11 @@ public class ConventionsView implements PidescoView {
 
 
 			@Override
-			public boolean visit(MethodDeclaration node) {
-
-
-
-
-				return true;
+			public boolean visit(TypeDeclaration node) {
+			System.out.println(node.getName());
+				return super.visit(node);
 			}
-
-
+	
 
 
 
@@ -148,38 +156,38 @@ public class ConventionsView implements PidescoView {
 			public void widgetSelected(SelectionEvent e){
 
 				if(botao.getSelection()){
-				
-					
-					
+
+
+
 
 					ASTVisitor v = new ASTVisitor() {
 
-						
-						
-						
+
+
+
 						@Override
-						public boolean visit(MethodDeclaration node) {
+						public boolean visit(TypeDeclaration node) {
 
 							int sizeMethod = 0;
 							int offset = 0;
-							
-							if(node.isConstructor()){
-								
+
+						
+
 								if(checkFirstLetterLowerCase(node.getName().getFullyQualifiedName())){
-				
+
 									sizeMethod = node.getName().getLength();
-								//offset é o inicio do primeiro caracter.
-								//Length é o tamanho da seleção.
+									//offset é o inicio do primeiro caracter.
+									//Length é o tamanho da seleção.
 									offset =node.getName().getStartPosition();	
-								
+
 
 									javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.ERROR, "O nome da classe não pode começar com letra minuscula", offset, sizeMethod);
 								}
+
+
+
+
 							
-							
-								
-							
-							}
 
 
 
@@ -189,18 +197,18 @@ public class ConventionsView implements PidescoView {
 					};
 
 					javaServices.parseFile(javaServices.getOpenedFile(), v);
-					
+
 				}	
-					
-//					if(checkFirstLetterLowerCase(javaServices.getOpenedFile().getName())){
-//						
-//						//marcar o nome da classe.
-//						System.out.println("A classe " +javaServices.getOpenedFile().getName() + " começa com letra Minuscula");
-//					}else{
-//						//apagar quando ja tiver a fazer highlight
-//						System.out.println("A classe " +javaServices.getOpenedFile().getName() + " começa com letra Maiuscula");
-//					};
-//				}
+
+				//					if(checkFirstLetterLowerCase(javaServices.getOpenedFile().getName())){
+				//						
+				//						//marcar o nome da classe.
+				//						System.out.println("A classe " +javaServices.getOpenedFile().getName() + " começa com letra Minuscula");
+				//					}else{
+				//						//apagar quando ja tiver a fazer highlight
+				//						System.out.println("A classe " +javaServices.getOpenedFile().getName() + " começa com letra Maiuscula");
+				//					};
+				//				}
 			}
 
 
@@ -219,36 +227,36 @@ public class ConventionsView implements PidescoView {
 			public void widgetSelected(SelectionEvent e){
 				if(botaoMaior.getSelection()){
 
-					
-					
-					
-					
+
+
+
+
 					ASTVisitor v = new ASTVisitor() {
 
-						
-						
-						
+
+
+
 						@Override
 						public boolean visit(MethodDeclaration node) {
 
 							int sizeMethod = 0;
 							int offset = 0;
-							
+
 							if(!node.isConstructor()){
 								if(!checkFirstLetterLowerCase(node.getName().getFullyQualifiedName())){
-				
+
 									sizeMethod = node.getName().getLength();
-								//offset é o inicio do primeiro caracter.
-								//Length é o tamanho da seleção.
+									//offset é o inicio do primeiro caracter.
+									//Length é o tamanho da seleção.
 									offset =node.getName().getStartPosition();	
-								
+
 
 									javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "O metodo começa com letra maiuscula", offset, sizeMethod);
 								}
-							
-							
-								
-							
+
+
+
+
 							}
 
 
@@ -259,17 +267,17 @@ public class ConventionsView implements PidescoView {
 					};
 
 					javaServices.parseFile(javaServices.getOpenedFile(), v);
-				
-			}else{
-				
-			}
+
+				}else{
+
+				}
 
 
 			}
 		});
 
 
-		
+
 
 
 
@@ -282,34 +290,34 @@ public class ConventionsView implements PidescoView {
 			public void widgetSelected(SelectionEvent e){
 				if(botaoverifySize.getSelection()){
 
-					
-					
-					
-					
+
+
+
+
 					ASTVisitor v = new ASTVisitor() {
 
-						
-						
-						
+
+
+
 						@Override
 						public boolean visit(MethodDeclaration node) {
 
 							int sizeMethod = 0;
 							int offset = 0;
-							
+
 							if(!node.isConstructor()){
-																	
+
 								if(verifySize(node.getName().getFullyQualifiedName())){
-									
+
 									sizeMethod = node.getName().getLength();
 									//offset é o inicio do primeiro caracter.
 									//Length é o tamanho da seleção.
 									offset =node.getName().getStartPosition();	
-									
+
 									javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "O nome do metodo é demasiado grande", offset, sizeMethod);
-									
+
 								}
-							
+
 							}
 
 
@@ -320,10 +328,10 @@ public class ConventionsView implements PidescoView {
 					};
 
 					javaServices.parseFile(javaServices.getOpenedFile(), v);
-				
-			}else{
-				
-			}
+
+				}else{
+
+				}
 
 
 			}
@@ -346,7 +354,7 @@ public class ConventionsView implements PidescoView {
 
 	}
 
-	
+
 
 
 	public boolean verifySize(String word){
