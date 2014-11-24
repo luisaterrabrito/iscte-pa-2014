@@ -10,7 +10,8 @@ public class DropAble {
 	private HashMap<String, DropAnnotation> annotations;
 	private HashSet<DropModifier> modifiers;
 
-	public DropAble() {
+	public DropAble(String name) {
+		this.name = name;
 		modifiers = new HashSet<>();
 		annotations = new HashMap<>();
 	}
@@ -20,11 +21,13 @@ public class DropAble {
 	}
 
 	public void setModifiers(int modifiers) {
-		if((modifiers & 10) != 0 ){
-			System.out.println();
-		}
-		if((modifiers & 001) != 0 ){
+		System.out.println(name() + " - modifiers: " + (byte) modifiers);
 		
+		if((modifiers & 01) != 0 ){
+//			System.out.println("01");
+		}
+		if((modifiers & 10) != 0 ){
+//			System.out.println("10");
 		}
 	}
 	

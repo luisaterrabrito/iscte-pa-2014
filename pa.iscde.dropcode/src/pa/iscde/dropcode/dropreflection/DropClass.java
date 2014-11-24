@@ -29,7 +29,8 @@ public class DropClass {
 			public boolean visit(FieldDeclaration field) {
 
 				// ADD FIELDS //
-				DropField newField = new DropField();
+				DropField newField = new DropField(field.fragments().get(0)
+						.toString());
 				newField.setModifiers(field.getModifiers());
 				fields.put(newField.name(), newField);
 				return false;
@@ -38,6 +39,14 @@ public class DropClass {
 			@Override
 			public boolean visit(MethodDeclaration method) {
 				// ADD METHODS //
+				DropMethod newMethod = new DropMethod(method.getName()
+						.getFullyQualifiedName());
+				newMethod.setModifiers(method.getModifiers());
+				if (method.isConstructor()) {
+					constructors.put(newMethod.name(), newMethod);
+				} else {
+					methods.put(newMethod.name(), newMethod);
+				}
 				return false;
 			}
 
