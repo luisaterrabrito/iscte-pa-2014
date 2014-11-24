@@ -24,7 +24,7 @@ public class DropCodeView implements PidescoView {
 
 	private ExpandBar bar;
 	private Composite fields, constructors, methods;
-	private ExpandItem fieldsBarItem;
+	private ExpandItem fieldsBarItem, constructorsBarItem, methodsBarItem;
 	private DropClass dropClass;
 
 	@Override
@@ -37,11 +37,6 @@ public class DropCodeView implements PidescoView {
 		instance = this;
 		bar = new ExpandBar(comp, SWT.V_SCROLL);
 
-		// compFields = new Composite(bar, SWT.NONE);
-		// FillLayout fillLayout = new FillLayout();
-		// fillLayout.type = SWT.VERTICAL;
-		// compFields.setLayout(fillLayout);
-
 		fields = new Composite(bar, SWT.NONE);
 		fields.setLayout(new FillLayout(SWT.VERTICAL));
 		fieldsBarItem = new ExpandItem(bar, SWT.NONE, 0);
@@ -49,12 +44,14 @@ public class DropCodeView implements PidescoView {
 		fieldsBarItem.setControl(fields);
 
 		constructors = new Composite(bar, SWT.NONE);
-		ExpandItem constructorsBarItem = new ExpandItem(bar, SWT.NONE, 1);
+		constructors.setLayout(new FillLayout(SWT.VERTICAL));
+		constructorsBarItem = new ExpandItem(bar, SWT.NONE, 1);
 		constructorsBarItem.setText("Constructors");
 		constructorsBarItem.setControl(constructors);
 
 		methods = new Composite(bar, SWT.NONE);
-		ExpandItem methodsBarItem = new ExpandItem(bar, SWT.NONE, 2);
+		methods.setLayout(new FillLayout(SWT.VERTICAL));
+		methodsBarItem = new ExpandItem(bar, SWT.NONE, 2);
 		methodsBarItem.setText("Methods");
 		methodsBarItem.setControl(methods);
 
@@ -65,12 +62,12 @@ public class DropCodeView implements PidescoView {
 		System.out.println("DropCodeView.update()");
 		dropClass = DropCodeActivator.getDropClass();
 		clearFields();
-		// clearConstructors();
-		// clearMethods();
+		clearConstructors();
+		clearMethods();
 		if (dropClass != null) {
 			updateFields();
-			// updateConstructors();
-			// updateMethods();
+			updateConstructors();
+			updateMethods();
 		}
 		fields.layout();
 		fieldsBarItem.setHeight(fields.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
@@ -86,12 +83,28 @@ public class DropCodeView implements PidescoView {
 
 	}
 
+
 	private void clearFields() {
 		for (Control child : fields.getChildren()) {
 			System.out.println("Disposing of " + child);
 			child.dispose();
 		}
 	}
+	
+	private void clearMethods() {
+		for (Control child : methods.getChildren()) {
+			System.out.println("Disposing of " + child);
+			child.dispose();
+		}
+	}
+
+	private void clearConstructors() {
+		for (Control child : constructors.getChildren()) {
+			System.out.println("Disposing of " + child);
+			child.dispose();
+		}
+	}
+
 
 	private void updateFields() {
 
@@ -100,6 +113,26 @@ public class DropCodeView implements PidescoView {
 		}
 
 		fieldsBarItem.setExpanded(dropClass.getFields().size() > 0);
+
+	}
+
+	private void updateConstructors() {
+
+		for (DropField df : dropClass.getFields()) {
+			new DropRow(constructors, SWT.NONE, df);
+		}
+
+		fieldsBarItem.setExpanded(dropClass.getConstructors().size() > 0);
+
+	}
+
+	private void updateMethods() {
+
+		for (DropField df : dropClass.getFields()) {
+			new DropRow(methods, SWT.NONE, df);
+		}
+
+		fieldsBarItem.setExpanded(dropClass.getMethods().size() > 0);
 
 	}
 }
