@@ -76,7 +76,8 @@ public class DropCodeView implements PidescoView {
 		fieldsBarItem.setHeight(fields.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 
 		// constructors.layout();
-		// constructorsBarItem.setHeight(constructors.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		// constructorsBarItem.setHeight(constructors.computeSize(SWT.DEFAULT,
+		// SWT.DEFAULT).y);
 
 		// methods.layout();
 		// methods.setHeight(methods.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
@@ -97,6 +98,8 @@ public class DropCodeView implements PidescoView {
 		for (DropField df : dropClass.getFields()) {
 			new DropRow(fields, SWT.NONE, df);
 		}
+
+		fieldsBarItem.setExpanded(dropClass.getFields().size() > 0);
 
 	}
 }
