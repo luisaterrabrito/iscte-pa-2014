@@ -13,11 +13,10 @@ import pa.iscte.dropcode.gui.ClosableLabel.ClosableLabelEvent;
 
 public class DropRow extends Composite {
 
-	private DropRow me;
-
 	public DropRow(Composite parent, int style, DropAble dropable) {
 		super(parent, style);
-		me = this;
+		RowLayout layout = new RowLayout();
+		setLayout(layout);
 		if (dropable instanceof DropField) {
 			addCombo_visibility_modifier(dropable);
 			// addCombo_other_modifiers(dropable);
@@ -27,9 +26,10 @@ public class DropRow extends Composite {
 	}
 
 	private void addCombo_visibility_modifier(DropAble dropable) {
-		DropModifier[] vm = DropModifier.getVisibilityModifiers();
+		// DropModifier[] vm = DropModifier.getVisibilityModifiers();
+		DropModifier[] vm = { DropModifier.FINAL, DropModifier.ABSTRACT };
 
-		CCombo combo = new CCombo(me, SWT.NONE);
+		CCombo combo = new CCombo(this, SWT.NONE);
 		for (int i = 0; i != vm.length; i++) {
 			combo.add(vm[i].name());
 			if (vm[i].equals(dropable.getVisibilityModifier()))
