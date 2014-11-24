@@ -48,6 +48,7 @@ public class DropCodeActivator implements BundleActivator {
 			@Override
 			public void fileOpened(File file) {
 				openFile(file);
+				System.out.println("File Opened " + file);
 			}
 
 			@Override
@@ -70,6 +71,9 @@ public class DropCodeActivator implements BundleActivator {
 
 	private void openFile(File file) {
 		if (file == null)
+			return;
+
+		if (javaEditor.getOpenedFile() == file)
 			return;
 
 		dropClass = new DropClass(javaEditor);

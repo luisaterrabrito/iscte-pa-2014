@@ -1,22 +1,17 @@
 package pa.iscde.dropcode;
 
-import java.util.Map;
-
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Label;
 
 import pa.iscde.dropcode.dropreflection.DropClass;
+import pa.iscde.dropcode.dropreflection.DropField;
 import pa.iscte.dropcode.gui.ClosableLabel;
-import pa.iscte.dropcode.gui.ClosableLabel.ClosableLabelEvent;
+import pa.iscte.dropcode.gui.DropRow;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
 public class DropCodeView implements PidescoView {
@@ -27,24 +22,39 @@ public class DropCodeView implements PidescoView {
 		return instance;
 	}
 
-	private ExpandBar bar;
-	private Composite compFields;
-	private static Image IMAGE_UP;
-	private static Image IMAGE_DOWN;
+	ExpandBar bar;
+	private Composite fields, constructors, methods;
+	private DropClass dropClass;
 
 	@Override
-	public void createContents(Composite comp, Map<String, Image> images) {
+	public void createContents(Composite comp,
+			java.util.Map<String, Image> images) {
 
-		IMAGE_UP = images.get("x.png");
-		IMAGE_DOWN = images.get("x2.png");
+		ClosableLabel.image_up = images.get("x.png");
+		ClosableLabel.image_down = images.get("x2.png");
 
 		instance = this;
 		bar = new ExpandBar(comp, SWT.V_SCROLL);
 
-		compFields = new Composite(bar, SWT.NONE);
-		FillLayout fillLayout = new FillLayout();
-		fillLayout.type = SWT.VERTICAL;
-		compFields.setLayout(fillLayout);
+		// compFields = new Composite(bar, SWT.NONE);
+		// FillLayout fillLayout = new FillLayout();
+		// fillLayout.type = SWT.VERTICAL;
+		// compFields.setLayout(fillLayout);
+
+		fields = new Composite(bar, SWT.NONE);
+		ExpandItem fieldsBarItem = new ExpandItem(bar, SWT.NONE, 0);
+		fieldsBarItem.setText("Fields");
+		fieldsBarItem.setControl(fields);
+
+		constructors = new Composite(bar, SWT.NONE);
+		ExpandItem constructorsBarItem = new ExpandItem(bar, SWT.NONE, 1);
+		constructorsBarItem.setText("Constructors");
+		constructorsBarItem.setControl(constructors);
+
+		methods = new Composite(bar, SWT.NONE);
+		ExpandItem methodsBarItem = new ExpandItem(bar, SWT.NONE, 2);
+		methodsBarItem.setText("Methods");
+		methodsBarItem.setControl(methods);
 
 		// int halign = SWT.CENTER, valign = SWT.FILL, hspan = 5, vspan = 0;
 		// boolean hexcess = true, vexcess = false;
@@ -75,75 +85,87 @@ public class DropCodeView implements PidescoView {
 	}
 
 	public void update() {
+		System.out.println("DropCodeView.update()");
+		dropClass = DropCodeActivator.getDropClass();
+		clearFields();
+		// clearConstructors();
+		// clearMethods();
+		if (dropClass != null) {
+			updateFields();
+			// updateConstructors();
+			// updateMethods();
+		}
+	}
 
-		DropClass dropClass = DropCodeActivator.getDropClass();
+	private void clearFields() {
+		for (Control child : fields.getChildren()) {
+			System.out.println("Disposing of " + child);
+			child.dispose();
+		}
+	}
+
+	private void updateFields() {
 
 		// for (DropField df : dropClass.getFields()) {
-		// new DropRow(compFields, SWT.NONE, df);
+		// new DropRow(fields, SWT.NONE, df);
 		// }
 
-		createFieldContent();
+		new Label(fields, SWT.NONE).setText("MAE");
 
-		ExpandItem fields = new ExpandItem(bar, SWT.NONE, 0);
-		fields.setText("Fields");
-		fields.setHeight(compFields.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		fields.setControl(compFields);
-
-		ExpandItem constructors = new ExpandItem(bar, SWT.NONE, 1);
-		constructors.setText("Constructors");
-
-		ExpandItem methods = new ExpandItem(bar, SWT.NONE, 2);
-		methods.setText("Methods");
+		fields.layout();
+		bar.layout();
+		// createFieldContent();
+		// fields.setHeight(compFields.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 
 	}
 
-	public void createFieldContent() {
-		Composite compField1 = new Composite(compFields, SWT.NONE);
-		RowLayout layout = new RowLayout();
-		compField1.setLayout(layout);
-
-		CCombo c = new CCombo(compField1, SWT.NONE);
-		c.add("public");
-		c.add("private");
-		c.add("protected");
-		c.add("none");
-		c.select(0);
-		c.setEditable(false);
-
-		ClosableLabel.image_up = IMAGE_UP;
-		ClosableLabel.image_down = IMAGE_DOWN;
-
-		ClosableLabel cl = new ClosableLabel(compField1, SWT.NONE, "static");
-		ClosableLabel cl2 = new ClosableLabel(compField1, SWT.NONE, "final");
-		ClosableLabel cl3 = new ClosableLabel(compField1, SWT.NONE, "abstract");
-
-		cl2.addMouseAdapter(new ClosableLabelEvent() {
-			@Override
-			public void clicked() {
-				System.out.println("Clicked!");
-			}
-		});
-
-		CCombo c2 = new CCombo(compField1, SWT.NONE);
-		c2.add("int");
-		c2.add("boolean");
-		c2.add("char");
-		c2.add("double");
-		c2.add("String");
-		c2.select(0);
-		c2.setEditable(true);
-
-		Text t = new Text(compField1, SWT.SINGLE);
-		t.setMessage("Name");
-
-	}
-
-	public void clear() {
-
-		for (Control c : compFields.getChildren()) {
-			c.dispose();
-		}
-
-	}
+	// private void createFieldContent() {
+	// Composite compField1 = new Composite(compFields, SWT.NONE);
+	// RowLayout layout = new RowLayout();
+	// compField1.setLayout(layout);
+	//
+	// CCombo c = new CCombo(compField1, SWT.NONE);
+	// c.add("public");
+	// c.add("private");
+	// c.add("protected");
+	// c.add("none");
+	// c.select(0);
+	// c.setEditable(false);
+	//
+	// ClosableLabel.image_up = IMAGE_UP;
+	// ClosableLabel.image_down = IMAGE_DOWN;
+	//
+	// ClosableLabel cl = new ClosableLabel(compField1, SWT.NONE, "static");
+	// ClosableLabel cl2 = new ClosableLabel(compField1, SWT.NONE, "final");
+	// ClosableLabel cl3 = new ClosableLabel(compField1, SWT.NONE, "abstract");
+	//
+	// cl2.addMouseAdapter(new ClosableLabelEvent() {
+	// @Override
+	// public void clicked() {
+	// System.out.println("Clicked!");
+	// }
+	// });
+	//
+	// CCombo c2 = new CCombo(compField1, SWT.NONE);
+	// c2.add("int");
+	// c2.add("boolean");
+	// c2.add("char");
+	// c2.add("double");
+	// c2.add("String");
+	// c2.select(0);
+	// c2.setEditable(true);
+	//
+	// Text t = new Text(compField1, SWT.SINGLE);
+	// t.setMessage("Name");
+	//
+	// }
+	//
+	// private void clear() {
+	//
+	// for (Control c : compFields.getChildren()) {
+	// c.dispose();
+	// }
+	//
+	// }
 
 }

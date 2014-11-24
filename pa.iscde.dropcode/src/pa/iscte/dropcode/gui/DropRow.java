@@ -2,18 +2,57 @@ package pa.iscte.dropcode.gui;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 
 import pa.iscde.dropcode.dropreflection.DropAble;
 import pa.iscde.dropcode.dropreflection.DropModifier;
+import pa.iscte.dropcode.gui.ClosableLabel.ClosableLabelEvent;
 
 public class DropRow extends Composite {
 
 	public DropRow(Composite parent, int style, DropAble dropable) {
 		super(parent, style);
-		addCombo(DropModifier.getVisibilityModifiers(), dropable.getVisibilityModifier());
-		setName(dropable.name());
+		// addCombo(DropModifier.getVisibilityModifiers(),
+		// dropable.getVisibilityModifier());
+		// setName(dropable.name());
 		// TODO: Add Modifier addButton();
+
+		Composite compField1 = new Composite(this, SWT.NONE);
+		RowLayout layout = new RowLayout();
+		compField1.setLayout(layout);
+
+		CCombo c = new CCombo(compField1, SWT.NONE);
+		c.add("public");
+		c.add("private");
+		c.add("protected");
+		c.add("none");
+		c.select(0);
+		c.setEditable(false);
+
+		ClosableLabel cl = new ClosableLabel(compField1, SWT.NONE, "static");
+		ClosableLabel cl2 = new ClosableLabel(compField1, SWT.NONE, "final");
+		ClosableLabel cl3 = new ClosableLabel(compField1, SWT.NONE, "abstract");
+
+		cl2.addMouseAdapter(new ClosableLabelEvent() {
+			@Override
+			public void clicked() {
+				System.out.println("Clicked!");
+			}
+		});
+
+		CCombo c2 = new CCombo(compField1, SWT.NONE);
+		c2.add("int");
+		c2.add("boolean");
+		c2.add("char");
+		c2.add("double");
+		c2.add("String");
+		c2.select(0);
+		c2.setEditable(true);
+
+		Text t = new Text(compField1, SWT.SINGLE);
+		t.setMessage("Name");
 	}
 
 	private void addCombo(DropModifier[] visibilityModifiers,
