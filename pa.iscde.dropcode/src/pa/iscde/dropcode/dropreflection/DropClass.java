@@ -40,7 +40,7 @@ public class DropClass {
 			public boolean visit(MethodDeclaration method) {
 				// ADD METHODS //
 				DropMethod newMethod = new DropMethod(method.getName()
-						.getFullyQualifiedName());
+						.getFullyQualifiedName(), method.isConstructor());
 				newMethod.setModifiers(method.getModifiers());
 				if (method.isConstructor()) {
 					constructors.put(newMethod.name(), newMethod);

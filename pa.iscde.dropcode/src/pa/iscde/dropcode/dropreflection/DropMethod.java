@@ -1,9 +1,16 @@
 package pa.iscde.dropcode.dropreflection;
 
-public class DropMethod extends DropAble{
+public class DropMethod extends DropAble {
 
-	public DropMethod(String name) {
+	private boolean isConstructor;
+
+	public DropMethod(String name, boolean isConstructor) {
 		super(name);
+		this.isConstructor = isConstructor;
+	}
+
+	public boolean isConstructor() {
+		return isConstructor;
 	}
 
 }
