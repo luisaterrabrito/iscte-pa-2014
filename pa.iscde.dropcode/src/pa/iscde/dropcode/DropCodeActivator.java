@@ -7,6 +7,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 import pa.iscde.dropcode.dropreflection.DropClass;
+import pa.iscte.dropcode.gui.DropCodeView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
