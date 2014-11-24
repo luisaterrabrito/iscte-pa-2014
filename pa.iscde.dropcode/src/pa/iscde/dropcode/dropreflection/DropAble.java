@@ -18,9 +18,6 @@ public class DropAble {
 	}
 
 	public void setModifiers(int modifiers) {
-
-		System.out.println("DropAble.setModifiers()");
-
 		// TODO: Add Modifiers
 	}
 
