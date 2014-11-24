@@ -2,6 +2,7 @@ package pa.iscde.dropcode;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ExpandBar;
@@ -22,8 +23,9 @@ public class DropCodeView implements PidescoView {
 		return instance;
 	}
 
-	ExpandBar bar;
+	private ExpandBar bar;
 	private Composite fields, constructors, methods;
+	private ExpandItem fieldsBarItem;
 	private DropClass dropClass;
 
 	@Override
@@ -42,7 +44,8 @@ public class DropCodeView implements PidescoView {
 		// compFields.setLayout(fillLayout);
 
 		fields = new Composite(bar, SWT.NONE);
-		ExpandItem fieldsBarItem = new ExpandItem(bar, SWT.NONE, 0);
+		fields.setLayout(new FillLayout(SWT.VERTICAL));
+		fieldsBarItem = new ExpandItem(bar, SWT.NONE, 0);
 		fieldsBarItem.setText("Fields");
 		fieldsBarItem.setControl(fields);
 
@@ -56,32 +59,7 @@ public class DropCodeView implements PidescoView {
 		methodsBarItem.setText("Methods");
 		methodsBarItem.setControl(methods);
 
-		// int halign = SWT.CENTER, valign = SWT.FILL, hspan = 5, vspan = 0;
-		// boolean hexcess = true, vexcess = false;
-		// GridData layout = new GridData(halign, valign, hexcess, vexcess,
-		// hspan, vspan);
-		// c.setLayout(new GridLayout());
-		//
 		// c.setBackgroundImage(images.get("background.jpg"));
-		//
-		// Label label = new Label(c, SWT.SHADOW_OUT);
-		// label.setText("Esfera de Elites");
-		// label.setToolTipText("filletes");
-		//
-		// Button a = new Button(c, SWT.PUSH);
-		// a.setText("Cena?");
-		// a.addMouseListener(new MouseAdapter() {
-		//
-		// @Override
-		// public void mouseDown(MouseEvent e) {
-		// if (e.button == 1)
-		// JOptionPane.showMessageDialog(null, "Cena");
-		// }
-		// });
-		//
-		// Button b = new Button(c, SWT.CHECK);
-		// b.setText("És Elite");
-
 	}
 
 	public void update() {
@@ -95,6 +73,7 @@ public class DropCodeView implements PidescoView {
 			// updateConstructors();
 			// updateMethods();
 		}
+		bar.layout();
 	}
 
 	private void clearFields() {
@@ -106,16 +85,12 @@ public class DropCodeView implements PidescoView {
 
 	private void updateFields() {
 
-		// for (DropField df : dropClass.getFields()) {
-		// new DropRow(fields, SWT.NONE, df);
-		// }
-
-		new Label(fields, SWT.NONE).setText("MAE");
+		for (DropField df : dropClass.getFields()) {
+			new DropRow(fields, SWT.NONE, df);
+		}
 
 		fields.layout();
-		bar.layout();
-		// createFieldContent();
-		// fields.setHeight(compFields.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		fieldsBarItem.setHeight(fields.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 
 	}
 
