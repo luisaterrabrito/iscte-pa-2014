@@ -21,6 +21,7 @@ public class DropRow extends Composite {
 		if (dropable instanceof DropField) {
 			addCombo_visibility_modifier(dropable);
 			addCombo_other_modifiers(dropable);
+			setContent();
 			addCombo_type(dropable);
 			addTextfield_name(dropable);
 		}
@@ -78,16 +79,6 @@ public class DropRow extends Composite {
 	}
 
 	private void setContent() {
-		RowLayout layout = new RowLayout();
-		setLayout(layout);
-
-		CCombo c = new CCombo(this, SWT.NONE);
-		c.add("public");
-		c.add("private");
-		c.add("protected");
-		c.add("none");
-		c.select(0);
-		c.setEditable(false);
 
 		ClosableLabel cl = new ClosableLabel(this, SWT.NONE, "static");
 		ClosableLabel cl2 = new ClosableLabel(this, SWT.NONE, "final");
@@ -100,8 +91,6 @@ public class DropRow extends Composite {
 			}
 		});
 
-		Text t = new Text(this, SWT.SINGLE);
-		t.setMessage("Name");
 	}
 
 	public void update() {
