@@ -2,21 +2,25 @@ package pa.iscde.dropcode.dropreflection;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.swt.graphics.Image;
 
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class DropClass {
 
 	private HashMap<String, DropField> fields;
+	private HashMap<String, DropMethod> constructors;
 	private HashMap<String, DropMethod> methods;
 
 	public DropClass(JavaEditorServices javaEditor) {
 
 		fields = new HashMap<>();
+		constructors = new HashMap<>();
 		methods = new HashMap<>();
 
 		// CONSTRUCT THE JAVA CLASS //
@@ -54,6 +58,14 @@ public class DropClass {
 
 	public DropMethod getMethod(String name) {
 		return methods.get(name);
+	}
+
+	public Collection<DropMethod> getConstructors() {
+		return constructors.values();
+	}
+
+	public Collection<DropMethod> getMethods() {
+		return methods.values();
 	}
 
 }
