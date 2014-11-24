@@ -19,11 +19,10 @@ public class DropRow extends Composite {
 		// setName(dropable.name());
 		// TODO: Add Modifier addButton();
 
-		Composite compField1 = new Composite(this, SWT.NONE);
 		RowLayout layout = new RowLayout();
-		compField1.setLayout(layout);
+		setLayout(layout);
 
-		CCombo c = new CCombo(compField1, SWT.NONE);
+		CCombo c = new CCombo(this, SWT.NONE);
 		c.add("public");
 		c.add("private");
 		c.add("protected");
@@ -31,9 +30,9 @@ public class DropRow extends Composite {
 		c.select(0);
 		c.setEditable(false);
 
-		ClosableLabel cl = new ClosableLabel(compField1, SWT.NONE, "static");
-		ClosableLabel cl2 = new ClosableLabel(compField1, SWT.NONE, "final");
-		ClosableLabel cl3 = new ClosableLabel(compField1, SWT.NONE, "abstract");
+		ClosableLabel cl = new ClosableLabel(this, SWT.NONE, "static");
+		ClosableLabel cl2 = new ClosableLabel(this, SWT.NONE, "final");
+		ClosableLabel cl3 = new ClosableLabel(this, SWT.NONE, "abstract");
 
 		cl2.addMouseAdapter(new ClosableLabelEvent() {
 			@Override
@@ -42,7 +41,7 @@ public class DropRow extends Composite {
 			}
 		});
 
-		CCombo c2 = new CCombo(compField1, SWT.NONE);
+		CCombo c2 = new CCombo(this, SWT.NONE);
 		c2.add("int");
 		c2.add("boolean");
 		c2.add("char");
@@ -51,7 +50,7 @@ public class DropRow extends Composite {
 		c2.select(0);
 		c2.setEditable(true);
 
-		Text t = new Text(compField1, SWT.SINGLE);
+		Text t = new Text(this, SWT.SINGLE);
 		t.setMessage("Name");
 	}
 
