@@ -66,7 +66,7 @@ public class DropRow extends Composite {
 	}
 
 	private void setName(String text) {
-
+		
 	}
 
 	public void addButton() {
