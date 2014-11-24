@@ -53,6 +53,9 @@ public class DropCodeActivator implements BundleActivator {
 
 			@Override
 			public void fileClosed(File file) {
+				if (javaEditor.getOpenedFile() == null) {
+					dropClass = null;
+				}
 			}
 		});
 
