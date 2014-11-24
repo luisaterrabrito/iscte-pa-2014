@@ -3,6 +3,8 @@ package pa.iscde.dropcode.dropreflection;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+
 public class DropAble {
 	private String name;
 	private HashMap<String, DropAnnotation> annotations;
@@ -18,7 +20,16 @@ public class DropAble {
 	}
 
 	public void setModifiers(int modifiers) {
-		// TODO: Add Modifiers
+		if((modifiers & 10) != 0 ){
+			System.out.println();
+		}
+		if((modifiers & 001) != 0 ){
+		
+		}
+	}
+	
+	public void removeModifier(DropModifier modifier){
+		modifiers.remove(modifier);
 	}
 
 	public DropModifier getVisibilityModifier() {
