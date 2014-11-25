@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Listener;
 
 public class ClosableLabel extends Composite {
 
-	private Label button;
+	private Label button, label;
 	public static Image image_down;
 	public static Image image_up;
 	private static final Color backgroundColor = new Color(null, 230, 230, 230);
@@ -22,7 +22,7 @@ public class ClosableLabel extends Composite {
 		super(parent, style);
 
 		setLayout(new RowLayout(SWT.HORIZONTAL));
-		Label label = new Label(this, SWT.CENTER);
+		label = new Label(this, SWT.CENTER);
 		label.setBackground(backgroundColor);
 		setBackground(backgroundColor);
 		label.setText(text);
@@ -56,4 +56,10 @@ public class ClosableLabel extends Composite {
 		public void clicked();
 	}
 
+	@Override
+	public void dispose() {
+		button.dispose();
+		label.dispose();
+		super.dispose();
+	}
 }

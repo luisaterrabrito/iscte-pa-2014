@@ -1,21 +1,12 @@
 package pa.iscde.dropcode.dropreflection;
 
-public enum DropModifier {
-	PUBLIC(0), PROTECTED(0), PRIVATE(0), PACKAGE_PRIVATE(0), //
-	FINAL(1), STATIC(2), ABSTRACT(3);
-	// SYNCHRONIZED(3), TRANSIENT(5), VOLATILE(7), NATIVE(6);
+public class DropModifier {
 
-	int id;
-
-	private DropModifier(int id) {
-		this.id = id;
+	public enum DM_Visibility {
+		PUBLIC, PROTECTED, PRIVATE, PACKAGE_PRIVATE;
 	}
 
-	public static DropModifier[] getVisibilityModifiers() {
-		return new DropModifier[] { PUBLIC, PROTECTED, PRIVATE };
-	}
-
-	public static DropModifier[] getOtherModifiers() {
-		return new DropModifier[] { FINAL, STATIC, ABSTRACT };
+	public enum DM_Others {
+		FINAL, STATIC, ABSTRACT;
 	}
 }

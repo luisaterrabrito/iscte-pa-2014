@@ -8,51 +8,58 @@ import org.eclipse.swt.widgets.Text;
 
 import pa.iscde.dropcode.dropreflection.DropAble;
 import pa.iscde.dropcode.dropreflection.DropField;
-import pa.iscde.dropcode.dropreflection.DropModifier;
+import pa.iscde.dropcode.dropreflection.DropModifier.DM_Others;
+import pa.iscde.dropcode.dropreflection.DropModifier.DM_Visibility;
 import pa.iscde.dropcode.dropreflection.DropType;
 import pa.iscte.dropcode.gui.ClosableLabel.ClosableLabelEvent;
 
 public class DropRow extends Composite {
 
+	private DropRow me;
+
 	public DropRow(Composite parent, int style, DropAble dropable) {
 		super(parent, style);
+		me = this;
 		RowLayout layout = new RowLayout();
 		setLayout(layout);
 		if (dropable instanceof DropField) {
 			addCombo_visibility_modifier(dropable);
-			// addCombo_other_modifiers(dropable);
-			setContent(dropable.name());
+			addCombo_other_modifiers(dropable);
 			addCombo_type(dropable);
 			addTextfield_name(dropable);
 		}
 	}
 
 	private void addCombo_visibility_modifier(DropAble dropable) {
-		DropModifier[] vm = DropModifier.getVisibilityModifiers();
+		DM_Visibility[] vm = DM_Visibility.values();
 
 		CCombo combo = new CCombo(this, SWT.NONE);
+		int select = 0;
 		for (int i = 0; i != vm.length; i++) {
-			combo.add(vm[i].name());
+			combo.add(vm[i].name().toLowerCase());
 			if (vm[i].equals(dropable.getVisibilityModifier()))
-				combo.select(i);
+				select = i;
 		}
+		combo.select(select);
 		combo.setEditable(false);
 	}
 
 	private void addCombo_other_modifiers(final DropAble dropable) {
 
-		for (DropModifier dropModifier : DropModifier.getOtherModifiers()) {
+		for (DM_Others dropModifier : DM_Others.values()) {
 
-			final DropModifier dm = dropModifier;
-			if (dropable.isModifierPresent(dm)) {
+			final DM_Others dm = dropModifier;
+			if (true) { // TODO if (dropable.isModifierPresent(dm)) {
+
 				final ClosableLabel cl = new ClosableLabel(this, SWT.NONE, dm
-						+ "");
+						.toString().toLowerCase());
 
 				cl.addMouseAdapter(new ClosableLabelEvent() {
 					@Override
 					public void clicked() {
 						cl.dispose();
 						dropable.removeModifier(dm);
+						me.layout();
 					}
 				});
 			}
@@ -65,11 +72,13 @@ public class DropRow extends Composite {
 		CCombo combo = new CCombo(this, SWT.NONE);
 		for (int i = 0; i != types.length; i++) {
 			combo.add(types[i].name().toLowerCase());
-			if (types[i].toString().toLowerCase().equals(dropable.getType())) {
-				combo.select(i);
-
-			}
+			// if (types[i].toString().toLowerCase().equals(dropable.getType()))
+			// {
+			// combo.select(i);
+			// }
 		}
+		String type = dropable.getType();
+		combo.setText(type == null ? "Object" : type);
 		combo.setEditable(true);
 	}
 
