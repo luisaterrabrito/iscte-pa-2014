@@ -1,6 +1,7 @@
 package pa.iscde.filtersearch.view;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -8,7 +9,6 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -30,18 +30,23 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import pt.iscte.pidesco.extensibility.PidescoView;
-import pt.iscte.pidesco.projectbrowser.model.ClassElement;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 public class SearchView implements PidescoView {
 
+
+	List<SearchProvider> providers = new ArrayList<>(); //Hardcode
+
+
 	@SuppressWarnings("unused")
 	private static Composite viewArea;
 	private static SearchView instance;
 	private ProjectBrowserServices browserServices;
-	
+
+	@SuppressWarnings("unused")
+	private PackageElement rootPackage;
 	private TreeViewer tree;	
 	private Image packageIcon;
 	private Image classIcon;
@@ -54,19 +59,38 @@ public class SearchView implements PidescoView {
 		ServiceReference<ProjectBrowserServices> ref2 = context.getServiceReference(ProjectBrowserServices.class);
 		browserServices = context.getService(ref2);
 
+		providers.add(new ProjectBrowserSearchProvider()); //Hardcode
 	}
 
 	public static SearchView getInstance(){
 		return instance;
 	}
 
+
+	class SearchCategory {
+		String name;
+		List<Object> hits = new ArrayList<>();
+
+		SearchCategory(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public String toString() {
+			return name; 
+		}
+	}
+
+
+
+
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> images) {
-		
+
 		SearchView.viewArea = viewArea;
 		instance = this;
 		final Shell shell = new Shell();
-		
+
 		packageIcon = images.get("package_obj.gif");
 		classIcon = images.get("classes.gif");
 
@@ -89,37 +113,23 @@ public class SearchView implements PidescoView {
 
 		Combo filter = new Combo(viewArea, SWT.READ_ONLY);
 		filter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		filter.add("Variables");
-		filter.add("Methods");
-		filter.add("Classes");
-		filter.add("Packages");
 		filter.add("All");
-
+		filter.add("Public");
+		filter.add("Private");
 
 		// Results
-
 		label = new Label(viewArea, SWT.NULL);
 		label.setText("Results:");
 
-		//		results = new Text(viewArea,SWT.WRAP| SWT.MULTI| SWT.BORDER| SWT.H_SCROLL| SWT.V_SCROLL);
-		//		gridData =  new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL);
-		//		gridData.horizontalSpan = 3;
-		//		gridData.grabExcessVerticalSpace = true;
-		//		results.setLayoutData(gridData);
-
 
 		// TreeViewer
-		
-		PackageElement root = browserServices.getRootPackage();
-		System.out.println("Root Package:" + root.getName().toString());
+		rootPackage = browserServices.getRootPackage();
 		tree = new TreeViewer(viewArea, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		tree.setContentProvider(new ViewContentProvider());
 		tree.setLabelProvider(new ViewLabelProvider());
-
-		final PackageElement invisibleRoot = scan(root.getFile());
-		System.out.println("Insisible Root: " + invisibleRoot.getName().toString());
-		tree.setInput(invisibleRoot);
+		loadCategories();
 		tree.expandAll();
+
 
 
 		// Listener de alterações no searchText
@@ -129,48 +139,15 @@ public class SearchView implements PidescoView {
 			@Override
 			public void modifyText(ModifyEvent e) {
 
-
-				//tree.collapseAll();
-
-				ViewerFilterClass filter = new ViewerFilterClass(searchText.getText());
-
-
-				//	if(o.getName().contains(searchText.getText()))
-
-				tree.setInput(invisibleRoot);
-				if(!searchText.getText().isEmpty()){
-					tree.addFilter(filter);
-					//tree.expandToLevel(o, TreeViewer.ALL_LEVELS);
-				} else {
-					tree.resetFilters();
-				}
-
+				loadCategories();
 			}
-
-			/**
-			 *							String text = "";
-
-							if(searchText.getText().isEmpty()){
-								for (String s : _list) {
-										text += s + '\n';
-								}
-							}else{
-								for (String s : _list) {
-									if(s.contains(searchText.getText()))
-										text += s + '\n';
-								}
-							}
-
-								results.setText(text);
-						} 
-			 */
-
 		};
+
 		searchText.addModifyListener(modifyListener);
 
 
 		// Search Button
-		
+
 		final Button searchButton = new Button(viewArea, SWT.PUSH);
 		searchButton.setText("Enter");
 
@@ -182,73 +159,37 @@ public class SearchView implements PidescoView {
 		Listener listener = new Listener(){
 			@Override
 			public void handleEvent(Event event) {
-				if(event.widget == searchButton){
-					MessageBox dialog =  new MessageBox(shell, SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
-					dialog.setText("SEARCH CONFIRMATION");
-					dialog.setMessage("Do you really want to do this?");
-					// results.setText(browserServices.searchMethod(searchText.getText()));
-					// open dialog and await user selection
 
+				if(!searchText.getText().isEmpty()){
+					loadCategories();
 
+				} else{
+					MessageBox dialog =  new MessageBox(shell, SWT.ICON_ERROR | SWT.OK);
+					dialog.setText("ERROR");
+					dialog.setMessage("Please enter some text!");
 					dialog.open(); 
 				}
 			}
+
 		};
 
 		searchButton.addListener(SWT.Selection, listener);
 
 	}
 
-
-
-	private static PackageElement scan(File root) {
-		PackageElement pack = new PackageElement(null, "", root);
-		for(File child : root.listFiles()) {
-			if(!child.getName().startsWith("."))
-				scanRec(child, pack);
+	private void loadCategories() {
+		List<SearchCategory> categories = new ArrayList<>();
+		for(SearchProvider p : providers) {
+			SearchCategory category = new SearchCategory(p.getClass().getSimpleName());
+			category.hits = p.getResults(searchText.getText());
+			categories.add(category);
 		}
-		return pack;
-	}
-
-	private static void scanRec(File f, PackageElement p) {
-		if(f.isFile() && f.getName().endsWith(".java")) {
-			new ClassElement(p, f);
-		}
-		else if(f.isDirectory()) {
-			PackageElement childPack = new PackageElement(p, f.getName(), f);
-			for(File child : f.listFiles()) {
-				scanRec(child, childPack);
-			}
-		}
+		tree.setInput(categories);
+		tree.expandAll();
 	}
 
 
 
-
-	/**
-	 * 
-
-			private static String scanRec(File f, PackageElement p) {
-				String s = "";
-				if(f.isFile() && f.getName().endsWith(".java")) {
-					s += '\t' +  f.getName() + '\n';
-					_list.add(f.getName());
-				}
-				else if(f.isDirectory()) {
-					PackageElement childPack = new PackageElement(p, f.getName(), f);
-					for(File child : f.listFiles()) {
-						scanRec(child, childPack);
-					}
-				}
-				return s;
-			}
-	 */
-
-
-	
-	
-	
-	
 	/**
 	 *  ##########################################
 	 * 				OUTRAS CLASSES
@@ -257,20 +198,55 @@ public class SearchView implements PidescoView {
 	 */
 
 
+	class ProjectBrowserSearchProvider implements SearchProvider {
+
+		@Override
+		public List<Object> getResults(String text) {
+			List<Object> hits = new ArrayList<>();
+			PackageElement root = browserServices.getRootPackage();
+
+			scan(root,hits,text);
+
+			return hits;
+		}
+
+		private void scan(PackageElement root, List<Object> hits, String text) {
+			for(SourceElement c : root){
+				if(c.getName().contains(text))
+					hits.add(c);
+				if(c.isPackage()){
+					scan((PackageElement)c,hits, text);				
+				} 
+			}
+		}
+	}
+
+
+	/**
+	 * Decide o que vai aparecer em cada item da árvore: nome e imagem
+	 * @author lcmms
+	 *
+	 */
 	class ViewLabelProvider extends LabelProvider {
 
 		public String getText(Object obj) {
 			return obj.toString();
 		}
 		public Image getImage(Object obj) {
-			return ((SourceElement) obj).isPackage() ? packageIcon : classIcon;
+			if(obj.toString().contains(".java"))
+				return classIcon;					// Hardcode
+			return packageIcon;						// Hardcode
 		}
 	}	
 
-	
-	private static class ViewContentProvider implements IStructuredContentProvider, ITreeContentProvider {
 
-		private static final Object[] EMPTY = new Object[0];
+	/**
+	 * Define que elementos vão aparecer na árvore
+	 * @author lcmms
+	 *
+	 */
+
+	private static class ViewContentProvider implements IStructuredContentProvider, ITreeContentProvider {
 
 		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
 
@@ -280,50 +256,35 @@ public class SearchView implements PidescoView {
 
 		}
 
-		public Object[] getElements(Object parent) {
-			return getChildren(parent);
+		@SuppressWarnings("unchecked")
+		public Object[] getElements(Object input) {
+			List<SearchCategory> cats = (List<SearchCategory>) input;
+			return cats.toArray();
 
 		}
 
 		public Object getParent(Object child) {
-			return ((SourceElement)child).getParent();
+			//			SearchCategory cat = (SearchCategory) child;
+			return null;
+
 		}
 
 		public Object[] getChildren(Object parent) {
-			if (parent instanceof PackageElement)
-				return ((PackageElement)parent).getChildren().toArray();
-			else
-				return EMPTY;
+			SearchCategory cat = (SearchCategory) parent;
+			return cat.hits.toArray();
 		}
 
 		public boolean hasChildren(Object parent) {
-			return parent instanceof PackageElement && ((PackageElement)parent).hasChildren();
+			if(!(parent instanceof SearchCategory))
+				return false;
+
+			SearchCategory cat = (SearchCategory) parent;
+			return !cat.hits.isEmpty();
 		}
 
 	}
 
-	
-	
-	private static class ViewerFilterClass extends ViewerFilter{
 
-		private String s;
 
-		public ViewerFilterClass(String text) {
-			this.s = text;
-		}
-
-		@Override
-		public boolean select(Viewer viewer, Object parentElement,	Object element) {
-			if (s == null || s.length() == 0) {
-				return true;
-			}
-			PackageElement p = (PackageElement) element;
-			if (p.getName().contains(s)) {
-				return true;
-			}
-
-			return false;
-		}
-	}
 
 }
