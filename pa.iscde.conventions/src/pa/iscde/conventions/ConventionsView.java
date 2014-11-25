@@ -124,100 +124,53 @@ public class ConventionsView implements PidescoView {
 
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
-		Shell shell = new Shell(); //duvida na shell
+
 		RowLayout rowLayout = new RowLayout();
 		rowLayout.type = SWT.VERTICAL;
 		viewArea.setLayout(rowLayout);
-
-		
-		
-		
-
-		//		ASTVisitor v = new ASTVisitor() {
-		//
-		//
-		//			@Override
-		//			public boolean visit(TypeDeclaration node) {
-		//			System.out.println(node.getName());
-		//				return super.visit(node);
-		//			}
-		//	
-		//
-		//
-		//
-		//
-		//
-		//
-		//		};
-
-		//		javaServices.parseFile(javaServices.getOpenedFile(), v);
-
 		final Label label = new Label(viewArea, SWT.NONE);
 		label.setText("Escolha uma das opções para Validar a Classe:");
 
 		//Verificar classes.
-		final Button botao = new Button(viewArea, SWT.CHECK);
-		botao.setSize(10, 20);
-		botao.setText("Check First Letter of a Class");
-		botao.addSelectionListener(new SelectionAdapter() {
+		final Button checkBoxClass = new Button(viewArea, SWT.CHECK);
+		checkBoxClass.setSize(10, 20);
+		checkBoxClass.setText("Verificar a Primeira Letra da Classe");
+		//Verificar Metodos
+		final Button checkBoxMethod = new Button(viewArea, SWT.CHECK);
+		checkBoxMethod.setSize(10, 20);
+		checkBoxMethod.setText("Verificar a Primeira Letra dos Métodos");
+		//Verificar o Tamanho dos mettodos
+		final Button checkBoxSize = new Button(viewArea, SWT.CHECK);
+		checkBoxSize.setSize(10, 20);
+		checkBoxSize.setText("Verificar o tamanho dos Métodos");
+		//Verificar Constantes
+		final Button checkBoxConstant = new Button(viewArea, SWT.CHECK);
+		checkBoxConstant.setSize(10, 20);
+		checkBoxConstant.setText("Verificar Constantes/Variáveis (Minisculas, '$' , '_' )");
+		//Verificar Enumerados
+		final Button checkBoxEnum = new Button(viewArea, SWT.CHECK);
+		checkBoxEnum.setSize(10, 20);
+		checkBoxEnum.setText("Verificar Enumerados");
+
+
+		//verificar classes.
+		checkBoxClass.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e){
 
-				if(botao.getSelection()){
-
-
-
-
+				if(checkBoxClass.getSelection()){
 					ASTVisitor v = new ASTVisitor() {
-
-
-
-
 						@Override
 						public boolean visit(TypeDeclaration node) {
-
-							int sizeMethod = 0;
-							int offset = 0;
-
-
-
 							if(checkFirstLetterLowerCase(node.getName().getFullyQualifiedName())){
-
-								sizeMethod = node.getName().getLength();
-								//offset é o inicio do primeiro caracter.
-								//Length é o tamanho da seleção.
-								offset =node.getName().getStartPosition();	
-
-
-								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.ERROR, "O nome da classe não pode começar com letra minuscula", offset, sizeMethod);
+								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.ERROR, "O nome da classe não pode começar com letra minuscula", node.getName().getStartPosition(), node.getName().getLength());
 							}
-
-
-
-
-
-
-
-
 							return true;
 						}
-
 					};
-
 					javaServices.parseFile(javaServices.getOpenedFile(), v);
-
 				}	
-
-				//					if(checkFirstLetterLowerCase(javaServices.getOpenedFile().getName())){
-				//						
-				//						//marcar o nome da classe.
-				//						System.out.println("A classe " +javaServices.getOpenedFile().getName() + " começa com letra Minuscula");
-				//					}else{
-				//						//apagar quando ja tiver a fazer highlight
-				//						System.out.println("A classe " +javaServices.getOpenedFile().getName() + " começa com letra Maiuscula");
-				//					};
-				//				}
 			}
 
 
@@ -226,50 +179,19 @@ public class ConventionsView implements PidescoView {
 
 
 
-		//Verificar Metodos
-		final Button botaoMaior = new Button(viewArea, SWT.CHECK);
-		botaoMaior.setSize(10, 20);
-		botaoMaior.setText("Check First Letter of a Method");
-		botaoMaior.addSelectionListener(new SelectionAdapter() {
-
+		//verificar Metodos
+		checkBoxMethod.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				if(botaoMaior.getSelection()){
-
-
-
-
-
+				if(checkBoxMethod.getSelection()){
 					ASTVisitor v = new ASTVisitor() {
-
-
-
-
 						@Override
 						public boolean visit(MethodDeclaration node) {
-
-							int sizeMethod = 0;
-							int offset = 0;
-
 							if(!node.isConstructor()){
 								if(!checkFirstLetterLowerCase(node.getName().getFullyQualifiedName())){
-
-									sizeMethod = node.getName().getLength();
-									//offset é o inicio do primeiro caracter.
-									//Length é o tamanho da seleção.
-									offset =node.getName().getStartPosition();	
-
-
-									javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "O metodo começa com letra maiuscula", offset, sizeMethod);
+									javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "O metodo começa com letra maiuscula", node.getName().getStartPosition(), node.getName().getLength());
 								}
-
-
-
-
 							}
-
-
-
 							return true;
 						}
 
@@ -278,7 +200,7 @@ public class ConventionsView implements PidescoView {
 					javaServices.parseFile(javaServices.getOpenedFile(), v);
 
 				}else{
-
+					//Remover a anotação
 				}
 
 
@@ -287,50 +209,21 @@ public class ConventionsView implements PidescoView {
 
 
 
-
-
-
-		final Button botaoverifySize = new Button(viewArea, SWT.CHECK);
-		botaoverifySize.setSize(10, 20);
-		botaoverifySize.setText("Verify Size");
-		botaoverifySize.addSelectionListener(new SelectionAdapter() {
+		//Verificar o Tamanho dos mettodos
+		checkBoxSize.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				if(botaoverifySize.getSelection()){
-
-
-
-
-
+				if(checkBoxSize.getSelection()){
 					ASTVisitor v = new ASTVisitor() {
-
-
-
-
 						@Override
 						public boolean visit(MethodDeclaration node) {
 
-							int sizeMethod = 0;
-							int offset = 0;
-
 							if(!node.isConstructor()){
-
 								if(verifySize(node.getName().getFullyQualifiedName())){
-
-									sizeMethod = node.getName().getLength();
-									//offset é o inicio do primeiro caracter.
-									//Length é o tamanho da seleção.
-									offset =node.getName().getStartPosition();	
-
-									javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "O nome do metodo é demasiado grande", offset, sizeMethod);
-
+									javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "O nome do metodo é demasiado grande", node.getName().getStartPosition(),  node.getName().getLength());
 								}
-
 							}
-
-
-
 							return true;
 						}
 
@@ -339,110 +232,97 @@ public class ConventionsView implements PidescoView {
 					javaServices.parseFile(javaServices.getOpenedFile(), v);
 
 				}else{
-
+					//Remover a anotação
 				}
 
 
 			}
 		});
 
-		final Button botaoverifyconstant = new Button(viewArea, SWT.CHECK);
-		botaoverifyconstant.setSize(10, 20);
-		botaoverifyconstant.setText("Verify Constant (Minisculas, '$' , '_' )");
-		botaoverifyconstant.addSelectionListener(new SelectionListener() {
+		//Verificar Constantes
+		checkBoxConstant.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(botaoverifyconstant.getSelection()){
+				if(checkBoxConstant.getSelection()){
 
 
 					ASTVisitor v = new ASTVisitor() {
-					
+
 						public boolean visit(VariableDeclarationFragment node) {
-							
 							if(checkVariableLowerCase(node.getName().getFullyQualifiedName())){
 								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "A variável tem que ter tudo minisculo",
 										node.getName().getStartPosition(), node.getName().getLength());
 							}
 							//como agregar warnings..
-							
+
 							if(checkVariableDollar(node.getName().getFullyQualifiedName())){
 								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "A variável não deve começar com o caracter '$'",
 										node.getName().getStartPosition(), node.getName().getLength());
 							}
-							
+
 							if(checkVariableUnderScore(node.getName().getFullyQualifiedName())){
 								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "A variável não deve começar com o caracter '_'",
 										node.getName().getStartPosition(), node.getName().getLength());
 							}
 							return true;
 						};
-						
+
 					};
 					javaServices.parseFile(javaServices.getOpenedFile(), v);
-					
+
+				}else{
+					//Remove anotação
 				}
 			}
 
 
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-
-			}
 		});
-		
-		
-		
-		final Button botaoverifyenum = new Button(viewArea, SWT.CHECK);
-		botaoverifyenum.setSize(10, 20);
-		botaoverifyenum.setText("Verify Enum");
-		botaoverifyenum.addSelectionListener(new SelectionListener() {
+
+
+		//Verificar Enumerados
+		checkBoxEnum.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(botaoverifyenum.getSelection()){
+				if(checkBoxEnum.getSelection()){
 
 
 					ASTVisitor v = new ASTVisitor() {
-					
-					public boolean visit(EnumConstantDeclaration node) {
-						
-						if(!checkVariableLowerCase(node.getName().getFullyQualifiedName())){
-							javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "Os enumerados têm que ter letra maiuscula",
-									node.getName().getStartPosition(), node.getName().getLength());
+
+						public boolean visit(EnumConstantDeclaration node) {
+
+							if(!checkVariableLowerCase(node.getName().getFullyQualifiedName())){
+								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "Os enumerados têm que ter letra maiuscula",
+										node.getName().getStartPosition(), node.getName().getLength());
+							}
+
+							return true;
 						}
-						
-						return true;
-					}
-				};
-					
+					};
+
 					javaServices.parseFile(javaServices.getOpenedFile(), v);
-					
+
+				}else{
+					//Apagar anotação
+
 				}
 			}
 
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-
-			
 		});
 
 
 
 
 
+		
+		
 	}
 
-	public boolean checkFirstLetterLowerCase(String name){ //temporarimente boolean
 
+
+	public boolean checkFirstLetterLowerCase(String name){ 
 		return Character.isLowerCase(name.charAt(0));
-		
-
 	}
 
 
@@ -453,23 +333,23 @@ public class ConventionsView implements PidescoView {
 		}
 		return false;
 	}
-	
-	
+
+
 	public boolean checkUnderScore(String name){
 		return name.contains("_");
 	}
-	
+
 	public boolean checkVariableUnderScore(String name){
 		return (name.charAt(0)=='_');
 	}
-	
+
 	public boolean checkVariableDollar(String name){
 		return (name.charAt(0)=='$');
 	}
-	
-	
+
+
 	public boolean checkVariableLowerCase(String word){
-		
+
 		for(int i = 0; i!= word.length();i++){
 			if(Character.isLowerCase(word.charAt(i))){
 				return false;
