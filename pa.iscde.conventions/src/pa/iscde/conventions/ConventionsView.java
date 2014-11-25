@@ -52,6 +52,9 @@ import java.util.Map;
 
 
 
+
+
+
 import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 import org.eclipse.jdt.core.dom.AST;
@@ -73,6 +76,7 @@ import org.eclipse.jdt.core.dom.NullLiteral;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
@@ -80,6 +84,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.PopupList;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
@@ -124,24 +129,24 @@ public class ConventionsView implements PidescoView {
 
 
 
-//		ASTVisitor v = new ASTVisitor() {
-//
-//
-//			@Override
-//			public boolean visit(TypeDeclaration node) {
-//			System.out.println(node.getName());
-//				return super.visit(node);
-//			}
-//	
-//
-//
-//
-//
-//
-//
-//		};
+		//		ASTVisitor v = new ASTVisitor() {
+		//
+		//
+		//			@Override
+		//			public boolean visit(TypeDeclaration node) {
+		//			System.out.println(node.getName());
+		//				return super.visit(node);
+		//			}
+		//	
+		//
+		//
+		//
+		//
+		//
+		//
+		//		};
 
-//		javaServices.parseFile(javaServices.getOpenedFile(), v);
+		//		javaServices.parseFile(javaServices.getOpenedFile(), v);
 
 		final Label label = new Label(viewArea, SWT.NONE);
 		label.setText("Escolha uma das opções para Validar a Classe:");
@@ -171,23 +176,23 @@ public class ConventionsView implements PidescoView {
 							int sizeMethod = 0;
 							int offset = 0;
 
-						
-
-								if(checkFirstLetterLowerCase(node.getName().getFullyQualifiedName())){
-
-									sizeMethod = node.getName().getLength();
-									//offset é o inicio do primeiro caracter.
-									//Length é o tamanho da seleção.
-									offset =node.getName().getStartPosition();	
 
 
-									javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.ERROR, "O nome da classe não pode começar com letra minuscula", offset, sizeMethod);
-								}
+							if(checkFirstLetterLowerCase(node.getName().getFullyQualifiedName())){
+
+								sizeMethod = node.getName().getLength();
+								//offset é o inicio do primeiro caracter.
+								//Length é o tamanho da seleção.
+								offset =node.getName().getStartPosition();	
+
+
+								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.ERROR, "O nome da classe não pode começar com letra minuscula", offset, sizeMethod);
+							}
 
 
 
 
-							
+
 
 
 
@@ -337,7 +342,39 @@ public class ConventionsView implements PidescoView {
 			}
 		});
 
+		final Button botaoverifyconstant = new Button(viewArea, SWT.CHECK);
+		botaoverifyconstant.setSize(10, 20);
+		botaoverifyconstant.setText("Verify Constant");
+		botaoverifyconstant.addSelectionListener(new SelectionListener() {
 
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(botaoverifyconstant.getSelection()){
+
+
+					ASTVisitor v = new ASTVisitor() {
+					
+						public boolean visit(VariableDeclarationFragment node) {
+							if(checkVariableLowerCase(node.getName().getFullyQualifiedName())){
+								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "A variável tem que ter tudo minisculo",
+										node.getName().getStartPosition(), node.getName().getLength());
+							}
+							return true;
+						};
+						
+					};
+					javaServices.parseFile(javaServices.getOpenedFile(), v);
+					
+				}
+			}
+
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 
 
 
@@ -365,6 +402,16 @@ public class ConventionsView implements PidescoView {
 
 		return false;
 
+	}
+	
+	public boolean checkVariableLowerCase(String word){
+		
+		for(int i = 0; i!= word.length();i++){
+			if(Character.isLowerCase(word.charAt(i))){
+				return false;
+			}
+		}
+		return true;
 	}
 
 
