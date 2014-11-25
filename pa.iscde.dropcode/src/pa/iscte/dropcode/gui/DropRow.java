@@ -49,7 +49,7 @@ public class DropRow extends Composite {
 		for (DM_Others dropModifier : DM_Others.values()) {
 
 			final DM_Others dm = dropModifier;
-			if (true) { // TODO if (dropable.isModifierPresent(dm)) {
+			if (dropable.isModifierPresent(dm)) {
 
 				final ClosableLabel cl = new ClosableLabel(this, SWT.NONE, dm
 						.toString().toLowerCase());

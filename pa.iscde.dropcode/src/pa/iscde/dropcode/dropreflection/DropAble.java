@@ -13,7 +13,7 @@ public class DropAble {
 	private String type;
 	private HashMap<String, DropAnnotation> annotations;
 	private HashSet<DM_Others> modifiers;
-	private DM_Visibility vis_mod;
+	private DM_Visibility visibility_modifier;
 
 	public DropAble(String name) {
 		this.name = name;
@@ -25,9 +25,11 @@ public class DropAble {
 		List<String> field = Arrays.asList(declaration.toString().split(" "));
 
 		// VISIBILITY MODIFIERS
-		for (DM_Visibility mod : DM_Visibility.values()) {
-			if (field.contains(mod.toString().toLowerCase()))
+		FOR: for (DM_Visibility mod : DM_Visibility.values()) {
+			if (field.contains(mod.toString().toLowerCase())){
 				setVisibilityModifier(mod);
+				break FOR;
+			}
 		}
 
 		// OTHER MODIFIERS
@@ -42,11 +44,11 @@ public class DropAble {
 	}
 
 	public void setVisibilityModifier(DM_Visibility vis_mod) {
-		this.vis_mod = vis_mod;
+		this.visibility_modifier = vis_mod;
 	}
 
 	public DM_Visibility getVisibilityModifier() {
-		return vis_mod;
+		return visibility_modifier;
 	}
 
 	public void addModifier(DM_Others mod) {
