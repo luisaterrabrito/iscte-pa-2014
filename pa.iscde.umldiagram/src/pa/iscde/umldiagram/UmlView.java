@@ -15,7 +15,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.zest.core.widgets.Graph;
+import org.eclipse.zest.core.widgets.GraphConnection;
 import org.eclipse.zest.core.widgets.GraphNode;
+import org.eclipse.zest.core.widgets.ZestStyles;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -38,6 +40,7 @@ public class UmlView implements PidescoView {
 	private BundleContext context  = bundle.getBundleContext();
 	private ServiceReference<JavaEditorServices> ref = context.getServiceReference(JavaEditorServices.class);
 	private JavaEditorServices javaServices = context.getService(ref);
+	private ArrayList<Node> nodes = new ArrayList<Node>();
 	
 	public UmlView() {
 		umlView = this;
@@ -82,7 +85,16 @@ public class UmlView implements PidescoView {
 			}
 		
 		umlGraph.applyLayout();
-		
+		connectUml();
+		}
+	}
+
+	private void connectUml() {
+		for(Node  node1 : nodes){
+			for(Node  node2 : nodes){
+				if(node1.getNode().getText().contains(node2.getName()) && node1!=node2)
+					new GraphConnection(umlGraph, ZestStyles.CONNECTIONS_DIRECTED, node1.getNode(), node2.getNode());
+			}
 		}
 	}
 
@@ -100,6 +112,7 @@ public class UmlView implements PidescoView {
 	private void paintClass(SourceElement classes, UmlVisitor visitor) {
 		GraphNode node = new GraphNode(umlGraph, SWT.NONE);
 		node.setText("Class "+classes.getName().replace(".java", "")+"\n");
+		nodes.add(new Node(node, classes.getName().replace(".java", ""), classes));
 		node.setText(node.getText()+"---------------------------"+"\n");
 		for (int i = 0; i < visitor.getFields().size(); i++) {
 			Object field = visitor.getFields().get(i).fragments().get(0);
@@ -121,15 +134,21 @@ public class UmlView implements PidescoView {
 	private void paintEnum(UmlVisitor visitor) {
 		GraphNode node = new GraphNode(umlGraph, SWT.NONE);
 		node.setText("Enum "+visitor.getEnums().get(0).getName()+"\n");
+		nodes.add(new Node(node, visitor.getEnums().get(0).getName().toString(), null));
 		node.setText(node.getText()+"---------------------------"+"\n");
 		node.setText(node.getText()+visitor.getEnums().get(0).enumConstants());
+		
 	}
 
 	public synchronized void clearGraph() {
+		nodes.clear();
+		List<GraphConnection> connections = new ArrayList<GraphConnection>(umlGraph.getConnections());
+		for(GraphConnection c : connections){
+		  c.dispose();
+		}
 		List<GraphNode> nodes = new ArrayList<GraphNode>(umlGraph.getNodes());
 		for(GraphNode n : nodes){
 		  n.dispose();
 		}
 	}
-
 }
