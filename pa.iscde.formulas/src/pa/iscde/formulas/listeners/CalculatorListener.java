@@ -153,7 +153,6 @@ public class CalculatorListener implements SelectionListener{
 		}
 		
 		private boolean isMultipleInput(String string){
-			System.out.println("chegeui aqui");
 			List<String> inputs = Arrays.asList(string.split(","));
 			boolean inputsAreNumbers = false;
 			for (int i = 0; i <inputs.size(); i++) {

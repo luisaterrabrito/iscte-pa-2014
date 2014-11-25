@@ -1,53 +1,44 @@
 package pa.iscde.formulas.util;
 
-import java.io.InputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 
 public class FileReaderUtil {
 
 	public static String readFile(){
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();
-		IProject project  = root.getProject("Teste");
-		IFolder folder = project.getFolder("formulas");
+		IPath location = root.getLocation();
+		IPath append = location.append("formulas");
+		File dir = append.toFile();
+		File[] listFiles = dir.listFiles();
 		String allFormulas = "";
 		
-		try{
-			if (!project.exists()) project.create(null);
-			if (!project.isOpen()) project.open(null);
-			if (!folder.exists()) 
-				folder.create(IResource.NONE, true, null);
-			//		Isto da todos os ficheiros daquela pastas	
-			
-			IResource[] members = folder.members();
-			if(members.length!=0){
-			for (int i = 0; i < members.length; i++) {
-				IFile f = folder.getFile(members[i].getName());
-				InputStream is =f.getContents();
-				Scanner s = new Scanner(is, "UTF-8");
+		if(listFiles.length!=0){
+		for (int i = 0; i < listFiles.length; i++) {
+			Scanner s;
+			try {
+				s = new Scanner(listFiles[i]);
 				while(s.hasNext()){
-					allFormulas += s.nextLine();
+					allFormulas+=s.nextLine()+System.lineSeparator();
 				}
 				allFormulas+="END";
 				s.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			}else{
-				return null;
-			}
-		} catch (CoreException e) {
-			e.printStackTrace();
 		}
+		}else
+			return null;
 
+		System.out.println("all formulas " + allFormulas);
 		return allFormulas;
-
 	}
 }
