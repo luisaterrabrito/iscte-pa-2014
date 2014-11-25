@@ -31,7 +31,7 @@ public class SnippetCode extends Composite {
 	private ArrayList<String> languages;
 	private Button editButton;
 	private final Composite viewArea;
-	
+
 	public SnippetCode(File f, Composite viewArea, int style) {
 		super(viewArea, style);
 		this.viewArea = viewArea;
@@ -42,10 +42,12 @@ public class SnippetCode extends Composite {
 		snippetNameTextBox.setEditable(false);
 		snippetCodeText.setEditable(false);
 		languagesCombo.setEnabled(false);
-		snippetCodeText.setBackground(new Color(Display.getCurrent(), 255, 255,
-				255));
-		snippetNameTextBox.setBackground(new Color(Display.getCurrent(), 255,
-				255, 255));
+		/*
+		 * Uncomment if Rui wins argument snippetCodeText.setBackground(new
+		 * Color(Display.getCurrent(), 255, 255, 255));
+		 * snippetNameTextBox.setBackground(new Color(Display.getCurrent(), 255,
+		 * 255, 255));
+		 */
 	}
 
 	public SnippetCode(Composite viewArea, int style) {
@@ -126,11 +128,17 @@ public class SnippetCode extends Composite {
 					languagesCombo.setEnabled(true);
 				} else {
 					snippetNameTextBox.setEditable(false);
-					snippetNameTextBox.setBackground(new Color(Display
-							.getCurrent(), 255, 255, 255));
+					/*
+					 * Uncomment if Rui wins argument
+					 * snippetNameTextBox.setBackground(new Color(Display
+					 * .getCurrent(), 255, 255, 255));
+					 */
 					snippetCodeText.setEditable(false);
-					snippetCodeText.setBackground(new Color(Display
-							.getCurrent(), 255, 255, 255));
+					/*
+					 * Uncomment if Rui wins argument
+					 * snippetCodeText.setBackground(new Color(Display
+					 * .getCurrent(), 255, 255, 255));
+					 */
 					languagesCombo.setEnabled(false);
 				}
 			}
@@ -211,12 +219,25 @@ public class SnippetCode extends Composite {
 		}
 		languagesCombo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-			if(languagesCombo.getText().equals("Create New Language...")){
-				MessageBox messageBox = new MessageBox(viewArea.getShell(), SWT.ICON_WARNING | SWT.ABORT | SWT.RETRY | SWT.IGNORE);
-				
+				if (languagesCombo.getText().equals("Create New Language...")) {
+					MessageBox messageBox = new MessageBox(viewArea.getShell(),
+							SWT.ICON_WARNING | SWT.ABORT | SWT.RETRY
+									| SWT.IGNORE);
+					messageBox.setText("Create New Language");
+					messageBox.setMessage("Language Name");
+					int buttonID = messageBox.open();
+					switch (buttonID) {
+					case SWT.YES:
+						// saves changes ...
+					case SWT.NO:
+						// exits here ...
+						break;
+					case SWT.CANCEL:
+						// does nothing ...
+					}
+				}
 			}
-		}
-		
+
 		});
 	}
 
