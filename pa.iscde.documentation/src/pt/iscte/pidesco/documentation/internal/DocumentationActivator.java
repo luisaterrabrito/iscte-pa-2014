@@ -21,6 +21,8 @@ public class DocumentationActivator implements BundleActivator {
 	private Set<IDocumentationListener> listeners;
 	private ServiceRegistration<IDocumentationServices> service;
 	
+	//não deveria ser singleton?
+	
 	@Override
 	public void start(BundleContext context) throws Exception {
 		instance = this;
