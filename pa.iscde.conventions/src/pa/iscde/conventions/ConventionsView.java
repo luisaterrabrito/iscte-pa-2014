@@ -55,6 +55,7 @@ import java.util.Map;
 
 
 
+
 import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 import org.eclipse.jdt.core.dom.AST;
@@ -66,6 +67,7 @@ import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.ConstructorInvocation;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.Initializer;
@@ -127,8 +129,6 @@ public class ConventionsView implements PidescoView {
 		rowLayout.type = SWT.VERTICAL;
 		viewArea.setLayout(rowLayout);
 
-		String name = "$lolol";
-		String name1 = "_Lolol";
 		
 		
 		
@@ -359,6 +359,7 @@ public class ConventionsView implements PidescoView {
 					ASTVisitor v = new ASTVisitor() {
 					
 						public boolean visit(VariableDeclarationFragment node) {
+							
 							if(checkVariableLowerCase(node.getName().getFullyQualifiedName())){
 								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "A variável tem que ter tudo minisculo",
 										node.getName().getStartPosition(), node.getName().getLength());
@@ -390,6 +391,47 @@ public class ConventionsView implements PidescoView {
 
 			}
 		});
+		
+		
+		
+		final Button botaoverifyenum = new Button(viewArea, SWT.CHECK);
+		botaoverifyenum.setSize(10, 20);
+		botaoverifyenum.setText("Verify Enum");
+		botaoverifyenum.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if(botaoverifyenum.getSelection()){
+
+
+					ASTVisitor v = new ASTVisitor() {
+					
+					public boolean visit(EnumConstantDeclaration node) {
+						
+						if(!checkVariableLowerCase(node.getName().getFullyQualifiedName())){
+							javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "Os enumerados têm que ter letra maiuscula",
+									node.getName().getStartPosition(), node.getName().getLength());
+						}
+						
+						return true;
+					}
+				};
+					
+					javaServices.parseFile(javaServices.getOpenedFile(), v);
+					
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+
+			
+		});
+
 
 
 
