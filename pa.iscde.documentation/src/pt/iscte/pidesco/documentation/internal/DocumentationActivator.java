@@ -42,7 +42,8 @@ public class DocumentationActivator implements BundleActivator {
 			@Override
 			public void fileClosed(File file) {
 				DocumentationView view = DocumentationView.getInstance();
-				view.cleanView();
+				view.draw();
+//				view.cleanView();
 			}
 		});
 
