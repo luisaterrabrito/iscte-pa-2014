@@ -3,7 +3,7 @@
 <plugin>
    <extension
          id="snippets"
-         name="Snippets"
+         name="Lemony Snippets"
          point="pt.iscte.pidesco.view">
       <view
             class="pa.iscde.snippets.gui.SnippetsView">
