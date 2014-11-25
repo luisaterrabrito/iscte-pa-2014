@@ -3,9 +3,15 @@ package pt.iscte.pidesco.documentation.internal;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
+import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.Javadoc;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.TagElement;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -78,17 +84,35 @@ public class DocumentationView implements PidescoView {
 			 */
 			@Override
 			public boolean visit(Javadoc node) {
+				TableItem item = new TableItem(table, SWT.NONE);
+
+				if (node.getParent() instanceof TypeDeclaration) {
+					item.setText(1, "Classe Nome: " + ((TypeDeclaration) node.getParent()).getName());
+				}
+				
+				// Detectar o Método
+				if (node.getParent() instanceof MethodDeclaration) {
+					item.setText(1, "Método Nome: " + ((MethodDeclaration) node.getParent()).getName());
+					//item.setText(1, "Método Nome: " + ((MethodDeclaration) node.getParent()).toString());
+				}
+				
 				String s = "";
 				int i = 0;
 
+				// Percorrer a lista de tags
+				// Primeira tag -> getTagName se null é o descritivo senão é uma tag
 				for (TagElement tag : (List<TagElement>) node.tags()) {
-					TableItem item = new TableItem(table, SWT.NONE);
+						s += tag.getTagName() + " > ";
+
+						// Apanhar os descritivos associados às tags
+						for (Object fragment : tag.fragments()) {
+							s += fragment.toString() + " ||| ";
+					}
 					
-					s += tag.getTagName() + " > ";
-						tag.fragments();
-						item.setText(i, item.getText().toString());
-						item.setData(tag);
-						i++;
+					item.setText(0, s);
+					item.setData(tag);
+					i++;
+					s = "";
 				};
 				
 				return false;
