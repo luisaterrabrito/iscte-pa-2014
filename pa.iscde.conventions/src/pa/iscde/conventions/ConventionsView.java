@@ -127,7 +127,11 @@ public class ConventionsView implements PidescoView {
 		rowLayout.type = SWT.VERTICAL;
 		viewArea.setLayout(rowLayout);
 
-
+		String name = "$lolol";
+		String name1 = "_Lolol";
+		
+		
+		
 
 		//		ASTVisitor v = new ASTVisitor() {
 		//
@@ -344,7 +348,7 @@ public class ConventionsView implements PidescoView {
 
 		final Button botaoverifyconstant = new Button(viewArea, SWT.CHECK);
 		botaoverifyconstant.setSize(10, 20);
-		botaoverifyconstant.setText("Verify Constant");
+		botaoverifyconstant.setText("Verify Constant (Minisculas, '$' , '_' )");
 		botaoverifyconstant.addSelectionListener(new SelectionListener() {
 
 			@Override
@@ -357,6 +361,17 @@ public class ConventionsView implements PidescoView {
 						public boolean visit(VariableDeclarationFragment node) {
 							if(checkVariableLowerCase(node.getName().getFullyQualifiedName())){
 								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "A variável tem que ter tudo minisculo",
+										node.getName().getStartPosition(), node.getName().getLength());
+							}
+							//como agregar warnings..
+							
+							if(checkVariableDollar(node.getName().getFullyQualifiedName())){
+								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "A variável não deve começar com o caracter '$'",
+										node.getName().getStartPosition(), node.getName().getLength());
+							}
+							
+							if(checkVariableUnderScore(node.getName().getFullyQualifiedName())){
+								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "A variável não deve começar com o caracter '_'",
 										node.getName().getStartPosition(), node.getName().getLength());
 							}
 							return true;
@@ -383,26 +398,33 @@ public class ConventionsView implements PidescoView {
 
 	public boolean checkFirstLetterLowerCase(String name){ //temporarimente boolean
 
-		if(Character.isLowerCase(name.charAt(0))){
-			return true;
-		}
-
-		return false;
+		return Character.isLowerCase(name.charAt(0));
+		
 
 	}
-
 
 
 
 	public boolean verifySize(String word){
-
 		if(word.length()>=20){
 			return true;
 		}
-
 		return false;
-
 	}
+	
+	
+	public boolean checkUnderScore(String name){
+		return name.contains("_");
+	}
+	
+	public boolean checkVariableUnderScore(String name){
+		return (name.charAt(0)=='_');
+	}
+	
+	public boolean checkVariableDollar(String name){
+		return (name.charAt(0)=='$');
+	}
+	
 	
 	public boolean checkVariableLowerCase(String word){
 		
