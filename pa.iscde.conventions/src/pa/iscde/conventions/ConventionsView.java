@@ -164,13 +164,15 @@ public class ConventionsView implements PidescoView {
 						@Override
 						public boolean visit(TypeDeclaration node) {
 							if(checkFirstLetterLowerCase(node.getName().getFullyQualifiedName())){
-								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.ERROR, "O nome da classe não pode começar com letra minuscula", node.getName().getStartPosition(), node.getName().getLength());
+								javaServices.addAnnotation(javaServices.getOpenedFile(), AnnotationType.WARNING, "O nome da classe não deve começar com letra minuscula", node.getName().getStartPosition(), node.getName().getLength());
 							}
 							return true;
 						}
 					};
 					javaServices.parseFile(javaServices.getOpenedFile(), v);
-				}	
+				}else{	
+					//Apagar as anotações.
+				}
 			}
 
 
