@@ -1,5 +1,7 @@
 package pa.iscde.formulas;
 
+import java.util.Arrays;
+
 
 public class NewFormula extends Formula{
 
@@ -36,6 +38,15 @@ public class NewFormula extends Formula{
 	public String methodCode() {
 		return javacode;
 	}
+
+
+	@Override
+	public String toString() {
+		return "NewFormula [name=" + name + ", inputs="
+				+ Arrays.toString(inputs) + ", algorithm=" + algorithm
+				+ ", javacode=" + javacode + "]";
+	}
+	
 	
 
 }

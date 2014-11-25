@@ -1,17 +1,15 @@
 package pa.iscde.formulas.listeners;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -198,34 +196,52 @@ public class AddFormulaListener implements SelectionListener{
 	private void addFormulaToFile(String javaCode, String algorithm, String formulaNameString, String categoryNameString, String[] inputsName) {
 		iff = new InsertFormulaFormat(categoryNameString, formulaNameString, inputsName, inputsNumber, algorithm, javaCode);
 
-		try{
+//		try{
+//			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+//			IWorkspaceRoot root = workspace.getRoot();
+//			IProject project  = root.getProject("Test");
+//			IFolder folder = project.getFolder("formulas");
+//			IFile file = folder.getFile(formulaNameString+".txt");
+//			
+//			if (!project.exists()) project.create(null);
+//			if (!project.isOpen()) project.open(null);
+//			if (!folder.exists()) 
+//				folder.create(IResource.NONE, true, null);
+//			if (!file.exists()) {
+//
+//				byte[] bytes = iff.createText();
+//				InputStream source = new ByteArrayInputStream(bytes);
+//				file.create(source, IResource.NONE, null);
+//				file.setCharset("UTF-8", null);
+//			}
+//			
+//		} catch (CoreException e) {
+//			e.printStackTrace();
+//		}
+		
+		PrintWriter writer;
+		try {
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			IWorkspaceRoot root = workspace.getRoot();
-			IProject project  = root.getProject("Teste");
-			IFolder folder = project.getFolder("formulas");
-			IFile file = folder.getFile(formulaNameString+".txt");
-
-			//	Isto da todos os ficheiros daquela pastas		 
-			IResource[] members = folder.members();
-					 for (int i = 0; i < members.length; i++) {
-						System.out.println("nomes dos ficheiros: " +members[i].getName());
-					}
-
-			if (!project.exists()) project.create(null);
-			if (!project.isOpen()) project.open(null);
-			if (!folder.exists()) 
-				folder.create(IResource.NONE, true, null);
-			if (!file.exists()) {
-
-				byte[] bytes = iff.createText();
-				InputStream source = new ByteArrayInputStream(bytes);
-				file.create(source, IResource.NONE, null);
-				file.setCharset("UTF-8", null);
-			}
+			IPath location = root.getLocation();
+			IPath append = location.append("formulas");
+			String path = append.toString();
 			
-		} catch (CoreException e) {
+			File file = new File(path+"\\"+ formulaNameString+".txt");
+			writer = new PrintWriter(file, "UTF-8");
+			iff.createText();
+			String formula = iff.getFormula();
+			writer.println(formula);
+			writer.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	
+		
 		FormulasView.loadAllFormulas(iff.getFormula());
 	}
 

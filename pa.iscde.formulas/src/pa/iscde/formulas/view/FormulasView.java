@@ -1,26 +1,17 @@
 package pa.iscde.formulas.view;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
@@ -141,16 +132,16 @@ public class FormulasView implements PidescoView {
 		}
 		switch (categoryString) {
 		case "Basics":
-			basic_formulas.add(new NewFormula(formulaName, inputs, line_2.replace("«", System.lineSeparator()), line_3.replace("«", System.lineSeparator())));
+			basic_formulas.add(new NewFormula(formulaName, inputs, line_2.replace("#", ""), line_3.replace("#", "")));
 			break;
 		case "Engineering":
-			engineering_formulas.add(new NewFormula(formulaName, inputs, line_2.replace("«", System.lineSeparator()), line_3.replace("«", System.lineSeparator())));
+			engineering_formulas.add(new NewFormula(formulaName, inputs, line_2.replace("#", ""), line_3.replace("#", "")));
 			break;
 		case "Statistic":
-			statistics_formulas.add(new NewFormula(formulaName, inputs, line_2.replace("«", System.lineSeparator()), line_3.replace("«", System.lineSeparator())));
+			statistics_formulas.add(new NewFormula(formulaName, inputs, line_2.replace("#", ""), line_3.replace("#","")));
 			break;
 		case "Finance":
-			finance_formulas.add(new NewFormula(formulaName, inputs, line_2.replace("«", System.lineSeparator()), line_3.replace("«", System.lineSeparator())));
+			finance_formulas.add(new NewFormula(formulaName, inputs, line_2.replace("#",""), line_3.replace("#", "")));
 			break;
 
 		}
