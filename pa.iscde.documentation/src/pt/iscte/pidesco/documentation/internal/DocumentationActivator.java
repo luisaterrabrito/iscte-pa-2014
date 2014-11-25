@@ -13,15 +13,12 @@ import pt.iscte.pidesco.documentation.service.IDocumentationListener;
 import pt.iscte.pidesco.documentation.service.IDocumentationServices;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
-import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 
 public class DocumentationActivator implements BundleActivator {
 
 	private static DocumentationActivator instance;
 	private Set<IDocumentationListener> listeners;
 	private ServiceRegistration<IDocumentationServices> service;
-	
-	//não deveria ser singleton?
 	
 	@Override
 	public void start(BundleContext context) throws Exception {
