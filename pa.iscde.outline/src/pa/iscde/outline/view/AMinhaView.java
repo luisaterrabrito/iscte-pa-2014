@@ -1,5 +1,7 @@
 package pa.iscde.outline.view;
 
+import java.io.File;
+import java.lang.reflect.Field;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
@@ -11,24 +13,45 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 import pt.iscte.pidesco.extensibility.PidescoView;
+import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
+import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 public class AMinhaView implements PidescoView{
 
+	private JavaEditorServices javaServices;
+	
+	private ProjectBrowserServices browserServices;
+	
+	
 	@Override
 	public void createContents(Composite viewArea,Map<String, Image> imageMap) {
 		
 		Display d = viewArea.getDisplay();
 		
+		Bundle bundle = FrameworkUtil.getBundle(AMinhaView.class);
+		BundleContext context  = bundle.getBundleContext();
+		ServiceReference<JavaEditorServices> ref = context.getServiceReference(JavaEditorServices.class);
+		javaServices = context.getService(ref);
+		
+		ServiceReference<ProjectBrowserServices> ref2 = context.getServiceReference(ProjectBrowserServices.class);
+		browserServices = context.getService(ref2);
+		
 		Tree t = new Tree(viewArea, SWT.SINGLE | SWT.BORDER);
 		TreeItem child1 = new TreeItem(t, SWT.NONE, 0);
 	    child1.setText("Item 1");
 
+	    File f = javaServices.getOpenedFile();
+	    Class c = AMinhaView.class;
+	    
 	    TreeItem child2 = new TreeItem(t, SWT.NONE, 1);
 	    child2.setText("Item 2");
 	    Image i = imageMap.get("package-x-generic.png");

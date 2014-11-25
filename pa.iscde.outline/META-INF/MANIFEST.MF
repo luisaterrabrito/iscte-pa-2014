@@ -7,4 +7,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: pa.iscde;bundle-version="0.1.0",
  pt.iscte.pidesco;bundle-version="0.1.0",
  org.eclipse.swt
-Import-Package: org.eclipse.swt.widgets
+Import-Package: org.eclipse.swt.widgets,
+ org.osgi.framework;version="1.8.0",
+ pt.iscte.pidesco.javaeditor.service,
+ pt.iscte.pidesco.projectbrowser.service
