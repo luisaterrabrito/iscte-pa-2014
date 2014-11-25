@@ -124,24 +124,24 @@ public class ConventionsView implements PidescoView {
 
 
 
-		ASTVisitor v = new ASTVisitor() {
+//		ASTVisitor v = new ASTVisitor() {
+//
+//
+//			@Override
+//			public boolean visit(TypeDeclaration node) {
+//			System.out.println(node.getName());
+//				return super.visit(node);
+//			}
+//	
+//
+//
+//
+//
+//
+//
+//		};
 
-
-			@Override
-			public boolean visit(TypeDeclaration node) {
-			System.out.println(node.getName());
-				return super.visit(node);
-			}
-	
-
-
-
-
-
-
-		};
-
-		javaServices.parseFile(javaServices.getOpenedFile(), v);
+//		javaServices.parseFile(javaServices.getOpenedFile(), v);
 
 		final Label label = new Label(viewArea, SWT.NONE);
 		label.setText("Escolha uma das opções para Validar a Classe:");
@@ -149,7 +149,7 @@ public class ConventionsView implements PidescoView {
 		//Verificar classes.
 		final Button botao = new Button(viewArea, SWT.CHECK);
 		botao.setSize(10, 20);
-		botao.setText("CheckFirstLetterClass");
+		botao.setText("Check First Letter of a Class");
 		botao.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -220,7 +220,7 @@ public class ConventionsView implements PidescoView {
 		//Verificar Metodos
 		final Button botaoMaior = new Button(viewArea, SWT.CHECK);
 		botaoMaior.setSize(10, 20);
-		botaoMaior.setText("CheckFirstLetterUpperMethod");
+		botaoMaior.setText("Check First Letter of a Method");
 		botaoMaior.addSelectionListener(new SelectionAdapter() {
 
 			@Override
