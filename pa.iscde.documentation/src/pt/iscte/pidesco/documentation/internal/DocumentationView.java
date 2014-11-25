@@ -1,16 +1,12 @@
 package pt.iscte.pidesco.documentation.internal;
 
-import java.awt.Color;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.BlockComment;
-import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.Javadoc;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.TagElement;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -77,37 +73,27 @@ public class DocumentationView implements PidescoView {
 		this.cleanView();		
 		ASTVisitor visitor = new ASTVisitor() {
 
-			public boolean visit(org.eclipse.jdt.core.dom.LineComment node) {
-				if (node.isLineComment())
-					l2.setText("Pimbas");
-				return false;
-			};
-			
-			
+			/**
+			 * Método que apanha os comentários
+			 */
 			@Override
 			public boolean visit(Javadoc node) {
-				return false;
-			}
-			
-			@Override
-			public boolean visit(BlockComment node) {
-				if (node.isBlockComment())
-					l2.setText("Encontrei");
-				else
-					l2.setText("Nï¿½o Encontrei");
+				String s = "";
+				int i = 0;
+
+				for (TagElement tag : (List<TagElement>) node.tags()) {
+					TableItem item = new TableItem(table, SWT.NONE);
+					
+					s += tag.getTagName() + " > ";
+						tag.fragments();
+						item.setText(i, item.getText().toString());
+						item.setData(tag);
+						i++;
+				};
 				
 				return false;
-			};
-			
-			@Override
-			public boolean visit(MethodDeclaration node) {
-				//l.setText(node.getName().toString());
-				TableItem oneTableItem = new TableItem(table, SWT.NONE);
-				oneTableItem.setText(0, node.getName().toString());
-				oneTableItem.setData(node.getName().toString());
-				return false;
 			}
-			
+
 		};
 		
 		if(javaServices.getOpenedFile() != null){
