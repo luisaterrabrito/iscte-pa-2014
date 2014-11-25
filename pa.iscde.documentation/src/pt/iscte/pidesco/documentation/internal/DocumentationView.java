@@ -110,7 +110,10 @@ public class DocumentationView implements PidescoView {
 			
 		};
 		
-		javaServices.parseFile(javaServices.getOpenedFile(), visitor);
+		if(javaServices.getOpenedFile() != null){
+			javaServices.parseFile(javaServices.getOpenedFile(), visitor);
+		}
+		
 	}
 	
 	public void cleanView() {
