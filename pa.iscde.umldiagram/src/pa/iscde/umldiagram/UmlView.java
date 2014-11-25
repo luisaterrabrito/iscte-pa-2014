@@ -116,7 +116,6 @@ public class UmlView implements PidescoView {
 				}
 			}
 		}
-		
 	}
 
 	private void paintEnum(UmlVisitor visitor) {
@@ -124,7 +123,6 @@ public class UmlView implements PidescoView {
 		node.setText("Enum "+visitor.getEnums().get(0).getName()+"\n");
 		node.setText(node.getText()+"---------------------------"+"\n");
 		node.setText(node.getText()+visitor.getEnums().get(0).enumConstants());
-		
 	}
 
 	public synchronized void clearGraph() {
