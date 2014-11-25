@@ -2,5 +2,13 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="Command" name="Command" schema="schema/Command.exsd"/>
+   <extension
+         id="id1"
+         name="Command"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.commands.external.services.CommandView">
+      </view>
+   </extension>
 
 </plugin>
