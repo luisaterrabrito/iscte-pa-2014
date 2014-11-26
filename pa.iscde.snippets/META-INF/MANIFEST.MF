@@ -10,4 +10,5 @@ Require-Bundle: pa.iscde;bundle-version="0.1.0",
 Import-Package: org.eclipse.core.resources,
  org.eclipse.core.runtime;version="3.4.0",
  org.eclipse.jface.dialogs,
+ org.eclipse.jface.window,
  org.osgi.framework;version="1.8.0"
