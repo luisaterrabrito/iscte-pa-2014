@@ -57,14 +57,12 @@ public class SnippetsView implements PidescoView {
 	// With file
 	public void createSnippetCode(File snp) {
 		new SnippetCode(snp, viewArea, SWT.NONE);
-		viewArea.pack();
 		viewArea.layout();
 	}
 
 	// Without file
 	public void createSnippetCode() {
 		new SnippetCode(viewArea, SWT.NONE);
-		viewArea.pack();
 		viewArea.layout();
 	}
 }

@@ -163,9 +163,9 @@ public class SnippetsExplorer extends Composite {
 			}
 		});
 		
-		languagesCombo.setFocus();
-		
 		loadSnippets();
+		
+		languagesCombo.setFocus();
 	}
 
 	private void loadSnippets() {
