@@ -46,7 +46,7 @@ public class SnippetsView implements PidescoView {
 		return snippetsRootFolder;
 	}
 
-	public void createExplorer() {
+	protected void createExplorer() {
 		if (SnippetsExplorer.getInstance() == null)
 			new SnippetsExplorer(viewArea, SWT.NONE);
 		else
@@ -55,13 +55,13 @@ public class SnippetsView implements PidescoView {
 	}
 
 	// With file
-	public void createSnippetCode(File snp) {
+	protected void createSnippetCode(File snp) {
 		new SnippetCode(snp, viewArea, SWT.NONE);
 		viewArea.layout();
 	}
 
 	// Without file
-	public void createSnippetCode() {
+	protected void createSnippetCode() {
 		new SnippetCode(viewArea, SWT.NONE);
 		viewArea.layout();
 	}

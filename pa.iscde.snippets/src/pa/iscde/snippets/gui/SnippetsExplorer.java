@@ -156,16 +156,14 @@ public class SnippetsExplorer extends Composite {
 		addNewButton.setText("Add New Snippet");
 
 		addDisposeListener(new DisposeListener() {
-			
+
 			@Override
 			public void widgetDisposed(DisposeEvent e) {
 				instance = null;
 			}
 		});
-		
+
 		loadSnippets();
-		
-		languagesCombo.setFocus();
 	}
 
 	private void loadSnippets() {
