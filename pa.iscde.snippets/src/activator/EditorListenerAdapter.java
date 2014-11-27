@@ -5,7 +5,7 @@ import java.io.File;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 
 public class EditorListenerAdapter extends JavaEditorListener.Adapter {
-	private String selectedText;
+	private String selectedText = null;
 
 	@Override
 	public void selectionChanged(File file, String text, int offset, int length) {

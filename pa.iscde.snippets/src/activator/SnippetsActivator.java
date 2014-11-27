@@ -26,6 +26,7 @@ public class SnippetsActivator implements BundleActivator {
 
 	@Override
 	public void start(BundleContext context) throws Exception {
+		instance = this;
 		this.context = context;
 		ServiceReference<JavaEditorServices> ref = context
 				.getServiceReference(JavaEditorServices.class);
