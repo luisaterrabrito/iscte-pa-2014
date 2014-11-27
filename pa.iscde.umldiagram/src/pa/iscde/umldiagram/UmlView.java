@@ -92,8 +92,14 @@ public class UmlView implements PidescoView {
 	private void connectUml() {
 		for(Node  node1 : nodes){
 			for(Node  node2 : nodes){
-				if(node1.getNode().getText().contains(node2.getName()) && node1!=node2)
-					new GraphConnection(umlGraph, ZestStyles.CONNECTIONS_DIRECTED, node1.getNode(), node2.getNode());
+				for(String f: node1.getFields()){
+					System.out.println(f);
+					if(f.equals(node2.getName()) && node1!=node2){
+						new GraphConnection(umlGraph, ZestStyles.CONNECTIONS_DIRECTED, node1.getNode(), node2.getNode());
+					}
+				}
+				//if(node1.getNode().getText().contains(node2.getName()) && node1!=node2)
+					
 			}
 		}
 	}
@@ -112,12 +118,14 @@ public class UmlView implements PidescoView {
 	private void paintClass(SourceElement classes, UmlVisitor visitor) {
 		GraphNode node = new GraphNode(umlGraph, SWT.NONE);
 		node.setText("Class "+classes.getName().replace(".java", "")+"\n");
-		nodes.add(new Node(node, classes.getName().replace(".java", ""), classes));
+		Node n = new Node(node, classes.getName().replace(".java", ""), classes);
+		nodes.add(n);
 		node.setText(node.getText()+"---------------------------"+"\n");
 		for (int i = 0; i < visitor.getFields().size(); i++) {
 			Object field = visitor.getFields().get(i).fragments().get(0);
 			String fieldName = ((VariableDeclarationFragment) field).getName().toString();
 			node.setText(node.getText()+fieldName+" :"+visitor.getFields().get(i).getType()+"\n");
+			n.addField(visitor.getFields().get(i).getType().toString());
 		}
 		node.setText(node.getText()+"___________________________"+"\n");
 		for (int i = 0; i < visitor.getMethods().size(); i++) {
