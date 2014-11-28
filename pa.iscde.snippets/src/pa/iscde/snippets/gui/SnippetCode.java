@@ -2,6 +2,7 @@ package pa.iscde.snippets.gui;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -19,8 +20,10 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import pa.iscde.snippets.data.Variable;
 import pa.iscde.snippets.fileoperations.FileOperations;
 import pa.iscde.snippets.gui.dialogboxes.NewLanguageDialog;
+import pa.iscde.snippets.gui.dialogboxes.ValueInsertionDialog;
 
 public class SnippetCode extends Composite {
 	private Text snippetNameTextBox;
@@ -198,6 +201,34 @@ public class SnippetCode extends Composite {
 		gd_useSnippetButton.widthHint = 215;
 		useSnippetButton.setLayoutData(gd_useSnippetButton);
 		useSnippetButton.setText("Use");
+		useSnippetButton.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				switch (event.type) {
+				case SWT.Selection:
+					// TEST ARRAY
+					ArrayList<Variable> parameters = new ArrayList<Variable>(
+							Arrays.asList(new Variable("temp1", "int"),
+									new Variable( "temp2", "double"),
+									new Variable("temp3", "String")));
+					ValueInsertionDialog dialog = new ValueInsertionDialog(
+							viewArea.getShell(),
+							"Value Insertion",
+							"Please fill the boxes with the appropriate values",
+							parameters);
+					dialog.create();
+					if (dialog.open() == Window.OK) {
+						// TEST RESULTS
+						for (Variable variable : dialog
+								.getVariable())
+							System.out.println("Variable Name: "
+									+ variable.getName() + " Variable Type: " + variable.getType() +
+									" Value: " + variable.getValue());
+					}
+					break;
+				}
+			}
+		});
 		bottomButtonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
 				true, true, 1, 1));
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -223,13 +254,17 @@ public class SnippetCode extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				if (languagesCombo.getText().equals("Create New Language...")) {
 					NewLanguageDialog dialog = new NewLanguageDialog(viewArea
-							.getShell(), "Create New Language", "Create A New Language to classify Snippets", "Language Name");
+							.getShell(), "Create New Language",
+							"Create A New Language to classify Snippets",
+							"Language Name");
 					dialog.create();
 					if (dialog.open() == Window.OK) {
-						  String languageName = dialog.getLanguageName();
-						  languagesCombo.add(languageName, languagesCombo.getItemCount() - 1);
-						  languagesCombo.select(languagesCombo.indexOf(languageName));
-					} 
+						String languageName = dialog.getLanguageName();
+						languagesCombo.add(languageName,
+								languagesCombo.getItemCount() - 1);
+						languagesCombo.select(languagesCombo
+								.indexOf(languageName));
+					}
 				}
 			}
 		});
