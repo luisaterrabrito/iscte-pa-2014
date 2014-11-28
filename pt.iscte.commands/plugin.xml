@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="Command" name="Command" schema="schema/Command.exsd"/>
+   <extension-point id="Action" name="Action" schema="schema/Action.exsd"/>
    <extension
          id="id1"
          name="Command"
