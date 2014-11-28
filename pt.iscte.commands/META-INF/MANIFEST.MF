@@ -4,10 +4,13 @@ Bundle-Name: Commands
 Bundle-SymbolicName: pa.iscde.commands;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Import-Package: org.osgi.framework
+Import-Package: org.eclipse.core.runtime;version="3.4.0",
+ org.osgi.framework
 Bundle-Activator: pa.iscde.commands.controllers.CommandsController
 Bundle-ActivationPolicy: lazy
 Require-Bundle: pa.iscde;bundle-version="0.1.0",
  pt.iscte.pidesco;bundle-version="0.1.0",
  org.eclipse.swt;bundle-version="3.103.1",
  org.eclipse.ui;bundle-version="3.106.0"
+Export-Package: pa.iscde.commands.internal.services,
+ pa.iscde.commands.models

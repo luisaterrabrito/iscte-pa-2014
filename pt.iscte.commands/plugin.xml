@@ -2,14 +2,63 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="Command" name="Command" schema="schema/Command.exsd"/>
-   <extension-point id="Action" name="Action" schema="schema/Action.exsd"/>
+   <extension-point id="pa.iscde.commands.action" name="Action" schema="schema/Action.exsd"/>
    <extension
          id="id1"
-         name="Command"
+         name="Commands"
          point="pt.iscte.pidesco.view">
       <view
             class="pa.iscde.commands.external.services.CommandView">
       </view>
+   </extension>
+   <extension
+         id="ActionNewCommand"
+         name="ActionNewCommand"
+         point="pa.iscde.commands.action">
+      <action
+            class="pa.iscde.commands.features.actions.NewCommand"
+            label="New">
+      </action>
+   </extension>
+   <extension
+         id="ActionDeleteCommand"
+         name="ActionDeleteCommand"
+         point="pa.iscde.commands.action">
+      <action
+            class="pa.iscde.commands.features.actions.DeleteCommand"
+            label="Delete">
+      </action>
+   </extension>
+   <extension
+         id="ActionEditCommand"
+         name="ActionEditCommand"
+         point="pa.iscde.commands.action">
+      <action
+            class="pa.iscde.commands.features.actions.EditCommad"
+            label="Edit">
+      </action>
+   </extension>
+   <extension
+         id="ActionCombineCommand"
+         name="ActionCombineCommand"
+         point="pa.iscde.commands.action">
+      <action
+            class="pa.iscde.commands.features.actions.CombineCommands"
+            label="Combine">
+      </action>
+   </extension>
+   <extension
+         id="TeamCommands"
+         name="Commands"
+         point="pa.iscde.team">
+      <member
+            name="Fábio Martins"
+            user="farms">
+      </member>
+      <member
+            name="Tiago Martins"
+            user="trvms">
+      </member>
    </extension>
 
 </plugin>
