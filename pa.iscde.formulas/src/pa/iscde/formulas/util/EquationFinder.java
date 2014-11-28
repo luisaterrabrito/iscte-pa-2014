@@ -24,7 +24,7 @@ public class EquationFinder {
 		Scanner s = new Scanner(file);
 		while(s.hasNext()){
 			String line = s.nextLine();
-			if(line.contains("/") || line.contains("Math.sqrt"))
+			if(line.contains("/") || line.contains("Math.sqrt") || line.contains("Math.pow") || line.contains("*"))
 				equations.put(delimitateLine(removeA(frac(line))),lines);
 			lines++;
 		}
@@ -69,7 +69,23 @@ public class EquationFinder {
 		String result = line;
 		if(line.contains("Math.sqrt")){
 			result = result.replace("Math.sqrt", "\\sqrt");
+		}else if(line.contains("Math.pow")){
+			result = convertPow(line);
 		}
+		return result;
+	}
+
+	private String convertPow(String line) {
+		String aux = line.replace("Math.pow(", "");
+		String result = aux.split(",")[0];
+		System.out.println(aux.split(",")[1]);
+		for (int i = 1; i < aux.split(",").length; i++) {
+			
+		}
+		
+		
+		
+		
 		return result;
 	}
 
