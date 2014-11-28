@@ -193,6 +193,18 @@ public class SnippetCode extends Composite {
 		gd_saveButton.widthHint = 215;
 		saveButton.setLayoutData(gd_saveButton);
 		saveButton.setText("Save");
+		saveButton.addListener(SWT.Selection, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+				switch (event.type) {
+				case SWT.Selection:
+					fileOperations.save(snippetNameTextBox.getText(),
+							snippetCodeText.getText(), languagesCombo.getText());
+					break;
+				}
+			}
+		});
 		Button useSnippetButton = new Button(bottomButtonComposite, SWT.NONE);
 		useSnippetButton.setFont(SWTResourceManager.getFont("Segoe UI", 11,
 				SWT.NORMAL));
@@ -209,7 +221,7 @@ public class SnippetCode extends Composite {
 					// TEST ARRAY
 					ArrayList<Variable> parameters = new ArrayList<Variable>(
 							Arrays.asList(new Variable("temp1", "int"),
-									new Variable( "temp2", "double"),
+									new Variable("temp2", "double"),
 									new Variable("temp3", "String")));
 					ValueInsertionDialog dialog = new ValueInsertionDialog(
 							viewArea.getShell(),
@@ -219,11 +231,11 @@ public class SnippetCode extends Composite {
 					dialog.create();
 					if (dialog.open() == Window.OK) {
 						// TEST RESULTS
-						for (Variable variable : dialog
-								.getVariable())
+						for (Variable variable : dialog.getVariable())
 							System.out.println("Variable Name: "
-									+ variable.getName() + " Variable Type: " + variable.getType() +
-									" Value: " + variable.getValue());
+									+ variable.getName() + " Variable Type: "
+									+ variable.getType() + " Value: "
+									+ variable.getValue());
 					}
 					break;
 				}
@@ -259,11 +271,21 @@ public class SnippetCode extends Composite {
 							"Language Name");
 					dialog.create();
 					if (dialog.open() == Window.OK) {
-						String languageName = dialog.getLanguageName();
-						languagesCombo.add(languageName,
-								languagesCombo.getItemCount() - 1);
+						boolean aux = false;
+						String languageFromUser = dialog.getLanguageName();
+						for (String language : languagesCombo.getItems()) {
+							if (language.toLowerCase().equals(
+									languageFromUser.toLowerCase())) {
+								aux = true;
+								languageFromUser = language;
+								break;
+							}
+						}
+						if (!aux)
+							languagesCombo.add(languageFromUser,
+									languagesCombo.getItemCount() - 1);
 						languagesCombo.select(languagesCombo
-								.indexOf(languageName));
+								.indexOf(languageFromUser));
 					}
 				}
 			}
