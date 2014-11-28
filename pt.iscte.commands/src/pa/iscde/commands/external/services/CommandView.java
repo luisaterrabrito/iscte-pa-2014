@@ -6,14 +6,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Cursor;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -22,36 +18,38 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 
+import pa.iscde.commands.controllers.ExtensionHandler;
+import pa.iscde.commands.models.ShortKey;
+import pa.iscde.commands.utils.ExtensionPointsIDS;
+import pa.iscde.commands.utils.Labels;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
-public class CommandView implements PidescoView {
+/**
+ * @author Fábio Martins
+ * 
+ * */
+final public class CommandView implements PidescoView {
 
 	private Text textField;
 	private Tree commandTree;
 	private Composite actionsArea;
-	private Button delete;
-	private Button edit;
-	private Button newCommand;
 
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
-
 		viewArea.setLayout(new GridLayout(1, false));
 
 		createSearchField(viewArea);
 		createTreeTable(viewArea);
-		createActionButtons(viewArea);
-
+		createActionButtonsArea(viewArea);
 	}
 
 	private void createTreeTable(Composite viewArea) {
-		GridData gridData;
+		GridData gridData = new GridData();
 		commandTree = new Tree(viewArea, SWT.BORDER | SWT.H_SCROLL
 				| SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.CHECK);
 
 		commandTree.setHeaderVisible(true);
 		commandTree.setLinesVisible(true);
-		gridData = new GridData();
 		gridData.horizontalAlignment = SWT.FILL;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.verticalAlignment = SWT.FILL;
@@ -59,11 +57,11 @@ public class CommandView implements PidescoView {
 		commandTree.setLayoutData(gridData);
 
 		TreeColumn column1 = new TreeColumn(commandTree, SWT.NONE);
-		column1.setText("Description");
+		column1.setText(Labels.CONTEXTDESCRIPTION_LBL);
 		column1.setWidth(380);
 
 		TreeColumn column2 = new TreeColumn(commandTree, SWT.NONE);
-		column2.setText("Binding");
+		column2.setText(Labels.KEYESCRIPTION_LBL);
 		column2.setWidth(80);
 
 		addDataToTreeTable();
@@ -80,6 +78,9 @@ public class CommandView implements PidescoView {
 	}
 
 	private void addDataToTreeTable() {
+
+		// TODO necessario vir do model que guarada todas as kyes registadas
+
 		for (int i = 0; i < 4; i++) {
 			TreeItem item = new TreeItem(commandTree, SWT.NONE);
 
@@ -87,9 +88,12 @@ public class CommandView implements PidescoView {
 			item.setBackground(new Color(null, 240, 240, 240));
 
 			for (int j = 0; j < 4; j++) {
+				ShortKey k = new ShortKey("Command description " + j); // importante
 				TreeItem subItem = new TreeItem(item, SWT.NONE);
-				subItem.setText(new String[] { "Command description " + j,
-						"CTRL+R+" + j });
+				subItem.setData(k);
+
+				subItem.setText(new String[] { k.getDescription(),
+						k.getKeyString() });
 				subItem.getParentItem().setExpanded(true);
 			}
 		}
@@ -109,35 +113,25 @@ public class CommandView implements PidescoView {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				System.out.println(textField.getText());
-				// TODO Filtrar a lista
+				// TODO Filtrar a lista. Necessario os dados originais
 
 			}
 		});
 	}
 
-	private void createActionButtons(Composite viewArea) {
+	private void createActionButtonsArea(Composite viewArea) {
 		actionsArea = new Composite(viewArea, SWT.NONE);
 		FillLayout fillLayout = new FillLayout(SWT.HORIZONTAL);
 		fillLayout.marginHeight = 10;
-		fillLayout.marginWidth = 10;
+		fillLayout.marginWidth = 0;
 		fillLayout.spacing = 10;
 		actionsArea.setLayout(fillLayout);
 
-		delete = new Button(actionsArea, SWT.PUSH);
-		delete.setCursor(new Cursor(null, SWT.CURSOR_HAND));
-		delete.setText("Delete");
+		ExtensionHandler handler = new ExtensionHandler();
+		handler.setExtensionHandler(ExtensionPointsIDS.ACTION_ID.getID(),
+				new ActionHandler(actionsArea, commandTree));
+		handler.startProcessExtension();
 
-		edit = new Button(actionsArea, SWT.PUSH);
-		edit.setCursor(new Cursor(null, SWT.CURSOR_HAND));
-		edit.setText("Edit");
-
-		newCommand = new Button(actionsArea, SWT.PUSH);
-		newCommand.setCursor(new Cursor(null, SWT.CURSOR_HAND));
-		newCommand.setText("New");
-
-		Button combine = new Button(actionsArea, SWT.PUSH);
-		combine.setCursor(new Cursor(null, SWT.CURSOR_HAND));
-		combine.setText("Combine");
 	}
 
 	private final class SelectionListener implements Listener {
