@@ -12,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.FileLocator;
 
@@ -90,7 +92,7 @@ public class FileOperations {
 			try {
 				Path temp = Files.createDirectory(languagePath);
 				temp.toFile().setWritable(true, false);
-				
+
 			} catch (IOException e) {
 				System.err.println("Failed to Create New Directory");
 				e.printStackTrace();
@@ -99,7 +101,7 @@ public class FileOperations {
 		File fileToSave = new File(languagePath + "/" + name + ".snp");
 		if (!fileToSave.isFile()) {
 			try {
-				fileToSave.createNewFile();					
+				fileToSave.createNewFile();
 			} catch (IOException e) {
 				System.err.println("Failed to Create New File");
 				e.printStackTrace();
@@ -107,12 +109,48 @@ public class FileOperations {
 		}
 		try {
 			fileToSave.setWritable(true, false);
-			BufferedWriter bw = Files.newBufferedWriter(Paths.get(fileToSave.getPath()));
+			BufferedWriter bw = Files.newBufferedWriter(Paths.get(fileToSave
+					.getPath()));
 			bw.write(code);
 			bw.close();
 		} catch (IOException e) {
-			System.err.println("Failed to Write To New File");			
+			System.err.println("Failed to Write To New File");
 			e.printStackTrace();
 		}
+	}
+
+	public boolean checkIfNameAlreadyExists(String text) {
+		if (fileToUse != null) {
+			for (File childDirectories : snippetsRootFolder.listFiles()) {
+				for (File childFiles : childDirectories.listFiles()) {
+					if (childFiles.getName().equals(text + ".snp")
+							&& !childFiles.getName()
+									.equals(fileToUse.getName()))
+						return true;
+				}
+			}
+		} else {
+			for (File childDirectories : snippetsRootFolder.listFiles()) {
+				for (File childFiles : childDirectories.listFiles()) {
+					if (childFiles.getName().equals(text + ".snp"))
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public int numberOfNewSnippets() {
+		int aux = 0;
+		for (File childDirectories : snippetsRootFolder.listFiles()) {
+			for (File childFiles : childDirectories.listFiles()) {
+				System.out.println(childFiles.getName());
+				if (childFiles.getName().matches("New Snippet\\(\\d+\\).snp")) {
+					aux += 1;
+				}
+			}
+		}
+		System.out.println(aux);
+		return aux;
 	}
 }
