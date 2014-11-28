@@ -50,15 +50,15 @@ public class NewLanguageDialog extends TitleAreaDialog {
 	}
 
 	private void createLanguage(Composite container) {
-		Label lbtFirstName = new Label(container, SWT.NONE);
-		lbtFirstName.setText(labelText);
+		Label languageName = new Label(container, SWT.NONE);
+		languageName.setText(labelText);
 
-		GridData dataFirstName = new GridData();
-		dataFirstName.grabExcessHorizontalSpace = true;
-		dataFirstName.horizontalAlignment = GridData.FILL;
+		GridData dataLanguage = new GridData();
+		dataLanguage.grabExcessHorizontalSpace = true;
+		dataLanguage.horizontalAlignment = GridData.FILL;
 
 		languageNameText = new Text(container, SWT.BORDER);
-		languageNameText.setLayoutData(dataFirstName);
+		languageNameText.setLayoutData(dataLanguage);
 	}
 
 	@Override
