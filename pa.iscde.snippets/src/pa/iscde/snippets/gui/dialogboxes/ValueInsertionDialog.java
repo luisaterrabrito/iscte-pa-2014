@@ -1,17 +1,18 @@
 package pa.iscde.snippets.gui.dialogboxes;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -54,8 +55,14 @@ public class ValueInsertionDialog extends TitleAreaDialog {
 
 	private void createParameterList(Composite container) {
 		for (Variable variable : variables) {
-			Label parameterName = new Label(container, SWT.NONE);
-			parameterName.setText(variable.getType() + " " + variable.getName() + ":");
+			Composite nameAndTypeContainer = new Composite(container, SWT.NONE);
+			GridData nameAndTypeData = new GridData();
+			nameAndTypeContainer.setLayout(new GridLayout(2, false));
+			Label parameterType = new Label(nameAndTypeContainer, SWT.NONE);
+			parameterType.setText(variable.getType() + " ");
+			parameterType.setForeground(new Color(Display.getCurrent(), 112, 0, 112));
+			Label parameterName = new Label(nameAndTypeContainer, SWT.NONE);
+			parameterName.setText(variable.getName() + ":");
 
 			GridData dataParameter = new GridData();
 			dataParameter.grabExcessHorizontalSpace = true;
@@ -63,8 +70,9 @@ public class ValueInsertionDialog extends TitleAreaDialog {
 
 			Text parameterValueTextBox = new Text(container, SWT.BORDER);
 			parameterValueTextBox.setLayoutData(dataParameter);
-			
-			parametersValuesFromDialog.put(variable.getName(), parameterValueTextBox);
+
+			parametersValuesFromDialog.put(variable.getName(),
+					parameterValueTextBox);
 		}
 	}
 
@@ -75,9 +83,10 @@ public class ValueInsertionDialog extends TitleAreaDialog {
 
 	private void saveInput() {
 		for (String variableName : parametersValuesFromDialog.keySet()) {
-			for(Variable variable : variables){
-				if(variableName.equals(variable.getName()))
-					variable.setValue(parametersValuesFromDialog.get(variableName).getText());
+			for (Variable variable : variables) {
+				if (variableName.equals(variable.getName()))
+					variable.setValue(parametersValuesFromDialog.get(
+							variableName).getText());
 			}
 		}
 
