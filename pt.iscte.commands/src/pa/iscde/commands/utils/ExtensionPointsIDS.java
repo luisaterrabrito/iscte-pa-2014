@@ -2,7 +2,7 @@ package pa.iscde.commands.utils;
 
 public enum ExtensionPointsIDS {
 
-	ACTION_ID("pa.iscde.commands.action"), COMMAND_ID("Command");
+	ACTION_ID("pa.iscde.commands.action"), COMMAND_ID("pa.iscde.commands.command");
 
 	private String ID;
 

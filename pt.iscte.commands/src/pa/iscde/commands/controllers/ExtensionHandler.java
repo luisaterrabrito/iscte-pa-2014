@@ -16,24 +16,19 @@ final public class ExtensionHandler {
 
 		/**
 		 * This method indicates how the extension point will be processed.
-		 * <p>
-		 * For each extension point of the same type as the extension ID, is
-		 * called once.
-		 * </p>
+		 * For each extension point of the same type as the extension ID, is called once.
 		 * 
-		 * @param extension
-		 *            the extension point class.
+		 * @param extension  - the extension point class.
 		 * 
-		 * @throws CoreException
-		 *             if you try to get unknown classes from the extension
-		 *             point
+		 * @throws CoreException  - if you try to get unknown classes from the extension point
 		 * */
 		public abstract void processExtension(IConfigurationElement extension)
 				throws CoreException;
 	}
-
+	
 	private String extensionID;
 	private Handler handler;
+
 
 	/**
 	 * @param extensionID
@@ -46,7 +41,7 @@ final public class ExtensionHandler {
 		this.extensionID = extensionID;
 		this.handler = handler;
 	}
-
+	
 	public void startProcessExtension() {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] config = registry

@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import pa.iscde.commands.models.ShortKey;
-
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
@@ -29,8 +29,8 @@ final public class CommandDataDecorator {
 	 * 
 	 * @return {@link List} A unmodifiable list list with the commands
 	 * */
-	public List<ShortKey> getSelectedCommands() {
-		LinkedList<ShortKey> kyes = new LinkedList<ShortKey>();
+	public List<CommandKey> getSelectedCommands() {
+		LinkedList<CommandKey> kyes = new LinkedList<CommandKey>();
 
 		TreeItem item = null;
 		for (int i = 0; i < tree.getItems().length; i++) {
@@ -41,10 +41,10 @@ final public class CommandDataDecorator {
 		return Collections.unmodifiableList(kyes);
 	}
 
-	private void validItem(LinkedList<ShortKey> kyes, TreeItem item) {
+	private void validItem(LinkedList<CommandKey> kyes, TreeItem item) {
 		for (int j = 0; j < item.getItems().length; j++) {
 			if (item.getItems()[j].getChecked()) {
-				kyes.add((ShortKey) item.getItems()[j].getData());
+				kyes.add(((CommandDefinition) item.getItems()[j].getData()).getCommandKey());
 			}
 		}
 	}
@@ -52,23 +52,82 @@ final public class CommandDataDecorator {
 	/**
 	 * Remove the command
 	 * 
-	 * @param key
-	 *            The shortkey to remove
+	 * @param key  -   The CommandKey to remove
 	 * */
-	public void deleteCommand(ShortKey key) {
-		// TODO apagar a shot key da lista onde a informação sobre todas as shorts keys esta guadada
-		// TODO actualiza na tree
+	public void deleteCommand(CommandKey key) {
+		
+		
+		Point keyInTree = findKeyInTree(CommandWarehouse.getCommandDefinition(key));
+		tree.getItem(keyInTree.x).getItem(keyInTree.y).dispose();
+		if(CommandWarehouse.removeCommandKey(key))
+			System.out.println("Command name '" + key.getCommandName() + "' was removed successfully");
+		
 	}
+	
+	
+	private Point findKeyInTree(CommandDefinition key){
+		
+		int i = 0;
+		for(TreeItem tree_ : tree.getItems()){
+			int j = 0;
+			for(TreeItem subTree : tree_.getItems()){
+				
+				if(subTree.getData().equals(key)){
+					return new Point(i, j);
+				}
+				j++;
+			}
+			i++;
+		}
+		return null;
+	}
+	
+	
+	private int findContextInTree(String key){
+		
+		int i = 0;
+		for(TreeItem treeContext : tree.getItems()){
+			
+			if(treeContext.getData().toString().equals(key.toString()))
+				return i;
+			i++;
+		}
+		return -1;
+	}
+	
 
 	/**
 	 * Insert a new command
 	 * 
-	 * @param key
-	 *            the shortkey ro insert
+	 * @param cmdDef  -   the CommandDefinition to insert
 	 * */
-	public void insertCommand(ShortKey key) {
-		// TODO inserir uma nova short key onde a informação sobre todas as shorts keys esta guadada
-		// TODO actualiza na tree
+	public boolean insertCommand(CommandDefinition cmdDef) {
+
+		
+		int i = findContextInTree(cmdDef.getContext());
+		if(i != -1)
+		{
+			CommandDefinition insertResult = CommandWarehouse.insertCommandDefinition(cmdDef.getCommandKey(), cmdDef);
+			
+			if(insertResult == null && CommandWarehouse.containsKey(cmdDef.getCommandKey())){
+		
+				TreeItem subItem = new TreeItem(tree.getItem(i), SWT.NONE);
+				subItem.setData(cmdDef);
+				subItem.setText(new String[] { cmdDef.getCommandKey().getCommandName(), 
+						cmdDef.getDescription() , cmdDef.getCommandKey().toString() });
+				subItem.getParentItem().setExpanded(true);
+				
+				System.out.println("Command name '" + cmdDef.getCommandKey().getCommandName() + "' was successfully added");
+				return true;
+				
+			}else{
+				System.out.println("Command name '" + cmdDef.getCommandKey().getCommandName() + "' wasn't added, there was a problem, "
+						+ "maybe there is already a command with the same binding for the same context!");
+			}
+			
+		}
+		return false;
+		
 	}
 
 	/**
@@ -76,14 +135,14 @@ final public class CommandDataDecorator {
 	 * 
 	 * @return {@link List} A unmodifiable list list with the commands
 	 * */
-	public List<ShortKey> getAllCommands() {
-		LinkedList<ShortKey> kyes = new LinkedList<ShortKey>();
+	public List<CommandDefinition> getAllCommands() {
+		LinkedList<CommandDefinition> kyes = new LinkedList<CommandDefinition>();
 
 		TreeItem item = null;
 		for (int i = 0; i < tree.getItems().length; i++) {
 			item = tree.getItems()[i];
 			for (int j = 0; j < item.getItems().length; j++) {
-				kyes.add((ShortKey) item.getItems()[j].getData());
+				kyes.add((CommandDefinition) item.getItems()[j].getData());
 			}
 		}
 

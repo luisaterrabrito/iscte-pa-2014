@@ -7,7 +7,7 @@ public class EditCommad implements Action {
 
 	@Override
 	public void action(CommandDataDecorator data) {
-		// TODO Auto-generated method stub
+
 		System.out.println("EditCommad.action()");
 
 	}

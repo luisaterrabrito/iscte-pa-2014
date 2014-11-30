@@ -1,7 +1,8 @@
 package pa.iscde.commands.external.services;
 
+import java.util.List;
 import java.util.Map;
-
+import java.util.Set;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -19,7 +20,9 @@ import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 
 import pa.iscde.commands.controllers.ExtensionHandler;
-import pa.iscde.commands.models.ShortKey;
+import pa.iscde.commands.models.CommandDefinition;
+import pa.iscde.commands.models.CommandWarehouse;
+import pa.iscde.commands.models.ViewWarehouse;
 import pa.iscde.commands.utils.ExtensionPointsIDS;
 import pa.iscde.commands.utils.Labels;
 import pt.iscte.pidesco.extensibility.PidescoView;
@@ -33,17 +36,24 @@ final public class CommandView implements PidescoView {
 	private Text textField;
 	private Tree commandTree;
 	private Composite actionsArea;
+	
+	public static Composite viewArea;
 
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		viewArea.setLayout(new GridLayout(1, false));
-
 		createSearchField(viewArea);
 		createTreeTable(viewArea);
 		createActionButtonsArea(viewArea);
+		
+		//This Method can only be called here, because it's when there are already WorkbenchPages and stuff related to the UI
+		ViewWarehouse.loadAllViews();
+		
 	}
 
 	private void createTreeTable(Composite viewArea) {
+		
+		
 		GridData gridData = new GridData();
 		commandTree = new Tree(viewArea, SWT.BORDER | SWT.H_SCROLL
 				| SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.CHECK);
@@ -55,14 +65,20 @@ final public class CommandView implements PidescoView {
 		gridData.verticalAlignment = SWT.FILL;
 		gridData.grabExcessVerticalSpace = true;
 		commandTree.setLayoutData(gridData);
+		
+		
 
 		TreeColumn column1 = new TreeColumn(commandTree, SWT.NONE);
 		column1.setText(Labels.CONTEXTDESCRIPTION_LBL);
-		column1.setWidth(380);
+		column1.setWidth(300);
 
 		TreeColumn column2 = new TreeColumn(commandTree, SWT.NONE);
-		column2.setText(Labels.KEYESCRIPTION_LBL);
-		column2.setWidth(80);
+		column2.setText(Labels.COMMANDDESCRIPTION);
+		column2.setWidth(200);
+		
+		TreeColumn column3 = new TreeColumn(commandTree, SWT.NONE);
+		column3.setText(Labels.KEYESCRIPTION_LBL);
+		column3.setWidth(100);
 
 		addDataToTreeTable();
 
@@ -79,24 +95,27 @@ final public class CommandView implements PidescoView {
 
 	private void addDataToTreeTable() {
 
-		// TODO necessario vir do model que guarada todas as kyes registadas
+		Set<String> contexts = CommandWarehouse.getCommandsContext();
 
-		for (int i = 0; i < 4; i++) {
+		for(String context : contexts){
 			TreeItem item = new TreeItem(commandTree, SWT.NONE);
-
-			item.setText(new String[] { "Context " + i, "" });
+			item.setData(context);
+			item.setText(new String[] { context , "" });
 			item.setBackground(new Color(null, 240, 240, 240));
-
-			for (int j = 0; j < 4; j++) {
-				ShortKey k = new ShortKey("Command description " + j); // importante
+			
+			List<CommandDefinition> commandsDefinitionList = CommandWarehouse.getCommandByContext(context);
+			
+			for(CommandDefinition command : commandsDefinitionList)
+			{
 				TreeItem subItem = new TreeItem(item, SWT.NONE);
-				subItem.setData(k);
-
-				subItem.setText(new String[] { k.getDescription(),
-						k.getKeyString() });
+				subItem.setData(command);
+				subItem.setText(new String[] { command.getCommandKey().getCommandName(), 
+						command.getDescription() , command.getCommandKey().toString() });
 				subItem.getParentItem().setExpanded(true);
 			}
+			
 		}
+		
 	}
 
 	private void createSearchField(Composite viewArea) {

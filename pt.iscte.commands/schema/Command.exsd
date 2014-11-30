@@ -17,6 +17,9 @@
          </appinfo>
       </annotation>
       <complexType>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <element ref="command"/>
+         </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
@@ -46,6 +49,20 @@
 
    <element name="command">
       <complexType>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
          <attribute name="ctrl_key" type="boolean" use="required">
             <annotation>
                <documentation>
@@ -73,7 +90,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":pt.iscte.pidesco.extensibility.PidescoView"/>
+                  <meta.attribute kind="identifier" basedOn="pt.iscte.pidesco.view/@point"/>
                </appinfo>
             </annotation>
          </attribute>
