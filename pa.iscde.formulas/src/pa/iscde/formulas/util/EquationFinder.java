@@ -61,7 +61,7 @@ public class EquationFinder {
 
 	private String delimitateLine(String line) {
 		//x = (-b+(Math.sqrt(root)))/(2*a); ----> x = \\frac{-b+\\sqrt{root}}{2*a}
-		String result = line.replace("(", "{").replace(")","}").replace("String", "").replace("int", "").replace(Character.toString(aux1), "").replace(";","").replace("return", "");
+		String result = line.replace("(", "{").replace(")","}").replace("String", "").replace("int", "").replace(Character.toString(aux1), "").replace(";","").replace("return", "").replace("and", "").replace("Math.PI", "\\pi");
 		return convertMath(result);
 	}
 	
@@ -69,23 +69,16 @@ public class EquationFinder {
 		String result = line;
 		if(line.contains("Math.sqrt")){
 			result = result.replace("Math.sqrt", "\\sqrt");
-		}else if(line.contains("Math.pow")){
+		}
+		if(line.contains("Math.pow")){
 			result = convertPow(line);
 		}
 		return result;
 	}
 
 	private String convertPow(String line) {
-		String aux = line.replace("Math.pow(", "");
-		String result = aux.split(",")[0];
-		System.out.println(aux.split(",")[1]);
-		for (int i = 1; i < aux.split(",").length; i++) {
-			
-		}
-		
-		
-		
-		
+		String aux = line.replace("Math.pow", "");
+		String result = aux.split(",")[0]+"^"+aux.split(",")[1];
 		return result;
 	}
 
@@ -94,7 +87,6 @@ public class EquationFinder {
 	}
 	
 	public static String frac(String str) {
-		
 		if(!str.contains("/"))
 			return str;
 		

@@ -211,7 +211,7 @@ public class FormulasView implements PidescoView {
 
 
 	private static void clearFormulasBoard() {
-		if(!formulasBoard.isEmpty()){
+		if(formulasBoard!=null && !formulasBoard.isEmpty()){
 			for (Label label : formulasBoard.keySet()) {
 				label.dispose();
 			}
@@ -220,6 +220,7 @@ public class FormulasView implements PidescoView {
 			}
 			formulasBoard.clear();
 		}
+		viewArea.pack();
 	}
 
 
@@ -239,13 +240,15 @@ public class FormulasView implements PidescoView {
 	
 
 	public static void setDrawEquaitonMode() throws IOException {
+		clearFormulasBoard();
 		drawFormulas = true;
 		buttons.clear();
 		tabFolder.dispose();
 		formulasBoard = new HashMap<Label,Text>();
-		clearFormulasBoard();
+		
 		//viewArea.setBackground(new Color(viewArea.getDisplay(), 255,255,255));
 		EquationFinder eq = new EquationFinder(fileTarget);
+		
 		for (String equation : eq.getEquations().keySet()) {
 			DrawEquationUtil formulaImage = new DrawEquationUtil(viewArea,equation); 
 			Text text = new Text(viewArea, SWT.NONE);
