@@ -13,7 +13,7 @@
    </extension>
    <extension
          id="AMinhaVista"
-         name="Oi"
+         name="Outline"
          point="pt.iscte.pidesco.view">
       <view
             class="pa.iscde.outline.view.AMinhaView">
