@@ -1,9 +1,5 @@
 package pa.iscde.commands.controllers;
 
-
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -11,7 +7,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import pa.iscde.commands.internal.services.Command;
+import pa.iscde.commands.external.services.CommandHandler;
 import pa.iscde.commands.models.CommandDefinition;
 import pa.iscde.commands.models.CommandKey;
 import pa.iscde.commands.models.CommandWarehouse;
@@ -22,7 +18,11 @@ public class CommandsController implements BundleActivator {
 	@Override
 	public void start(BundleContext context) throws Exception {
 
-		loadCommandsExtensions();
+		
+		ExtensionHandler handler = new ExtensionHandler();
+		handler.setExtensionHandler(ExtensionPointsIDS.COMMAND_ID.getID(),
+				new CommandHandler());
+		handler.startProcessExtension();
 		
 		
 		Display.getDefault().addFilter(SWT.KeyDown, new Listener() {
@@ -69,44 +69,6 @@ public class CommandsController implements BundleActivator {
 
 	}
 
-	private void loadCommandsExtensions() {
-
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] config = registry.getConfigurationElementsFor(ExtensionPointsIDS.COMMAND_ID.getID());
-
-		for (IConfigurationElement e : config) {
-
-			try {
-				
-			
-				String name = e.getAttribute("name");
-				String ctrl_key = e.getAttribute("ctrl_key");
-				String alt_key = e.getAttribute("alt_key");
-				String key = e.getAttribute("key");
-				String view = e.getAttribute("context_view");
-				String description = e.getAttribute("description");
-				Command command = (Command) e.createExecutableExtension("command_implementation");
-				
-				CommandKey cmdKey = new CommandKey(name, view, Boolean.valueOf(ctrl_key), Boolean.valueOf(alt_key), key.charAt(0));
-				CommandDefinition replacedValue = CommandWarehouse.insertCommandDefinition(cmdKey, new CommandDefinition(cmdKey, view, command, description));
-				
-				if(replacedValue != null)
-					System.err.println("WARNING: While loading the commands extensions, the command with the name '" + replacedValue.getCommandKey().getCommandName() + "' got replaced by the new command '"+ name + "',  if you don't want it to happen again please give unique keys combinations to your commands");
-				
-				
-			}catch(Exception exp){
-					System.err.println("ERROR: There was a error loading the commands extensions in Commands Component, "
-							+ "you or some group have choosed the wrong type classes for the extensions elements.");
-			}
-			
-			
-			
-		}
-		
-
-
-
-	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
