@@ -16,5 +16,13 @@
             user="ljgds">
       </member>
    </extension>
+   <extension
+         id="configurator"
+         name="configurator"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.configurator.view.ConfiguratorView">
+      </view>
+   </extension>
 
 </plugin>
