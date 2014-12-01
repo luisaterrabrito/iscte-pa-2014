@@ -1,0 +1,5 @@
+	private double PresentValue(double ratePercentage, double futureValue, int n ) {
+		double rate = (ratePercentage/100);
+		double aux = Math.pow((1+rate), n);
+		return (futureValue/aux);
+		}
