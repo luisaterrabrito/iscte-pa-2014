@@ -40,7 +40,7 @@ public class ConfiguratorView implements PidescoView{
 		graph= new Graph(viewArea, SWT.NONE);
 		paintRunningComponents();
 		dependencies = controller.getDependencies(runningComponents);
-		paintGivenDependencies(dependencies);
+		paintGivenDependencies();
 
 		
 		
@@ -55,9 +55,9 @@ public class ConfiguratorView implements PidescoView{
 		graph.applyLayout();
 		
 	}
-	private void paintGivenDependencies(LinkedList<Dependency> dependenciesToPaint) {
+	private void paintGivenDependencies() {
 		// TODO Auto-generated method stub
-		for (Dependency dependency : dependenciesToPaint) {
+		for (Dependency dependency : dependencies) {
 			GraphNode main=componentNode.get(dependency.getMainComponent());
 			GraphNode dependant=componentNode.get(dependency.getDependantComponent());
 			GraphConnection conn=new GraphConnection(graph, ZestStyles.CONNECTIONS_DIRECTED, dependant, main);
