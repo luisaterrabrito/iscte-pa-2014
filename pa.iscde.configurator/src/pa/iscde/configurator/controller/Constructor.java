@@ -52,12 +52,10 @@ public class Constructor {
 		for (IExtension ext : extensions) {
 			IContributor contributor = ext.getContributor();
 
-			if (getComponentByName(components, mainContributor.getName()) != null
-					&& getComponentByName(components, contributor.getName()) != null) {
 				dependenciesList.add(new Dependency(getComponentByName(
 						components, mainContributor.getName()),
 						getComponentByName(components, contributor.getName())));
-			}
+			
 			IExtensionPoint otherCompExtPoints = reg
 					.getExtensionPoint(contributor.getName());
 			if (otherCompExtPoints != null) {
@@ -66,15 +64,11 @@ public class Constructor {
 				for (IExtension iExtension : otherCompExtensions) {
 					IContributor otherContributors = iExtension
 							.getContributor();
-					if (getComponentByName(components, contributor.getName()) != null
-							&& getComponentByName(components,
-									otherContributors.getName()) != null) {
-
 						dependenciesList.add(new Dependency(getComponentByName(
 								components, contributor.getName()),
 								getComponentByName(components,
 										otherContributors.getName())));
-					}
+					
 				}
 			}
 		}
