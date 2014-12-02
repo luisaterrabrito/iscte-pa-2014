@@ -2,6 +2,7 @@ package pa.iscde.formulas.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Files;
 import java.util.Scanner;
 
 import org.eclipse.core.resources.IWorkspace;
@@ -16,6 +17,12 @@ public class FileReaderUtil {
 		IWorkspaceRoot root = workspace.getRoot();
 		IPath location = root.getLocation();
 		IPath append = location.append("formulas");
+		
+		if(!root.getFolder(append).exists()){
+			File directory = append.toFile();
+			directory.mkdir();
+		}
+		
 		File dir = append.toFile();
 		File[] listFiles = dir.listFiles();
 		String allFormulas = "";
@@ -37,8 +44,6 @@ public class FileReaderUtil {
 		}
 		}else
 			return null;
-
-		System.out.println("all formulas " + allFormulas);
 		return allFormulas;
 	}
 }
