@@ -1,16 +1,21 @@
 package pt.iscte.pidesco.documentation.internal;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import pt.iscte.pidesco.documentation.service.ITagComment;
 
 public class ClassDoc {
-
+	
+	public static ArrayList<String> validClassTags = new ArrayList<String>(Arrays.asList("@autor", "@versao"));
+	private static ClassDoc instance;
+	
 	private String classFullName;
 	private String comment;
 	private List<ITagComment> tags;
 	private List<MethodDoc> listMethods;
-
+	
 	public String getClassFullName() {
 		return classFullName;
 	}
@@ -41,6 +46,10 @@ public class ClassDoc {
 	
 	public void setListMethods(List<MethodDoc> listMethods) {
 		this.listMethods = listMethods;
+	}
+	
+	public static ClassDoc getInstance() {
+		return instance;
 	}
 
 }

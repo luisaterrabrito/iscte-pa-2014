@@ -28,6 +28,8 @@ import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
+import pt.iscte.pidesco.documentation.internal.TagCommentImpl;
+
 public class DocumentationView implements PidescoView {
 
 	private static DocumentationView instance;
@@ -53,6 +55,7 @@ public class DocumentationView implements PidescoView {
 
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
+		
 		instance = this;
 		
 		classDoc = new ClassDoc();
@@ -80,6 +83,7 @@ public class DocumentationView implements PidescoView {
 	}
 
 	public void draw() {
+		
 		this.cleanView();		
 		ASTVisitor visitor = new ASTVisitor() {
 
