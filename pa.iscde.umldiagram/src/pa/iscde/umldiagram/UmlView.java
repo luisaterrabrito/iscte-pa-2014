@@ -14,6 +14,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.zest.core.widgets.CGraphNode;
 import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.core.widgets.GraphConnection;
 import org.eclipse.zest.core.widgets.GraphNode;
@@ -41,7 +42,7 @@ public class UmlView implements PidescoView {
 	private ServiceReference<JavaEditorServices> ref = context.getServiceReference(JavaEditorServices.class);
 	private JavaEditorServices javaServices = context.getService(ref);
 	private ArrayList<Node> nodes = new ArrayList<Node>();
-	
+	 
 	public UmlView() {
 		umlView = this;
 	}
@@ -92,14 +93,12 @@ public class UmlView implements PidescoView {
 	private void connectUml() {
 		for(Node  node1 : nodes){
 			for(Node  node2 : nodes){
-				for(String f: node1.getFields()){
-					System.out.println(f);
-					if(f.equals(node2.getName()) && node1!=node2){
+				for(String ci: node1.getClassInstances()){
+					if(ci.equals(node2.getName()) && node1!=node2){
 						new GraphConnection(umlGraph, ZestStyles.CONNECTIONS_DIRECTED, node1.getNode(), node2.getNode());
 					}
 				}
 				//if(node1.getNode().getText().contains(node2.getName()) && node1!=node2)
-					
 			}
 		}
 	}
@@ -116,27 +115,37 @@ public class UmlView implements PidescoView {
 	}
 	
 	private void paintClass(SourceElement classes, UmlVisitor visitor) {
-		GraphNode node = new GraphNode(umlGraph, SWT.NONE);
+		UMLClassFigure figure = new UMLClassFigure(classes.getName().replace(".java", ""));
+		CGraphNode node = new CGraphNode(umlGraph, SWT.NONE, figure);
+		
+		//GraphNode node = new GraphNode(umlGraph, SWT.NONE);
 		node.setText("Class "+classes.getName().replace(".java", "")+"\n");
 		Node n = new Node(node, classes.getName().replace(".java", ""), classes);
+		
 		nodes.add(n);
-		node.setText(node.getText()+"---------------------------"+"\n");
+		//node.setText(node.getText()+"---------------------------"+"\n");
+		//for(ClassInstanceCreation ins : )
 		for (int i = 0; i < visitor.getFields().size(); i++) {
 			Object field = visitor.getFields().get(i).fragments().get(0);
 			String fieldName = ((VariableDeclarationFragment) field).getName().toString();
-			node.setText(node.getText()+fieldName+" :"+visitor.getFields().get(i).getType()+"\n");
+			//node.setText(node.getText()+fieldName+" :"+visitor.getFields().get(i).getType()+"\n");
 			n.addField(visitor.getFields().get(i).getType().toString());
+			figure.addNameField(fieldName+" :"+visitor.getFields().get(i).getType());
 		}
-		node.setText(node.getText()+"___________________________"+"\n");
+		//figure.addNameField("______________________________________________");
+		//node.setText(node.getText()+"___________________________"+"\n");
 		for (int i = 0; i < visitor.getMethods().size(); i++) {
 			if(!visitor.getMethods().get(i).isConstructor()){
 				if(visitor.getMethods().get(i).getReturnType2()!=null){
-					node.setText(node.getText()+"- "+visitor.getMethods().get(i).getName()+" :"+visitor.getMethods().get(i).getReturnType2().toString()+"\n");
+					figure.addNameMethod(visitor.getMethods().get(i).getName()+" :"+visitor.getMethods().get(i).getReturnType2().toString());;
+					//node.setText(node.getText()+"- "+visitor.getMethods().get(i).getName()+" :"+visitor.getMethods().get(i).getReturnType2().toString()+"\n");
 				}else{
-					node.setText(node.getText()+"- "+visitor.getMethods().get(i).getName()+" : Void"+"\n");
+					figure.addNameMethod(visitor.getMethods().get(i).getName()+" : Void");
+					//node.setText(node.getText()+"- "+visitor.getMethods().get(i).getName()+" : Void"+"\n");
 				}
 			}
 		}
+		n.setClassInstances(visitor.getClassInstances());
 	}
 
 	private void paintEnum(UmlVisitor visitor) {
