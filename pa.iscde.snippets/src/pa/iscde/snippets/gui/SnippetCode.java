@@ -99,7 +99,8 @@ public class SnippetCode extends Composite {
 		snippetNameTextBox = new Text(snippetNameComposite, SWT.BORDER);
 		snippetNameTextBox.setFont(SWTResourceManager.getFont("Segoe UI", 11,
 				SWT.NORMAL));
-		snippetNameTextBox.setText("New Snippet(" + fileOperations.numberOfNewSnippet() + ")");
+		snippetNameTextBox.setText("New Snippet("
+				+ fileOperations.numberOfNewSnippet() + ")");
 		snippetNameTextBox.setBounds(103, 1, 126, 25);
 
 		Composite composite = new Composite(
@@ -127,30 +128,7 @@ public class SnippetCode extends Composite {
 		editButton.setFont(SWTResourceManager.getFont("Segoe UI", 11,
 				SWT.NORMAL));
 		editButton.setText("Edit");
-		editButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (editButton.getSelection()) {
-					snippetNameTextBox.setEditable(true);
-					snippetCodeText.setEditable(true);
-					languagesCombo.setEnabled(true);
-				} else {
-					snippetNameTextBox.setEditable(false);
-					/*
-					 * Uncomment if Rui wins argument
-					 * snippetNameTextBox.setBackground(new Color(Display
-					 * .getCurrent(), 255, 255, 255));
-					 */
-					snippetCodeText.setEditable(false);
-					/*
-					 * Uncomment if Rui wins argument
-					 * snippetCodeText.setBackground(new Color(Display
-					 * .getCurrent(), 255, 255, 255));
-					 */
-					languagesCombo.setEnabled(false);
-				}
-			}
-		});
+		editButton.addSelectionListener(editButtonListenerCreator());
 
 		Composite snippetCodeTextComposite = new Composite(this, SWT.None);
 		snippetCodeTextComposite.setLayout(new FillLayout(SWT.HORIZONTAL
@@ -162,26 +140,7 @@ public class SnippetCode extends Composite {
 		snippetCodeText.setText("Insert Code Here...");
 		snippetCodeText.setFont(SWTResourceManager.getFont("Segoe UI", 11,
 				SWT.ITALIC));
-		snippetCodeText.addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				if (snippetCodeText.getText().equals("")) {
-					snippetCodeText.setFont(SWTResourceManager.getFont(
-							"Segoe UI", 11, SWT.ITALIC));
-					snippetCodeText.setText("Insert Code Here...");
-				}
-			}
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				if (snippetCodeText.getText().equals("Insert Code Here...")) {
-					snippetCodeText.setFont(SWTResourceManager.getFont(
-							"Segoe UI", 11, SWT.NORMAL));
-					snippetCodeText.setText("");
-				}
-			}
-		});
+		snippetCodeText.addFocusListener(focusListenerCreator());
 		GridData snippetCodeTextLayoutGridData = new GridData(SWT.FILL,
 				SWT.FILL, true, true, 1, 1);
 		snippetCodeTextLayoutGridData.widthHint = 200;
@@ -200,24 +159,7 @@ public class SnippetCode extends Composite {
 		gd_closeButton.widthHint = 215;
 		discardButton.setLayoutData(gd_closeButton);
 		discardButton.setText("Discard");
-		discardButton.addListener(SWT.Selection, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				switch (event.type) {
-				case SWT.Selection:
-					boolean aux = MessageDialog.openConfirm(
-							viewArea.getShell(), "Discard",
-							"Changes you may have made will be discarded. Do you wish to exit?");
-					if (aux) {
-						dispose();
-						SnippetsView.getInstance().createExplorer();
-						System.out.println("Button pressed");
-					}
-					break;
-				}
-			}
-		});
+		discardButton.addListener(SWT.Selection, addButtonListenerCreator());
 		Button saveButton = new Button(bottomButtonComposite, SWT.NONE);
 		saveButton.setFont(SWTResourceManager.getFont("Segoe UI", 11,
 				SWT.NORMAL));
@@ -226,37 +168,7 @@ public class SnippetCode extends Composite {
 		gd_saveButton.widthHint = 215;
 		saveButton.setLayoutData(gd_saveButton);
 		saveButton.setText("Save");
-		saveButton.addListener(SWT.Selection, new Listener() {
-
-			@Override
-			public void handleEvent(Event event) {
-				switch (event.type) {
-				case SWT.Selection:
-					if (snippetNameTextBox.getText().replaceAll("\\s", "")
-							.length() == 0) {
-						MessageDialog.openWarning(viewArea.getShell(),
-								"Warning",
-								"Name field must not be empty. Please change it.");
-						snippetNameTextBox.setText("");
-					} else if (fileOperations
-							.checkIfNameAlreadyExists(snippetNameTextBox
-									.getText())) {
-						MessageDialog.openWarning(
-								viewArea.getShell(),
-								"Warning",
-								"The name you choose is already attributed to another snippet. Please change it.");
-					} else {
-						fileOperations.save(snippetNameTextBox.getText(),
-								snippetCodeText.getText(),
-								languagesCombo.getText());
-						MessageDialog.openInformation(viewArea.getShell(),
-								"Info",
-								"File succesfully saved.");
-					}
-					break;
-				}
-			}
-		});
+		saveButton.addListener(SWT.Selection, saveButtonListenerCreator());
 		Button useSnippetButton = new Button(bottomButtonComposite, SWT.NONE);
 		useSnippetButton.setFont(SWTResourceManager.getFont("Segoe UI", 11,
 				SWT.NORMAL));
@@ -265,29 +177,8 @@ public class SnippetCode extends Composite {
 		gd_useSnippetButton.widthHint = 215;
 		useSnippetButton.setLayoutData(gd_useSnippetButton);
 		useSnippetButton.setText("Use");
-		useSnippetButton.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				switch (event.type) {
-				case SWT.Selection:
-					HashMap<String, Variable> variables = getVariables();
-					if (!variables.isEmpty()) {
-						ValueInsertionDialog dialog = new ValueInsertionDialog(
-								viewArea.getShell(),
-								"Value Insertion",
-								"Please fill the boxes with the appropriate values",
-								variables);
-						dialog.create();
-						if (dialog.open() == Window.OK) {
-							insertSnippet(variables);
-						}
-					} else {
-						insertSnippet();
-					}
-					break;
-				}
-			}
-		});
+		useSnippetButton.addListener(SWT.Selection,
+				useSnippetButtonListenerCreator());
 		bottomButtonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
 				true, true, 1, 1));
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -309,11 +200,37 @@ public class SnippetCode extends Composite {
 					.size()]));
 			languagesCombo.add("Create New Language...");
 		}
-		languagesCombo.addSelectionListener(new SelectionAdapter() {
+		languagesCombo
+				.addSelectionListener(languagesComboBoxSelectionListenerCreator(viewArea));
+	}
+
+	private void setSnippetTextAndName() {
+		snippetNameTextBox.setText(fileOperations.getFileName());
+		String code = "";
+		for (String s : fileOperations.getFileCode())
+			code += s + "\n";
+		snippetCodeText.setText(code);
+	}
+
+	private void setSelectedFileLanguage() {
+		languagesCombo.select(languages.indexOf(fileOperations.getFileType()));
+	}
+
+	private void selectDefaultLanguage() {
+		int index = languages.indexOf("Unknown");
+		if (index != -1) {
+			languagesCombo.select(index);
+		}
+	}
+
+	/* Listener Section */
+	private SelectionAdapter languagesComboBoxSelectionListenerCreator(
+			final Composite viewArea) {
+		return new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				if (languagesCombo.getText().equals("Create New Language...")) {
-					NewLanguageDialog dialog = new NewLanguageDialog(viewArea
-							.getShell(), "Create New Language",
+					NewLanguageDialog dialog = new NewLanguageDialog(
+							viewArea.getShell(), "Create New Language",
 							"Create A New Language to classify Snippets",
 							"Language Name");
 					dialog.create();
@@ -336,27 +253,141 @@ public class SnippetCode extends Composite {
 					}
 				}
 			}
-		});
+		};
 	}
 
-	private void setSnippetTextAndName() {
-		snippetNameTextBox.setText(fileOperations.getFileName());
-		String code = "";
-		for (String s : fileOperations.getFileCode())
-			code += s + "\n";
-		snippetCodeText.setText(code);
+	private Listener useSnippetButtonListenerCreator() {
+		return new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				switch (event.type) {
+				case SWT.Selection:
+					HashMap<String, Variable> variables = getVariables();
+					if (!variables.isEmpty()) {
+						ValueInsertionDialog dialog = new ValueInsertionDialog(
+								viewArea.getShell(),
+								"Value Insertion",
+								"Please fill the boxes with the appropriate values",
+								variables);
+						dialog.create();
+						if (dialog.open() == Window.OK) {
+							insertSnippet(variables);
+						}
+					} else {
+						insertSnippet();
+					}
+					break;
+				}
+			}
+		};
 	}
 
-	private void setSelectedFileLanguage() {
-		languagesCombo.select(languages.indexOf(fileOperations.getFileType()));
+	private Listener saveButtonListenerCreator() {
+		return new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+				switch (event.type) {
+				case SWT.Selection:
+					if (snippetNameTextBox.getText().replaceAll("\\s", "")
+							.length() == 0) {
+						MessageDialog
+								.openWarning(viewArea.getShell(), "Warning",
+										"Name field must not be empty. Please change it.");
+						snippetNameTextBox.setText("");
+					} else if (fileOperations
+							.checkIfNameAlreadyExists(snippetNameTextBox
+									.getText())) {
+						MessageDialog
+								.openWarning(
+										viewArea.getShell(),
+										"Warning",
+										"The name you choose is already attributed to another snippet. Please change it.");
+					} else {
+						fileOperations.save(snippetNameTextBox.getText(),
+								snippetCodeText.getText(),
+								languagesCombo.getText());
+						MessageDialog.openInformation(viewArea.getShell(),
+								"Info", "File succesfully saved.");
+					}
+					break;
+				}
+			}
+		};
 	}
 
-	private void selectDefaultLanguage() {
-		int index = languages.indexOf("Unknown");
-		if (index != -1) {
-			languagesCombo.select(index);
-		}
+	private SelectionAdapter editButtonListenerCreator() {
+		return new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (editButton.getSelection()) {
+					snippetNameTextBox.setEditable(true);
+					snippetCodeText.setEditable(true);
+					languagesCombo.setEnabled(true);
+				} else {
+					snippetNameTextBox.setEditable(false);
+					/*
+					 * Uncomment if Rui wins argument
+					 * snippetNameTextBox.setBackground(new Color(Display
+					 * .getCurrent(), 255, 255, 255));
+					 */
+					snippetCodeText.setEditable(false);
+					/*
+					 * Uncomment if Rui wins argument
+					 * snippetCodeText.setBackground(new Color(Display
+					 * .getCurrent(), 255, 255, 255));
+					 */
+					languagesCombo.setEnabled(false);
+				}
+			}
+		};
 	}
+
+	private Listener addButtonListenerCreator() {
+		return new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+				switch (event.type) {
+				case SWT.Selection:
+					boolean aux = MessageDialog
+							.openConfirm(viewArea.getShell(), "Discard",
+									"Changes you may have made will be discarded. Do you wish to exit?");
+					if (aux) {
+						dispose();
+						SnippetsView.getInstance().createExplorer();
+						System.out.println("Button pressed");
+					}
+					break;
+				}
+			}
+		};
+	}
+
+	private FocusListener focusListenerCreator() {
+		return new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (snippetCodeText.getText().equals("")) {
+					snippetCodeText.setFont(SWTResourceManager.getFont(
+							"Segoe UI", 11, SWT.ITALIC));
+					snippetCodeText.setText("Insert Code Here...");
+				}
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (snippetCodeText.getText().equals("Insert Code Here...")) {
+					snippetCodeText.setFont(SWTResourceManager.getFont(
+							"Segoe UI", 11, SWT.NORMAL));
+					snippetCodeText.setText("");
+				}
+			}
+		};
+	}
+
+	/* Listener Section */
 
 	private HashMap<String, Variable> getVariables() {
 		HashMap<String, Variable> variables = new HashMap<String, Variable>();
