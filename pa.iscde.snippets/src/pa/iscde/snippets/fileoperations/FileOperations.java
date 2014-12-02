@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -12,12 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.FileLocator;
-
-import pa.iscde.snippets.gui.SnippetsView;
 
 public class FileOperations {
 
@@ -26,21 +21,14 @@ public class FileOperations {
 
 	public FileOperations(File f) {
 		fileToUse = f;
-		URL fileURL;
-		try {
-			fileURL = new URL("platform:/plugin/pa.iscde.snippets/Snippets");
-			try {
-				snippetsRootFolder = new File(FileLocator.resolve(fileURL)
-						.getPath());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
+		initialize();
 	}
 
 	public FileOperations() {
+		initialize();
+	}
+
+	private void initialize() {
 		URL fileURL;
 		try {
 			fileURL = new URL("platform:/plugin/pa.iscde.snippets/Snippets");
@@ -53,7 +41,6 @@ public class FileOperations {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public String getFileName() {
@@ -70,19 +57,16 @@ public class FileOperations {
 			while ((line = reader.readLine()) != null) {
 				lines.add(line);
 			}
-			;
+			reader.close();
 		} catch (IOException e) {
 			System.err.println("File Not Found");
 		}
-		;
 		return lines;
 	}
 
 	public String getFileType() {
 		return fileToUse.getParent().replace(
-				SnippetsView.getInstance().getSnippetsRootFolder()
-						.getAbsolutePath()
-						+ "\\", "");
+				snippetsRootFolder.getAbsolutePath() + "\\", "");
 	}
 
 	public void save(String name, String code, String language) {

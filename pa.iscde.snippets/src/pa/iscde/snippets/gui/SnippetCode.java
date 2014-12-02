@@ -2,15 +2,14 @@ package pa.iscde.snippets.gui;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Scanner;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -25,6 +24,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import activator.SnippetsActivator;
 import pa.iscde.snippets.data.Variable;
 import pa.iscde.snippets.fileoperations.FileOperations;
 import pa.iscde.snippets.gui.dialogboxes.NewLanguageDialog;
@@ -64,7 +64,7 @@ public class SnippetCode extends Composite {
 		createContents();
 		editButton.setSelection(true);
 		selectDefaultLanguage();
-		
+
 	}
 
 	public void createContents() {
@@ -266,24 +266,19 @@ public class SnippetCode extends Composite {
 			public void handleEvent(Event event) {
 				switch (event.type) {
 				case SWT.Selection:
-					// TEST ARRAY
-					ArrayList<Variable> parameters = new ArrayList<Variable>(
-							Arrays.asList(new Variable("temp1", "int"),
-									new Variable("temp2", "double"),
-									new Variable("temp3", "String")));
-					ValueInsertionDialog dialog = new ValueInsertionDialog(
-							viewArea.getShell(),
-							"Value Insertion",
-							"Please fill the boxes with the appropriate values",
-							parameters);
-					dialog.create();
-					if (dialog.open() == Window.OK) {
-						// TEST RESULTS
-						for (Variable variable : dialog.getVariable())
-							System.out.println("Variable Name: "
-									+ variable.getName() + " Variable Type: "
-									+ variable.getType() + " Value: "
-									+ variable.getValue());
+					HashMap<String, Variable> variables = getVariables();
+					if (!variables.isEmpty()) {
+						ValueInsertionDialog dialog = new ValueInsertionDialog(
+								viewArea.getShell(),
+								"Value Insertion",
+								"Please fill the boxes with the appropriate values",
+								variables);
+						dialog.create();
+						if (dialog.open() == Window.OK) {
+							insertSnippet(variables);
+						}
+					} else {
+						insertSnippet();
 					}
 					break;
 				}
@@ -357,5 +352,32 @@ public class SnippetCode extends Composite {
 		if (index != -1) {
 			languagesCombo.select(index);
 		}
+	}
+
+	private HashMap<String, Variable> getVariables() {
+		HashMap<String, Variable> variables = new HashMap<String, Variable>();
+		Scanner scanner = new Scanner(snippetCodeText.getText());
+		while (scanner.hasNext()) {
+			String token = scanner.next("(\\$[\\w]+:[\\w]*)|(\\$[\\w]+)");
+			if (token.contains(":")) {
+				String[] split = token.split(":");
+				variables
+						.put(split[0], new Variable(token, split[0], split[1]));
+			}
+		}
+		scanner.close();
+		return variables;
+	}
+
+	private void insertSnippet(HashMap<String, Variable> variables) {
+		String code = snippetCodeText.getText();
+		for (Variable variable : variables.values()) {
+			code = code.replace(variable.getSubstituteToken(), variable.getValue());
+		}
+		SnippetsActivator.getInstance().insertTextAt(code);
+	}
+
+	private void insertSnippet() {
+		SnippetsActivator.getInstance().insertTextAt(snippetCodeText.getText());
 	}
 }
