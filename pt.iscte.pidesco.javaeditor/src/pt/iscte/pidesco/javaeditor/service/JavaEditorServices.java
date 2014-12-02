@@ -55,6 +55,13 @@ public interface JavaEditorServices {
 	void insertTextAtCursor(String text);
 	
 	/**
+	 * Returns the cursor position in editor (offset)
+	 * Requires having an open editor.
+	 * @return an integer equal or greater than zero
+	 */
+	int getCursorPosition();
+	
+	/**
 	 * Parses a Java file using a AST visitor.
 	 * @param file (non-null) file to parse
 	 * @param visitor (non-null) visitor

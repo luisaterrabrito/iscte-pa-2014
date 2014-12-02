@@ -41,10 +41,13 @@ public class JavaEditorServicesImpl implements JavaEditorServices {
 	@Override
 	public File getOpenedFile() {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		IEditorInput input = page.getActiveEditor().getEditorInput();
-		if(input instanceof FileStoreEditorInput) {
-			String path = ((FileStoreEditorInput) input).getURI().getPath();
-			return new File(path);
+		IEditorPart part = page.getActiveEditor();
+		if(part != null) {
+			IEditorInput input = part.getEditorInput();
+			if(input instanceof FileStoreEditorInput) {
+				String path = ((FileStoreEditorInput) input).getURI().getPath();
+				return new File(path);
+			}
 		}
 		return null;
 	}
@@ -69,8 +72,6 @@ public class JavaEditorServicesImpl implements JavaEditorServices {
 			throw new RuntimeException("File not found");
 		}
 	}
-
-
 
 	@Override
 	public void selectText(File file, int offset, int length) {
@@ -153,12 +154,23 @@ public class JavaEditorServicesImpl implements JavaEditorServices {
 		}
 	}
 
+	@Override
+	public int getCursorPosition() {
+		File file = getOpenedFile();
+		if(file == null)
+			throw new RuntimeException("no file is opened");
+
+		ITextEditor editor = openEditor(file);
+		ISelectionProvider selProvider = editor.getSite().getSelectionProvider();
+		ITextSelection textSelection =  (ITextSelection) selProvider.getSelection();
+		return textSelection.getOffset();
+	}
+
 
 
 	@Override
 	public IProblem[] parseFile(File file, ASTVisitor visitor) {
 		Assert.isNotNull(file, "file cannot be null");
-
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
 		Map options = JavaCore.getOptions();
 		JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, options);
@@ -215,6 +227,9 @@ public class JavaEditorServicesImpl implements JavaEditorServices {
 		Assert.isNotNull(listener, "argument cannot be null");
 		JavaEditorActivator.getInstance().removeListener(listener);
 	}
+
+
+
 
 
 }
