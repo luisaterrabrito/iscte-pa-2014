@@ -14,6 +14,11 @@ import pt.iscte.pidesco.documentation.service.IDocumentationServices;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
+/**
+ * 
+ * 
+ *
+ */
 public class DocumentationActivator implements BundleActivator {
 
 	private static DocumentationActivator instance;
