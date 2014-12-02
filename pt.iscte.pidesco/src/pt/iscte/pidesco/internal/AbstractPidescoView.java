@@ -13,22 +13,25 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISizeProvider;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 
 import pt.iscte.pidesco.extensibility.PidescoExtensionPoint;
 import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoTool;
 import pt.iscte.pidesco.internal.PidescoActivator.ViewComponent;
 
-public class AbstractPidescoView extends ViewPart {
+public class AbstractPidescoView extends ViewPart implements ISizeProvider {
 
 	private static String IMAGES_FLODER_PATH = PidescoServices.IMAGES_FOLDER + "/";
 	
@@ -118,6 +121,27 @@ public class AbstractPidescoView extends ViewPart {
 		}
 	}
 
-	
+	@Override
+	public void dispose() {
+		super.dispose();
+		try {
+			Platform.getBundle(vcomponent.pluginId).stop();
+		} catch (BundleException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public int getSizeFlags(boolean width) {
+		return SWT.MIN;
+	}
+
+	@Override
+	public int computePreferredSize(boolean width, int availableParallel,
+			int availablePerpendicular, int preferredResult) {
+		System.out.println(availableParallel + " " + availablePerpendicular);
+		return 200;
+	}
 	
 }
