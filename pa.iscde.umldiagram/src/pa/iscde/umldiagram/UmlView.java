@@ -115,11 +115,11 @@ public class UmlView implements PidescoView {
 	}
 	
 	private void paintClass(SourceElement classes, UmlVisitor visitor) {
-		UMLClassFigure figure = new UMLClassFigure(classes.getName().replace(".java", ""));
+		UMLClassFigure figure = new UMLClassFigure("Class "+classes.getName().replace(".java", ""));
 		CGraphNode node = new CGraphNode(umlGraph, SWT.NONE, figure);
 		
 		//GraphNode node = new GraphNode(umlGraph, SWT.NONE);
-		node.setText("Class "+classes.getName().replace(".java", "")+"\n");
+		//node.setText("Class "+classes.getName().replace(".java", "")+"\n");
 		Node n = new Node(node, classes.getName().replace(".java", ""), classes);
 		
 		nodes.add(n);
@@ -131,7 +131,10 @@ public class UmlView implements PidescoView {
 			//node.setText(node.getText()+fieldName+" :"+visitor.getFields().get(i).getType()+"\n");
 			n.addField(visitor.getFields().get(i).getType().toString());
 			figure.addNameField(fieldName+" :"+visitor.getFields().get(i).getType());
+			if(i==visitor.getFields().size()-1)
+				figure.drawLine();
 		}
+		
 		//figure.addNameField("______________________________________________");
 		//node.setText(node.getText()+"___________________________"+"\n");
 		for (int i = 0; i < visitor.getMethods().size(); i++) {
@@ -149,11 +152,14 @@ public class UmlView implements PidescoView {
 	}
 
 	private void paintEnum(UmlVisitor visitor) {
-		GraphNode node = new GraphNode(umlGraph, SWT.NONE);
-		node.setText("Enum "+visitor.getEnums().get(0).getName()+"\n");
+		UMLClassFigure figure = new UMLClassFigure("Enum "+visitor.getEnums().get(0).getName());
+		CGraphNode node = new CGraphNode(umlGraph, SWT.NONE, figure);
+		figure.addNameMethod(node.getText()+visitor.getEnums().get(0).enumConstants());
+		//GraphNode node = new GraphNode(umlGraph, SWT.NONE);
+		//node.setText("Enum "+visitor.getEnums().get(0).getName()+"\n");
 		nodes.add(new Node(node, visitor.getEnums().get(0).getName().toString(), null));
-		node.setText(node.getText()+"---------------------------"+"\n");
-		node.setText(node.getText()+visitor.getEnums().get(0).enumConstants());
+		//node.setText(node.getText()+"---------------------------"+"\n");
+		//node.setText(node.getText()+visitor.getEnums().get(0).enumConstants());
 		
 	}
 

@@ -97,7 +97,10 @@ public class UMLClassFigure extends Figure {
 		add(nameLabel);
 	}
 
-	
+	public void drawLine(){
+		methodsCompartment = new CompartmentFigure();
+		add(methodsCompartment);
+	}
 
 	
 	
