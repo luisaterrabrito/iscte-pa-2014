@@ -38,14 +38,19 @@ public class DocumentationActivator implements BundleActivator {
 			@Override
 			public void fileOpened(File file) {
 				DocumentationView view = DocumentationView.getInstance();
-				view.draw();
+				view.fillView();
+			}
+			
+			@Override
+			public void selectionChanged(File file, String text, int offset, int length) {
+				DocumentationView view = DocumentationView.getInstance();
+				view.fillView();
 			}
 			
 			@Override
 			public void fileClosed(File file) {
 				DocumentationView view = DocumentationView.getInstance();
-				view.draw();
-//				view.cleanView();
+				view.cleanView();
 			}
 		});
 
