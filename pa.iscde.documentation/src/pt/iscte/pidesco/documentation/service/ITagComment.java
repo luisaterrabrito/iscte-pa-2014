@@ -3,7 +3,7 @@ package pt.iscte.pidesco.documentation.service;
 public interface ITagComment {
 
 	public String getTagName();
-	public String getTagVariable();
+	public String getTagVariable(); // Opcional
 	public String getTagText();
 	
 	public void setTagName(String tagName);
