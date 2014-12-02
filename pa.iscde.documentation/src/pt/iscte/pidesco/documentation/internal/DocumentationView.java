@@ -39,6 +39,8 @@ public class DocumentationView implements PidescoView {
 	private Label l2;
 	private Table table;
 
+	private ClassDoc classDoc;
+	
 	public DocumentationView() {
 		Bundle bundle = FrameworkUtil.getBundle(DocumentationView.class);
 		BundleContext context  = bundle.getBundleContext();
@@ -52,6 +54,8 @@ public class DocumentationView implements PidescoView {
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		instance = this;
+		
+		classDoc = new ClassDoc();
 		
 //		l = new Label(viewArea, SWT.NONE);
 //		l.setText("Inicio");
@@ -86,11 +90,14 @@ public class DocumentationView implements PidescoView {
 			public boolean visit(Javadoc node) {
 				TableItem item = new TableItem(table, SWT.NONE);
 
+				// Condition to get properties of the class
 				if (node.getParent() instanceof TypeDeclaration) {
-					item.setText(1, "Classe Nome: " + ((TypeDeclaration) node.getParent()).getName());
+					classDoc.setClassFullName(((TypeDeclaration) node.getParent()).getName().getFullyQualifiedName());
+					item.setText(1, "Classe Nome: " + ((TypeDeclaration) node.getParent()).getName().getFullyQualifiedName());
+
 				}
 				
-				// Detectar o Método
+				// Condition to get properties of the method
 				if (node.getParent() instanceof MethodDeclaration) {
 					item.setText(1, "Método Nome: " + ((MethodDeclaration) node.getParent()).getName());
 					//item.setText(1, "Método Nome: " + ((MethodDeclaration) node.getParent()).toString());
