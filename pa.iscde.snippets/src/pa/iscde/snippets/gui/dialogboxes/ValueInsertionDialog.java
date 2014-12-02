@@ -1,6 +1,6 @@
 package pa.iscde.snippets.gui.dialogboxes;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -21,13 +21,13 @@ import pa.iscde.snippets.data.Variable;
 
 public class ValueInsertionDialog extends TitleAreaDialog {
 
-	private ArrayList<Variable> variables;
+	private HashMap<String, Variable> variables;
 	private String titleText;
 	private String infoText;
 	private SortedMap<String, Text> parametersValuesFromDialog = new TreeMap<String, Text>();
 
 	public ValueInsertionDialog(Shell parentShell, String titleText,
-			String infoText, ArrayList<Variable> variables) {
+			String infoText, HashMap<String, Variable> variables) {
 		super(parentShell);
 		this.variables = variables;
 		this.titleText = titleText;
@@ -54,13 +54,13 @@ public class ValueInsertionDialog extends TitleAreaDialog {
 	}
 
 	private void createParameterList(Composite container) {
-		for (Variable variable : variables) {
+		for (Variable variable : variables.values()) {
 			Composite nameAndTypeContainer = new Composite(container, SWT.NONE);
-			GridData nameAndTypeData = new GridData();
 			nameAndTypeContainer.setLayout(new GridLayout(2, false));
 			Label parameterType = new Label(nameAndTypeContainer, SWT.NONE);
 			parameterType.setText(variable.getType() + " ");
-			parameterType.setForeground(new Color(Display.getCurrent(), 112, 0, 112));
+			parameterType.setForeground(new Color(Display.getCurrent(), 112, 0,
+					112));
 			Label parameterName = new Label(nameAndTypeContainer, SWT.NONE);
 			parameterName.setText(variable.getName() + ":");
 
@@ -83,22 +83,14 @@ public class ValueInsertionDialog extends TitleAreaDialog {
 
 	private void saveInput() {
 		for (String variableName : parametersValuesFromDialog.keySet()) {
-			for (Variable variable : variables) {
-				if (variableName.equals(variable.getName()))
-					variable.setValue(parametersValuesFromDialog.get(
-							variableName).getText());
-			}
+			variables.get(variableName).setValue(
+					parametersValuesFromDialog.get(variableName).getText());
 		}
-
 	}
 
 	@Override
 	protected void okPressed() {
 		saveInput();
 		super.okPressed();
-	}
-
-	public ArrayList<Variable> getVariable() {
-		return variables;
 	}
 }

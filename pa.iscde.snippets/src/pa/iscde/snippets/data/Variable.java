@@ -1,11 +1,14 @@
 package pa.iscde.snippets.data;
 
 public class Variable {
+	private String substituteToken;
 	private String name;
 	private String type;
 	private String value;
-	
-	public Variable(String name, String type){
+
+	public Variable(String substituteToken, String name, String type) {
+		super();
+		this.substituteToken = substituteToken;
 		this.name = name;
 		this.type = type;
 	}
@@ -24,5 +27,9 @@ public class Variable {
 
 	public String getType() {
 		return type;
+	}
+
+	public String getSubstituteToken() {
+		return substituteToken;
 	}
 }
