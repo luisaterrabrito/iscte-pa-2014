@@ -1,8 +1,8 @@
 package pa.iscde.commands.internal.services;
 
-import pa.iscde.commands.models.CommandDataDecorator;
+import pa.iscde.commands.models.CommandDataAdaptor;
 
 public interface Action {
 
-	public void action(CommandDataDecorator data);
+	public void action(CommandDataAdaptor data);
 }

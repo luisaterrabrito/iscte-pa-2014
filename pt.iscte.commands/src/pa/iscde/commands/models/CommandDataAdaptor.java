@@ -16,11 +16,11 @@ import org.eclipse.swt.widgets.TreeItem;
  * @author Fábio Martins
  * 
  * */
-final public class CommandDataDecorator {
+final public class CommandDataAdaptor {
 
 	private Tree tree;
 
-	public CommandDataDecorator(Tree tree) {
+	public CommandDataAdaptor(Tree tree) {
 		this.tree = tree;
 	}
 
