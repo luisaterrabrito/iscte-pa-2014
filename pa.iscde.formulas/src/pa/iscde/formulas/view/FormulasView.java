@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -35,6 +36,7 @@ import pa.iscde.formulas.engineering.DecibelConverter;
 import pa.iscde.formulas.engineering.ElectronicsFormulas;
 import pa.iscde.formulas.engineering.FriisFormula;
 import pa.iscde.formulas.engineering.MovementEquations;
+import pa.iscde.formulas.extensibility.CreateCategoryProvider;
 import pa.iscde.formulas.extensibility.CreateFormulaProvider;
 import pa.iscde.formulas.finance.NumberOfPayments;
 import pa.iscde.formulas.finance.PresentValue;
@@ -60,6 +62,9 @@ public class FormulasView implements PidescoView {
 	private static LinkedList<Formula> finance_formulas = new LinkedList<Formula>();
 	private static LinkedList<Formula> statistics_formulas = new LinkedList<Formula>();
 	
+	
+	private static HashMap<String,LinkedList<Formula>> categories = new HashMap<String,LinkedList<Formula>>();
+	
 	private static Composite viewArea;
 	private static TabFolder tabFolder;
 	private static boolean drawFormulas = false;
@@ -70,7 +75,7 @@ public class FormulasView implements PidescoView {
 	private static File fileTarget;
 	
 	private CreateFormulaProvider create_formula_provider;
-	
+	private CreateCategoryProvider create_category_provider;
 	
 	public FormulasView() {
 		Bundle bundle = FrameworkUtil.getBundle(this.getClass());
@@ -80,9 +85,51 @@ public class FormulasView implements PidescoView {
 		
 		FormulasView.javaeditor=javaeditor;
 		//FormulasView.fileTarget = javaeditor.getOpenedFile();
-		loadFormulas();
+		
+		
+		basic_formulas.add(new QuadraticFormula());
+		basic_formulas.add(new TrigonometricFormula());		
+		basic_formulas.add(new PythagoreanTheorem());
+		basic_formulas.add(new Areas());
+		basic_formulas.add(new Volumes());
+		
+		engineering_formulas.add(new FriisFormula());
+		engineering_formulas.add(new DecibelConverter());
+		engineering_formulas.add(new MovementEquations());
+		engineering_formulas.add(new ElectronicsFormulas());
+		
+		finance_formulas.add(new VALCalculation());
+		finance_formulas.add(new NumberOfPayments());
+		finance_formulas.add(new PresentValue());
+		
+		statistics_formulas.add(new Mean());
+		statistics_formulas.add(new Median());
+		statistics_formulas.add(new StandardDeviation());
+		statistics_formulas.add(new Variance());
+		
+		//map with all formulas
+		allFormulas.put("Basic",basic_formulas);
+		allFormulas.put("Engineering",engineering_formulas);
+		allFormulas.put("Finance",finance_formulas);
+		allFormulas.put("Statistics",statistics_formulas);
+		
+		
 		
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
+		for(IExtension ext : reg.getExtensionPoint("pa.iscde.formulas.createcategory").getExtensions()) {
+			for(IConfigurationElement category : ext.getConfigurationElements()) {
+				final String category_name = category.getAttribute("Name");
+				create_category_provider = new CreateCategoryProvider() {
+					
+					@Override
+					public String setName() {
+						return category_name;
+					}
+				};
+				categories.put(category_name,new LinkedList<Formula>());
+				allFormulas.put(category_name,categories.get(category_name));
+			}
+		}
 		for(IExtension ext : reg.getExtensionPoint("pa.iscde.formulas.createformula").getExtensions()) {
 			for(IConfigurationElement formula : ext.getConfigurationElements()) {
 				
@@ -131,38 +178,14 @@ public class FormulasView implements PidescoView {
 				case "Statistic":
 					statistics_formulas.add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setName(), create_formula_provider.setName()));
 				break;
+				default:
+					categories.get(category).add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setName(), create_formula_provider.setName()));
 				}
 				
 			}
 		}
-		
-	
-		
-		basic_formulas.add(new QuadraticFormula());
-		basic_formulas.add(new TrigonometricFormula());		
-		basic_formulas.add(new PythagoreanTheorem());
-		basic_formulas.add(new Areas());
-		basic_formulas.add(new Volumes());
-		
-		engineering_formulas.add(new FriisFormula());
-		engineering_formulas.add(new DecibelConverter());
-		engineering_formulas.add(new MovementEquations());
-		engineering_formulas.add(new ElectronicsFormulas());
-		
-		finance_formulas.add(new VALCalculation());
-		finance_formulas.add(new NumberOfPayments());
-		finance_formulas.add(new PresentValue());
-		
-		statistics_formulas.add(new Mean());
-		statistics_formulas.add(new Median());
-		statistics_formulas.add(new StandardDeviation());
-		statistics_formulas.add(new Variance());
-		
-		//map with all formulas
-		allFormulas.put("Basic",basic_formulas);
-		allFormulas.put("Engineering",engineering_formulas);
-		allFormulas.put("Finance",finance_formulas);
-		allFormulas.put("Statistics",statistics_formulas);
+		loadFormulas();
+
 		
 		
 	}
@@ -206,6 +229,10 @@ public class FormulasView implements PidescoView {
 			break;
 		case "Finance":
 			finance_formulas.add(new NewFormula(formulaName, inputs, line_2.replace("#",""), line_3.replace("#", "")));
+			break;
+			
+		default:
+			categories.get(categoryString).add(new NewFormula(formulaName, inputs, line_2.replace("#",""), line_3.replace("#", "")));
 			break;
 
 		}
@@ -338,6 +365,11 @@ public class FormulasView implements PidescoView {
 		tabFolder.dispose();
 		createFormula(formula);
 		createTabs();
+	}
+
+
+	public Set<String> getCategories() {
+		return allFormulas.keySet();
 	}
 	
 
