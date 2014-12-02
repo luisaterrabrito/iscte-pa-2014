@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Tree;
 
 import pa.iscde.commands.controllers.ExtensionHandler.Handler;
 import pa.iscde.commands.internal.services.Action;
-import pa.iscde.commands.models.CommandDataDecorator;
+import pa.iscde.commands.models.CommandDataAdaptor;
 
 final class ActionHandler implements Handler {
 
@@ -34,7 +34,7 @@ final class ActionHandler implements Handler {
 		btn.setText(label);
 		btn.addListener(SWT.Selection, new Listener() {
 
-			CommandDataDecorator data = new CommandDataDecorator(tree);
+			private CommandDataAdaptor data = new CommandDataAdaptor(tree);
 
 			@Override
 			public void handleEvent(Event event) {
