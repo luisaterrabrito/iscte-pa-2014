@@ -17,6 +17,7 @@ public class UmlVisitor extends ASTVisitor{
 	private ArrayList<FieldDeclaration> fields = new ArrayList<FieldDeclaration>();
 	private ArrayList<EnumDeclaration> enums = new ArrayList<EnumDeclaration>();
 	private ArrayList<String> classInstances = new ArrayList<String>();
+
 	
 	@Override
 	public boolean visit(MethodDeclaration m) {
@@ -61,7 +62,13 @@ public class UmlVisitor extends ASTVisitor{
 	public ArrayList<FieldDeclaration> getFields(){
 		return fields;
 	}
+
+	
+	
+	
+
 	public ArrayList<String> getClassInstances() {
 		return classInstances;
 	}
+
 }
