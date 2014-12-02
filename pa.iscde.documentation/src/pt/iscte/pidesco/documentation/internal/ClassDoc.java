@@ -20,6 +20,10 @@ public class ClassDoc {
 		return classFullName;
 	}
 
+	/**
+	 * 
+	 * @param classFullName nome da classe
+	 */
 	public void setClassFullName(String classFullName) {
 		this.classFullName = classFullName;
 	}
@@ -41,6 +45,9 @@ public class ClassDoc {
 	}
 	
 	public List<MethodDoc> getListMethods() {
+		if (listMethods == null)
+			listMethods = new ArrayList<MethodDoc>();
+		
 		return listMethods;
 	}
 	
