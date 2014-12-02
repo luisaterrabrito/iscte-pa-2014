@@ -99,8 +99,7 @@ public class SnippetCode extends Composite {
 		snippetNameTextBox = new Text(snippetNameComposite, SWT.BORDER);
 		snippetNameTextBox.setFont(SWTResourceManager.getFont("Segoe UI", 11,
 				SWT.NORMAL));
-		int aux = (fileOperations.numberOfNewSnippets() + 1);
-		snippetNameTextBox.setText("New Snippet(" + aux + ")");
+		snippetNameTextBox.setText("New Snippet(" + fileOperations.numberOfNewSnippet() + ")");
 		snippetNameTextBox.setBounds(103, 1, 126, 25);
 
 		Composite composite = new Composite(
@@ -246,12 +245,13 @@ public class SnippetCode extends Composite {
 								viewArea.getShell(),
 								"Warning",
 								"The name you choose is already attributed to another snippet. Please change it.");
-						setSnippetTextAndName();
 					} else {
 						fileOperations.save(snippetNameTextBox.getText(),
 								snippetCodeText.getText(),
 								languagesCombo.getText());
-						setSnippetTextAndName();
+						MessageDialog.openInformation(viewArea.getShell(),
+								"Info",
+								"File succesfully saved.");
 					}
 					break;
 				}

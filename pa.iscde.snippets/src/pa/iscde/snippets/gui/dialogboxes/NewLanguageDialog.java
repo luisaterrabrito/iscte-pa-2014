@@ -43,9 +43,7 @@ public class NewLanguageDialog extends TitleAreaDialog {
 		GridLayout layout = new GridLayout(2, false);
 		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		container.setLayout(layout);
-
 		createLanguage(container);
-
 		return area;
 	}
 
