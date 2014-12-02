@@ -37,7 +37,7 @@ public class AddFormulaListener implements SelectionListener{
 	private String categoryNameString;
 	private InsertFormulaFormat iff;
 	private ArrayList<Text> inputs_text = new ArrayList<Text>();
-
+	
 	public AddFormulaListener(){
 		createInputsNumberWindow(new Shell(new Shell(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL));
 	}
@@ -58,7 +58,11 @@ public class AddFormulaListener implements SelectionListener{
 
 		final Combo c = new Combo(dialog, SWT.READ_ONLY);
 		c.setBounds(50, 50, GridData.FILL_HORIZONTAL, 65);
-		String items[] = { "Basics", "Finance", "Statistic", "Engineering"};
+		
+		String[] items = new String[FormulasView.getInstance().getCategories().size()];
+		for (int i = 0; i < FormulasView.getInstance().getCategories().size(); i++) {
+			items[i] = (String) FormulasView.getInstance().getCategories().toArray()[i];
+		}
 		c.setItems(items);
 
 		Label formulaName = new Label(dialog, SWT.NONE);

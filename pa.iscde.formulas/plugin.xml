@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="createformula" name="Create Formula" schema="schema/createformula.exsd"/>
+   <extension-point id="createcategory" name="Create Category" schema="schema/createcategory.exsd"/>
    <extension
          id="formulas"
          name="Formulas Team"
@@ -71,6 +72,12 @@
             name="Name"
             result="Result">
       </NewFormula>
+   </extension>
+   <extension
+         point="pa.iscde.formulas.createcategory">
+      <AddCategory
+            Name="Exemple">
+      </AddCategory>
    </extension> 
 
 </plugin>
