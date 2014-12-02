@@ -12,6 +12,12 @@ public class Variable {
 		this.name = name;
 		this.type = type;
 	}
+	
+	public Variable(String substituteToken, String name) {
+		super();
+		this.substituteToken = substituteToken;
+		this.name = name;
+	}
 
 	public String getValue() {
 		return value;

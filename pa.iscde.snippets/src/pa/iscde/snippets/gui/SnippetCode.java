@@ -392,13 +392,30 @@ public class SnippetCode extends Composite {
 	private HashMap<String, Variable> getVariables() {
 		HashMap<String, Variable> variables = new HashMap<String, Variable>();
 		Scanner scanner = new Scanner(snippetCodeText.getText());
-		while (scanner.hasNext()) {
-			String token = scanner.next("(\\$[\\w]+:[\\w]*)|(\\$[\\w]+)");
-			if (token.contains(":")) {
-				String[] split = token.split(":");
-				variables
-						.put(split[0], new Variable(token, split[0], split[1]));
+//		while (scanner.hasNext()) {
+//			String token = scanner.next("(\\$[\\w]+:[\\w]*)|(\\$[\\w]+)");
+//			if (token.contains(":")) {
+//				String[] split = token.split(":");
+//				variables
+//						.put(split[0], new Variable(token, split[0], split[1]));
+//			}
+//		}
+//		scanner.close();
+		String token = "";
+		while (scanner.hasNextLine()) {
+			token = "";
+			while (token != null) {
+				token = scanner.findInLine("(\\$[\\w]+:[\\w]*)|(\\$[\\w]+)");
+				if (token != null) {
+					if (token.contains(":")) {
+						String[] split = token.split(":");
+						variables.put(split[0].replace("$", ""), new Variable(token, split[0].replace("$", ""), split[1]));
+					} else {
+						variables.put(token.replace("$", ""), new Variable(token, token.replace("$", "")));
+					}
+				}
 			}
+			scanner.nextLine();
 		}
 		scanner.close();
 		return variables;
