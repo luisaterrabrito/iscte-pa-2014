@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
@@ -78,35 +82,62 @@ public class FormulasView implements PidescoView {
 		//FormulasView.fileTarget = javaeditor.getOpenedFile();
 		loadFormulas();
 		
-		create_formula_provider = new CreateFormulaProvider() {
-			
-			@Override
-			public String setResult() {
-				return "TESTE: RESULT";
-			}
-			
-			@Override
-			public String setName() {
-				return "TESTE: NAME";
-			}
-			
-			@Override
-			public String setMethodCode() {
-				return "TESTE: METHODCODE";
-			}
-			
-			@Override
-			public String[] setInputs() {
-				return "TESTE: INPUTS".split("");
-			}
+		IExtensionRegistry reg = Platform.getExtensionRegistry();
+		for(IExtension ext : reg.getExtensionPoint("pa.iscde.formulas.createformula").getExtensions()) {
+			for(IConfigurationElement formula : ext.getConfigurationElements()) {
+				
+				final String category = formula.getAttribute("category");
+				final String name = formula.getAttribute("name");
+				final String method = formula.getAttribute("method");
+				final String result = formula.getAttribute("result");
+				final String inputs = formula.getAttribute("inputs");
+				create_formula_provider = new CreateFormulaProvider() {
+					
+					@Override
+					public String setResult() {
+						return result;
+					}
+					
+					@Override
+					public String setName() {
+						return name;
+					}
+					
+					@Override
+					public String setMethodCode() {
+						return method;
+					}
+					
+					@Override
+					public String[] setInputs() {
+						return inputs.split("");
+					}
 
-			@Override
-			public String setCategory() {
-				return "Basics";
+					@Override
+					public String setCategory() {
+						return category;
+					}
+				};
+				switch(create_formula_provider.setCategory()){
+				case "Basics":
+					basic_formulas.add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setName(), create_formula_provider.setName()));
+				break;
+				case "Engineering":
+					engineering_formulas.add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setName(), create_formula_provider.setName()));
+				break;
+				case "Finance":
+					finance_formulas.add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setName(), create_formula_provider.setName()));
+				break;
+				case "Statistic":
+					statistics_formulas.add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setName(), create_formula_provider.setName()));
+				break;
+				}
+				
 			}
-		};
+		}
 		
-		basic_formulas.add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setName(), create_formula_provider.setName()));
+	
+		
 		basic_formulas.add(new QuadraticFormula());
 		basic_formulas.add(new TrigonometricFormula());		
 		basic_formulas.add(new PythagoreanTheorem());
