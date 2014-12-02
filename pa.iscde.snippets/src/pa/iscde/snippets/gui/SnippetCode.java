@@ -176,9 +176,11 @@ public class SnippetCode extends Composite {
 
 			@Override
 			public void focusGained(FocusEvent e) {
-				snippetCodeText.setFont(SWTResourceManager.getFont("Segoe UI",
-						11, SWT.NORMAL));
-				snippetCodeText.setText("");
+				if (snippetCodeText.getText().equals("Insert Code Here...")) {
+					snippetCodeText.setFont(SWTResourceManager.getFont(
+							"Segoe UI", 11, SWT.NORMAL));
+					snippetCodeText.setText("");
+				}
 			}
 		});
 		GridData snippetCodeTextLayoutGridData = new GridData(SWT.FILL,
@@ -244,10 +246,12 @@ public class SnippetCode extends Composite {
 								viewArea.getShell(),
 								"Warning",
 								"The name you choose is already attributed to another snippet. Please change it.");
+						setSnippetTextAndName();
 					} else {
 						fileOperations.save(snippetNameTextBox.getText(),
 								snippetCodeText.getText(),
 								languagesCombo.getText());
+						setSnippetTextAndName();
 					}
 					break;
 				}
@@ -372,7 +376,8 @@ public class SnippetCode extends Composite {
 	private void insertSnippet(HashMap<String, Variable> variables) {
 		String code = snippetCodeText.getText();
 		for (Variable variable : variables.values()) {
-			code = code.replace(variable.getSubstituteToken(), variable.getValue());
+			code = code.replace(variable.getSubstituteToken(),
+					variable.getValue());
 		}
 		SnippetsActivator.getInstance().insertTextAt(code);
 	}
