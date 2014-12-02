@@ -11,9 +11,12 @@ public class Node {
 	private String name;
 	private SourceElement sourceElement;
 	private ArrayList<String> fields = new ArrayList<String>();
+	private ArrayList<String> classInstances = new ArrayList<String>();
 	
-	
-	
+	public ArrayList<String> getClassInstances() {
+		return classInstances;
+	}
+
 	public Node(GraphNode node, String name, SourceElement sourceElement) {
 		super();
 		this.node = node;
@@ -37,6 +40,10 @@ public class Node {
 
 	public ArrayList<String> getFields() {
 		return fields;
+	}
+
+	public void setClassInstances(ArrayList<String> classInstances) {
+		this.classInstances = classInstances;
 	}
 	
 	
