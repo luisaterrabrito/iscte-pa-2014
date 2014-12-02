@@ -54,7 +54,7 @@ final public class CommandDataDecorator {
 	 * 
 	 * @param key  -   The CommandKey to remove
 	 * */
-	public void deleteCommand(CommandKey key) {
+	public void deleteCommandLine(CommandKey key) {
 		
 		
 		Point keyInTree = findKeyInTree(CommandWarehouse.getCommandDefinition(key));
@@ -101,7 +101,7 @@ final public class CommandDataDecorator {
 	 * 
 	 * @param cmdDef  -   the CommandDefinition to insert
 	 * */
-	public boolean insertCommand(CommandDefinition cmdDef) {
+	public boolean insertCommandLine(CommandDefinition cmdDef) {
 
 		
 		int i = findContextInTree(cmdDef.getContext());
