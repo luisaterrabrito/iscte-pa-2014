@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="SearchProvider" name="Search Provider" schema="schema/SearchProvider.exsd"/>
    <extension
-         id="id1"
+         id="id1"         
          name="Filter Search"
          point="pa.iscde.team">
       <member
@@ -27,5 +28,10 @@
             icon="searchtool.gif">
       </view>
    </extension>
-
+   <extension
+         point="pa.iscde.filtersearch.SearchProvider">
+      <SearchProvider
+            className="pa.iscde.filtersearch.view.SearchView$ProjectBrowserSearchProvider">
+      </SearchProvider>
+   </extension>
 </plugin>

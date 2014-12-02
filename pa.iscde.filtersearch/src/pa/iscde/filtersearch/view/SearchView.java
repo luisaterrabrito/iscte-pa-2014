@@ -4,11 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.osgi.service.resolver.PlatformAdmin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -30,6 +37,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import pt.iscte.pidesco.extensibility.PidescoView;
+import pt.iscte.pidesco.projectbrowser.model.ClassElement;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
@@ -50,7 +58,8 @@ public class SearchView implements PidescoView {
 	private TreeViewer tree;	
 	private Image packageIcon;
 	private Image classIcon;
-
+	private Image categoryIcon;
+	
 	private Text searchText;
 
 	public SearchView() {
@@ -59,7 +68,27 @@ public class SearchView implements PidescoView {
 		ServiceReference<ProjectBrowserServices> ref2 = context.getServiceReference(ProjectBrowserServices.class);
 		browserServices = context.getService(ref2);
 
-		providers.add(new ProjectBrowserSearchProvider()); //Hardcode
+		
+		/**
+		 * Acede aos pontos de extensão que implementam a interface SearchProvider
+		 */
+		IExtensionRegistry reg = Platform.getExtensionRegistry();
+		IExtensionPoint extensionPoint = reg.getExtensionPoint("pa.iscde.filtersearch.SearchProvider");
+		IExtension[] extensions = extensionPoint.getExtensions();
+
+		for(IExtension ext : extensions){
+			for(IConfigurationElement configurationElement : ext.getConfigurationElements()){
+				 SearchProvider p = null;
+				try {
+					p = (SearchProvider) configurationElement.createExecutableExtension("className");
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+				System.out.println("-> " + p);
+				providers.add(p);
+			}
+		}
+		
 	}
 
 	public static SearchView getInstance(){
@@ -93,7 +122,8 @@ public class SearchView implements PidescoView {
 
 		packageIcon = images.get("package_obj.gif");
 		classIcon = images.get("classes.gif");
-
+		categoryIcon = images.get("searchtool.gif");
+			
 		GridLayout gridLayout = new GridLayout(4, false);
 		gridLayout.verticalSpacing = 8;
 		viewArea.setLayout(gridLayout);
@@ -198,8 +228,18 @@ public class SearchView implements PidescoView {
 	 */
 
 
-	class ProjectBrowserSearchProvider implements SearchProvider {
+	public static class ProjectBrowserSearchProvider implements SearchProvider {
 
+		private ProjectBrowserServices browserServices;
+		
+		public ProjectBrowserSearchProvider() {
+			
+			Bundle bundle = FrameworkUtil.getBundle(ProjectBrowserSearchProvider.class);
+			BundleContext context  = bundle.getBundleContext();
+			ServiceReference<ProjectBrowserServices> ref2 = context.getServiceReference(ProjectBrowserServices.class);
+			browserServices = context.getService(ref2);
+		}
+		
 		@Override
 		public List<Object> getResults(String text) {
 			List<Object> hits = new ArrayList<>();
@@ -219,6 +259,14 @@ public class SearchView implements PidescoView {
 				} 
 			}
 		}
+
+		@Override
+		public Image getImage(Object object) {
+//			if(object instanceof ClassElement)
+//				return classIcon;					// Hardcode
+//			return packageIcon;
+			return null;
+		}
 	}
 
 
@@ -232,10 +280,12 @@ public class SearchView implements PidescoView {
 		public String getText(Object obj) {
 			return obj.toString();
 		}
+		
 		public Image getImage(Object obj) {
-			if(obj.toString().contains(".java"))
-				return classIcon;					// Hardcode
-			return packageIcon;						// Hardcode
+			if(obj instanceof SearchCategory)
+				return categoryIcon;
+			else
+				return null;
 		}
 	}	
 
