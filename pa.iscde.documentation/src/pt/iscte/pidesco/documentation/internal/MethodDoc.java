@@ -1,15 +1,20 @@
 package pt.iscte.pidesco.documentation.internal;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import pt.iscte.pidesco.documentation.service.ITagComment;
 
 public class MethodDoc {
-
+	
+	public static ArrayList<String> validMethodTags = new ArrayList<String>(Arrays.asList("@param", "@retorno", "@excecao"));
+	public static MethodDoc instance;
+	
 	private String methodName;
 	private String comment;
 	private List<ITagComment> tags;
-
+	
 	public String getMethodName() {
 		return methodName;
 	}
@@ -27,6 +32,10 @@ public class MethodDoc {
 	}
 	public void setTags(List<ITagComment> tags) {
 		this.tags = tags;
+	}
+	
+	public static MethodDoc getInstance() {
+		return instance;
 	}
 
 }

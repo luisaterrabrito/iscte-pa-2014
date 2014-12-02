@@ -4,40 +4,54 @@ import pt.iscte.pidesco.documentation.service.ITagComment;
 
 public class TagCommentImpl implements ITagComment {
 
+	private String tagName;
+	private String tagVariable;
+	private String tagText;
+	
 	@Override
 	public String getTagName() {
-		// TODO Auto-generated method stub
-		return null;
+		return tagName;
 	}
 
 	@Override
 	public String getTagVariable() {
-		// TODO Auto-generated method stub
-		return null;
+		return tagVariable;
 	}
 
 	@Override
 	public String getTagText() {
-		// TODO Auto-generated method stub
-		return null;
+		return tagText;
 	}
 
 	@Override
 	public void setTagName(String tagName) {
-		// TODO Auto-generated method stub
-		
+		this.tagName = tagName;		
 	}
 
 	@Override
 	public void setTagVariable(String tagVariable) {
-		// TODO Auto-generated method stub
-		
+		this.tagVariable = tagVariable;
 	}
 
 	@Override
 	public void setTagText(String tagText) {
-		// TODO Auto-generated method stub
-		
+		this.tagText = tagText;
 	}
-
+	
+	boolean isValidTag(String tagName, String type){
+		
+		
+		
+		boolean isValid = false;
+		
+		if (!tagName.trim().isEmpty()){
+			if (tagName.startsWith("@")){
+				tagName = tagName.trim().substring(1);
+			}
+						
+		}
+		
+		return isValid;
+	}
+	
 }
