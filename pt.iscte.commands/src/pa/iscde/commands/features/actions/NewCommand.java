@@ -18,7 +18,7 @@ public class NewCommand implements Action {
 				new CommentFeature(), "novo comando por via dinâmica");
 		
 		
-		data.insertCommand(cmdDef);
+		data.insertCommandLine(cmdDef);
 
 	}
 

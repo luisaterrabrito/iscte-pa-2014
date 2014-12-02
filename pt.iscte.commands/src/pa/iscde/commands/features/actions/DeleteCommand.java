@@ -10,7 +10,7 @@ public class DeleteCommand implements Action {
 	public void action(CommandDataDecorator data) {
 		
 		for(CommandKey command : data.getSelectedCommands()){
-			data.deleteCommand(command);
+			data.deleteCommandLine(command);
 		}
 		
 
