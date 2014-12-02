@@ -57,10 +57,12 @@ public class ValueInsertionDialog extends TitleAreaDialog {
 		for (Variable variable : variables.values()) {
 			Composite nameAndTypeContainer = new Composite(container, SWT.NONE);
 			nameAndTypeContainer.setLayout(new GridLayout(2, false));
-			Label parameterType = new Label(nameAndTypeContainer, SWT.NONE);
-			parameterType.setText(variable.getType() + " ");
-			parameterType.setForeground(new Color(Display.getCurrent(), 112, 0,
-					112));
+			if (variable.getType() != null) {
+				Label parameterType = new Label(nameAndTypeContainer, SWT.NONE);
+				parameterType.setText(variable.getType() + " ");
+				parameterType.setForeground(new Color(Display.getCurrent(),
+						112, 0, 112));
+			}
 			Label parameterName = new Label(nameAndTypeContainer, SWT.NONE);
 			parameterName.setText(variable.getName() + ":");
 
