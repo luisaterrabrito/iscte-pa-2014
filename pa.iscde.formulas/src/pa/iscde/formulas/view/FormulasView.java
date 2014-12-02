@@ -31,6 +31,7 @@ import pa.iscde.formulas.engineering.DecibelConverter;
 import pa.iscde.formulas.engineering.ElectronicsFormulas;
 import pa.iscde.formulas.engineering.FriisFormula;
 import pa.iscde.formulas.engineering.MovementEquations;
+import pa.iscde.formulas.extensibility.CreateFormulaProvider;
 import pa.iscde.formulas.finance.NumberOfPayments;
 import pa.iscde.formulas.finance.PresentValue;
 import pa.iscde.formulas.finance.VALCalculation;
@@ -64,6 +65,8 @@ public class FormulasView implements PidescoView {
 	private static JavaEditorServices javaeditor;
 	private static File fileTarget;
 	
+	private CreateFormulaProvider create_formula_provider;
+	
 	
 	public FormulasView() {
 		Bundle bundle = FrameworkUtil.getBundle(this.getClass());
@@ -74,6 +77,36 @@ public class FormulasView implements PidescoView {
 		FormulasView.javaeditor=javaeditor;
 		//FormulasView.fileTarget = javaeditor.getOpenedFile();
 		loadFormulas();
+		
+		create_formula_provider = new CreateFormulaProvider() {
+			
+			@Override
+			public String setResult() {
+				return "TESTE: RESULT";
+			}
+			
+			@Override
+			public String setName() {
+				return "TESTE: NAME";
+			}
+			
+			@Override
+			public String setMethodCode() {
+				return "TESTE: METHODCODE";
+			}
+			
+			@Override
+			public String[] setInputs() {
+				return "TESTE: INPUTS".split("");
+			}
+
+			@Override
+			public String setCategory() {
+				return "Basics";
+			}
+		};
+		
+		basic_formulas.add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setName(), create_formula_provider.setName()));
 		basic_formulas.add(new QuadraticFormula());
 		basic_formulas.add(new TrigonometricFormula());		
 		basic_formulas.add(new PythagoreanTheorem());
