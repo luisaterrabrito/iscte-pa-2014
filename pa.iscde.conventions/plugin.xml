@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="conventionservice" name="Convention Service" schema="schema/conventionservice.exsd"/>
    <extension
          id="Convetions"
          name="Code Coventions"
@@ -22,6 +23,12 @@
             class="pa.iscde.conventions.ConventionsView"
             icon="exc_catch.gif">
       </view>
+   </extension>
+   <extension
+         point="pa.iscde.conventions.conventionservice">
+      <conventionservice
+            class="pa.iscde.conventions.teste">
+      </conventionservice>
    </extension>
 
 </plugin>

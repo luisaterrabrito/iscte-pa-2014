@@ -2,8 +2,13 @@ package pa.iscde.conventions;
 
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.Map;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -22,18 +27,22 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import pa.iscde.conventions.extensability.ConventionService;
+import pa.iscde.conventions.extensability.TypeOf;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.AnnotationType;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 
-public class ConventionsView implements PidescoView,ConventionService {
+public class ConventionsView implements PidescoView {
 
 
 	private JavaEditorServices javaServices;
 
+	private static final String EXT_POINT_CONVENTION = "pa.iscde.conventions.conventionservice";
 
-
+	private LinkedList<ConventionService> lista;
+	
 	public ConventionsView() {
 		Bundle bundle = FrameworkUtil.getBundle(ConventionsView.class);
 		BundleContext context  = bundle.getBundleContext();
@@ -41,9 +50,96 @@ public class ConventionsView implements PidescoView,ConventionService {
 		javaServices = context.getService(ref);
 	}
 
+	
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
+		
+		
+		ConventionService cs = new ConventionService() {
+			
+			@Override
+			public Cobject verificarConvencao(String name, TypeOf to) {
+				switch (to) {
+				case CLASS:{
+				
+				if(checkFirstLetterLowerCase(name)){
+					return new Cobject("O nome da classe não deve começar com letra minuscula", checkFirstLetterLowerCase(name));
+				}else{
+					return new Cobject("", false);
+				}
+				}
+				
+				
+				case METHOD:{
+				
+				if(!checkFirstLetterLowerCase(name))
+					return new Cobject("O metodo começa com letra maiuscula",!checkFirstLetterLowerCase(name));
+				
+				if(verifySize(name)){
+					return new Cobject("O nome do metodo é demasiado grande",verifySize(name));
+				}else{
+					return new Cobject("", false);
+				}
+				}
+				
+				
+				
+				case CONSTANTS:{
+					if(checkVariableLowerCase(name)){
+						return new Cobject("O nome da constante não está de acordo com as convenções(variavel com letra maiuscula)",checkVariableLowerCase(name));
+					}
+					if(checkVariableDollar(name)){
+						return new Cobject("O nome da constante não está de acordo com as convenções(variavel com dollar)",checkVariableDollar(name));
+					}
+					
+					if(checkVariableUnderScore(name)){
+						return new Cobject("O nome da constante não está de acordo com as convenções(variavel com underscore no inicio)",checkVariableUnderScore(name));
+					}else{
+						return new Cobject("", false);
+					}
+				}
+					
+					
+				
+				case ENUM:{
+					if(!checkVariableLowerCase(name)){
+					return new Cobject ("Os enumerados têm que ter letra maiuscula", !checkVariableLowerCase(name));
+					}else{
+						return new Cobject("", false);
+					}
+				}
+				
+				default:
+				return new Cobject("",false);
+				}
+			}
+		};
+		
+		lista = new LinkedList<ConventionService>();
+		lista.add(cs);
+	
+		IExtensionRegistry reg = Platform.getExtensionRegistry();
+		
+		IConfigurationElement[] extensions = reg.getConfigurationElementsFor(EXT_POINT_CONVENTION);
+		
+		for(IConfigurationElement ext : extensions){
+			
+			
+			try {
+				
+				ConventionService s = (ConventionService) ext.createExecutableExtension("class");
+				lista.add(s);
+				
+				
+			} catch (CoreException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
 
+		
+		
+		
 		RowLayout rowLayout = new RowLayout();
 		rowLayout.type = SWT.VERTICAL;
 		viewArea.setLayout(rowLayout);
@@ -57,11 +153,7 @@ public class ConventionsView implements PidescoView,ConventionService {
 		//Verificar Metodos
 		final Button checkBoxMethod = new Button(viewArea, SWT.CHECK);
 		checkBoxMethod.setSize(10, 20);
-		checkBoxMethod.setText("Verificar a Primeira Letra dos Métodos");
-		//Verificar o Tamanho dos mettodos
-		final Button checkBoxSize = new Button(viewArea, SWT.CHECK);
-		checkBoxSize.setSize(10, 20);
-		checkBoxSize.setText("Verificar o tamanho dos Métodos");
+		checkBoxMethod.setText("Verificar a Primeira Letra / Tamanho dos Métodos ");
 		//Verificar Constantes
 		final Button checkBoxConstant = new Button(viewArea, SWT.CHECK);
 		checkBoxConstant.setSize(10, 20);
@@ -76,8 +168,11 @@ public class ConventionsView implements PidescoView,ConventionService {
 		checkBoxClass.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
+				
+				
+				
 				if(checkBoxClass.getSelection()){
-					verificaClass(javaServices.getOpenedFile(),"O nome da classe não deve começar com letra minuscula");
+					verificaClass(javaServices.getOpenedFile());
 				}
 			}
 		});
@@ -89,23 +184,15 @@ public class ConventionsView implements PidescoView,ConventionService {
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				if(checkBoxMethod.getSelection()){
-					verificarLetraMetodo(javaServices.getOpenedFile(),"O metodo começa com letra maiuscula");
+					verificarLetraMetodo(javaServices.getOpenedFile());
+					verificaTamanhoMetodo(javaServices.getOpenedFile());
 				}
 			}
 		});
 
 
 
-		//Verificar o Tamanho dos mettodos
-		checkBoxSize.addSelectionListener(new SelectionAdapter() {
 
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				if(checkBoxSize.getSelection()){
-					verificaTamanhoMetodo(javaServices.getOpenedFile(),"O nome do metodo é demasiado grande");
-				}
-			}
-		});
 
 		//Verificar Constantes
 		checkBoxConstant.addSelectionListener(new SelectionAdapter() {
@@ -113,7 +200,7 @@ public class ConventionsView implements PidescoView,ConventionService {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(checkBoxConstant.getSelection()){
-					verificaConstantes(javaServices.getOpenedFile(),"O nome da constante não está de acordo com as convenções");
+					verificaConstantes(javaServices.getOpenedFile());
 				}
 			}
 		});
@@ -125,7 +212,7 @@ public class ConventionsView implements PidescoView,ConventionService {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(checkBoxEnum.getSelection()){
-					verificaEnum(javaServices.getOpenedFile(),"Os enumerados têm que ter letra maiuscula");
+					verificaEnum(javaServices.getOpenedFile());
 				}
 			}
 		});
@@ -135,14 +222,13 @@ public class ConventionsView implements PidescoView,ConventionService {
 	}
 
 
-
-	public boolean checkFirstLetterLowerCase(String name){ 
+	private boolean checkFirstLetterLowerCase(String name){ 
 		return Character.isLowerCase(name.charAt(0));
 	}
 
 
 
-	public boolean verifySize(String word){
+	private boolean verifySize(String word){
 		if(word.length()>=20){
 			return true;
 		}
@@ -150,20 +236,16 @@ public class ConventionsView implements PidescoView,ConventionService {
 	}
 
 
-	public boolean checkUnderScore(String name){
-		return name.contains("_");
-	}
-
-	public boolean checkVariableUnderScore(String name){
+	private boolean checkVariableUnderScore(String name){
 		return (name.charAt(0)=='_');
 	}
 
-	public boolean checkVariableDollar(String name){
+	private boolean checkVariableDollar(String name){
 		return (name.charAt(0)=='$');
 	}
 
 
-	public boolean checkVariableLowerCase(String word){
+	private boolean checkVariableLowerCase(String word){
 
 		for(int i = 0; i!= word.length();i++){
 			if(Character.isLowerCase(word.charAt(i))){
@@ -173,26 +255,35 @@ public class ConventionsView implements PidescoView,ConventionService {
 		return true;
 	}
 
-	private void verificaClass(final File f, final String warning) {
+	private void verificaClass(final File f) {
 		ASTVisitor v = new ASTVisitor() {
 			@Override
 			public boolean visit(TypeDeclaration node) {
-				if(checkFirstLetterLowerCase(node.getName().getFullyQualifiedName())){
-					javaServices.addAnnotation(f, AnnotationType.WARNING, warning, node.getName().getStartPosition(), node.getName().getLength());
+				String id = node.getName().getFullyQualifiedName();
+				
+				for(ConventionService s : lista){
+					if(s.verificarConvencao(id, TypeOf.CLASS).getCondition()){
+						javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.CLASS).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
+					}
 				}
+				
 				return true;
 			}
 		};
 		javaServices.parseFile(f, v);
 	}
 
-	private void verificarLetraMetodo(final File f,final String warning) {
+	private void verificarLetraMetodo(final File f) {
 		ASTVisitor v = new ASTVisitor() {
 			@Override
 			public boolean visit(MethodDeclaration node) {
 				if(!node.isConstructor()){
-					if(!checkFirstLetterLowerCase(node.getName().getFullyQualifiedName())){
-						javaServices.addAnnotation(f, AnnotationType.WARNING, warning, node.getName().getStartPosition(), node.getName().getLength());
+					String id = node.getName().getFullyQualifiedName();
+					
+					for(ConventionService s : lista){
+					if(s.verificarConvencao(id, TypeOf.METHOD).getCondition()){
+						javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
+					}
 					}
 				}
 				return true;
@@ -203,15 +294,19 @@ public class ConventionsView implements PidescoView,ConventionService {
 		javaServices.parseFile(f, v);
 	}
 
-	private void verificaTamanhoMetodo(final File f, final String warning) {
+	private void verificaTamanhoMetodo(final File f) {
 		ASTVisitor v = new ASTVisitor() {
 			@Override
 			public boolean visit(MethodDeclaration node) {
-
+				
+				String id = node.getName().getFullyQualifiedName();
+				
+				for(ConventionService s : lista){
 				if(!node.isConstructor()){
-					if(verifySize(node.getName().getFullyQualifiedName())){
-						javaServices.addAnnotation(f, AnnotationType.WARNING, warning, node.getName().getStartPosition(),  node.getName().getLength());
+					if(s.verificarConvencao(id, TypeOf.METHOD).getCondition()){
+						javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(),  node.getName().getLength());
 					}
+				}
 				}
 				return true;
 			}
@@ -221,42 +316,54 @@ public class ConventionsView implements PidescoView,ConventionService {
 		javaServices.parseFile(f, v);
 	}
 
-	private void verificaConstantes(final File f,final String warning) {
+	private void verificaConstantes(final File f) {
 		ASTVisitor v = new ASTVisitor() {
 
 			public boolean visit(VariableDeclarationFragment node) {
-				if(checkVariableLowerCase(node.getName().getFullyQualifiedName())){
-					javaServices.addAnnotation(f, AnnotationType.WARNING, warning,
+
+				String id = node.getName().getFullyQualifiedName();
+				
+				for(ConventionService s : lista){
+				
+				
+				if(s.verificarConvencao(id, TypeOf.CONSTANTS).getCondition()){ //checkVariableLowerCase
+					javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.CONSTANTS).getWarning(),
 							node.getName().getStartPosition(), node.getName().getLength());
 				}
-				//como agregar warnings..
+			
 
-				if(checkVariableDollar(node.getName().getFullyQualifiedName())){
-					javaServices.addAnnotation(f, AnnotationType.WARNING, warning,
+				if(s.verificarConvencao(id, TypeOf.CONSTANTS).getCondition()){ // checkVariableDollar
+					javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.CONSTANTS).getWarning(),
 							node.getName().getStartPosition(), node.getName().getLength());
 				}
 
-				if(checkVariableUnderScore(node.getName().getFullyQualifiedName())){
-					javaServices.addAnnotation(f, AnnotationType.WARNING, warning,
+				if(s.verificarConvencao(id, TypeOf.CONSTANTS).getCondition()){ //checkVariableUnderScore
+					javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.CONSTANTS).getWarning(),
 							node.getName().getStartPosition(), node.getName().getLength());
+				}
+				
 				}
 				return true;
 			};
+			
 
 		};
 		javaServices.parseFile(f, v);
 	}
 
-	private void verificaEnum(final File f,final String warning) {
+	private void verificaEnum(final File f) {
 		ASTVisitor v = new ASTVisitor() {
 
 			public boolean visit(EnumConstantDeclaration node) {
 
-				if(!checkVariableLowerCase(node.getName().getFullyQualifiedName())){
-					javaServices.addAnnotation(f, AnnotationType.WARNING, warning,
+				String id = node.getName().getFullyQualifiedName();
+				
+				for(ConventionService s : lista){
+				if(s.verificarConvencao(id, TypeOf.ENUM).getCondition()){
+					javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.ENUM).getWarning(),
 							node.getName().getStartPosition(), node.getName().getLength());
+					}
 				}
-
 				return true;
 			}
 		};
@@ -264,33 +371,6 @@ public class ConventionsView implements PidescoView,ConventionService {
 		javaServices.parseFile(f, v);
 	}
 
-
-
-	@Override
-	public void verificarTudo(String warning, File f, TypeOf to) {
-		switch (to) {
-		case CLASS:
-			verificaClass(f,warning);
-			
-			break;
-		case METHOD:
-			verificarLetraMetodo(f,warning);
-			verificaTamanhoMetodo(f,warning);
-
-			break;
-		case CONSTANTS:
-			verificaConstantes(f,warning);
-
-			break;
-		case ENUM:
-			verificaEnum(f, warning);
-			break;
-
-		default:
-			break;
-		}
-		
-	}
 
 
 
