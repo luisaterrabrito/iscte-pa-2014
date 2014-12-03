@@ -9,6 +9,7 @@ public interface SearchProvider {
 	
 	List<Object> getResults(String text);
 	Image setImage(Object object);
+	void doubleClickAction(Object object);
 	
 	
 }

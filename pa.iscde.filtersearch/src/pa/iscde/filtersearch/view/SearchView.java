@@ -2,6 +2,7 @@ package pa.iscde.filtersearch.view;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,7 +82,7 @@ public class SearchView implements PidescoView {
 
 
 		/**
-		 * Acede aos pontos de extensão que implementam a interface SearchProvider
+		 * Acede aos pontos de extensï¿½o que implementam a interface SearchProvider
 		 */
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
 		IExtensionPoint extensionPoint = reg.getExtensionPoint("pa.iscde.filtersearch.SearchProvider");
@@ -110,7 +111,7 @@ public class SearchView implements PidescoView {
 	class SearchCategory {
 		String name;
 		List<Object> hits = new ArrayList<>();
-
+		
 		SearchCategory(String name) {
 			this.name = name;
 		}
@@ -121,6 +122,7 @@ public class SearchView implements PidescoView {
 		}
 	}
 
+	Map<Object, SearchProvider> providerMap;
 
 
 
@@ -180,9 +182,10 @@ public class SearchView implements PidescoView {
 
 				IStructuredSelection s = (IStructuredSelection) tree.getSelection();
 				if(s.size() == 1) {
-					SourceElement element = (SourceElement) s.getFirstElement();
+					Object element = (SourceElement) s.getFirstElement();
 
-					TreeItem item = (TreeItem) s;
+					SearchProvider p = providerMap.get(element);
+				
 					System.out.println(item.getData().toString());
 					
 					if(element.isClass()){
@@ -204,7 +207,7 @@ public class SearchView implements PidescoView {
 		});
 
 
-		// Listener de alterações no searchText
+		// Listener de alteraï¿½ï¿½es no searchText
 
 		ModifyListener modifyListener = new ModifyListener() {
 
@@ -250,25 +253,20 @@ public class SearchView implements PidescoView {
 	}
 
 	private void loadCategories() {
+		providerMap = new HashMap<Object, SearchProvider>();
 		List<SearchCategory> categories = new ArrayList<>();
 		for(SearchProvider p : providers) {
 			SearchCategory category = new SearchCategory(p.getClass().getSimpleName());
 			category.hits = p.getResults(searchText.getText());
-			searchCategoryIndexation(category, category.hits);
+			for(Object o : category.hits){
+				providerMap.put(o, p);
+			}
 			categories.add(category);
 		}
 		tree.setInput(categories);
 		tree.expandAll();
 	}
 
-
-	private void searchCategoryIndexation(SearchCategory category, List<Object> hits) {
-	
-		for(Object o : hits){
-			TreeItem item = (TreeItem)o;
-			item.setData(category);
-		}
-	}
 
 
 	/**
@@ -316,11 +314,17 @@ public class SearchView implements PidescoView {
 		public Image setImage(Object object) {
 			return labelProvider.getImage(object);
 		}
+
+		@Override
+		public void doubleClickAction(Object object) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 
 	/**
-	 * Decide o que vai aparecer em cada item da árvore: nome e imagem
+	 * Decide o que vai aparecer em cada item da ï¿½rvore: nome e imagem
 	 * @author lcmms
 	 *
 	 */
@@ -343,7 +347,7 @@ public class SearchView implements PidescoView {
 
 
 	/**
-	 * Define que elementos vão aparecer na árvore
+	 * Define que elementos vï¿½o aparecer na ï¿½rvore
 	 * @author lcmms
 	 *
 	 */
