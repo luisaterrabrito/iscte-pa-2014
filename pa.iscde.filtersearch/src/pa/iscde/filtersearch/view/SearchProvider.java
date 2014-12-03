@@ -8,7 +8,7 @@ public interface SearchProvider {
 	
 	
 	List<Object> getResults(String text);
-	Image getImage(Object object);
+	Image setImage(Object object);
 	
 	
 }

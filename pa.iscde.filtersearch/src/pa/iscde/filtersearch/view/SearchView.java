@@ -1,5 +1,6 @@
 package pa.iscde.filtersearch.view;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,12 +11,15 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.osgi.service.resolver.PlatformAdmin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -37,6 +41,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import pt.iscte.pidesco.extensibility.PidescoView;
+import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.ClassElement;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
@@ -51,24 +56,29 @@ public class SearchView implements PidescoView {
 	@SuppressWarnings("unused")
 	private static Composite viewArea;
 	private static SearchView instance;
+
 	private ProjectBrowserServices browserServices;
+	private JavaEditorServices editorServices;
 
 	@SuppressWarnings("unused")
 	private PackageElement rootPackage;
 	private TreeViewer tree;	
-	private Image packageIcon;
-	private Image classIcon;
-	private Image categoryIcon;
-	
+	private static Image packageIcon;
+	private static Image classIcon;
+	private static Image categoryIcon;
+
 	private Text searchText;
 
 	public SearchView() {
 		Bundle bundle = FrameworkUtil.getBundle(SearchView.class);
 		BundleContext context  = bundle.getBundleContext();
-		ServiceReference<ProjectBrowserServices> ref2 = context.getServiceReference(ProjectBrowserServices.class);
-		browserServices = context.getService(ref2);
+		ServiceReference<ProjectBrowserServices> serviceReference_projectBrowser = context.getServiceReference(ProjectBrowserServices.class);
+		browserServices = context.getService(serviceReference_projectBrowser);
 
-		
+		ServiceReference<JavaEditorServices> serviceReference_javaEditor = context.getServiceReference(JavaEditorServices.class);
+		editorServices = context.getService(serviceReference_javaEditor);
+
+
 		/**
 		 * Acede aos pontos de extensão que implementam a interface SearchProvider
 		 */
@@ -78,7 +88,7 @@ public class SearchView implements PidescoView {
 
 		for(IExtension ext : extensions){
 			for(IConfigurationElement configurationElement : ext.getConfigurationElements()){
-				 SearchProvider p = null;
+				SearchProvider p = null;
 				try {
 					p = (SearchProvider) configurationElement.createExecutableExtension("className");
 				} catch (CoreException e) {
@@ -88,7 +98,7 @@ public class SearchView implements PidescoView {
 				providers.add(p);
 			}
 		}
-		
+
 	}
 
 	public static SearchView getInstance(){
@@ -123,7 +133,7 @@ public class SearchView implements PidescoView {
 		packageIcon = images.get("package_obj.gif");
 		classIcon = images.get("classes.gif");
 		categoryIcon = images.get("searchtool.gif");
-			
+
 		GridLayout gridLayout = new GridLayout(4, false);
 		gridLayout.verticalSpacing = 8;
 		viewArea.setLayout(gridLayout);
@@ -160,6 +170,34 @@ public class SearchView implements PidescoView {
 		loadCategories();
 		tree.expandAll();
 
+
+		tree.addDoubleClickListener(new IDoubleClickListener() {
+
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+
+
+				IStructuredSelection s = (IStructuredSelection) tree.getSelection();
+				if(s.size() == 1) {
+					SourceElement element = (SourceElement) s.getFirstElement();
+
+					if(element.isClass()){
+
+						File f = (File)element.getFile();
+						editorServices.openFile(f);
+
+						/**
+						 * TODO 
+						 * 
+						 * Se for um projecto (search category)
+						 */
+					} else {
+						// if(element.isRoot()){
+						tree.collapseAll();
+					}
+				}
+			}
+		});
 
 
 		// Listener de alterações no searchText
@@ -231,15 +269,16 @@ public class SearchView implements PidescoView {
 	public static class ProjectBrowserSearchProvider implements SearchProvider {
 
 		private ProjectBrowserServices browserServices;
-		
+		private ViewLabelProvider labelProvider;
+
 		public ProjectBrowserSearchProvider() {
-			
+
 			Bundle bundle = FrameworkUtil.getBundle(ProjectBrowserSearchProvider.class);
 			BundleContext context  = bundle.getBundleContext();
 			ServiceReference<ProjectBrowserServices> ref2 = context.getServiceReference(ProjectBrowserServices.class);
 			browserServices = context.getService(ref2);
 		}
-		
+
 		@Override
 		public List<Object> getResults(String text) {
 			List<Object> hits = new ArrayList<>();
@@ -261,11 +300,8 @@ public class SearchView implements PidescoView {
 		}
 
 		@Override
-		public Image getImage(Object object) {
-//			if(object instanceof ClassElement)
-//				return classIcon;					// Hardcode
-//			return packageIcon;
-			return null;
+		public Image setImage(Object object) {
+			return labelProvider.getImage(object);
 		}
 	}
 
@@ -280,12 +316,15 @@ public class SearchView implements PidescoView {
 		public String getText(Object obj) {
 			return obj.toString();
 		}
-		
+
 		public Image getImage(Object obj) {
 			if(obj instanceof SearchCategory)
 				return categoryIcon;
-			else
-				return null;
+			else if(obj instanceof PackageElement)
+				return packageIcon;
+			else if(obj instanceof ClassElement)
+				return classIcon;
+			return null;
 		}
 	}	
 
