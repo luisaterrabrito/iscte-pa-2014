@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.TreeItem;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -181,6 +182,9 @@ public class SearchView implements PidescoView {
 				if(s.size() == 1) {
 					SourceElement element = (SourceElement) s.getFirstElement();
 
+					TreeItem item = (TreeItem) s;
+					System.out.println(item.getData().toString());
+					
 					if(element.isClass()){
 
 						File f = (File)element.getFile();
@@ -250,12 +254,21 @@ public class SearchView implements PidescoView {
 		for(SearchProvider p : providers) {
 			SearchCategory category = new SearchCategory(p.getClass().getSimpleName());
 			category.hits = p.getResults(searchText.getText());
+			searchCategoryIndexation(category, category.hits);
 			categories.add(category);
 		}
 		tree.setInput(categories);
 		tree.expandAll();
 	}
 
+
+	private void searchCategoryIndexation(SearchCategory category, List<Object> hits) {
+	
+		for(Object o : hits){
+			TreeItem item = (TreeItem)o;
+			item.setData(category);
+		}
+	}
 
 
 	/**
@@ -295,7 +308,7 @@ public class SearchView implements PidescoView {
 					hits.add(c);
 				if(c.isPackage()){
 					scan((PackageElement)c,hits, text);				
-				} 
+				}
 			}
 		}
 
