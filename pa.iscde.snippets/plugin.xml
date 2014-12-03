@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="createnewsnippet" name="Create New Snippet" schema="schema/createnewsnippet.exsd"/>
+   <extension-point id="pa.iscde.createnewsnippet" name="Create New Snippet" schema="schema/createnewsnippet.exsd"/>
    <extension
          id="snippets"
          name="Lemony Snippets"
@@ -27,5 +27,4 @@
             user="rnnma">
       </member>
    </extension>
-
 </plugin>

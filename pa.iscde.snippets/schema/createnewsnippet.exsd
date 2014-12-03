@@ -6,7 +6,7 @@
          <meta.schema plugin="pa.iscde.snippets" id="pa.iscde.snippets.createnewsnippet" name="Create New Snippet"/>
       </appinfo>
       <documentation>
-         Allows the insertion of programmed snippets
+         Allows the insertion of programmed snippets, only loads at the beginning of program, anything defined whilst program is running will only be added the next time the program runs. 
       </documentation>
    </annotation>
 
@@ -30,14 +30,14 @@
          <attribute name="id" type="string">
             <annotation>
                <documentation>
-                  
+                  Can be used to identify source ID
                </documentation>
             </annotation>
          </attribute>
          <attribute name="name" type="string">
             <annotation>
                <documentation>
-                  
+                  Can be used to identify source ID
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>

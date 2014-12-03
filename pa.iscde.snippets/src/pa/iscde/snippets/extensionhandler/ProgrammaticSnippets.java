@@ -9,13 +9,13 @@ import pa.iscde.snippets.fileoperations.FileOperations;
 import pa.iscde.snippets.interfaces.ProgrammaticSnippetsInterface;
 
 public class ProgrammaticSnippets implements ProgrammaticSnippetsInterface {
-	public static final String EXT_POINT_ID = "pa.iscde.snippets.createnewsnippet";
+	public static final String EXT_POINT_ID = "pa.iscde.createnewsnippet";
 
 	@Override
-	public void createNewSnippetProgrammatically() {
+	public void createNewSnippetsProgrammatically() {
 		FileOperations f = new FileOperations();
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
-
+//TODO: Should Update files with the same name
 		for (IExtension ext : reg.getExtensionPoint(EXT_POINT_ID)
 				.getExtensions()) {
 			for (IConfigurationElement snippet : ext.getConfigurationElements()) {
@@ -24,7 +24,7 @@ public class ProgrammaticSnippets implements ProgrammaticSnippetsInterface {
 					return;
 				String code = snippet.getAttribute("code");
 				String language = snippet.getAttribute("language");
-				if(language.replaceAll("\\s", "").equals("") || language == null)
+				if(language == null || language.replaceAll("\\s", "").equals(""))
 					language = "Unknown";
 				f.save(name, code, language);
 			}
