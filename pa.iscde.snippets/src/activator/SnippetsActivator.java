@@ -4,6 +4,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+import pa.iscde.snippets.extensionhandler.ProgrammaticSnippets;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class SnippetsActivator implements BundleActivator {
@@ -32,6 +33,7 @@ public class SnippetsActivator implements BundleActivator {
 				.getServiceReference(JavaEditorServices.class);
 		editorServices = context.getService(ref);
 		editorServices.addListener(editorListener);
+		(new ProgrammaticSnippets()).createNewSnippetsProgrammatically();
 	}
 
 	@Override
