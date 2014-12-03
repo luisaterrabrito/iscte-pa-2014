@@ -38,7 +38,7 @@ public class SnippetCode extends Composite {
 	private ArrayList<String> languages;
 	private Button editButton;
 	private final Composite viewArea;
-
+	
 	public SnippetCode(File f, Composite viewArea, int style) {
 		super(viewArea, style);
 		this.viewArea = viewArea;
@@ -135,12 +135,16 @@ public class SnippetCode extends Composite {
 				| SWT.VERTICAL));
 		snippetCodeText = new Text(snippetCodeTextComposite, SWT.MULTI
 				| SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
-		snippetCodeText.setFont(SWTResourceManager.getFont("Segoe UI", 11,
-				SWT.NORMAL));
 		snippetCodeText.setText("Insert Code Here...");
 		snippetCodeText.setFont(SWTResourceManager.getFont("Segoe UI", 11,
 				SWT.ITALIC));
+		if(SnippetsActivator.getInstance().getSelectedText() != null && !SnippetsActivator.getInstance().getSelectedText().equals("")){
+			snippetCodeText.setText(SnippetsActivator.getInstance().getSelectedText());
+			snippetCodeText.setFont(SWTResourceManager.getFont("Segoe UI", 11,
+				SWT.NORMAL));
+		}
 		snippetCodeText.addFocusListener(focusListenerCreator());
+		//TODO: Add Listener To Check If Text Changed, use changed flag
 		GridData snippetCodeTextLayoutGridData = new GridData(SWT.FILL,
 				SWT.FILL, true, true, 1, 1);
 		snippetCodeTextLayoutGridData.widthHint = 200;
@@ -184,43 +188,6 @@ public class SnippetCode extends Composite {
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		this.setLayoutData(gridData);
 		this.redraw();
-	}
-
-	private void setLanguagesBox(final Composite viewArea) {
-		File root = SnippetsView.getInstance().getSnippetsRootFolder();
-		languages = new ArrayList<String>();
-		if (root.isDirectory()) {
-			File[] subFolders = root.listFiles();
-			for (int i = 0; i < subFolders.length; i++) {
-				if (subFolders[i].isDirectory()) {
-					languages.add(subFolders[i].getName());
-				}
-			}
-			languagesCombo.setItems(languages.toArray(new String[languages
-					.size()]));
-			languagesCombo.add("Create New Language...");
-		}
-		languagesCombo
-				.addSelectionListener(languagesComboBoxSelectionListenerCreator(viewArea));
-	}
-
-	private void setSnippetTextAndName() {
-		snippetNameTextBox.setText(fileOperations.getFileName());
-		String code = "";
-		for (String s : fileOperations.getFileCode())
-			code += s + "\n";
-		snippetCodeText.setText(code);
-	}
-
-	private void setSelectedFileLanguage() {
-		languagesCombo.select(languages.indexOf(fileOperations.getFileType()));
-	}
-
-	private void selectDefaultLanguage() {
-		int index = languages.indexOf("Unknown");
-		if (index != -1) {
-			languagesCombo.select(index);
-		}
 	}
 
 	/* Listener Section */
@@ -388,6 +355,45 @@ public class SnippetCode extends Composite {
 	}
 
 	/* Listener Section */
+
+	private void setLanguagesBox(final Composite viewArea) {
+		File root = SnippetsView.getInstance().getSnippetsRootFolder();
+		languages = new ArrayList<String>();
+		if (root.isDirectory()) {
+			File[] subFolders = root.listFiles();
+			for (int i = 0; i < subFolders.length; i++) {
+				if (subFolders[i].isDirectory()) {
+					languages.add(subFolders[i].getName());
+				}
+			}
+			languagesCombo.setItems(languages.toArray(new String[languages
+					.size()]));
+			languagesCombo.add("Create New Language...");
+		}
+		languagesCombo
+				.addSelectionListener(languagesComboBoxSelectionListenerCreator(viewArea));
+	}
+
+	private void setSnippetTextAndName() {
+		snippetNameTextBox.setText(fileOperations.getFileName());
+		String code = "";
+		for (String s : fileOperations.getFileCode())
+			code += s + "\n";
+		snippetCodeText.setText(code);
+		snippetCodeText.setFont(SWTResourceManager.getFont("Segoe UI", 11,
+				SWT.NORMAL));
+	}
+
+	private void setSelectedFileLanguage() {
+		languagesCombo.select(languages.indexOf(fileOperations.getFileType()));
+	}
+
+	private void selectDefaultLanguage() {
+		int index = languages.indexOf("Unknown");
+		if (index != -1) {
+			languagesCombo.select(index);
+		}
+	}
 
 	private HashMap<String, Variable> getVariables() {
 		HashMap<String, Variable> variables = new HashMap<String, Variable>();
