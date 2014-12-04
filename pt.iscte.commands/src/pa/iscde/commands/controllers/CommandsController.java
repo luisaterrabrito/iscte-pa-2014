@@ -12,41 +12,48 @@ import pa.iscde.commands.utils.ExtensionPointsIDS;
 
 public class CommandsController implements BundleActivator {
 
+	private static BundleContext context;
+
+	public static BundleContext getContext() {
+		return CommandsController.context;
+	}
+
 	@Override
 	public void start(BundleContext context) throws Exception {
+		CommandsController.context = context;
 
-		
 		ExtensionHandler handler = new ExtensionHandler();
 		handler.setExtensionHandler(ExtensionPointsIDS.COMMAND_ID.getID(),
 				new CommandHandler());
 		handler.startProcessExtension();
-		
-		
-		KeyPressDetector.getInstance().addKeyPressListener(new KeyStrokeListener() {
-			
-			@Override
-			public void keyPressed(CommandKey c) {
-				CommandDefinition commandDefinitionTyped = CommandWarehouse.getCommandDefinition(c);
 
-				
-				System.out.println(" -- ");
-				System.out
-				.println("CommandsController.start(...).new KeyStrokeListener() {...}.keyPressed()");
-				CommandWarehouse.printall();
-				System.out.println(" -- ");
-				
-				if(commandDefinitionTyped != null){
-					//This blocks means that the key typed is registered
-					commandDefinitionTyped.getCommand().action();
-				}else{
-					//This line must be deleted, is just here for debugging
-					System.out.println("The key is not registered in the database! Or maybe wrong context!");
-				}
-				
-			}
-		});
-		
-		
+		KeyPressDetector.getInstance().addKeyPressListener(
+				new KeyStrokeListener() {
+
+					@Override
+					public void keyPressed(CommandKey c) {
+						CommandDefinition commandDefinitionTyped = CommandWarehouse
+								.getCommandDefinition(c);
+
+						System.out.println(" -- ");
+						System.out
+								.println("CommandsController.start(...).new KeyStrokeListener() {...}.keyPressed()");
+						CommandWarehouse.printall();
+						System.out.println(" -- ");
+
+						if (commandDefinitionTyped != null) {
+							// This blocks means that the key typed is
+							// registered
+							commandDefinitionTyped.getCommand().action();
+						} else {
+							// This line must be deleted, is just here for
+							// debugging
+							System.out
+									.println("The key is not registered in the database! Or maybe wrong context!");
+						}
+					}
+				});
+
 	}
 
 	@Override
