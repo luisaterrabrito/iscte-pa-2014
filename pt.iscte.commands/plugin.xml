@@ -62,43 +62,26 @@
    </extension>
    <extension
          point="pa.iscde.commands.command">
-      <command
+      <command_editor
             alt_key="false"
             command_implementation="pa.iscde.commands.features.comments.CommentFeature"
-            context_view="pa.iscde.teams"
             ctrl_key="true"
-            description="O comentário das teams é lindo"
-            key="t"
-            name="teste2">
-      </command>
-      <command
-            alt_key="true"
-            command_implementation="pa.iscde.commands.features.comments.CommentFeature"
-            context_view="pt.iscte.pidesco.projectbrowser.tree"
-            ctrl_key="true"
-            description="No proximo nao vou meter nada!"
-            key="B"
-            name="teste">
-      </command>
-      <command
-            alt_key="true"
-            command_implementation="pa.iscde.commands.features.comments.CommentFeature"
-            context_view="pa.iscde.teams"
-            ctrl_key="true"
-            key="X"
-            name="teste3">
-      </command>
+            description="comando editor"
+            key="A"
+            name="pa.iscde.commands.command_editor1">
+      </command_editor>
    </extension>
    <extension
          point="pa.iscde.commands.command">
-      <command
-            alt_key="true"
+      <command_view
+            alt_key="false"
             command_implementation="pa.iscde.commands.features.comments.CommentFeature"
             context_view="pa.iscde.commands.CommandsView"
-            ctrl_key="false"
-            key="C"
-            name="pa.iscde.commands.command5">
-      </command>
+            ctrl_key="true"
+            description="comando view"
+            key="A"
+            name="pa.iscde.commands.command_view1">
+      </command_view>
    </extension>
 
 </plugin>
