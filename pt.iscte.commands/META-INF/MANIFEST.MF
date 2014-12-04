@@ -5,7 +5,10 @@ Bundle-SymbolicName: pa.iscde.commands;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.eclipse.core.runtime;version="3.4.0",
- org.osgi.framework
+ org.eclipse.jdt.core.compiler,
+ org.eclipse.jdt.core.dom,
+ org.osgi.framework,
+ pt.iscte.pidesco.javaeditor.service
 Bundle-Activator: pa.iscde.commands.controllers.CommandsController
 Bundle-ActivationPolicy: lazy
 Require-Bundle: pa.iscde;bundle-version="0.1.0",
