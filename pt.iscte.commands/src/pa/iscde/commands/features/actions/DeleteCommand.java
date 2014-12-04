@@ -2,17 +2,16 @@ package pa.iscde.commands.features.actions;
 
 import pa.iscde.commands.internal.services.Action;
 import pa.iscde.commands.models.CommandDataAdaptor;
-import pa.iscde.commands.models.CommandKey;
+import pa.iscde.commands.models.CommandDefinition;
 
 public class DeleteCommand implements Action {
 
 	@Override
 	public void action(CommandDataAdaptor data) {
-		
-		for(CommandKey command : data.getSelectedCommands()){
-			data.deleteCommandLine(command);
+
+		for (CommandDefinition command : data.getSelectedCommands()) {
+			data.deleteCommandLine(command.getCommandKey());
 		}
-		
 
 	}
 

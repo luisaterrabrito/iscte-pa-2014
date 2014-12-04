@@ -7,6 +7,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import pa.iscde.commands.models.CommandKey;
@@ -39,11 +43,8 @@ final public class KeyPressDetector {
 				boolean ctrl_clicked = (event.stateMask & SWT.CTRL) == SWT.CTRL;
 				boolean alt_clicked = (event.stateMask & SWT.ALT) == SWT.ALT;
 				int keyCode_lastKey = event.keyCode;
-				
-				
-				String viewActive = PlatformUI.getWorkbench()
-						.getActiveWorkbenchWindow().getActivePage()
-						.getActivePartReference().getPartProperty("viewid");
+
+				String viewActive = getActiveView();
 
 				// Capture any keystroke combination that uses CTRL or ALT with
 				// something else, or both and something else
@@ -63,6 +64,22 @@ final public class KeyPressDetector {
 		});
 	}
 
+	// para retirar.
+	// so sevve para testes ate resolver o problema com o
+	// PidescoServices
+	public String getActiveView() {
+		IWorkbenchPage page = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage();
+		IWorkbenchPart activePart = page.getActivePart();
+		if (activePart != null) {
+			if (activePart instanceof IViewPart)
+				return ((IViewPart) activePart).getViewSite().getSecondaryId();
+			else if (activePart instanceof IEditorPart)
+				return ((IEditorPart) activePart).getEditorSite().getId();
+		}
+		return null;
+	}
+
 	public void addKeyPressListener(KeyStrokeListener listener) {
 		listeners.add(listener);
 	}
@@ -73,7 +90,8 @@ final public class KeyPressDetector {
 
 	public void notifyListeners(CommandKey c) {
 		// for (KeyStrokeListener keyStrokeListener : listeners) {
-		// notefica apenas o ultimo listener, para evitar chamar outros listeners individamente
+		// notefica apenas o ultimo listener, para evitar chamar outros
+		// listeners individamente
 		listeners.get(listeners.size() - 1).keyPressed(c);
 		// }
 	}

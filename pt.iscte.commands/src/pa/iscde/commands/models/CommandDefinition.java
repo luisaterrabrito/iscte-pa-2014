@@ -32,28 +32,29 @@ public class CommandDefinition {
 		return description;
 	}
 	
-	@Override
-	public int hashCode(){
-		return ((short)commandKey.hashCode()) ^ ((short)view.hashCode()) ^ 
-				((short)command.hashCode()) ^ ((short) description.hashCode());
-	}
-	
-	@Override
-	public boolean equals(Object o){
-		CommandDefinition cmdDef = (CommandDefinition) o;
-		
-		if(o == null)
-			return false;
-		
-		if(this == o)
-			return true;
-		
-		if(commandKey.equals(cmdDef.commandKey) && command.equals(cmdDef.command) &&
-				description.equals(cmdDef.description) && view.equals(cmdDef.view))
-			return true;
-		
-		return false;
-	}
+	// algo aqui esta a null. Não pecebi ainda o que, por isso foi comentado
+//	@Override
+//	public int hashCode(){
+//		return ((short)commandKey.hashCode()) ^ ((short)view.hashCode()) ^ 
+//				((short)command.hashCode()) ^ ((short) description.hashCode());
+//	}
+//	
+//	@Override
+//	public boolean equals(Object o){
+//		CommandDefinition cmdDef = (CommandDefinition) o;
+//		
+//		if(o == null)
+//			return false;
+//		
+//		if(this == o)
+//			return true;
+//		
+//		if(commandKey.equals(cmdDef.commandKey) && command.equals(cmdDef.command) &&
+//				description.equals(cmdDef.description) && view.equals(cmdDef.view))
+//			return true;
+//		
+//		return false;
+//	}
 	
 	
 	

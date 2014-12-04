@@ -29,8 +29,8 @@ final public class CommandDataAdaptor {
 	 * 
 	 * @return {@link List} A unmodifiable list list with the commands
 	 * */
-	public List<CommandKey> getSelectedCommands() {
-		LinkedList<CommandKey> kyes = new LinkedList<CommandKey>();
+	public List<CommandDefinition> getSelectedCommands() {
+		LinkedList<CommandDefinition> kyes = new LinkedList<CommandDefinition>();
 
 		TreeItem item = null;
 		for (int i = 0; i < tree.getItems().length; i++) {
@@ -41,11 +41,10 @@ final public class CommandDataAdaptor {
 		return Collections.unmodifiableList(kyes);
 	}
 
-	private void validItem(LinkedList<CommandKey> kyes, TreeItem item) {
+	private void validItem(LinkedList<CommandDefinition> kyes, TreeItem item) {
 		for (int j = 0; j < item.getItems().length; j++) {
 			if (item.getItems()[j].getChecked()) {
-				kyes.add(((CommandDefinition) item.getItems()[j].getData())
-						.getCommandKey());
+				kyes.add((CommandDefinition) item.getItems()[j].getData());
 			}
 		}
 	}
