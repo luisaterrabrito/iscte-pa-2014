@@ -39,8 +39,8 @@ final class ActionHandler implements Handler {
 			@Override
 			public void handleEvent(Event event) {
 				action.action(data);
+		
 			}
 		});
 	}
-
 }

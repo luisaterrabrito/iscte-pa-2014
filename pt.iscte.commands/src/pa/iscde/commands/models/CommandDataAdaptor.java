@@ -44,7 +44,8 @@ final public class CommandDataAdaptor {
 	private void validItem(LinkedList<CommandKey> kyes, TreeItem item) {
 		for (int j = 0; j < item.getItems().length; j++) {
 			if (item.getItems()[j].getChecked()) {
-				kyes.add(((CommandDefinition) item.getItems()[j].getData()).getCommandKey());
+				kyes.add(((CommandDefinition) item.getItems()[j].getData())
+						.getCommandKey());
 			}
 		}
 	}
@@ -52,27 +53,28 @@ final public class CommandDataAdaptor {
 	/**
 	 * Remove the command
 	 * 
-	 * @param key  -   The CommandKey to remove
+	 * @param key
+	 *            - The CommandKey to remove
 	 * */
 	public void deleteCommandLine(CommandKey key) {
-		
-		
-		Point keyInTree = findKeyInTree(CommandWarehouse.getCommandDefinition(key));
+
+		Point keyInTree = findKeyInTree(CommandWarehouse
+				.getCommandDefinition(key));
 		tree.getItem(keyInTree.x).getItem(keyInTree.y).dispose();
-		if(CommandWarehouse.removeCommandKey(key))
-			System.out.println("Command name '" + key.getCommandName() + "' was removed successfully");
-		
+		if (CommandWarehouse.removeCommandKey(key))
+			System.out.println("Command name '" + key.getCommandName()
+					+ "' was removed successfully");
+
 	}
-	
-	
-	private Point findKeyInTree(CommandDefinition key){
-		
+
+	private Point findKeyInTree(CommandDefinition key) {
+
 		int i = 0;
-		for(TreeItem tree_ : tree.getItems()){
+		for (TreeItem tree_ : tree.getItems()) {
 			int j = 0;
-			for(TreeItem subTree : tree_.getItems()){
-				
-				if(subTree.getData().equals(key)){
+			for (TreeItem subTree : tree_.getItems()) {
+
+				if (subTree.getData().equals(key)) {
 					return new Point(i, j);
 				}
 				j++;
@@ -81,53 +83,59 @@ final public class CommandDataAdaptor {
 		}
 		return null;
 	}
-	
-	
-	private int findContextInTree(String key){
-		
+
+	private int findContextInTree(String key) {
+
 		int i = 0;
-		for(TreeItem treeContext : tree.getItems()){
-			
-			if(treeContext.getData().toString().equals(key.toString()))
+		for (TreeItem treeContext : tree.getItems()) {
+
+			if (treeContext.getData().toString().equals(key.toString()))
 				return i;
 			i++;
 		}
 		return -1;
 	}
-	
 
 	/**
 	 * Insert a new command
 	 * 
-	 * @param cmdDef  -   the CommandDefinition to insert
+	 * @param cmdDef
+	 *            - the CommandDefinition to insert
 	 * */
 	public boolean insertCommandLine(CommandDefinition cmdDef) {
 
-		
 		int i = findContextInTree(cmdDef.getContext());
-		if(i != -1)
-		{
-			CommandDefinition insertResult = CommandWarehouse.insertCommandDefinition(cmdDef.getCommandKey(), cmdDef);
-			
-			if(insertResult == null && CommandWarehouse.containsKey(cmdDef.getCommandKey())){
-		
+		if (i != -1) {
+			CommandDefinition insertResult = CommandWarehouse
+					.insertCommandDefinition(cmdDef.getCommandKey(), cmdDef);
+
+			if (insertResult == null
+					&& CommandWarehouse.containsKey(cmdDef.getCommandKey())) {
+
 				TreeItem subItem = new TreeItem(tree.getItem(i), SWT.NONE);
 				subItem.setData(cmdDef);
-				subItem.setText(new String[] { cmdDef.getCommandKey().getCommandName(), 
-						cmdDef.getDescription() , cmdDef.getCommandKey().toString() });
+				subItem.setText(new String[] {
+						cmdDef.getCommandKey().getCommandName(),
+						cmdDef.getDescription(),
+						cmdDef.getCommandKey().toString() });
 				subItem.getParentItem().setExpanded(true);
-				
-				System.out.println("Command name '" + cmdDef.getCommandKey().getCommandName() + "' was successfully added");
+
+				System.out.println("Command name '"
+						+ cmdDef.getCommandKey().getCommandName()
+						+ "' was successfully added");
 				return true;
-				
-			}else{
-				System.out.println("Command name '" + cmdDef.getCommandKey().getCommandName() + "' wasn't added, there was a problem, "
-						+ "maybe there is already a command with the same binding for the same context!");
+
+			} else {
+				System.out
+						.println("Command name '"
+								+ cmdDef.getCommandKey().getCommandName()
+								+ "' wasn't added, there was a problem, "
+								+ "maybe there is already a command with the same binding for the same context!");
 			}
-			
+
 		}
 		return false;
-		
+
 	}
 
 	/**
