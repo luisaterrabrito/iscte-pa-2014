@@ -47,10 +47,14 @@ public class FileOperations {
 	}
 
 	public String getFileName() {
+		if(fileToUse == null)
+			return null;
 		return fileToUse.getName().replace(".snp", "");
 	}
 
 	public ArrayList<String> getFileCode() {
+		if(fileToUse == null)
+			return null;
 		ArrayList<String> lines = new ArrayList<String>();
 		fileToUse.setReadOnly();
 		BufferedReader reader;
@@ -68,6 +72,8 @@ public class FileOperations {
 	}
 
 	public String getFileType() {
+		if(fileToUse == null)
+			return null;
 		return fileToUse.getParent().replace(
 				snippetsRootFolder.getAbsolutePath() + "\\", "");
 	}
@@ -158,13 +164,14 @@ public class FileOperations {
 			return true;
 		return false;
 	}
-	
-	//Returns the number of the Snippet that should be assigned to a new snippet
-	//Checks the lowest snippet number available
+
+	// Returns the number of the Snippet that should be assigned to a new
+	// snippet
+	// Checks the lowest snippet number available
 	public int numberOfNewSnippet() {
 		int aux = 1;
-		while(checkIfNameAlreadyExists("New Snippet (" + aux + ").snp")) {
-					aux += 1;
+		while (checkIfNameAlreadyExists("New Snippet (" + aux + ").snp")) {
+			aux += 1;
 		}
 		return aux;
 	}

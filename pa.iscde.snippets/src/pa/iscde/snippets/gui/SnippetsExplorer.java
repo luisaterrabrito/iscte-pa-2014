@@ -190,7 +190,6 @@ public class SnippetsExplorer extends Composite {
 			}
 			loadAllToFiltered();
 		}
-
 		refreshSnippetsList();
 	}
 
