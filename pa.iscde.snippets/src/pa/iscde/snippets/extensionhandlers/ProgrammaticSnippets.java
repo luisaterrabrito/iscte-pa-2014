@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.Platform;
 import pa.iscde.snippets.fileoperations.FileOperations;
 
 public class ProgrammaticSnippets{
-	public static final String EXT_POINT_ID = "pa.iscde.createnewsnippet";
+	public static final String EXT_POINT_ID = "pa.iscde.snippets.createnewsnippet";
 
 	public void createNewSnippetsProgrammatically() {
 		FileOperations f = new FileOperations();
