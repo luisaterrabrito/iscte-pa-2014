@@ -6,12 +6,10 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
 import pa.iscde.snippets.fileoperations.FileOperations;
-import pa.iscde.snippets.interfaces.ProgrammaticSnippetsInterface;
 
-public class ProgrammaticSnippets implements ProgrammaticSnippetsInterface {
+public class ProgrammaticSnippets{
 	public static final String EXT_POINT_ID = "pa.iscde.createnewsnippet";
 
-	@Override
 	public void createNewSnippetsProgrammatically() {
 		FileOperations f = new FileOperations();
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
