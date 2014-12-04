@@ -24,7 +24,10 @@ public class ContextVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(CompilationUnit node) {
-		// TODO Auto-generated method stub
+		int nodePosition = node.getStartPosition() - 1;
+		if (nodePosition < cursorPosition
+				&& cursorPosition < nodePosition + node.getLength())
+			insideClass = true;
 		return true;
 	}
 
@@ -32,18 +35,7 @@ public class ContextVisitor extends ASTVisitor {
 		return insideMethod;
 	}
 
-	public void setInsideMethod(boolean insideMethod) {
-		this.insideMethod = insideMethod;
-	}
-
 	public boolean isInsideClass() {
 		return insideClass;
 	}
-
-	public void setInsideClass(boolean insideClass) {
-		this.insideClass = insideClass;
-	}
-	
-	
-	
 }
