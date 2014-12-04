@@ -142,6 +142,7 @@ final public class CommandView implements PidescoView {
 			@Override
 			public void modifyText(ModifyEvent e) {
 
+				// TODO implementar um timer de key.
 				commandTree.removeAll();
 				addDataToTreeTable();
 
