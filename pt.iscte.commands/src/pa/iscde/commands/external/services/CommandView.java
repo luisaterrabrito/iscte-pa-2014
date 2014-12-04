@@ -108,6 +108,10 @@ final public class CommandView implements PidescoView {
 
 			for (CommandDefinition command : commandsDefinitionList) {
 				TreeItem subItem = new TreeItem(item, SWT.NONE);
+				// O tree item agora observa o commandkey. 
+				// NOTA: O SWT não permite extender o  TreeItem, dai não ser possivel utilizar correctamente o padrão observador, observado.
+				// 			http://stackoverflow.com/questions/4264983/why-is-subclassing-not-allowed-for-many-of-the-swt-controls
+				command.getCommandKey().addObserver(subItem);
 				subItem.setData(command);
 				subItem.setText(new String[] {
 						command.getCommandKey().getCommandName(),
@@ -142,7 +146,6 @@ final public class CommandView implements PidescoView {
 			@Override
 			public void modifyText(ModifyEvent e) {
 
-				// TODO implementar um timer de key.
 				commandTree.removeAll();
 				addDataToTreeTable();
 

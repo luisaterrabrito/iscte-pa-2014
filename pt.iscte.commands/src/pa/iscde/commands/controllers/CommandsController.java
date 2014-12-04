@@ -28,6 +28,13 @@ public class CommandsController implements BundleActivator {
 			public void keyPressed(CommandKey c) {
 				CommandDefinition commandDefinitionTyped = CommandWarehouse.getCommandDefinition(c);
 
+				
+				System.out.println(" -- ");
+				System.out
+				.println("CommandsController.start(...).new KeyStrokeListener() {...}.keyPressed()");
+				CommandWarehouse.printall();
+				System.out.println(" -- ");
+				
 				if(commandDefinitionTyped != null){
 					//This blocks means that the key typed is registered
 					commandDefinitionTyped.getCommand().action();
