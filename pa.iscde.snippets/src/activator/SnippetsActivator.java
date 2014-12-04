@@ -1,10 +1,13 @@
 package activator;
 
+import java.io.File;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 import pa.iscde.snippets.extensionhandlers.ProgrammaticSnippets;
+import pa.iscde.snippets.extensionhandlers.SnippetContextDefinitionManager;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class SnippetsActivator implements BundleActivator {
@@ -16,6 +19,9 @@ public class SnippetsActivator implements BundleActivator {
 	public static SnippetsActivator getInstance() {
 		return instance;
 	}
+	
+	private SnippetsActivator(){
+	}
 
 	public String getSelectedText() {
 		return editorListener.getSelectedText();
@@ -23,6 +29,14 @@ public class SnippetsActivator implements BundleActivator {
 	
 	public void insertTextAt(String text){
 		editorServices.insertTextAtCursor(text);
+	}
+	
+	public File getOpenFile(){
+		return editorServices.getOpenedFile();
+	}
+	
+	public int getCursorPosition(){
+		return editorServices.getCursorPosition();
 	}
 
 	@Override
@@ -34,6 +48,7 @@ public class SnippetsActivator implements BundleActivator {
 		editorServices = context.getService(ref);
 		editorServices.addListener(editorListener);
 		(new ProgrammaticSnippets()).createNewSnippetsProgrammatically();
+		SnippetContextDefinitionManager.getInstance().loadDefinitions();
 	}
 
 	@Override
