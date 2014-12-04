@@ -19,9 +19,6 @@ public class SnippetsActivator implements BundleActivator {
 	public static SnippetsActivator getInstance() {
 		return instance;
 	}
-	
-	private SnippetsActivator(){
-	}
 
 	public String getSelectedText() {
 		return editorListener.getSelectedText();
