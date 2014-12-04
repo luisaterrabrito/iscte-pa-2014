@@ -17,9 +17,10 @@
          </appinfo>
       </annotation>
       <complexType>
-         <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="command"/>
-         </sequence>
+         <choice>
+            <element ref="command_view"/>
+            <element ref="command_editor"/>
+         </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
@@ -47,7 +48,7 @@
       </complexType>
    </element>
 
-   <element name="command">
+   <element name="command_view">
       <complexType>
          <attribute name="name" type="string" use="required">
             <annotation>
@@ -92,6 +93,56 @@
                <appinfo>
                   <meta.attribute kind="identifier" basedOn="pt.iscte.pidesco.view/@point"/>
                </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="command_implementation" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":pa.iscde.commands.internal.services.Command"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="command_editor">
+      <complexType>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="ctrl_key" type="boolean" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="alt_key" type="boolean" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="key" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
             </annotation>
          </attribute>
          <attribute name="command_implementation" type="string" use="required">
