@@ -1,4 +1,4 @@
-package pa.iscde.snippets.extensionhandler;
+package pa.iscde.snippets.extensionhandlers;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
