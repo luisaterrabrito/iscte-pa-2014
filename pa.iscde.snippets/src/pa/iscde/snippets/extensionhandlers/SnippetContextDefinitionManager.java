@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -12,7 +13,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.swt.graphics.Image;
 
 import pa.iscde.snippets.fileoperations.FileOperations;
 import pa.iscde.snippets.interfaces.ContextDefinitionInterface;
@@ -24,16 +24,16 @@ public class SnippetContextDefinitionManager {
 	public static final String EXT_POINT_ID = "pa.iscde.snippets.contextdefinition";
 	private HashMap<String, ContextDefinitionInterface> definitions;
 	private FileOperations fileOP;
-	
-	public static SnippetContextDefinitionManager getInstance(){
-		if(instance == null)
+
+	public static SnippetContextDefinitionManager getInstance() {
+		if (instance == null)
 			instance = new SnippetContextDefinitionManager();
 		return instance;
 	}
-	
-	private SnippetContextDefinitionManager(){
+
+	private SnippetContextDefinitionManager() {
 	}
-	
+
 	public void addDefinition(ContextDefinitionInterface c) {
 		definitions.put(c.getTargetSnippet(), c);
 	}
@@ -42,12 +42,15 @@ public class SnippetContextDefinitionManager {
 		definitions.remove(c.getTargetSnippet());
 	}
 
-	public void loadDefinitions() {
+	public void loadDefinitions() throws CoreException {
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
-		for(IExtension ext : reg.getExtensionPoint(EXT_POINT_ID).getExtensions()) {
-			for(IConfigurationElement member : ext.getConfigurationElements()) {
-				
-				}
+		for (IExtension ext : reg.getExtensionPoint(EXT_POINT_ID)
+				.getExtensions()) {
+			for (IConfigurationElement member : ext.getConfigurationElements()) {
+				ContextDefinitionInterface definition = (ContextDefinitionInterface) member
+						.createExecutableExtension("definition");
+				addDefinition(definition);
+			}
 		}
 	}
 
@@ -76,8 +79,8 @@ public class SnippetContextDefinitionManager {
 		} else {
 			language = "NewSnippet";
 		}
-		//TODO
-		CursorContext context = new CursorContext(language, extension, false, false);
+		CursorContext context = new CursorContext(language, extension, visitor.isInsideMethod(),
+				visitor.isInsideClass());
 		return context;
 	}
 

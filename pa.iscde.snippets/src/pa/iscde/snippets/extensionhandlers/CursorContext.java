@@ -14,4 +14,20 @@ public class CursorContext {
 		this.insideMethod = insideMethod;
 		this.insideClass = insideClass;
 	}
+
+	public String getOpenedFileExtension() {
+		return openedFileExtension;
+	}
+
+	public String getSnippetLanguage() {
+		return snippetLanguage;
+	}
+
+	public boolean isInsideMethod() {
+		return insideMethod;
+	}
+
+	public boolean isInsideClass() {
+		return insideClass;
+	}
 }

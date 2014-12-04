@@ -26,9 +26,11 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import activator.SnippetsActivator;
 import pa.iscde.snippets.data.Variable;
+import pa.iscde.snippets.extensionhandlers.SnippetContextDefinitionManager;
 import pa.iscde.snippets.fileoperations.FileOperations;
 import pa.iscde.snippets.gui.dialogboxes.NewLanguageDialog;
 import pa.iscde.snippets.gui.dialogboxes.ValueInsertionDialog;
+import pa.iscde.snippets.interfaces.ContextDefinitionInterface.ValidateMessage;
 
 public class SnippetCode extends Composite {
 	private Text snippetNameTextBox;
@@ -38,7 +40,7 @@ public class SnippetCode extends Composite {
 	private ArrayList<String> languages;
 	private Button editButton;
 	private final Composite viewArea;
-	
+
 	public SnippetCode(File f, Composite viewArea, int style) {
 		super(viewArea, style);
 		this.viewArea = viewArea;
@@ -138,13 +140,16 @@ public class SnippetCode extends Composite {
 		snippetCodeText.setText("Insert Code Here...");
 		snippetCodeText.setFont(SWTResourceManager.getFont("Segoe UI", 11,
 				SWT.ITALIC));
-		if(SnippetsActivator.getInstance().getSelectedText() != null && !SnippetsActivator.getInstance().getSelectedText().equals("")){
-			snippetCodeText.setText(SnippetsActivator.getInstance().getSelectedText());
+		if (SnippetsActivator.getInstance().getSelectedText() != null
+				&& !SnippetsActivator.getInstance().getSelectedText()
+						.equals("")) {
+			snippetCodeText.setText(SnippetsActivator.getInstance()
+					.getSelectedText());
 			snippetCodeText.setFont(SWTResourceManager.getFont("Segoe UI", 11,
-				SWT.NORMAL));
+					SWT.NORMAL));
 		}
 		snippetCodeText.addFocusListener(focusListenerCreator());
-		//TODO: Add Listener To Check If Text Changed, use changed flag
+		// TODO: Add Listener To Check If Text Changed, use changed flag
 		GridData snippetCodeTextLayoutGridData = new GridData(SWT.FILL,
 				SWT.FILL, true, true, 1, 1);
 		snippetCodeTextLayoutGridData.widthHint = 200;
@@ -398,15 +403,6 @@ public class SnippetCode extends Composite {
 	private HashMap<String, Variable> getVariables() {
 		HashMap<String, Variable> variables = new HashMap<String, Variable>();
 		Scanner scanner = new Scanner(snippetCodeText.getText());
-//		while (scanner.hasNext()) {
-//			String token = scanner.next("(\\$[\\w]+:[\\w]*)|(\\$[\\w]+)");
-//			if (token.contains(":")) {
-//				String[] split = token.split(":");
-//				variables
-//						.put(split[0], new Variable(token, split[0], split[1]));
-//			}
-//		}
-//		scanner.close();
 		String token = "";
 		while (scanner.hasNextLine()) {
 			token = "";
@@ -415,9 +411,11 @@ public class SnippetCode extends Composite {
 				if (token != null) {
 					if (token.contains(":")) {
 						String[] split = token.split(":");
-						variables.put(split[0].replace("$", ""), new Variable(token, split[0].replace("$", ""), split[1]));
+						variables.put(split[0].replace("$", ""), new Variable(
+								token, split[0].replace("$", ""), split[1]));
 					} else {
-						variables.put(token.replace("$", ""), new Variable(token, token.replace("$", "")));
+						variables.put(token.replace("$", ""), new Variable(
+								token, token.replace("$", "")));
 					}
 				}
 			}
@@ -437,6 +435,13 @@ public class SnippetCode extends Composite {
 	}
 
 	private void insertSnippet() {
-		SnippetsActivator.getInstance().insertTextAt(snippetCodeText.getText());
+		ValidateMessage message = SnippetContextDefinitionManager.getInstance()
+				.validateSnippet(fileOperations);
+		if (message.isValid())
+			SnippetsActivator.getInstance().insertTextAt(
+					snippetCodeText.getText());
+		else
+			MessageDialog.openError(viewArea.getShell(),
+					"Invalid Snippet Context", message.getMessage());
 	}
 }
