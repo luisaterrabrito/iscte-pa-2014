@@ -29,6 +29,7 @@ public class CommandInputDialog extends Dialog {
 	public CommandInputDialog(Shell parent, CommandDefinition commandDefinition) {
 		super(parent);
 		this.commandDefinition = commandDefinition;
+
 	}
 
 	@Override
@@ -36,7 +37,9 @@ public class CommandInputDialog extends Dialog {
 		Composite container = (Composite) super.createDialogArea(parent);
 		GridData fieldsLayout = new GridData();
 		fieldsLayout.horizontalAlignment = SWT.FILL;
-		fieldsLayout.heightHint = 19;
+		fieldsLayout.grabExcessHorizontalSpace = true;
+		fieldsLayout.verticalAlignment = SWT.TOP;
+		fieldsLayout.grabExcessVerticalSpace = false;
 
 		keyInput = new Text(container, SWT.BORDER);
 		keyInput.setEditable(false);
@@ -46,6 +49,7 @@ public class CommandInputDialog extends Dialog {
 		inputLabel.setText(Labels.CLICKKEYCOMBINATIONS_LBL);
 
 		keyInput.setLayoutData(fieldsLayout);
+		fieldsLayout.heightHint = 30;
 		inputLabel.setLayoutData(fieldsLayout);
 
 		edit = new KeyPressEdit();
@@ -67,6 +71,7 @@ public class CommandInputDialog extends Dialog {
 	@Override
 	protected void cancelPressed() {
 		KeyPressDetector.getInstance().removeKeyPressListener(edit);
+		key = null;
 		super.cancelPressed();
 	}
 
@@ -86,9 +91,11 @@ public class CommandInputDialog extends Dialog {
 			if (result) {
 				keyInput.setBackground(new Color(null, 255, 255, 255));
 				key = c;
+				inputLabel.setText(Labels.CLICKKEYCOMBINATIONS_LBL);
 			} else {
 				keyInput.setBackground(new Color(null, 255, 0, 0));
 				key = null;
+				inputLabel.setText(Labels.KEYALREADYUSE_LBL);
 			}
 
 		}
