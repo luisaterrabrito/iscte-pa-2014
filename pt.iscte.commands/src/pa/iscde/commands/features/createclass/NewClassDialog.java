@@ -36,7 +36,6 @@ final class NewClassDialog extends TitleAreaDialog {
 
 	protected NewClassDialog(Shell shell) {
 		super(shell);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -92,13 +91,16 @@ final class NewClassDialog extends TitleAreaDialog {
 
 	@Override
 	protected void okPressed() {
-		try {
-			createClass();
-		} catch (IOException e) {
-			System.err
-					.println("An error secure while creating the java class file.");
+
+		if (validClassName() && validatePackageName()) {
+			try {
+				createClass();
+			} catch (IOException e) {
+				System.err
+						.println("An error secure while creating the java class file.");
+			}
+			super.okPressed();
 		}
-		super.okPressed();
 	}
 
 	private void createClass() throws IOException {
@@ -169,4 +171,19 @@ final class NewClassDialog extends TitleAreaDialog {
 		newShell.setText(Labels.CREATECLASS_LBL);
 	}
 
+	private boolean validClassName() {
+		if (className.getText().length() == 0)
+			return false;
+
+		// começar por uma letra e não ter espaços em branco
+		return className.getText().matches("^[A-Za-z](\\w)*");
+	}
+
+	private boolean validatePackageName() {
+		if (packageName.getText().length() == 0)
+			return true;
+		
+		// Inicia validação dos packages da maneira correcta
+		return className.getText().matches("^(\\w)*|(.\\w)*");
+	}
 }
