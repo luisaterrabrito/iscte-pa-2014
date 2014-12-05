@@ -1,4 +1,4 @@
-package pa.iscde.snippets.extensionhandlers;
+package pa.iscde.snippets.external;
 
 public class CursorContext {
 	private String openedFileExtension;

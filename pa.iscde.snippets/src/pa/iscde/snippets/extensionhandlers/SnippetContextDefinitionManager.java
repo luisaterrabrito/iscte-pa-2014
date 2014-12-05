@@ -14,15 +14,16 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
+import pa.iscde.snippets.external.ContextDefinitionInterface;
+import pa.iscde.snippets.external.CursorContext;
+import pa.iscde.snippets.external.ContextDefinitionInterface.ValidateMessage;
 import pa.iscde.snippets.fileoperations.FileOperations;
-import pa.iscde.snippets.interfaces.ContextDefinitionInterface;
-import pa.iscde.snippets.interfaces.ContextDefinitionInterface.ValidateMessage;
 import activator.SnippetsActivator;
 
 public class SnippetContextDefinitionManager {
 	private static SnippetContextDefinitionManager instance;
 	public static final String EXT_POINT_ID = "pa.iscde.snippets.contextdefinition";
-	private HashMap<String, ContextDefinitionInterface> definitions;
+	private HashMap<String, ContextDefinitionInterface> definitions = new HashMap<>();
 	private FileOperations fileOP;
 
 	public static SnippetContextDefinitionManager getInstance() {
@@ -72,6 +73,7 @@ public class SnippetContextDefinitionManager {
 	private CursorContext createContext(ContextVisitor visitor) {
 		String language = fileOP.getFileType();
 		File openFile = SnippetsActivator.getInstance().getOpenFile();
+		System.out.println(openFile.getName());
 		String[] splitName = openFile.getName().toLowerCase().split(".");
 		String extension = splitName[splitName.length - 1];
 		if (language != null) {
