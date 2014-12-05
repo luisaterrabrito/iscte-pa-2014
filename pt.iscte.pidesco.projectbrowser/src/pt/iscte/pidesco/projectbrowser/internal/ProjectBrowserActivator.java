@@ -26,6 +26,7 @@ public class ProjectBrowserActivator implements BundleActivator {
 	public void stop(BundleContext context) throws Exception {
 		instance = null;
 		service.unregister();
+		listeners.clear();
 	}
 	
 	public static ProjectBrowserActivator getInstance() {
