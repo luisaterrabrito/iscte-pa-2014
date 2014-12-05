@@ -52,7 +52,7 @@ final class SearchInputDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		data.setText(textInput.getText());
-		data.setCaseSensitive(checkBox.isEnabled());
+		data.setCaseSensitive(checkBox.getSelection());
 		super.okPressed();
 	}
 

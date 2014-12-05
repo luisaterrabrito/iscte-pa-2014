@@ -15,5 +15,13 @@ final public class Labels {
 	public static final String LINECOLUMN = "Line";
 	public static final String DESCRIPTIONCOLUMN = "Description";
 	public static final String NOSEARCHRESULTS = "No search results found";
+	public static final String CREATECLASS_LBL = "Create Class";
+	public static final String CREATECLASSINFO_LBL = "Create a new java class";
+	public static final String PACKAGE_LBL = "Package";
+	public static final String NAME_LBL = "Class Name";
+	public static final String MODIFIERS_LBL = "Modifiers";
+	public static final String PUBLICMODIFIER_LBL = "Public";
+	public static final String PACKAGEMODIFIER_LBL = "Package";
+	public static final String FINALMODIFIER_LBL = "Final";
 
 }
