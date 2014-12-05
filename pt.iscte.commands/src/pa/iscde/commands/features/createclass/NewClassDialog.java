@@ -151,13 +151,14 @@ final class NewClassDialog extends TitleAreaDialog {
 			File file = new File(workspace + "/" + folders + "/"
 					+ className.getText() + ".java");
 
+			if (!file.exists()) {
+				file.getParentFile().mkdirs();
+				file.createNewFile();
+			}
+
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			bw = new BufferedWriter(fw);
 			bw.write(createClassString().toString());
-
-			if (!file.exists()) {
-				file.createNewFile();
-			}
 
 		} finally {
 			if (bw != null) {
