@@ -4,6 +4,27 @@
    <extension-point id="pa.iscde.commands.command" name="Command" schema="schema/Command.exsd"/>
    <extension-point id="pa.iscde.commands.action" name="Action" schema="schema/Action.exsd"/>
    <extension
+         id="TeamCommands"
+         name="Commands"
+         point="pa.iscde.team">
+      <member
+            name="Fábio Martins"
+            user="farms">
+      </member>
+      <member
+            name="Tiago Martins"
+            user="trvms">
+      </member>
+   </extension>
+   <extension
+         id="CommandsView"
+         name="Commands"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.commands.external.services.CommandView">
+      </view>
+   </extension>
+   <extension
          id="ActionNewCommand"
          name="ActionNewCommand"
          point="pa.iscde.commands.action">
@@ -40,27 +61,6 @@
       </action>
    </extension>
    <extension
-         id="TeamCommands"
-         name="Commands"
-         point="pa.iscde.team">
-      <member
-            name="Fábio Martins"
-            user="farms">
-      </member>
-      <member
-            name="Tiago Martins"
-            user="trvms">
-      </member>
-   </extension>
-   <extension
-         id="CommandsView"
-         name="Commands"
-         point="pt.iscte.pidesco.view">
-      <view
-            class="pa.iscde.commands.external.services.CommandView">
-      </view>
-   </extension>
-   <extension
          point="pa.iscde.commands.command">
       <command_editor
             alt_key="false"
@@ -81,6 +81,17 @@
             description="comando view"
             key="A"
             name="pa.iscde.commands.command_view1">
+      </command_view>
+   </extension>
+   <extension
+         point="pa.iscde.commands.command">
+      <command_view
+            alt_key="false"
+            command_implementation="pa.iscde.commands.features.search.SearchWord"
+            context_view="pa.iscde.commands.CommandsView"
+            ctrl_key="true"
+            key="F"
+            name="pa.iscde.commands.search">
       </command_view>
    </extension>
 

@@ -1,4 +1,4 @@
-package pa.iscde.commands.external.services;
+package pa.iscde.commands.controllers;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
