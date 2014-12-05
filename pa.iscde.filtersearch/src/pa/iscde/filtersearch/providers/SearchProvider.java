@@ -7,10 +7,8 @@ import org.eclipse.swt.graphics.Image;
 
 public interface SearchProvider {
 	
-	
 	List<Object> getResults(String text);
 	Image setImage(Object object);
 	void doubleClickAction(TreeViewer tree, Object object);
-	
 	
 }

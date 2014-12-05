@@ -1,12 +1,8 @@
 package pa.iscde.filtersearch.view;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Image;
@@ -54,77 +50,16 @@ public class ProjectBrowserSearchProvider implements SearchProvider {
 
 		private void scan(PackageElement root, List<Object> hits, String text) {
 
-
-
-			Map<ClassElement, String> resultsMethods = new HashMap<ClassElement, String>();
-
 			for(SourceElement c : root){
 
 				if(c.getName().toUpperCase().contains(text.toUpperCase()))
 					hits.add(c);
-
-				if(c.isClass()){
-					verifyExistingMethodsInsideClass((ClassElement)c, text, resultsMethods);
-				} else {
+				if(c.isPackage()){
 					scan((PackageElement)c,hits, text);				
 				}
 			}
 		}
 
-		/** 
-		 *
-		 * TODO
-		 * 
-		 * acabar a verifica��o da existencia de m�todos
-		 *
-		 */
-		private void verifyExistingMethodsInsideClass(ClassElement c, String text, Map<ClassElement, String> resultsMethods) {
-
-
-
-			Scanner fileScanner = null;
-			boolean fileEnd = false;
-
-			File f  = c.getFile();
-			
-			System.out.println("File name: " + c.getFile().getName());
-			try { 
-				fileScanner = new Scanner(f);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-
-			while(!fileEnd){
-
-				if(fileScanner.hasNextLine()){
-
-					Scanner lineScanner = new Scanner(fileScanner.nextLine());
-
-					if(lineScanner.hasNextLine()){
-
-						String line = lineScanner.nextLine();
-						
-						System.out.println(line);
-
-						if(line.contains(text) && !text.isEmpty()){
-							resultsMethods.put(c, line);
-							System.out.println("Tenho um resultado");
-						}
-
-					} else {
-						fileEnd = true;
-						printMap(resultsMethods);
-					}
-				}
-			}
-		}
-
-		private void printMap(Map<ClassElement, String> resultsMethods) {
-			System.out.println("--------------- RESULTS ---------------");
-			for (Map.Entry<ClassElement, String> entry : resultsMethods.entrySet()) {
-				System.out.println(entry.getKey() + " - " + entry.getValue());
-			}
-		}
 
 		@Override
 		public Image setImage(Object object) {
