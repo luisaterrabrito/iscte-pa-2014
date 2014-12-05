@@ -1,7 +1,8 @@
-package pa.iscde.filtersearch.view;
+package pa.iscde.filtersearch.providers;
 
 import java.util.List;
 
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Image;
 
 public interface SearchProvider {
@@ -9,7 +10,7 @@ public interface SearchProvider {
 	
 	List<Object> getResults(String text);
 	Image setImage(Object object);
-	void doubleClickAction(Object object);
+	void doubleClickAction(TreeViewer tree, Object object);
 	
 	
 }
