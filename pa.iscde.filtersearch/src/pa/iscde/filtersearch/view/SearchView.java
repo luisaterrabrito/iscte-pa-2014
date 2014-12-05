@@ -1,14 +1,10 @@
 package pa.iscde.filtersearch.view;
 
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.Vector;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -30,14 +26,8 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -46,10 +36,8 @@ import org.osgi.framework.ServiceReference;
 
 import pa.iscde.filtersearch.providers.SearchProvider;
 import pt.iscte.pidesco.extensibility.PidescoView;
-import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.ClassElement;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
-import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 public class SearchView implements PidescoView {
@@ -60,10 +48,8 @@ public class SearchView implements PidescoView {
 
 	@SuppressWarnings("unused")
 	private static Composite viewArea;
-	private static SearchView instance;
 
 	private ProjectBrowserServices browserServices;
-	private JavaEditorServices editorServices;
 
 	@SuppressWarnings("unused")
 	private PackageElement rootPackage;
@@ -71,8 +57,6 @@ public class SearchView implements PidescoView {
 	private static Image packageIcon;
 	private static Image classIcon;
 	private static Image categoryIcon;
-
-	private Text searchText;
 
 	public SearchView() {
 		Bundle bundle = FrameworkUtil.getBundle(SearchView.class);
@@ -82,9 +66,8 @@ public class SearchView implements PidescoView {
 
 
 
-
 		/**
-		 * Acede aos pontos de extensï¿½o que implementam a interface SearchProvider
+		 * Acede aos pontos de extensão que implementam a interface SearchProvider
 		 */
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
 		IExtensionPoint extensionPoint = reg.getExtensionPoint("pa.iscde.filtersearch.SearchProvider");
@@ -104,10 +87,6 @@ public class SearchView implements PidescoView {
 
 	}
 
-	public static SearchView getInstance(){
-		return instance;
-	}
-
 
 	class SearchCategory {
 		String name;
@@ -124,21 +103,16 @@ public class SearchView implements PidescoView {
 	}
 
 
-
-
-
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> images) {
 
 		SearchView.viewArea = viewArea;
-		instance = this;
-		final Shell shell = new Shell();
 
 		packageIcon = images.get("package_obj.gif");
 		classIcon = images.get("classes.gif");
 		categoryIcon = images.get("searchtool.gif");
 
-		GridLayout gridLayout = new GridLayout(4, false);
+		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.verticalSpacing = 8;
 		viewArea.setLayout(gridLayout);
 
@@ -146,34 +120,19 @@ public class SearchView implements PidescoView {
 		Label label = new Label(viewArea, SWT.NULL);
 		label.setText("Search: ");
 
-		searchText = new Text(viewArea, SWT.SINGLE | SWT.BORDER);
+		Text searchText = new Text(viewArea, SWT.SINGLE | SWT.BORDER);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		searchText.setLayoutData(gridData);
-
-
-		// Filter
-		label = new Label(viewArea, SWT.NULL);
-		label.setText("Filter");
-
-		Combo filter = new Combo(viewArea, SWT.READ_ONLY);
-		filter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		filter.add("All");
-		filter.add("Public");
-		filter.add("Private");
-
-		// Results
-		label = new Label(viewArea, SWT.NULL);
-		label.setText("Results:");
-
 
 		// TreeViewer
 		rootPackage = browserServices.getRootPackage();
 		tree = new TreeViewer(viewArea, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		tree.setContentProvider(new ViewContentProvider());
 		tree.setLabelProvider(new ViewLabelProvider());
-		loadCategories();
+		loadCategories("");
 		tree.expandAll();
 
+		tree.getTree().setLayoutData(new GridData(GridData.FILL_BOTH | SWT.H_SCROLL | SWT.V_SCROLL));
 
 		tree.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -194,57 +153,28 @@ public class SearchView implements PidescoView {
 		});
 
 
-		// Listener de alteraï¿½ï¿½es no searchText
+		// Listener de alterações no searchText
 
 		ModifyListener modifyListener = new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
 
-				loadCategories();
+				Text text = (Text)e.widget;
+				loadCategories(text.getText());
 			}
 		};
 
 		searchText.addModifyListener(modifyListener);
 
-
-		// Search Button
-
-		final Button searchButton = new Button(viewArea, SWT.PUSH);
-		searchButton.setText("Enter");
-
-		gridData = new GridData();
-		gridData.horizontalSpan = 4;
-		gridData.horizontalAlignment = GridData.END;
-		searchButton.setLayoutData(gridData);
-
-		Listener listener = new Listener(){
-			@Override
-			public void handleEvent(Event event) {
-
-				if(!searchText.getText().isEmpty()){
-					loadCategories();
-
-				} else{
-					MessageBox dialog =  new MessageBox(shell, SWT.ICON_ERROR | SWT.OK);
-					dialog.setText("ERROR");
-					dialog.setMessage("Please enter some text!");
-					dialog.open(); 
-				}
-			}
-
-		};
-
-		searchButton.addListener(SWT.Selection, listener);
-
 	}
 
-	private void loadCategories() {
+	private void loadCategories(String text) {
 		providerMap = new HashMap<Object, SearchProvider>();
 		List<SearchCategory> categories = new ArrayList<>();
 		for(SearchProvider p : providers) {
 			SearchCategory category = new SearchCategory(p.getClass().getSimpleName());
-			category.hits = p.getResults(searchText.getText());
+			category.hits = p.getResults(text);
 			for(Object o : category.hits){
 				providerMap.put(o, p);
 			}
@@ -267,7 +197,7 @@ public class SearchView implements PidescoView {
 
 
 	/**
-	 * Decide o que vai aparecer em cada item da ï¿½rvore: nome e imagem
+	 * Decide o que vai aparecer em cada item da árvore: nome e imagem
 	 * @author lcmms
 	 *
 	 */
@@ -290,8 +220,7 @@ public class SearchView implements PidescoView {
 
 
 	/**
-	 * Define que elementos vï¿½o aparecer na ï¿½rvore
-	 * @author lcmms
+	 * Define que elementos vão aparecer na árvore
 	 *
 	 */
 
@@ -307,15 +236,17 @@ public class SearchView implements PidescoView {
 
 		@SuppressWarnings("unchecked")
 		public Object[] getElements(Object input) {
-			List<SearchCategory> cats = (List<SearchCategory>) input;
-			return cats.toArray();
+			List<SearchCategory> categories = (List<SearchCategory>) input;
+			return categories.toArray();
 
 		}
 
+		/**
+		 * É necessário
+		 */
 		public Object getParent(Object child) {
-			//			SearchCategory cat = (SearchCategory) child;
+			// SearchCategory cat = (SearchCategory) child;
 			return null;
-
 		}
 
 		public Object[] getChildren(Object parent) {
