@@ -184,6 +184,6 @@ final class NewClassDialog extends TitleAreaDialog {
 			return true;
 		
 		// Inicia validação dos packages da maneira correcta
-		return className.getText().matches("^(\\w)*|(.\\w)*");
+		return className.getText().matches("(\\w|\\.\\w)*");
 	}
 }
