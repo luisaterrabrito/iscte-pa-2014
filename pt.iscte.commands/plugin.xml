@@ -94,5 +94,16 @@
             name="pa.iscde.commands.search">
       </command_view>
    </extension>
+   <extension
+         point="pa.iscde.commands.command">
+      <command_view
+            alt_key="false"
+            command_implementation="pa.iscde.commands.features.createclass.NewClass"
+            context_view="pt.iscte.pidesco.projectbrowser.tree"
+            ctrl_key="true"
+            key="L"
+            name="New Class">
+      </command_view>
+   </extension>
 
 </plugin>
