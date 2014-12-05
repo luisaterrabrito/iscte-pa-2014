@@ -16,6 +16,10 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleListener;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
@@ -82,23 +86,21 @@ public class JavaEditorActivator implements BundleActivator, IPartListener2 {
 	}
 	
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(final BundleContext context) throws Exception {
 		instance = this;
 		this.context = context;
-		ServiceReference<ProjectBrowserServices> ref = context.getServiceReference(ProjectBrowserServices.class);
+		final ServiceReference<ProjectBrowserServices> ref = context.getServiceReference(ProjectBrowserServices.class);
 		browser = context.getService(ref);
 		services = new JavaEditorServicesImpl();
 		listener = new OpenEditorListener(services);
 		browser.addListener(listener);
 		context.registerService(JavaEditorServices.class, services, null);
-		
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		instance = null;
 		this.context = null;
-		browser.removeListener(listener);
 	}
 
 	public BundleContext getContext() {
