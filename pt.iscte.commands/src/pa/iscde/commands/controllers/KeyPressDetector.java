@@ -89,11 +89,12 @@ final public class KeyPressDetector {
 	}
 
 	public void notifyListeners(CommandKey c) {
-		// for (KeyStrokeListener keyStrokeListener : listeners) {
 		// notefica apenas o ultimo listener, para evitar chamar outros
 		// listeners individamente
-		listeners.get(listeners.size() - 1).keyPressed(c);
-		// }
+		if (listeners.size() >= 1) {
+			listeners.get(listeners.size() - 1).keyPressed(c);
+		}
+
 	}
 
 }

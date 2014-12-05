@@ -1,25 +1,53 @@
 package pa.iscde.commands.features.search;
 
-import org.osgi.framework.ServiceReference;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.swt.widgets.Display;
 
-import pa.iscde.commands.controllers.CommandsController;
 import pa.iscde.commands.internal.services.Command;
-import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 final public class SearchWord implements Command {
-	
-	private JavaEditorServices javaServices;
 
-	public SearchWord() {
-		
-		ServiceReference<JavaEditorServices> ref = CommandsController.getContext().getServiceReference(JavaEditorServices.class);
-		javaServices = CommandsController.getContext().getService(ref);
-	}
+	private SearchInputDialog dialog;
+	private FileSearchResults searchResult;
 
 	@Override
 	public void action() {
-		// TODO Auto-generated method stub
-		
+		DialogInputData data = new DialogInputData();
+		dialog = new SearchInputDialog(Display.getCurrent().getActiveShell(),
+				data);
+
+		int result = dialog.open();
+
+		if (result == Dialog.OK && data.getText().length() > 0) {
+			searchResult = new FileSearchResults(Display.getCurrent()
+					.getActiveShell(), data);
+
+			searchResult.open();
+		}
+	}
+
+	final class DialogInputData {
+
+		private String text;
+
+		private boolean isCaseSensitive = false;
+
+		public void setCaseSensitive(boolean isCaseSensitive) {
+			this.isCaseSensitive = isCaseSensitive;
+		}
+
+		public void setText(String text) {
+			this.text = text;
+		}
+
+		public String getText() {
+			return text;
+		}
+
+		public boolean isCaseSensitive() {
+			return isCaseSensitive;
+		}
+
 	}
 
 }

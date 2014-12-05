@@ -3,6 +3,7 @@ package pa.iscde.commands.features.actions;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -49,7 +50,7 @@ public class CommandInputDialog extends Dialog {
 		inputLabel.setText(Labels.CLICKKEYCOMBINATIONS_LBL);
 
 		keyInput.setLayoutData(fieldsLayout);
-		fieldsLayout.heightHint = 30;
+		fieldsLayout.heightHint = 15;
 		inputLabel.setLayoutData(fieldsLayout);
 
 		edit = new KeyPressEdit();
@@ -73,6 +74,17 @@ public class CommandInputDialog extends Dialog {
 		KeyPressDetector.getInstance().removeKeyPressListener(edit);
 		key = null;
 		super.cancelPressed();
+	}
+	
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText(Labels.CHANGEKEYTITLE_LBL);
+	}
+	
+	@Override
+	protected Point getInitialSize() {
+		return new Point(320, 150);
 	}
 
 	private final class KeyPressEdit implements KeyStrokeListener {

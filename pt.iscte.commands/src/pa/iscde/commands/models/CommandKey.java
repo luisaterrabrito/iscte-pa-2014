@@ -85,8 +85,7 @@ final public class CommandKey {
 
 	@Override
 	public int hashCode() {
-		return ((short) view.hashCode())
-				^ ((short) Boolean.valueOf(ctrl_key).hashCode())
+		return ((short) Boolean.valueOf(ctrl_key).hashCode())
 				^ ((short) Boolean.valueOf(alt_key).hashCode())
 				^ ((short) Character.valueOf(key).hashCode());
 	}
@@ -101,8 +100,8 @@ final public class CommandKey {
 			return true;
 
 		CommandKey command = (CommandKey) o;
-		if (view.equals(command.view) && ctrl_key == command.ctrl_key
-				&& alt_key == command.alt_key && key == command.key)
+		if (ctrl_key == command.ctrl_key && alt_key == command.alt_key
+				&& key == command.key)
 			return true;
 
 		return false;
