@@ -98,7 +98,6 @@ public class SearchView implements PidescoView {
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
-				System.out.println("-> " + p);
 				providers.add(p);
 			}
 		}
@@ -195,7 +194,7 @@ public class SearchView implements PidescoView {
 		});
 
 
-		// Listener de alteraï¿½ï¿½es no searchText
+		// Listener de alterações no searchText
 
 		ModifyListener modifyListener = new ModifyListener() {
 
@@ -287,28 +286,27 @@ public class SearchView implements PidescoView {
 			List<Object> hits = new ArrayList<>();
 			PackageElement root = browserServices.getRootPackage();
 
+
+
 			scan(root,hits,text);
 
 			return hits;
 		}
 
 		private void scan(PackageElement root, List<Object> hits, String text) {
-			
-			int i = 1;
-			
-			Map<String, SourceElement> resultsMethods = new HashMap<String, SourceElement>();
-			
+
+
+
+			Map<ClassElement, String> resultsMethods = new HashMap<ClassElement, String>();
+
 			for(SourceElement c : root){
 
+				if(c.getName().toUpperCase().contains(text.toUpperCase()))
+					hits.add(c);
+
 				if(c.isClass()){
-					if(c.getName().toUpperCase().contains(text.toUpperCase()))
-						hits.add(c);
-					System.out.println(i + " -----------------");
-					verifyExistingMethodsInsideClass(c, text, resultsMethods);
-					i++;
+					verifyExistingMethodsInsideClass((ClassElement)c, text, resultsMethods);
 				} else {
-					if(c.getName().toUpperCase().contains(text.toUpperCase()))
-						hits.add(c);
 					scan((PackageElement)c,hits, text);				
 				}
 			}
@@ -321,16 +319,17 @@ public class SearchView implements PidescoView {
 		 * acabar a verificação da existencia de métodos
 		 *
 		 */
-		private void verifyExistingMethodsInsideClass(SourceElement c, String text, Map<String, SourceElement> resultsMethods) {
+		private void verifyExistingMethodsInsideClass(ClassElement c, String text, Map<ClassElement, String> resultsMethods) {
 
-			
+
 
 			Scanner fileScanner = null;
 			boolean fileEnd = false;
 
 			File f  = c.getFile();
-
-			try {
+			
+			System.out.println("File name: " + c.getFile().getName());
+			try { 
 				fileScanner = new Scanner(f);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -338,30 +337,33 @@ public class SearchView implements PidescoView {
 
 			while(!fileEnd){
 
-				Scanner lineScanner = new Scanner(fileScanner.nextLine());
+				if(fileScanner.hasNextLine()){
 
-				if(lineScanner.hasNextLine()){
+					Scanner lineScanner = new Scanner(fileScanner.nextLine());
 
-					String line = lineScanner.nextLine();
+					if(lineScanner.hasNextLine()){
 
-					if(line.contains(text)){
-						resultsMethods.put(line, c);
+						String line = lineScanner.nextLine();
 						
 						System.out.println(line);
+
+						if(line.contains(text) && !text.isEmpty()){
+							resultsMethods.put(c, line);
+							System.out.println("Tenho um resultado");
+						}
+
+					} else {
+						fileEnd = true;
+						printMap(resultsMethods);
 					}
-
-				} else {
-					fileEnd = true;
-					//printMap(resultsMethods);
 				}
-
 			}
-
 		}
 
-		private void printMap(Map<String, SourceElement> resultsMethods) {
-			for (Map.Entry<String, SourceElement> entry : resultsMethods.entrySet()) {
-				System.out.println(entry.getValue() + " - " + entry.getKey());
+		private void printMap(Map<ClassElement, String> resultsMethods) {
+			System.out.println("--------------- RESULTS ---------------");
+			for (Map.Entry<ClassElement, String> entry : resultsMethods.entrySet()) {
+				System.out.println(entry.getKey() + " - " + entry.getValue());
 			}
 		}
 
