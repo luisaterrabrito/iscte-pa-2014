@@ -31,7 +31,7 @@
    <extension
          point="pa.iscde.filtersearch.SearchProvider">
       <SearchProvider
-            className="pa.iscde.filtersearch.view.SearchView$ProjectBrowserSearchProvider">
+            className="pa.iscde.filtersearch.view.ProjectBrowserSearchProvider">
       </SearchProvider>
    </extension>
 </plugin>
