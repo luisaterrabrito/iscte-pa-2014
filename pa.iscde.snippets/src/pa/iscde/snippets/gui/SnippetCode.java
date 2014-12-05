@@ -27,10 +27,10 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import activator.SnippetsActivator;
 import pa.iscde.snippets.data.Variable;
 import pa.iscde.snippets.extensionhandlers.SnippetContextDefinitionManager;
+import pa.iscde.snippets.external.ContextDefinitionInterface.ValidateMessage;
 import pa.iscde.snippets.fileoperations.FileOperations;
 import pa.iscde.snippets.gui.dialogboxes.NewLanguageDialog;
 import pa.iscde.snippets.gui.dialogboxes.ValueInsertionDialog;
-import pa.iscde.snippets.interfaces.ContextDefinitionInterface.ValidateMessage;
 
 public class SnippetCode extends Composite {
 	private Text snippetNameTextBox;
@@ -402,8 +402,8 @@ public class SnippetCode extends Composite {
 
 	private HashMap<String, Variable> getVariables() {
 		HashMap<String, Variable> variables = new HashMap<String, Variable>();
-		Scanner scanner = new Scanner(snippetCodeText.getText());
-		String token = "";
+		Scanner scanner = new Scanner(snippetCodeText.getText().concat(System.lineSeparator()));
+		String token;
 		while (scanner.hasNextLine()) {
 			token = "";
 			while (token != null) {
@@ -419,19 +419,25 @@ public class SnippetCode extends Composite {
 					}
 				}
 			}
-			scanner.nextLine();
+				scanner.nextLine();
 		}
 		scanner.close();
 		return variables;
 	}
 
 	private void insertSnippet(HashMap<String, Variable> variables) {
-		String code = snippetCodeText.getText();
-		for (Variable variable : variables.values()) {
-			code = code.replace(variable.getSubstituteToken(),
-					variable.getValue());
-		}
-		SnippetsActivator.getInstance().insertTextAt(code);
+		ValidateMessage message = SnippetContextDefinitionManager.getInstance()
+				.validateSnippet(fileOperations);
+		if (message.isValid()) {
+			String code = snippetCodeText.getText();
+			for (Variable variable : variables.values()) {
+				code = code.replace(variable.getSubstituteToken(),
+						variable.getValue());
+			}
+			SnippetsActivator.getInstance().insertTextAt(code);
+		} else
+			MessageDialog.openError(viewArea.getShell(),
+					"Invalid Snippet Context", message.getMessage());
 	}
 
 	private void insertSnippet() {

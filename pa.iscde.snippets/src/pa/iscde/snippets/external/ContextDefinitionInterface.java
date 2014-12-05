@@ -1,6 +1,5 @@
-package pa.iscde.snippets.interfaces;
+package pa.iscde.snippets.external;
 
-import pa.iscde.snippets.extensionhandlers.CursorContext;
 
 public interface ContextDefinitionInterface {
 
