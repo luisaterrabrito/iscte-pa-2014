@@ -1,10 +1,14 @@
 package pa.iscde.filtersearch.view;
 
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.Vector;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -14,7 +18,6 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -36,12 +39,12 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.TreeItem;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import pa.iscde.filtersearch.providers.SearchProvider;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.ClassElement;
@@ -52,8 +55,8 @@ import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 public class SearchView implements PidescoView {
 
 
-	List<SearchProvider> providers = new ArrayList<>(); //Hardcode
-
+	List<SearchProvider> providers = new ArrayList<>(); 
+	Map<Object, SearchProvider> providerMap;
 
 	@SuppressWarnings("unused")
 	private static Composite viewArea;
@@ -77,8 +80,7 @@ public class SearchView implements PidescoView {
 		ServiceReference<ProjectBrowserServices> serviceReference_projectBrowser = context.getServiceReference(ProjectBrowserServices.class);
 		browserServices = context.getService(serviceReference_projectBrowser);
 
-		ServiceReference<JavaEditorServices> serviceReference_javaEditor = context.getServiceReference(JavaEditorServices.class);
-		editorServices = context.getService(serviceReference_javaEditor);
+
 
 
 		/**
@@ -111,7 +113,7 @@ public class SearchView implements PidescoView {
 	class SearchCategory {
 		String name;
 		List<Object> hits = new ArrayList<>();
-		
+
 		SearchCategory(String name) {
 			this.name = name;
 		}
@@ -122,7 +124,7 @@ public class SearchView implements PidescoView {
 		}
 	}
 
-	Map<Object, SearchProvider> providerMap;
+
 
 
 
@@ -182,26 +184,12 @@ public class SearchView implements PidescoView {
 
 				IStructuredSelection s = (IStructuredSelection) tree.getSelection();
 				if(s.size() == 1) {
-					Object element = (SourceElement) s.getFirstElement();
 
-					SearchProvider p = providerMap.get(element);
-				
-					System.out.println(item.getData().toString());
-					
-					if(element.isClass()){
+					Object element = s.getFirstElement();
+					SearchProvider provider = providerMap.get(element);
 
-						File f = (File)element.getFile();
-						editorServices.openFile(f);
+					provider.doubleClickAction(tree, element);
 
-						/**
-						 * TODO 
-						 * 
-						 * Se for um projecto (search category)
-						 */
-					} else {
-						// if(element.isRoot()){
-						tree.collapseAll();
-					}
 				}
 			}
 		});
@@ -280,14 +268,18 @@ public class SearchView implements PidescoView {
 	public static class ProjectBrowserSearchProvider implements SearchProvider {
 
 		private ProjectBrowserServices browserServices;
+		private JavaEditorServices editorServices;
 		private ViewLabelProvider labelProvider;
 
 		public ProjectBrowserSearchProvider() {
 
 			Bundle bundle = FrameworkUtil.getBundle(ProjectBrowserSearchProvider.class);
 			BundleContext context  = bundle.getBundleContext();
-			ServiceReference<ProjectBrowserServices> ref2 = context.getServiceReference(ProjectBrowserServices.class);
-			browserServices = context.getService(ref2);
+			ServiceReference<ProjectBrowserServices> ref = context.getServiceReference(ProjectBrowserServices.class);
+			browserServices = context.getService(ref);
+
+			ServiceReference<JavaEditorServices> serviceReference_javaEditor = context.getServiceReference(JavaEditorServices.class);
+			editorServices = context.getService(serviceReference_javaEditor);
 		}
 
 		@Override
@@ -301,12 +293,75 @@ public class SearchView implements PidescoView {
 		}
 
 		private void scan(PackageElement root, List<Object> hits, String text) {
+			
+			int i = 1;
+			
+			Map<String, SourceElement> resultsMethods = new HashMap<String, SourceElement>();
+			
 			for(SourceElement c : root){
-				if(c.getName().contains(text))
-					hits.add(c);
-				if(c.isPackage()){
+
+				if(c.isClass()){
+					if(c.getName().toUpperCase().contains(text.toUpperCase()))
+						hits.add(c);
+					System.out.println(i + " -----------------");
+					verifyExistingMethodsInsideClass(c, text, resultsMethods);
+					i++;
+				} else {
+					if(c.getName().toUpperCase().contains(text.toUpperCase()))
+						hits.add(c);
 					scan((PackageElement)c,hits, text);				
 				}
+			}
+		}
+
+		/** 
+		 *
+		 * TODO
+		 * 
+		 * acabar a verificação da existencia de métodos
+		 *
+		 */
+		private void verifyExistingMethodsInsideClass(SourceElement c, String text, Map<String, SourceElement> resultsMethods) {
+
+			
+
+			Scanner fileScanner = null;
+			boolean fileEnd = false;
+
+			File f  = c.getFile();
+
+			try {
+				fileScanner = new Scanner(f);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+
+			while(!fileEnd){
+
+				Scanner lineScanner = new Scanner(fileScanner.nextLine());
+
+				if(lineScanner.hasNextLine()){
+
+					String line = lineScanner.nextLine();
+
+					if(line.contains(text)){
+						resultsMethods.put(line, c);
+						
+						System.out.println(line);
+					}
+
+				} else {
+					fileEnd = true;
+					//printMap(resultsMethods);
+				}
+
+			}
+
+		}
+
+		private void printMap(Map<String, SourceElement> resultsMethods) {
+			for (Map.Entry<String, SourceElement> entry : resultsMethods.entrySet()) {
+				System.out.println(entry.getValue() + " - " + entry.getKey());
 			}
 		}
 
@@ -316,15 +371,20 @@ public class SearchView implements PidescoView {
 		}
 
 		@Override
-		public void doubleClickAction(Object object) {
-			// TODO Auto-generated method stub
-			
+		public void doubleClickAction(TreeViewer tree, Object object) {
+
+			if (object instanceof ClassElement){
+				SourceElement element = (SourceElement) object;
+				File f = element.getFile();
+				editorServices.openFile(f);
+			}
 		}
+
 	}
 
 
 	/**
-	 * Decide o que vai aparecer em cada item da ï¿½rvore: nome e imagem
+	 * Decide o que vai aparecer em cada item da árvore: nome e imagem
 	 * @author lcmms
 	 *
 	 */
