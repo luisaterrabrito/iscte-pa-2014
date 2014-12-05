@@ -9,6 +9,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -42,8 +44,12 @@ final class NewClassDialog extends TitleAreaDialog {
 	public void create() {
 		super.create();
 		setTitle(Labels.CREATECLASS_LBL);
-		setMessage(Labels.CREATECLASSINFO_LBL, IMessageProvider.INFORMATION);
+		setDefaultMessageTitle();
 
+	}
+
+	private void setDefaultMessageTitle() {
+		setMessage(Labels.CREATECLASSINFO_LBL, IMessageProvider.INFORMATION);
 	}
 
 	@Override
@@ -62,12 +68,40 @@ final class NewClassDialog extends TitleAreaDialog {
 
 		packageName = new Text(container, SWT.BORDER);
 		packageName.setLayoutData(fieldsLayout);
+		packageName.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				validatePackageName();
+
+			}
+		});
 
 		Label nameLabel = new Label(container, SWT.NONE);
 		nameLabel.setText(Labels.NAME_LBL);
 
 		className = new Text(container, SWT.BORDER);
 		className.setLayoutData(fieldsLayout);
+		className.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				validClassName();
+
+			}
+		});
 
 		Label modifiersLabel = new Label(container, SWT.NONE);
 		modifiersLabel.setText(Labels.MODIFIERS_LBL);
@@ -172,18 +206,35 @@ final class NewClassDialog extends TitleAreaDialog {
 	}
 
 	private boolean validClassName() {
-		if (className.getText().length() == 0)
-			return false;
-
+		if (className.getText().length() == 0
 		// começar por uma letra e não ter espaços em branco
-		return className.getText().matches("^[A-Za-z](\\w)*");
+				|| !className.getText().matches("^[A-Za-z](\\w)*")) {
+
+			setMessage(Labels.CREATECLASSERROR_LBL, IMessageProvider.ERROR);
+			return false;
+		}
+
+		setDefaultMessageTitle();
+		return true;
 	}
 
 	private boolean validatePackageName() {
-		if (packageName.getText().length() == 0)
+		if (packageName.getText().length() == 0) {
+			setDefaultMessageTitle();
 			return true;
-		
-		// Inicia validação dos packages da maneira correcta
-		return className.getText().matches("(\\w|\\.\\w)*");
+		}
+
+		// verifica se o package te o formato correcto:
+		// package1.packageInside.Package
+		boolean result = packageName.getText().matches("(\\w|\\.\\w)*");
+		System.out.println(result);
+		if (!result) {
+			setMessage(Labels.CREATECLASSPACKAGEERROR_LBL,
+					IMessageProvider.ERROR);
+		} else {
+			setDefaultMessageTitle();
+		}
+
+		return result;
 	}
 }
