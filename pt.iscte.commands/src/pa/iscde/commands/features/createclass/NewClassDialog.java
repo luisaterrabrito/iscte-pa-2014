@@ -172,6 +172,10 @@ final class NewClassDialog extends TitleAreaDialog {
 	private StringBuilder createClassString() {
 		StringBuilder sb = new StringBuilder(100);
 
+		if (packageName.getText().length() != 0)
+			sb.append("package " + packageName.getText()
+					+ System.lineSeparator() + System.lineSeparator());
+
 		if (radioPublicModifier.getSelection())
 			sb.append("public ");
 
@@ -228,7 +232,6 @@ final class NewClassDialog extends TitleAreaDialog {
 		// verifica se o package te o formato correcto:
 		// package1.packageInside.Package
 		boolean result = packageName.getText().matches("(\\w|\\.\\w)*");
-		System.out.println(result);
 		if (!result) {
 			setMessage(Labels.CREATECLASSPACKAGEERROR_LBL,
 					IMessageProvider.ERROR);

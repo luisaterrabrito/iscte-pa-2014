@@ -12,25 +12,22 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import pa.iscde.commands.controllers.KeyPressDetector;
-import pa.iscde.commands.controllers.KeyPressDetector.KeyStrokeListener;
 import pa.iscde.commands.models.CommandDefinition;
 import pa.iscde.commands.models.CommandKey;
-import pa.iscde.commands.models.CommandWarehouse;
 import pa.iscde.commands.utils.Labels;
 
-public class CommandInputDialog extends Dialog {
+class CommandInputDialog extends Dialog {
 
 	private Text keyInput;
 	private Label inputLabel;
 
-	private KeyPressEdit edit;
+	private KeyPressListener edit;
 	private CommandKey key;
 	private CommandDefinition commandDefinition;
 
 	public CommandInputDialog(Shell parent, CommandDefinition commandDefinition) {
 		super(parent);
 		this.commandDefinition = commandDefinition;
-
 	}
 
 	@Override
@@ -53,7 +50,18 @@ public class CommandInputDialog extends Dialog {
 		fieldsLayout.heightHint = 15;
 		inputLabel.setLayoutData(fieldsLayout);
 
-		edit = new KeyPressEdit();
+		edit = new KeyPressListener(keyInput, commandDefinition.getContext()) {
+			@Override
+			public void keyPressed(CommandKey c) {
+				super.keyPressed(c);
+
+				if (isKeyOK) {
+					inputLabel.setText(Labels.CLICKKEYCOMBINATIONS_LBL);
+				} else {
+					inputLabel.setText(Labels.KEYALREADYUSE_LBL);
+				}
+			}
+		};
 		KeyPressDetector.getInstance().addKeyPressListener(edit);
 
 		return container;
@@ -65,6 +73,7 @@ public class CommandInputDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
+		key = edit.getKey();
 		KeyPressDetector.getInstance().removeKeyPressListener(edit);
 		super.okPressed();
 	}
@@ -75,42 +84,16 @@ public class CommandInputDialog extends Dialog {
 		key = null;
 		super.cancelPressed();
 	}
-	
+
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(Labels.CHANGEKEYTITLE_LBL);
 	}
-	
+
 	@Override
 	protected Point getInitialSize() {
 		return new Point(320, 150);
-	}
-
-	private final class KeyPressEdit implements KeyStrokeListener {
-		@Override
-		public void keyPressed(CommandKey c) {
-			keyInput.setText(c.toString());
-
-			boolean result = true;
-			for (CommandDefinition it : CommandWarehouse
-					.getCommandByContext(commandDefinition.getContext())) {
-				if (it.getCommandKey().keyEquals(c)) {
-					result = false;
-				}
-			}
-
-			if (result) {
-				keyInput.setBackground(new Color(null, 255, 255, 255));
-				key = c;
-				inputLabel.setText(Labels.CLICKKEYCOMBINATIONS_LBL);
-			} else {
-				keyInput.setBackground(new Color(null, 255, 0, 0));
-				key = null;
-				inputLabel.setText(Labels.KEYALREADYUSE_LBL);
-			}
-
-		}
 	}
 
 }
