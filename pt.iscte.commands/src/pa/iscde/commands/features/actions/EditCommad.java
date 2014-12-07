@@ -13,12 +13,14 @@ public class EditCommad implements Action {
 
 		if (data.getSelectedCommands().size() == 1) {
 			CommandInputDialog inputDialog = new CommandInputDialog(Display
-					.getCurrent().getActiveShell(), data.getSelectedCommands().get(0));
+					.getCurrent().getActiveShell(), data.getSelectedCommands()
+					.get(0).getContext());
 
 			inputDialog.open();
 
 			if (inputDialog.getKey() != null) {
-				CommandKey key = data.getSelectedCommands().get(0).getCommandKey();
+				CommandKey key = data.getSelectedCommands().get(0)
+						.getCommandKey();
 
 				key.setAltKey(inputDialog.getKey().usesAlt());
 				key.setCtrlKey(inputDialog.getKey().usesCtrl());
