@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import pa.iscde.stylechecker.model.IStyleRule;
-import org.eclipse.wb.swt.SWTResourceManager;
+import pa.iscde.stylechecker.utils.SWTResourceManager;
 
 public class StyleRuleTableView extends Composite {
 	
@@ -35,6 +35,7 @@ public class StyleRuleTableView extends Composite {
 		setLayout(new GridLayout(1, false));
 		
 		Group btnsGroup_tools = new Group(this, SWT.NONE);
+		btnsGroup_tools.setFont(SWTResourceManager.getFont(".Helvetica Neue DeskInterface", 11, SWT.NORMAL));
 		GridData gd_btnsGroup_tools = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_btnsGroup_tools.heightHint = 18;
 		btnsGroup_tools.setLayoutData(gd_btnsGroup_tools);

@@ -1,26 +1,23 @@
-package pa.iscde.stylechecker.model;
+package pa.iscde.stylechecker.internal.extention;
 
-import org.eclipse.jdt.core.dom.ASTVisitor;
+import pa.iscde.stylechecker.model.IStyleRule;
 
-public class TryStatementASTVisitor extends ASTVisitor implements IStyleRule {
 
-	
+public class TryStamentEmptyRule implements IStyleRule {
+	 
 
 	@Override
 	public int getViolations() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void runStyleRule() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
