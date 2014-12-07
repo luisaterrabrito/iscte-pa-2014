@@ -1,3 +1,4 @@
+#labels pa.iscde.packagediagram.colorSelector
 pa.iscde.packagediagram.colorSelector
 
 = Introduction =
