@@ -23,7 +23,7 @@ public class CommandsController implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		CommandsController.context = context;
 
-		ExtensionHandler handler = new ExtensionHandler();
+		ExtensionHandler handler = ExtensionHandler.getInstance();
 		handler.setExtensionHandler(ExtensionPointsIDS.COMMAND_ID.getID(),
 				new CommandHandler());
 		handler.startProcessExtension();

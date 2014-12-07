@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import pa.iscde.commands.controllers.KeyPressDetector;
-import pa.iscde.commands.models.CommandDefinition;
 import pa.iscde.commands.models.CommandKey;
 import pa.iscde.commands.utils.Labels;
 
@@ -23,11 +22,11 @@ class CommandInputDialog extends Dialog {
 
 	private KeyPressListener edit;
 	private CommandKey key;
-	private CommandDefinition commandDefinition;
+	private String context;
 
-	public CommandInputDialog(Shell parent, CommandDefinition commandDefinition) {
+	public CommandInputDialog(Shell parent, String context) {
 		super(parent);
-		this.commandDefinition = commandDefinition;
+		this.context = context;
 	}
 
 	@Override
@@ -50,7 +49,7 @@ class CommandInputDialog extends Dialog {
 		fieldsLayout.heightHint = 15;
 		inputLabel.setLayoutData(fieldsLayout);
 
-		edit = new KeyPressListener(keyInput, commandDefinition.getContext()) {
+		edit = new KeyPressListener(keyInput, context) {
 			@Override
 			public void keyPressed(CommandKey c) {
 				super.keyPressed(c);

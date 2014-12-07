@@ -30,7 +30,7 @@
          point="pa.iscde.commands.action">
       <action
             class="pa.iscde.commands.features.actions.NewCommand"
-            label="New">
+            label="Commands Manager ">
       </action>
    </extension>
    <extension
@@ -90,6 +90,7 @@
             command_implementation="pa.iscde.commands.features.search.SearchWord"
             context_view="pa.iscde.commands.CommandsView"
             ctrl_key="true"
+            description="Search"
             key="F"
             name="pa.iscde.commands.search">
       </command_view>
@@ -101,6 +102,7 @@
             command_implementation="pa.iscde.commands.features.createclass.NewClass"
             context_view="pt.iscte.pidesco.projectbrowser.tree"
             ctrl_key="true"
+            description="New Class"
             key="L"
             name="New Class">
       </command_view>

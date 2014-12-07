@@ -21,12 +21,26 @@ import pa.iscde.commands.models.CommandDefinition;
 import pa.iscde.commands.models.CommandWarehouse;
 import pa.iscde.commands.utils.Labels;
 
-public class CommandTree {
+public class CommandViewTree {
 
-	private Text textField;
-	private Tree commandTree;
+	protected Text textField;
+	protected Tree commandTree;
+	private boolean useParentSelection;
+	private int[] columsIndexToRemove;
 
-	public CommandTree(Composite parentComposite) {
+	public CommandViewTree(Composite parentComposite,
+			int... columsIndexToRemove) {
+		useParentSelection = true;
+		this.columsIndexToRemove = columsIndexToRemove;
+		parentComposite.setLayout(new GridLayout(1, false));
+		createSearchField(parentComposite);
+		createTreeTable(parentComposite);
+	}
+
+	public CommandViewTree(Composite parentComposite,
+			boolean useParentSelection, int... columsIndexToRemove) {
+		this.useParentSelection = useParentSelection;
+		this.columsIndexToRemove = columsIndexToRemove;
 		parentComposite.setLayout(new GridLayout(1, false));
 		createSearchField(parentComposite);
 		createTreeTable(parentComposite);
@@ -46,17 +60,7 @@ public class CommandTree {
 		gridData.grabExcessVerticalSpace = true;
 		commandTree.setLayoutData(gridData);
 
-		TreeColumn column1 = new TreeColumn(commandTree, SWT.NONE);
-		column1.setText(Labels.CONTEXTDESCRIPTION_LBL);
-		column1.setWidth(300);
-
-		TreeColumn column2 = new TreeColumn(commandTree, SWT.NONE);
-		column2.setText(Labels.COMMANDDESCRIPTION);
-		column2.setWidth(200);
-
-		TreeColumn column3 = new TreeColumn(commandTree, SWT.NONE);
-		column3.setText(Labels.KEYESCRIPTION_LBL);
-		column3.setWidth(100);
+		addColumns();
 
 		addDataToTreeTable();
 
@@ -68,10 +72,42 @@ public class CommandTree {
 			}
 		});
 
-		commandTree.addListener(SWT.Selection, new SelectionListener());
+		if (useParentSelection)
+			commandTree.addListener(SWT.Selection, new SelectionListener());
 	}
 
-	private void addDataToTreeTable() {
+	private void addColumns() {
+
+		if (!asIndex(0)) {
+			TreeColumn column1 = new TreeColumn(commandTree, SWT.NONE);
+			column1.setText(Labels.CONTEXTDESCRIPTION_LBL);
+			column1.setWidth(300);
+		}
+
+		if (!asIndex(1)) {
+			TreeColumn column2 = new TreeColumn(commandTree, SWT.NONE);
+			column2.setText(Labels.COMMANDDESCRIPTION);
+			column2.setWidth(200);
+		}
+
+		if (!asIndex(2)) {
+			TreeColumn column3 = new TreeColumn(commandTree, SWT.NONE);
+			column3.setText(Labels.KEYESCRIPTION_LBL);
+			column3.setWidth(100);
+		}
+	}
+
+	private boolean asIndex(int i) {
+		for (int j = 0; j < columsIndexToRemove.length; j++) {
+			if (columsIndexToRemove[j] == i) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	protected void addDataToTreeTable() {
 
 		Set<String> contexts = CommandWarehouse.getCommandsContext();
 		String match = textField.getText();
@@ -110,6 +146,17 @@ public class CommandTree {
 			}
 		}
 
+	}
+
+	public int getNumSelectedItems() {
+		int counter = 0;
+		for (int i = 0; i < commandTree.getItems().length; i++) {
+			if (commandTree.getItems()[i].getChecked()) {
+				counter++;
+			}
+		}
+
+		return counter;
 	}
 
 	private void createSearchField(Composite parentComposite) {
