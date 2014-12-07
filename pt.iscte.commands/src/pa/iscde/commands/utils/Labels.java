@@ -25,5 +25,7 @@ final public class Labels {
 	public static final String FINALMODIFIER_LBL = "Final";
 	public static final String CREATECLASSERROR_LBL = "Class name is invalid";
 	public static final String CREATECLASSPACKAGEERROR_LBL = "Invalid package format";
+	public static final String SEARCHCOMMAND_LBL = "Write command to search";
+	public static final String VIEWSANDCOMMANDS_LBL = "Views / Commands";
 
 }

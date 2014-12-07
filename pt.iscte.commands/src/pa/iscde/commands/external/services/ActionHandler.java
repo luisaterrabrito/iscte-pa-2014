@@ -19,9 +19,9 @@ final class ActionHandler implements Handler {
 	private Composite actionsArea;
 	private Tree tree;
 
-	public ActionHandler(Composite actionsArea, Tree tree) {
+	public ActionHandler(Composite actionsArea, CommandTree commandTree) {
 		this.actionsArea = actionsArea;
-		this.tree = tree;
+		this.tree = commandTree.getCommandTree();
 	}
 
 	@Override
