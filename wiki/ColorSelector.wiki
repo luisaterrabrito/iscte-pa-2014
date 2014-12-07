@@ -9,6 +9,9 @@ Change letter color and background color depending on the package name
 
 = Details =
 <code>
+
+import org.eclipse.swt.graphics.Color;
+
 public interface PackageDiagramColorExtension {
 
         /** 
