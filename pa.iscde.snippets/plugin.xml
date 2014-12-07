@@ -28,4 +28,38 @@
             user="rnnma">
       </member>
    </extension>
+   <extension
+         point="pa.iscde.snippets.createnewsnippet">
+      <snippet
+            code="este é o código do snippet"
+            language="brainfuck"
+            name="testequarentaesete">
+      </snippet>
+      <snippet
+            code="Hello World - Olá Mundo - Hola Mundo"
+            name="HelloWorld">
+      </snippet>
+      <snippet
+            code="ve se é mesmo java"
+            language="JavA"
+            name="Pois">
+      </snippet>
+      <snippet
+            code="    w"
+            language="java"
+            name="snippetscomwhitespaces">
+      </snippet>
+   </extension>
+   <extension
+         point="pa.iscde.snippets.contextdefinition">
+      <member
+            definition="contextdefinitiontests.AppendTextInsideProcedure">
+      </member>
+      <member
+            definition="contextdefinitiontests.formOutsideClass">
+      </member>
+      <member
+            definition="contextdefinitiontests.ScreenshotMustJava">
+      </member>
+   </extension>
 </plugin>
