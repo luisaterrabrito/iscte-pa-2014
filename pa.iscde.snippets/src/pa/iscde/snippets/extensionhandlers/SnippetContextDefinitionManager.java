@@ -36,11 +36,11 @@ public class SnippetContextDefinitionManager {
 	}
 
 	public void addDefinition(ContextDefinitionInterface c) {
-		definitions.put(c.getTargetSnippet(), c);
+		definitions.put(c.getTargetSnippet().toLowerCase(), c);
 	}
 
 	public void removeDefinition(ContextDefinitionInterface c) {
-		definitions.remove(c.getTargetSnippet());
+		definitions.remove(c.getTargetSnippet().toLowerCase());
 	}
 
 	public void loadDefinitions() throws CoreException {
@@ -58,9 +58,10 @@ public class SnippetContextDefinitionManager {
 	public ValidateMessage validateSnippet(FileOperations fileOP) {
 		this.fileOP = fileOP;
 		File openFile = SnippetsActivator.getInstance().getOpenFile();
-		if (definitions.containsKey(fileOP.getFileName()) && openFile != null) {
-			return definitions.get(fileOP.getFileName()).validateContext(
-					createContext(createVisitor(openFile)));
+		if (definitions.containsKey(fileOP.getFileName().toLowerCase())
+				&& openFile != null) {
+			return definitions.get(fileOP.getFileName().toLowerCase())
+					.validateContext(createContext(createVisitor(openFile)));
 		} else {
 			if (openFile != null)
 				return new ValidateMessage("", true);
@@ -73,16 +74,14 @@ public class SnippetContextDefinitionManager {
 	private CursorContext createContext(ContextVisitor visitor) {
 		String language = fileOP.getFileType();
 		File openFile = SnippetsActivator.getInstance().getOpenFile();
-		System.out.println(openFile.getName());
-		String[] splitName = openFile.getName().toLowerCase().split(".");
-		String extension = splitName[splitName.length - 1];
+		String[] splitName = openFile.getName().split("\\.");
+		String extension = splitName[splitName.length - 1].toLowerCase();
 		if (language != null) {
 			language = language.toLowerCase();
 		} else {
 			language = "NewSnippet";
 		}
-		CursorContext context = new CursorContext(language, extension, visitor.isInsideMethod(),
-				visitor.isInsideClass());
+		CursorContext context = visitor.buildCursorContext(extension, language);
 		return context;
 	}
 
