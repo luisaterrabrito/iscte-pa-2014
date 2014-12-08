@@ -25,9 +25,9 @@ public class CommandsList extends CommandViewTree {
 
 		// TODO Pode ficar mais efeciente se for retornada alista de todos os
 		// comandos definidos
-		Set<String> aux = CommandWarehouse.getCommandsContext();
+		Set<String> aux = CommandWarehouse.getInstance().getCommandsContext();
 		for (String context : aux) {
-			for (CommandDefinition it : CommandWarehouse
+			for (CommandDefinition it : CommandWarehouse.getInstance()
 					.getCommandByContext(context)) {
 				contexts.add(it);
 			}

@@ -1,4 +1,5 @@
 package pa.iscde.commands.features.actions;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Event;
@@ -9,7 +10,6 @@ import pa.iscde.commands.controllers.CommandKeyListener;
 import pa.iscde.commands.models.CommandDefinition;
 import pa.iscde.commands.models.CommandKey;
 import pa.iscde.commands.models.CommandWarehouse;
-
 
 class KeyPressListener extends CommandKeyListener {
 
@@ -23,7 +23,7 @@ class KeyPressListener extends CommandKeyListener {
 		this.keyInputLabel = keyInput;
 		context = "";
 	}
-	
+
 	public KeyPressListener(Text keyInput) {
 		this.keyInputText = keyInput;
 		context = "";
@@ -45,48 +45,46 @@ class KeyPressListener extends CommandKeyListener {
 	@Override
 	public boolean keyPressed(Event event) {
 		boolean commandKeyDetected = super.keyPressed(event);
-		
+
 		defaultKeyPressed = true;
-		if(commandKeyDetected){
+		if (commandKeyDetected) {
 			defaultKeyPressed = false;
-			
+
 			boolean ctrl_clicked = (event.stateMask & SWT.CTRL) == SWT.CTRL;
 			boolean alt_clicked = (event.stateMask & SWT.ALT) == SWT.ALT;
 			int keyCode_lastKey = event.keyCode;
 
-			CommandKey typed = new CommandKey(context, ctrl_clicked, alt_clicked, (char) keyCode_lastKey);
-			
-			for (CommandDefinition it : CommandWarehouse.getCommandByContext(context)) {
+			CommandKey typed = new CommandKey(context, ctrl_clicked,
+					alt_clicked, (char) keyCode_lastKey);
+
+			for (CommandDefinition it : CommandWarehouse.getInstance()
+					.getCommandByContext(context)) {
 				if (it.getCommandKey().keyEquals(typed)) {
-					if(keyInputText != null)
+					if (keyInputText != null)
 						keyInputText.setBackground(new Color(null, 255, 0, 0));
 					else
 						keyInputLabel.setBackground(new Color(null, 255, 0, 0));
-					
+
 					key = null;
 					return false;
 				}
 			}
-			
-			if(keyInputText != null){
+
+			if (keyInputText != null) {
 				keyInputText.setBackground(new Color(null, 0, 0, 0));
 				keyInputText.setText(typed.toString());
-			}else{
+			} else {
 				keyInputLabel.setForeground(new Color(null, 0, 0, 0));
 				keyInputLabel.setText(typed.toString());
 			}
-			
+
 			key = typed;
 			System.out.println("key: " + key.toString());
 			return true;
 		}
-		
+
 		return false;
-		
-		
+
 	}
 
-
-	
-	
 }

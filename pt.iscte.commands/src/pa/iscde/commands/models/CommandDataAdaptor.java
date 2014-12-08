@@ -57,10 +57,10 @@ final public class CommandDataAdaptor {
 	 * */
 	public void deleteCommandLine(CommandKey key) {
 
-		Point keyInTree = findKeyInTree(CommandWarehouse
+		Point keyInTree = findKeyInTree(CommandWarehouse.getInstance()
 				.getCommandDefinition(key));
 		tree.getItem(keyInTree.x).getItem(keyInTree.y).dispose();
-		if (CommandWarehouse.removeCommandKey(key))
+		if (CommandWarehouse.getInstance().removeCommandKey(key))
 			System.out.println("Command name '" + key.getCommandName()
 					+ "' was removed successfully");
 
@@ -105,11 +105,12 @@ final public class CommandDataAdaptor {
 
 		int i = findContextInTree(cmdDef.getContext());
 		if (i != -1) {
-			CommandDefinition insertResult = CommandWarehouse
+			CommandDefinition insertResult = CommandWarehouse.getInstance()
 					.insertCommandDefinition(cmdDef.getCommandKey(), cmdDef);
 
 			if (insertResult == null
-					&& CommandWarehouse.containsKey(cmdDef.getCommandKey())) {
+					&& CommandWarehouse.getInstance().containsKey(
+							cmdDef.getCommandKey())) {
 
 				TreeItem subItem = new TreeItem(tree.getItem(i), SWT.NONE);
 				subItem.setData(cmdDef);

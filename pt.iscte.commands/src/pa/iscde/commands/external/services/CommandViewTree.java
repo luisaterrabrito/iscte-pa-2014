@@ -109,7 +109,8 @@ public class CommandViewTree {
 
 	protected void addDataToTreeTable() {
 
-		Set<String> contexts = CommandWarehouse.getCommandsContext();
+		Set<String> contexts = CommandWarehouse.getInstance()
+				.getCommandsContext();
 		String match = textField.getText();
 
 		for (String context : contexts) {
@@ -119,7 +120,7 @@ public class CommandViewTree {
 			item.setBackground(new Color(null, 240, 240, 240));
 
 			List<CommandDefinition> commandsDefinitionList = CommandWarehouse
-					.getCommandByContext(context);
+					.getInstance().getCommandByContext(context);
 
 			for (CommandDefinition command : commandsDefinitionList) {
 				TreeItem subItem = new TreeItem(item, SWT.NONE);
