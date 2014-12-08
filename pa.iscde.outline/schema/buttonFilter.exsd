@@ -3,7 +3,7 @@
 <schema targetNamespace="pa.iscde.outline" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="pa.iscde.outline" id="iconIdentifier" name="Icon Identifier Extension"/>
+         <meta.schema plugin="pa.iscde.outline" id="buttonFilter" name="Button Filter Extension"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
@@ -44,7 +44,7 @@
       </complexType>
    </element>
 
-   <element name="changeIcon">
+   <element name="Filter">
       <complexType>
          <attribute name="Icon" type="string" use="required">
             <annotation>
@@ -56,7 +56,7 @@
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="iconConstraints" type="string" use="required">
+         <attribute name="filterConstraints" type="string" use="required">
             <annotation>
                <documentation>
                   
