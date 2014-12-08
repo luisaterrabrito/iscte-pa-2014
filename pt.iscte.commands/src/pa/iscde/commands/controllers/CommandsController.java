@@ -70,9 +70,12 @@ public class CommandsController implements BundleActivator {
 	public void stop(BundleContext context) throws Exception {
 		ViewWarehouse.eraseModel();
 		CommandWarehouse.eraseModel();
+		ExtensionHandler.destroyInstance();
 
 		KeyPressDetector.getInstance().removeKeyPressListener(
 				commandKeylistener);
+
+		KeyPressDetector.destroyInstance();
 
 	}
 

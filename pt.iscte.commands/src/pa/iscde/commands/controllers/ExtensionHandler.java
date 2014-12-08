@@ -73,4 +73,8 @@ final public class ExtensionHandler {
 		}
 	}
 
+	public static void destroyInstance() {
+		instance = null;
+	}
+
 }
