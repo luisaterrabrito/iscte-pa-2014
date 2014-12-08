@@ -12,6 +12,7 @@ public class Node {
 	private SourceElement sourceElement;
 	private ArrayList<String> fields = new ArrayList<String>();
 	private ArrayList<String> classInstances = new ArrayList<String>();
+	private boolean isSuper;
 	
 	public ArrayList<String> getClassInstances() {
 		return classInstances;
@@ -44,6 +45,15 @@ public class Node {
 
 	public void setClassInstances(ArrayList<String> classInstances) {
 		this.classInstances = classInstances;
+	}
+
+	public void setSuperClass(boolean isSuper) {
+		this.isSuper=isSuper;
+		
+	}
+
+	public boolean isSuper() {
+		return isSuper;
 	}
 	
 	

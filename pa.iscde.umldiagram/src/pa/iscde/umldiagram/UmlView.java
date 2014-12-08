@@ -3,6 +3,7 @@ package pa.iscde.umldiagram;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -50,6 +51,11 @@ public class UmlView implements PidescoView {
 	@Override
 	public void createContents(Composite umlArea, Map<String, Image> imageMap) {
 		umlGraph = new Graph(umlArea, SWT.NONE);
+		
+		//UMLClassFigure f = new UMLClassFigure("COCO");
+		//GraphNode node = new GraphNode(umlGraph, SWT.NONE);
+		
+		
 	}
 
 	public static UmlView getInstance() {
@@ -98,30 +104,43 @@ public class UmlView implements PidescoView {
 						new GraphConnection(umlGraph, ZestStyles.CONNECTIONS_DIRECTED, node1.getNode(), node2.getNode());
 					}
 				}
+				//ver
+				sdwef
+				if(node1.getClass().isInstance(node2.getClass()) && node1 != node2 && node1.isSuper()){
+					System.out.println(node1.getName()+"-"+node2.getName());
+					new GraphConnection(umlGraph, ZestStyles.NODES_FISHEYE, node1.getNode(), node2.getNode());
+				}
 				//if(node1.getNode().getText().contains(node2.getName()) && node1!=node2)
 			}
 		}
 	}
 
 	private synchronized void paintNode(SourceElement classes) {
-		
+		if(classes.getFile().getClass().isInterface()==true){
+			System.out.println("LOOOL");
+		}
 		UmlVisitor visitor = new UmlVisitor();
 		javaServices.parseFile(classes.getFile(), visitor);
-		if(!visitor.getEnums().isEmpty() && visitor.getMethods().isEmpty()){
+		if(!visitor.getEnums().isEmpty()){
 			paintEnum(visitor);
 		}else{
 			paintClass(classes, visitor);
 		}
+		
 	}
 	
 	private void paintClass(SourceElement classes, UmlVisitor visitor) {
-		UMLClassFigure figure = new UMLClassFigure("Class "+classes.getName().replace(".java", ""));
+		String prefix = "Class ";
+		if(visitor.isSuperClass()) {
+			prefix = "Abstract "+prefix;
+		}
+		UMLClassFigure figure = new UMLClassFigure(prefix+classes.getName().replace(".java", ""));
 		CGraphNode node = new CGraphNode(umlGraph, SWT.NONE, figure);
 		
 		//GraphNode node = new GraphNode(umlGraph, SWT.NONE);
 		//node.setText("Class "+classes.getName().replace(".java", "")+"\n");
 		Node n = new Node(node, classes.getName().replace(".java", ""), classes);
-		
+		if(prefix.contains("Abstract")) n.setSuperClass(true);
 		nodes.add(n);
 		//node.setText(node.getText()+"---------------------------"+"\n");
 		//for(ClassInstanceCreation ins : )
@@ -155,11 +174,18 @@ public class UmlView implements PidescoView {
 		UMLClassFigure figure = new UMLClassFigure("Enum "+visitor.getEnums().get(0).getName());
 		CGraphNode node = new CGraphNode(umlGraph, SWT.NONE, figure);
 		figure.addNameMethod(node.getText()+visitor.getEnums().get(0).enumConstants());
-		//GraphNode node = new GraphNode(umlGraph, SWT.NONE);
-		//node.setText("Enum "+visitor.getEnums().get(0).getName()+"\n");
 		nodes.add(new Node(node, visitor.getEnums().get(0).getName().toString(), null));
-		//node.setText(node.getText()+"---------------------------"+"\n");
-		//node.setText(node.getText()+visitor.getEnums().get(0).enumConstants());
+		figure.drawLine();
+		for (int i = 0; i < visitor.getMethods().size(); i++) {
+			if(!visitor.getMethods().get(i).isConstructor()){
+				if(visitor.getMethods().get(i).getReturnType2()!=null){
+					figure.addNameMethod(visitor.getMethods().get(i).getName()+" :"+visitor.getMethods().get(i).getReturnType2().toString());;
+					
+				}else{
+					figure.addNameMethod(visitor.getMethods().get(i).getName()+" : Void");
+				}
+			}
+		}
 		
 	}
 
