@@ -1,7 +1,8 @@
-package pa.iscde.commands.features.actions;
+package pa.iscde.commands.controllers;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
+
 import pa.iscde.commands.controllers.KeyPressDetector.KeyDownListener;
 
 

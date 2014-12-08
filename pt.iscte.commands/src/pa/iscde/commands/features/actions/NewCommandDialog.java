@@ -21,7 +21,7 @@ import pa.iscde.commands.external.services.CommandViewTree;
 import pa.iscde.commands.models.CommandKey;
 import pa.iscde.commands.utils.Labels;
 
-public class NewCommandDialog extends Dialog {
+class NewCommandDialog extends Dialog {
 
 	private CommandsList list;
 	private Button rightToLeft;
@@ -65,11 +65,13 @@ public class NewCommandDialog extends Dialog {
 		rightToLeft = new Button(btns, SWT.NONE);
 		rightToLeft.setText("<");
 		rightToLeft.setCursor(new Cursor(null, SWT.CURSOR_HAND));
-		rightToLeft.addListener(SWT.Selection, new RightToLeftClick());
+		rightToLeft.addListener(SWT.Selection, new RightToLeftClick(
+				commandsAndViews, list));
 		leftToRight = new Button(btns, SWT.NONE);
 		leftToRight.setText(">");
 		leftToRight.setCursor(new Cursor(null, SWT.CURSOR_HAND));
-		leftToRight.addListener(SWT.Selection, new LeftToRightClick());
+		leftToRight.addListener(SWT.Selection, new LeftToRightClick(
+				commandsAndViews));
 
 		Composite commandsList = new Composite(area, SWT.NONE);
 		commandsList.setLayoutData(gridData);
@@ -100,6 +102,13 @@ public class NewCommandDialog extends Dialog {
 	}
 
 	private final class LeftToRightClick implements Listener {
+
+		private CommandViewTree commandsAndViews;
+
+		public LeftToRightClick(CommandViewTree commandsAndViews) {
+			this.commandsAndViews = commandsAndViews;
+		}
+
 		@Override
 		public void handleEvent(Event event) {
 			TreeItem[] items = commandsAndViews.getCommandTree().getItems();
@@ -120,6 +129,16 @@ public class NewCommandDialog extends Dialog {
 	}
 
 	private final class RightToLeftClick implements Listener {
+
+		private CommandViewTree commandsAndViews;
+		private CommandsList list;
+
+		public RightToLeftClick(CommandViewTree commandsAndViews,
+				CommandsList list) {
+			this.commandsAndViews = commandsAndViews;
+			this.list = list;
+		}
+
 		@Override
 		public void handleEvent(Event event) {
 
@@ -142,7 +161,7 @@ public class NewCommandDialog extends Dialog {
 					dialog.open();
 
 					addCommandsToView(dialog.getKey(), items[index].getData()
-							.toString()); 
+							.toString());
 				}
 			}
 
