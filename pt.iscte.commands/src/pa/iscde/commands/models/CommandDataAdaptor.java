@@ -157,4 +157,25 @@ final public class CommandDataAdaptor {
 		return Collections.unmodifiableList(kyes);
 	}
 
+	
+	/**
+	 * This methods allows you to edit a existing Command Line in the tree
+	 * Changing the CommandKey associated with the Definition before in the system.
+	 * 
+	 * @param cmdDefBefore
+	 * @param newKey
+	 * 
+	 * @return True - if the edit was successfully, False otherwise 
+	 */
+	public boolean editCommandLine(CommandDefinition cmdDefBefore,
+			CommandKey newKey) {
+
+		boolean removalResult = CommandWarehouse.getInstance().removeCommandKey(cmdDefBefore.getCommandKey());
+		cmdDefBefore.getCommandKey().setAltKey(newKey.usesAlt());
+		cmdDefBefore.getCommandKey().setCtrlKey(newKey.usesCtrl());
+		cmdDefBefore.getCommandKey().setKey(newKey.usesKey());
+		CommandDefinition changeDefResult = CommandWarehouse.getInstance().insertCommandDefinition(cmdDefBefore.getCommandKey(), cmdDefBefore);
+		return removalResult == true && changeDefResult == null;
+	}
+
 }

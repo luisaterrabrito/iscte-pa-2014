@@ -25,13 +25,7 @@ public class EditCommad implements Action {
 			CommandKey newKey = inputDialog.getKey();
 
 			if (newKey != null) {
-
-				CommandWarehouse.getInstance().removeCommandKey(cmdDefBefore.getCommandKey());
-				cmdDefBefore.getCommandKey().setAltKey(newKey.usesAlt());
-				cmdDefBefore.getCommandKey().setCtrlKey(newKey.usesCtrl());
-				cmdDefBefore.getCommandKey().setKey(newKey.usesKey());
-				CommandWarehouse.getInstance().insertCommandDefinition(cmdDefBefore.getCommandKey(), cmdDefBefore);
-				
+				data.editCommandLine(cmdDefBefore, newKey);
 			} else {
 				System.err.println("The input dialog didn't returned any new valid key to update the commands system");
 			}
