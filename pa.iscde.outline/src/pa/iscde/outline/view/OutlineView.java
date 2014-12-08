@@ -3,8 +3,6 @@ package pa.iscde.outline.view;
 import java.io.File;
 import java.util.Map;
 
-import org.eclipse.jdt.core.compiler.IProblem;
-import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.TreeEvent;
 import org.eclipse.swt.events.TreeListener;
@@ -48,11 +46,8 @@ public class OutlineView implements PidescoView {
 		javaServices = context.getService(ref);
 
 		javaServices.addListener(new JavaEditorListener() {
-
-			@Override
-			public void selectionChanged(File file, String text, int offset,
-					int length) {
-				System.out.println("File changed");
+			
+			public void updateOutline(File file){
 				OutlineView activeView = OutlineView.getSingleton();
 
 				for (Control control : activeView.viewArea.getChildren()) {
@@ -65,9 +60,17 @@ public class OutlineView implements PidescoView {
 			}
 
 			@Override
+			public void selectionChanged(File file, String text, int offset,
+					int length) {
+				System.out.println("File changed");
+				updateOutline(file);
+				
+			}
+
+			@Override
 			public void fileSaved(File file) {
-				OutlineView activeView = OutlineView.getSingleton();
-				//activeView.drawOutlineView(file);
+				updateOutline(file);
+
 			}
 
 			@Override
@@ -108,7 +111,14 @@ public class OutlineView implements PidescoView {
 		gc.dispose();
 
 		Tree t = new Tree(viewArea, SWT.SINGLE | SWT.BORDER);
-
+		int coisocoiso = 0;
+		
+		for(String s : visitor.getNames()){
+			TreeItem aux = new TreeItem(t, SWT.NONE, coisocoiso);
+			aux.setText(s);
+			coisocoiso++;
+		}
+			
 		// TreeItem child1 = new TreeItem(t, SWT.NONE, 0);
 		// child1.setText("outline");
 		// child1.setImage(img_escalada);
@@ -153,6 +163,7 @@ public class OutlineView implements PidescoView {
 		// //imagem para variável
 
 		t.addTreeListener(new TreeListener() {
+			
 			public void treeExpanded(TreeEvent e) {
 				TreeItem ti = (TreeItem) e.item;
 				// Abre árvore
@@ -205,4 +216,5 @@ public class OutlineView implements PidescoView {
 		return singleton;
 	}
 
+	
 }
