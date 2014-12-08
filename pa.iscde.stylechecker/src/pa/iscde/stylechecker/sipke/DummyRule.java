@@ -1,44 +1,33 @@
 package pa.iscde.stylechecker.sipke;
 
-import pa.iscde.stylechecker.model.IStyleRule;
+import org.eclipse.jdt.core.dom.ASTNode;
 
-public class DummyRule implements IStyleRule {
+import pa.iscde.stylechecker.model.AbstractStyleRule;
 
-	private boolean state;
-	private int violations;
+public class DummyRule extends AbstractStyleRule {
+
+
 	private String description;
 	
 	public DummyRule(String description, int violations, boolean state) {
 		this.description = description;
-		this.violations=violations;
-		this.state = state;
+		super.setActive(state);
+		//TODO setDescription
+		//TODO setViolations
 	}
 	
 
 	@Override
-	public void setActive(boolean state) {
-		this.state = state;
-
+	public boolean check(ASTNode node) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
-	@Override
-	public boolean getActive() {
-		return state;
-	}
 
 	@Override
-	public int getViolations() {
-		return violations;
-	}
-
-	@Override
-	public void runStyleRule() {
-
-	}
-
-	@Override
-	public String getDescription() {
-		return this.description;
+	public String getWarningMessage() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

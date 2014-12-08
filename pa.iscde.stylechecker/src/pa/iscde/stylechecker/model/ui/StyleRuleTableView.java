@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import pa.iscde.stylechecker.model.AbstractStyleRule;
 import pa.iscde.stylechecker.model.IStyleRule;
 import pa.iscde.stylechecker.utils.SWTResourceManager;
 
@@ -95,7 +96,7 @@ public class StyleRuleTableView extends Composite {
 	      }
 	}
 	
-	public void addRule(IStyleRule rule) {
+	public void addRule(AbstractStyleRule rule) {
 		TableItem item = new TableItem(tbRules, SWT.NONE);
 		item.setText(0, rule.getActive()?ACTIVE:STOPPED);
 		item.setText(1, rule.getClass().getSimpleName());
@@ -105,12 +106,12 @@ public class StyleRuleTableView extends Composite {
 		tbRules.computeSize(SWT.FILL, SWT.FILL);
 	}
 	
-	public void addRule(IStyleRule rule,String type) {
+	public void addRule(IStyleRule dummyRule,String type) {
 		TableItem item = new TableItem(tbRules, SWT.NONE);
-		item.setText(0, rule.getActive()?ACTIVE:STOPPED);
+		item.setText(0, dummyRule.getActive()?ACTIVE:STOPPED);
 		item.setText(1, type);
-		item.setText(2, rule.getDescription());
-		item.setText(3, ""+rule.getViolations());
+		item.setText(2, dummyRule.getDescription()==null?"Dummy":dummyRule.getDescription());
+		item.setText(3, ""+dummyRule.getViolations());
 		packAll();
 		tbRules.computeSize(SWT.FILL, SWT.FILL);
 	}

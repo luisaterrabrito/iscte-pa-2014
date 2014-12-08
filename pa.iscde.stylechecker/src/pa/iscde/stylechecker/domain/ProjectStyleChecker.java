@@ -1,4 +1,4 @@
-package pa.iscde.stylechecker.sipke;
+package pa.iscde.stylechecker.domain;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -12,16 +12,15 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
 public class ProjectStyleChecker {
 
-	private ASTVisitor visitor;
+	private StyleCheckerASTVisitor visitor;
 
 
-	public ProjectStyleChecker(ASTVisitor visitor) {
-		this.setVisitor(visitor);
+	public ProjectStyleChecker(StyleCheckerASTVisitor visitor) {
+		this.visitor=visitor;
 	}
 	
 	public void checkWorkSpace() {
@@ -77,12 +76,8 @@ public class ProjectStyleChecker {
 	    return (CompilationUnit) parser.createAST(null);
 	  }
 
-	public ASTVisitor getVisitor() {
+	public StyleCheckerASTVisitor getVisitor() {
 		return visitor;
-	}
-
-	public void setVisitor(ASTVisitor visitor) {
-		this.visitor = visitor;
 	}
 
 }

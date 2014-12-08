@@ -1,16 +1,14 @@
 package pa.iscde.stylechecker.model;
 
+import org.eclipse.jdt.core.dom.ASTNode;
+
 /**
  * 
  * @author joaomarques
  *
  */
 public interface IStyleRule {
-	
-	/**
-	 * 
-	 * @param state - true to active the rule or false to deactivate the rule
-	 */
+
 	public void setActive(boolean state);
 	
 	/**
@@ -21,14 +19,10 @@ public interface IStyleRule {
 	
 	/**
 	 * 
-	 * @return the detected rule violations
+	 * @return number of detected rule violations
 	 */
 	public int getViolations();
 	
-	/**
-	 * Runs the rule verifications
-	 */
-	public void runStyleRule();
 	
 	/**
 	 * 
@@ -37,5 +31,9 @@ public interface IStyleRule {
 	public String getDescription();
 	
 	
+	public  boolean check(ASTNode node) ;
+		
+	
+	public  String getWarningMessage() ;
 
 }

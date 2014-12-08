@@ -7,7 +7,7 @@ import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 /**
  * Represents a listener to Project Browser events.
  */
-public interface StyleCheckerListener {
+public interface StyleCheckerRuleListener {
 
 	/**
 	 * Invoked whenever a mouse double-click is performed on a source element of the tree.
@@ -25,7 +25,7 @@ public interface StyleCheckerListener {
 	/**
 	 * Interface adapter for convenience. Default implementations do nothing.
 	 */
-	public class Adapter implements StyleCheckerListener {
+	public class Adapter implements StyleCheckerRuleListener {
 
 		/**
 		 * Does nothing.
