@@ -149,6 +149,7 @@ class CommandInputDialog extends Dialog {
 					pressing = false;
 					parent.getShell().setBackgroundMode(SWT.INHERIT_FORCE);
 					keyInput.setBackground(null);
+					System.out.println("ca dentro: " + key);
 					return true;
 				} else if(!defaultKeyPressed && !result) {
 					inputLabel.setText(Labels.KEYALREADYUSE_LBL);
@@ -171,6 +172,7 @@ class CommandInputDialog extends Dialog {
 	}
 
 	public CommandKey getKey() {
+		System.out.println("ca dentro M: " + key);
 		return key;
 	}
 

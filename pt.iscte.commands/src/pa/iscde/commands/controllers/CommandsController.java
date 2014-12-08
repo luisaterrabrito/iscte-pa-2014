@@ -30,7 +30,7 @@ public class CommandsController implements BundleActivator {
 				
 				CommandKey typed = new CommandKey(viewActive, ctrl_clicked, alt_clicked, (char) keyCode_lastKey);
 				CommandDefinition commandDefinitionTyped = CommandWarehouse.getCommandDefinition(typed);
-
+				System.out.println("CARALHO! " + commandDefinitionTyped.getCommandKey());
 				if (commandDefinitionTyped != null) {
 					// This blocks means that the key typed is registered
 					commandDefinitionTyped.getCommand().action();

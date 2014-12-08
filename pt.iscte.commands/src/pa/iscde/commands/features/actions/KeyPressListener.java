@@ -57,15 +57,26 @@ class KeyPressListener extends CommandKeyListener {
 			
 			for (CommandDefinition it : CommandWarehouse.getCommandByContext(context)) {
 				if (it.getCommandKey().keyEquals(typed)) {
-					keyInputLabel.setBackground(new Color(null, 255, 0, 0));
+					if(keyInputText != null)
+						keyInputText.setBackground(new Color(null, 255, 0, 0));
+					else
+						keyInputLabel.setBackground(new Color(null, 255, 0, 0));
+					
 					key = null;
 					return false;
 				}
 			}
 			
-			keyInputLabel.setForeground(new Color(null, 0, 0, 0));
-			keyInputLabel.setText(typed.toString());
+			if(keyInputText != null){
+				keyInputText.setBackground(new Color(null, 0, 0, 0));
+				keyInputText.setText(typed.toString());
+			}else{
+				keyInputLabel.setForeground(new Color(null, 0, 0, 0));
+				keyInputLabel.setText(typed.toString());
+			}
+			
 			key = typed;
+			System.out.println("key: " + key.toString());
 			return true;
 		}
 		
@@ -73,7 +84,8 @@ class KeyPressListener extends CommandKeyListener {
 		
 		
 	}
-	
+
+
 	
 	
 }
