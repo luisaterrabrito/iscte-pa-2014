@@ -162,6 +162,7 @@ public class CommandViewTree {
 
 	private void createSearchField(Composite parentComposite) {
 		textField = new Text(parentComposite, SWT.BORDER);
+		textField.setMessage(Labels.SEARCHTEXT);
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = SWT.FILL;
 		gridData.grabExcessHorizontalSpace = true;
