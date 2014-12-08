@@ -25,7 +25,7 @@ import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
-public class OutlineView extends ASTVisitor implements PidescoView {
+public class OutlineView implements PidescoView {
 
 	private static OutlineView singleton;
 	private JavaEditorServices javaServices;
@@ -39,7 +39,7 @@ public class OutlineView extends ASTVisitor implements PidescoView {
 		singleton = this;
 		this.viewArea = viewArea;
 		this.imageMap = imageMap;
-		
+
 		Bundle bundle = FrameworkUtil.getBundle(JavaEditorServices.class);
 		BundleContext context = bundle.getBundleContext();
 
@@ -54,11 +54,14 @@ public class OutlineView extends ASTVisitor implements PidescoView {
 					int length) {
 				System.out.println("File changed");
 				OutlineView activeView = OutlineView.getSingleton();
-				
+
 				for (Control control : activeView.viewArea.getChildren()) {
-			        control.dispose();
-			    }
+					control.dispose();
+				}
 				activeView.drawOutlineView(file);
+				//activeView.viewArea.pack();
+				activeView.viewArea.layout(true);
+			//	activeView.viewArea.redraw();
 			}
 
 			@Override
@@ -80,15 +83,13 @@ public class OutlineView extends ASTVisitor implements PidescoView {
 			}
 		});
 
-		drawOutlineView(null);
+		drawOutlineView(javaServices.getOpenedFile());
 	}
 
 	private void drawOutlineView(File file) {
-		if(file == null) {
+		if (file == null)
 			return;
-		}
-		
-		IProblem[] problem = javaServices.parseFile(file, this);
+
 		ClassOutlineVisitor visitor = new ClassOutlineVisitor();
 		javaServices.parseFile(file, visitor);
 
