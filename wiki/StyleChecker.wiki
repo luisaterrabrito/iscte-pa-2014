@@ -24,7 +24,7 @@ public abstract class AbstractTryStatementRule extends AbstractStyleRule{
 	}
 	
 	/**
-	 * This method implement the rule logical.
+	 * This method implements the rule verification logic.
 	 * @param node the AST Node
 	 * @return - true if the node does not violate the rule otherwise false
 	 */
