@@ -14,6 +14,7 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -55,7 +56,6 @@ final class NewClassDialog extends TitleAreaDialog {
 		super.create();
 		setTitle(Labels.CREATECLASS_LBL);
 		setDefaultMessageTitle();
-
 	}
 
 	private void setDefaultMessageTitle() {
@@ -73,10 +73,14 @@ final class NewClassDialog extends TitleAreaDialog {
 		fieldsLayout.grabExcessVerticalSpace = false;
 		fieldsLayout.heightHint = 20;
 
-		Label packageLabel = new Label(container, SWT.NONE);
+		Composite comp = new Composite(container, SWT.BORDER);
+		comp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		comp.setLayout(new GridLayout(2, false));
+
+		Label packageLabel = new Label(comp, SWT.NONE);
 		packageLabel.setText(Labels.PACKAGE_LBL);
 
-		packageName = new Text(container, SWT.BORDER);
+		packageName = new Text(comp, SWT.BORDER);
 		packageName.setLayoutData(fieldsLayout);
 		packageName.addKeyListener(new KeyListener() {
 
@@ -93,10 +97,10 @@ final class NewClassDialog extends TitleAreaDialog {
 			}
 		});
 
-		Label nameLabel = new Label(container, SWT.NONE);
+		Label nameLabel = new Label(comp, SWT.NONE);
 		nameLabel.setText(Labels.NAME_LBL);
 
-		className = new Text(container, SWT.BORDER);
+		className = new Text(comp, SWT.BORDER);
 		className.setLayoutData(fieldsLayout);
 		className.addKeyListener(new KeyListener() {
 
@@ -113,10 +117,10 @@ final class NewClassDialog extends TitleAreaDialog {
 			}
 		});
 
-		Label modifiersLabel = new Label(container, SWT.NONE);
+		Label modifiersLabel = new Label(comp, SWT.NONE);
 		modifiersLabel.setText(Labels.MODIFIERS_LBL);
 
-		Composite c = new Composite(container, SWT.NONE);
+		Composite c = new Composite(comp, SWT.NONE);
 		c.setLayout(new FillLayout());
 		c.setLayoutData(fieldsLayout);
 		radioPublicModifier = new Button(c, SWT.RADIO);
@@ -139,7 +143,8 @@ final class NewClassDialog extends TitleAreaDialog {
 		if (validClassName() && validatePackageName()) {
 			try {
 				createClass();
-				services.runTool(ExtensionPointsIDS.REFRESH_EXPLORER_ID.getID(), false);
+				services.runTool(
+						ExtensionPointsIDS.REFRESH_EXPLORER_ID.getID(), false);
 			} catch (IOException e) {
 				System.err
 						.println("An error secure while creating the java class file.");
@@ -211,7 +216,7 @@ final class NewClassDialog extends TitleAreaDialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(450, 580);
+		return new Point(450, 280);
 	}
 
 	@Override
