@@ -20,7 +20,6 @@ import pt.iscte.pidesco.extensibility.PidescoServices;
 final public class ViewWarehouse {
 
 	private Set<String> viewsWarehouse;
-	// private static BundleContext context;
 	private static ViewWarehouse instance;
 
 	public static ViewWarehouse getInstance() {

@@ -12,7 +12,7 @@ public class EditCommad implements Action {
 	@Override
 	public void action(CommandDataAdaptor data) {
 		System.out.println("p1");
-		CommandWarehouse.printall();
+		CommandWarehouse.getInstance().printall();
 		System.out.println("p2");
 		if (data.getSelectedCommands().size() == 1) {
 			CommandInputDialog inputDialog = new CommandInputDialog(Display
@@ -38,7 +38,7 @@ public class EditCommad implements Action {
 
 		}
 		System.out.println("p3");
-		CommandWarehouse.printall();
+		CommandWarehouse.getInstance().printall();
 		System.out.println("p4");
 
 	}
