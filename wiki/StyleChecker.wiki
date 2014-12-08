@@ -37,3 +37,15 @@ public abstract class AbstractTryStatementRule extends AbstractStyleRule{
 	
 }
 }}}
+
+= Links and Literature =
+
+=== Eclipse AST/ JDT Resources ===
+http://eclipse.org/articles/article.php?file=Article-JavaCodeManipulation_AST/index.html
+
+http://help.eclipse.org/juno/index.jsp?topic=%2Forg.eclipse.jdt.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjdt%2Fcore%2Fdom%2FASTNode.html
+
+=== Coding Styles/Conventions Resources ===
+http://www.oracle.com/technetwork/java/codeconvtoc-136057.html
+
+http://google-styleguide.googlecode.com/svn/trunk/javaguide.html
