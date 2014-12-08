@@ -84,27 +84,27 @@ final public class CommandKey {
 	}
 
 	@Override
-	public int hashCode() {
-		return ((short) Boolean.valueOf(ctrl_key).hashCode())
-				^ ((short) Boolean.valueOf(alt_key).hashCode())
-				^ ((short) Character.valueOf(key).hashCode());
+	public int hashCode(){
+		return ((short) view.hashCode()) ^ ((short) Boolean.valueOf(ctrl_key).hashCode()) ^ 
+				((short) Boolean.valueOf(alt_key).hashCode()) ^ ((short) Character.valueOf(key).hashCode());
 	}
-
+	
 	@Override
-	public boolean equals(Object o) {
-
-		if (o == null)
+	public boolean equals(Object o){
+		
+		if(o == null)
 			return false;
-
-		if (this == o)
+		
+		if(this == o )
 			return true;
-
+	
 		CommandKey command = (CommandKey) o;
-		if (ctrl_key == command.ctrl_key && alt_key == command.alt_key
-				&& key == command.key)
+		if(view.equals(command.view) && ctrl_key == command.ctrl_key && 
+				alt_key == command.alt_key && key == command.key)
 			return true;
-
+		
 		return false;
+		
 	}
 
 	public boolean keyEquals(Object o) {
