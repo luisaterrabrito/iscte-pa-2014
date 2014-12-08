@@ -65,18 +65,24 @@ class NewCommandDialog extends Dialog {
 		rightToLeft = new Button(btns, SWT.NONE);
 		rightToLeft.setText("<");
 		rightToLeft.setCursor(new Cursor(null, SWT.CURSOR_HAND));
-		rightToLeft.addListener(SWT.Selection, new RightToLeftClick(
-				commandsAndViews, list));
+		rightToLeft.addListener(SWT.Selection, new RightToLeftClick(this));
 		leftToRight = new Button(btns, SWT.NONE);
 		leftToRight.setText(">");
 		leftToRight.setCursor(new Cursor(null, SWT.CURSOR_HAND));
-		leftToRight.addListener(SWT.Selection, new LeftToRightClick(
-				commandsAndViews));
+		leftToRight.addListener(SWT.Selection, new LeftToRightClick(this));
 
 		Composite commandsList = new Composite(area, SWT.NONE);
 		commandsList.setLayoutData(gridData);
 
 		list = new CommandsList(commandsList, 1, 2);
+	}
+
+	protected CommandsList getList() {
+		return list;
+	}
+
+	protected CommandViewTree getCommandsAndViews() {
+		return commandsAndViews;
 	}
 
 	@Override
@@ -105,8 +111,9 @@ class NewCommandDialog extends Dialog {
 
 		private CommandViewTree commandsAndViews;
 
-		public LeftToRightClick(CommandViewTree commandsAndViews) {
-			this.commandsAndViews = commandsAndViews;
+		public LeftToRightClick(NewCommandDialog newCommandDialog) {
+			this.commandsAndViews = newCommandDialog.getCommandsAndViews();
+
 		}
 
 		@Override
@@ -130,19 +137,17 @@ class NewCommandDialog extends Dialog {
 
 	private final class RightToLeftClick implements Listener {
 
-		private CommandViewTree commandsAndViews;
-		private CommandsList list;
+		private NewCommandDialog newCommandDialog;
 
-		public RightToLeftClick(CommandViewTree commandsAndViews,
-				CommandsList list) {
-			this.commandsAndViews = commandsAndViews;
-			this.list = list;
+		public RightToLeftClick(NewCommandDialog newCommandDialog) {
+			this.newCommandDialog = newCommandDialog;
 		}
 
 		@Override
 		public void handleEvent(Event event) {
 
-			TreeItem[] items = commandsAndViews.getCommandTree().getItems();
+			TreeItem[] items = newCommandDialog.getCommandsAndViews()
+					.getCommandTree().getItems();
 			int oneViewSelected = 0;
 			int index = -1;
 			for (int i = 0; i < items.length; i++) {
@@ -152,7 +157,8 @@ class NewCommandDialog extends Dialog {
 				}
 			}
 
-			if (oneViewSelected == 1 && list.getNumSelectedItems() > 0) {
+			if (oneViewSelected == 1
+					&& newCommandDialog.getList().getNumSelectedItems() > 0) {
 				if (items[index].getData() instanceof String) {
 
 					CommandInputDialog dialog = new CommandInputDialog(Display
