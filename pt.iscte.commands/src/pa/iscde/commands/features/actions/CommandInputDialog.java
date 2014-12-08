@@ -147,7 +147,6 @@ class CommandInputDialog extends Dialog {
 				if (result) {
 					inputLabel.setText(Labels.CLICKKEYCOMBINATIONS_LBL);
 					pressing = false;
-					System.out.println("bs");
 					parent.getShell().setBackgroundMode(SWT.INHERIT_FORCE);
 					keyInput.setBackground(null);
 					return true;
@@ -157,7 +156,6 @@ class CommandInputDialog extends Dialog {
 					return false;
 				}
 				else{
-					System.out.println("a");
 					parent.getShell().setBackgroundMode(SWT.INHERIT_FORCE);
 					keyInput.setBackground(null);
 					inputLabel.setText("Waiting..");

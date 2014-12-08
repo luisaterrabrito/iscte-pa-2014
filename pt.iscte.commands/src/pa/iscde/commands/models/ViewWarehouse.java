@@ -43,7 +43,7 @@ public class ViewWarehouse {
 
 	// This method is used to load all PidescoViews being used at ExtensionPoints in the system
 	public static void loadAllViews(){
-		ExtensionHandler handler = new ExtensionHandler();
+		ExtensionHandler handler = ExtensionHandler.getInstance();
 		handler.setExtensionHandler(ExtensionPointsIDS.VIEW_ID.getID(),
 				new ViewExtensionHandler(viewsWarehouse));
 		handler.startProcessExtension();

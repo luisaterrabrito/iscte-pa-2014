@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import pa.iscde.commands.controllers.KeyPressDetector;
-import pa.iscde.commands.external.services.CommandTree;
+import pa.iscde.commands.external.services.CommandViewTree;
 import pa.iscde.commands.utils.Labels;
 
 public class NewCommandDialog extends Dialog {
@@ -27,7 +27,7 @@ public class NewCommandDialog extends Dialog {
 
 	private Text inputKey;
 
-	private CommandTree commandsAndViews;
+	private CommandViewTree commandsAndViews;
 	private KeyPressListener keyPressListener;
 	private Label inputKeyLabel;
 
@@ -92,7 +92,7 @@ public class NewCommandDialog extends Dialog {
 		area.setLayout(gridLayout);
 
 		Composite commandsAndViewsComposite = new Composite(area, SWT.BORDER);
-		commandsAndViews = new CommandTree(commandsAndViewsComposite);
+		commandsAndViews = new CommandViewTree(commandsAndViewsComposite);
 
 		Composite btns = new Composite(area, SWT.BORDER);
 		btns.setLayout(new FillLayout(SWT.VERTICAL));

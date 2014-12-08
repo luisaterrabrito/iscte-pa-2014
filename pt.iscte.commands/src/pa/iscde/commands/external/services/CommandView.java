@@ -17,7 +17,7 @@ import pt.iscte.pidesco.extensibility.PidescoView;
  * */
 final public class CommandView implements PidescoView {
 
-	private CommandTree commandTree;
+	private CommandViewTree commandTree;
 	private Composite actionsArea;
 
 	public static Composite viewArea;
@@ -30,7 +30,7 @@ final public class CommandView implements PidescoView {
 	}
 
 	private void createActionButtonsArea(Composite viewArea) {
-		commandTree = new CommandTree(viewArea);
+		commandTree = new CommandViewTree(viewArea);
 		actionsArea = new Composite(viewArea, SWT.NONE);
 		FillLayout fillLayout = new FillLayout(SWT.HORIZONTAL);
 		fillLayout.marginHeight = 10;
@@ -38,7 +38,7 @@ final public class CommandView implements PidescoView {
 		fillLayout.spacing = 10;
 		actionsArea.setLayout(fillLayout);
 
-		ExtensionHandler handler = new ExtensionHandler();
+		ExtensionHandler handler = ExtensionHandler.getInstance();
 		handler.setExtensionHandler(ExtensionPointsIDS.ACTION_ID.getID(),
 				new ActionHandler(actionsArea, commandTree));
 		handler.startProcessExtension();

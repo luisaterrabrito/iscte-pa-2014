@@ -54,7 +54,7 @@ public class CommandsController implements BundleActivator {
 		ViewWarehouse.setContext(context);
 		ViewWarehouse.loadAllViews();
 
-		ExtensionHandler handler = new ExtensionHandler();
+		ExtensionHandler handler = ExtensionHandler.getInstance();
 		handler.setExtensionHandler(ExtensionPointsIDS.COMMAND_ID.getID(),
 				new CommandExtensionHandler());
 		handler.startProcessExtension();

@@ -57,7 +57,6 @@ class KeyPressListener extends CommandKeyListener {
 			
 			for (CommandDefinition it : CommandWarehouse.getCommandByContext(context)) {
 				if (it.getCommandKey().keyEquals(typed)) {
-					System.out.println("fuck");
 					keyInputLabel.setBackground(new Color(null, 255, 0, 0));
 					key = null;
 					return false;
