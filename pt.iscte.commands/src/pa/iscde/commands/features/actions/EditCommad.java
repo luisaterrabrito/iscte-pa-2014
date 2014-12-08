@@ -15,21 +15,24 @@ public class EditCommad implements Action {
 		CommandWarehouse.printall();
 		System.out.println("p2");
 		if (data.getSelectedCommands().size() == 1) {
-			CommandInputDialog inputDialog = new CommandInputDialog(Display.getCurrent().getActiveShell(), data.getSelectedCommands().get(0));
+			CommandInputDialog inputDialog = new CommandInputDialog(Display
+					.getCurrent().getActiveShell(), data.getSelectedCommands()
+					.get(0).getContext());
 
 			inputDialog.open();
 
 			CommandKey newKey = inputDialog.getKey();
-			
+
 			if (newKey != null) {
-				
-				CommandKey key = data.getSelectedCommands().get(0).getCommandKey();
+
+				CommandKey key = data.getSelectedCommands().get(0)
+						.getCommandKey();
 
 				key.setAltKey(newKey.usesAlt());
 				key.setCtrlKey(newKey.usesCtrl());
 				key.setKey(newKey.usesKey());
 
-			}else{
+			} else {
 				System.out.println("key null");
 			}
 
