@@ -26,7 +26,16 @@ public class CommandWarehouse {
 	}
 
 	public static CommandDefinition getCommandDefinition(CommandKey key) {
-		return commandsWarehouse.get(key);
+		System.out.println("tou à procura desta: " + key);
+		
+		System.out.println("antes: ");
+		CommandWarehouse.printall();
+		CommandDefinition key2 = commandsWarehouse.get(key);
+		System.out.println("encontrei la isto: " + key2.getCommandKey());
+		System.out.println("depois");
+		CommandWarehouse.printall();
+		
+		return key2;
 	}
 
 	public static CommandDefinition insertCommandDefinition(CommandKey key,
@@ -56,7 +65,7 @@ public class CommandWarehouse {
 	// Método auxiliar de debug
 	public static void printall() {
 		for (CommandKey ke : commandsWarehouse.keySet()) {
-			System.out.println(ke);
+			System.out.println("oi: " + ke);
 		}
 	}
 

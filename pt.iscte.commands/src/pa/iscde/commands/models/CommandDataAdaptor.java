@@ -38,7 +38,7 @@ final public class CommandDataAdaptor {
 			validItem(kyes, item);
 		}
 
-		return Collections.unmodifiableList(kyes);
+		return kyes;
 	}
 
 	private void validItem(LinkedList<CommandDefinition> kyes, TreeItem item) {
