@@ -3,7 +3,6 @@
 = Introduction =
 
 //TODO 
-
 = Details =
 
 Any contribution to StyleChecker has to extend one of the following extension points :
@@ -71,6 +70,9 @@ public abstract class AbstractVariableDeclarationRule extends AbstractStyleRule{
 }}}
 
 = Examples: =
+
+//TODO
+
 
 
 = Links and Literature =
