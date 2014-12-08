@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.google.common.collect.LinkedListMultimap;
 
-public class CommandWarehouse {
+public final class CommandWarehouse {
 
 	private static Map<CommandKey, CommandDefinition> commandsWarehouse;
 	private static LinkedListMultimap<String, CommandDefinition> commandsByViewWarehouse;
@@ -27,14 +27,14 @@ public class CommandWarehouse {
 
 	public static CommandDefinition getCommandDefinition(CommandKey key) {
 		System.out.println("tou à procura desta: " + key);
-		
+
 		System.out.println("antes: ");
 		CommandWarehouse.printall();
 		CommandDefinition key2 = commandsWarehouse.get(key);
 		System.out.println("encontrei la isto: " + key2.getCommandKey());
 		System.out.println("depois");
 		CommandWarehouse.printall();
-		
+
 		return key2;
 	}
 
@@ -69,7 +69,8 @@ public class CommandWarehouse {
 		}
 	}
 
-	//Called when the Plug-in is destroyed (this needs to be done, in case to of re-launch the plug-in in run-time)
+	// Called when the Plug-in is destroyed (this needs to be done, in case to
+	// of re-launch the plug-in in run-time)
 	public static void eraseModel() {
 		commandsWarehouse = new HashMap<CommandKey, CommandDefinition>();
 		commandsByViewWarehouse = LinkedListMultimap.create();
