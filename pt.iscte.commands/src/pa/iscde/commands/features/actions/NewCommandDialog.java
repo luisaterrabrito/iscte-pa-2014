@@ -1,7 +1,10 @@
 package pa.iscde.commands.features.actions;
 
+import java.util.Set;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
@@ -18,7 +21,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TreeItem;
 
 import pa.iscde.commands.external.services.CommandViewTree;
+import pa.iscde.commands.models.CommandDefinition;
 import pa.iscde.commands.models.CommandKey;
+import pa.iscde.commands.models.CommandWarehouse;
+import pa.iscde.commands.models.ViewWarehouse;
 import pa.iscde.commands.utils.Labels;
 
 class NewCommandDialog extends Dialog {
@@ -58,7 +64,35 @@ class NewCommandDialog extends Dialog {
 
 		Composite commandsAndViewsComposite = new Composite(area, SWT.NONE);
 		commandsAndViewsComposite.setLayoutData(gridData);
-		commandsAndViews = new CommandViewTree(commandsAndViewsComposite, false);
+		commandsAndViews = new CommandViewTree(commandsAndViewsComposite, false) {
+
+			@Override
+			protected void addDataToTreeTable() {
+				super.addDataToTreeTable();
+				Set<String> views = ViewWarehouse.getInstance()
+						.getViewsWarehouse();
+				for (String string : views) {
+					if (!containView(commandTree.getItems(), string)) {
+						TreeItem item = new TreeItem(commandTree, SWT.NONE);
+						item.setBackground(new Color(null, 240, 240, 240));
+						item.setText(string);
+						item.setData(string);
+					}
+
+				}
+			}
+
+			private boolean containView(TreeItem[] items, String string) {
+				String data = "";
+				for (int i = 0; i < items.length; i++) {
+					data = (String) items[i].getData();
+					if (data.equals(string)) {
+						return true;
+					}
+				}
+				return false;
+			}
+		};
 
 		Composite btns = new Composite(area, SWT.BORDER);
 		btns.setLayout(new FillLayout(SWT.VERTICAL));
@@ -66,10 +100,12 @@ class NewCommandDialog extends Dialog {
 		rightToLeft.setText("<");
 		rightToLeft.setCursor(new Cursor(null, SWT.CURSOR_HAND));
 		rightToLeft.addListener(SWT.Selection, new RightToLeftClick(this));
+		rightToLeft.setToolTipText(Labels.RIGHTTOLEFTTIP);
 		leftToRight = new Button(btns, SWT.NONE);
 		leftToRight.setText(">");
 		leftToRight.setCursor(new Cursor(null, SWT.CURSOR_HAND));
 		leftToRight.addListener(SWT.Selection, new LeftToRightClick(this));
+		leftToRight.setToolTipText(Labels.LEFTTORIGHTTIP);
 
 		Composite commandsList = new Composite(area, SWT.NONE);
 		commandsList.setLayoutData(gridData);
@@ -125,11 +161,16 @@ class NewCommandDialog extends Dialog {
 					processSubItems(subItems[j]);
 				}
 			}
+			commandsAndViews.refresh();
 		}
 
 		private void processSubItems(TreeItem subItem) {
 			if (subItem.getChecked()) {
-				// TODO remover da view o commando
+				CommandDefinition def = (CommandDefinition) subItem.getData();
+				CommandWarehouse.getInstance().removeCommandKey(
+						def.getCommandKey());
+
+				subItem.dispose();
 			}
 
 		}
@@ -148,6 +189,23 @@ class NewCommandDialog extends Dialog {
 
 			TreeItem[] items = newCommandDialog.getCommandsAndViews()
 					.getCommandTree().getItems();
+
+			int index = getSelectedIndex(items);
+			if (index != -1
+					&& newCommandDialog.getList().getNumSelectedItems() == 1) {
+
+				CommandInputDialog dialog = new CommandInputDialog(Display
+						.getCurrent().getActiveShell(), items[index].getData()
+						.toString());
+				dialog.open();
+
+				addCommandsToView(dialog.getKey(), items[index].getData()
+						.toString());
+
+			}
+		}
+
+		private int getSelectedIndex(TreeItem[] items) {
 			int oneViewSelected = 0;
 			int index = -1;
 			for (int i = 0; i < items.length; i++) {
@@ -157,26 +215,27 @@ class NewCommandDialog extends Dialog {
 				}
 			}
 
-			if (oneViewSelected == 1
-					&& newCommandDialog.getList().getNumSelectedItems() > 0) {
-				if (items[index].getData() instanceof String) {
-
-					CommandInputDialog dialog = new CommandInputDialog(Display
-							.getCurrent().getActiveShell(), items[index]
-							.getData().toString());
-					dialog.open();
-
-					addCommandsToView(dialog.getKey(), items[index].getData()
-							.toString());
-				}
-			}
-
+			if (oneViewSelected > 1)
+				index = -1;
+			return index;
 		}
 
 		private void addCommandsToView(CommandKey commandKey, String view) {
 			if (commandKey != null) {
-				// TODO adicionar comando a view e á tree
-
+				TreeItem[] items = newCommandDialog.getList().getCommandTree()
+						.getItems();
+				for (int i = 0; i < items.length; i++) {
+					if (items[i].getChecked()) {
+						CommandDefinition def = (CommandDefinition) items[i]
+								.getData();
+						commandKey.setName(def.getDescription());
+						CommandWarehouse.getInstance().insertCommandDefinition(
+								commandKey,
+								new CommandDefinition(commandKey, view, def
+										.getCommand(), def.getDescription()));
+					}
+				}
+				newCommandDialog.getCommandsAndViews().refresh();
 			}
 
 		}

@@ -184,6 +184,11 @@ public class CommandViewTree {
 		return commandTree;
 	}
 
+	public void refresh() {
+		commandTree.removeAll();
+		addDataToTreeTable();
+	}
+
 	final class SelectionListener implements Listener {
 
 		public void handleEvent(Event event) {
