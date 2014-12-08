@@ -8,7 +8,7 @@ Style Checker is a static code
 
 Any contribution to StyleChecker has to extend one of the following extension points :
 
-Extension point 1 :
+==Extension point 1 :==
 
 {{{
 /**
