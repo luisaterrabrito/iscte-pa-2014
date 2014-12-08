@@ -12,7 +12,7 @@ public class formOutsideClass implements ContextDefinitionInterface {
 
 	@Override
 	public ValidateMessage validateContext(CursorContext e) {
-		return new ValidateMessage("This snippet must be out of the class body.", !e.isOutsideTopClass());
+		return new ValidateMessage("This snippet must be out of the class body.", e.isOutsideTopClass());
 	}
 
 }
