@@ -4,6 +4,7 @@ import org.eclipse.swt.widgets.Display;
 
 import pa.iscde.commands.internal.services.Action;
 import pa.iscde.commands.models.CommandDataAdaptor;
+import pa.iscde.commands.models.CommandDefinition;
 import pa.iscde.commands.models.CommandKey;
 import pa.iscde.commands.models.CommandWarehouse;
 
@@ -11,35 +12,31 @@ public class EditCommad implements Action {
 
 	@Override
 	public void action(CommandDataAdaptor data) {
-		System.out.println("p1");
-		CommandWarehouse.getInstance().printall();
-		System.out.println("p2");
+		
 		if (data.getSelectedCommands().size() == 1) {
+			
+			CommandDefinition cmdDefBefore = data.getSelectedCommands().get(0); 
+			
 			CommandInputDialog inputDialog = new CommandInputDialog(Display
-					.getCurrent().getActiveShell(), data.getSelectedCommands()
-					.get(0).getContext());
-
+					.getCurrent().getActiveShell(), cmdDefBefore.getContext());
 			inputDialog.open();
 
+			
 			CommandKey newKey = inputDialog.getKey();
 
 			if (newKey != null) {
 
-				CommandKey key = data.getSelectedCommands().get(0)
-						.getCommandKey();
-
-				key.setAltKey(newKey.usesAlt());
-				key.setCtrlKey(newKey.usesCtrl());
-				key.setKey(newKey.usesKey());
-
+				CommandWarehouse.getInstance().removeCommandKey(cmdDefBefore.getCommandKey());
+				cmdDefBefore.getCommandKey().setAltKey(newKey.usesAlt());
+				cmdDefBefore.getCommandKey().setCtrlKey(newKey.usesCtrl());
+				cmdDefBefore.getCommandKey().setKey(newKey.usesKey());
+				CommandWarehouse.getInstance().insertCommandDefinition(cmdDefBefore.getCommandKey(), cmdDefBefore);
+				
 			} else {
-				System.out.println("key null");
+				System.err.println("The input dialog didn't returned any new valid key to update the commands system");
 			}
 
 		}
-		System.out.println("p3");
-		CommandWarehouse.getInstance().printall();
-		System.out.println("p4");
 
 	}
 }

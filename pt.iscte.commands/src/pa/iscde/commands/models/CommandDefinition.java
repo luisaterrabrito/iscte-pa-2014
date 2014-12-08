@@ -56,6 +56,15 @@ public class CommandDefinition {
 		return false;
 	}
 	
+	@Override
+	public String toString(){
+		return commandKey.toString() + " ("+view+") "+description+" - " + command;
+	}
+
+	public void updateKey(CommandKey key) {
+		this.commandKey = key;
+	}
+	
 	
 	
 }

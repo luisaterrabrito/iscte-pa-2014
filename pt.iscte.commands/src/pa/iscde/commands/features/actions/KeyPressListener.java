@@ -79,7 +79,6 @@ class KeyPressListener extends CommandKeyListener {
 			}
 
 			key = typed;
-			System.out.println("key: " + key.toString());
 			return true;
 		}
 

@@ -32,21 +32,12 @@ public final class CommandWarehouse {
 	}
 
 	public CommandDefinition getCommandDefinition(CommandKey key) {
-		System.out.println("tou à procura desta: " + key);
-
-		System.out.println("antes: ");
-		printall();
-		CommandDefinition key2 = commandsWarehouse.get(key);
-		System.out.println("encontrei la isto: " + key2.getCommandKey());
-		System.out.println("depois");
-		printall();
-
-		return key2;
+		return commandsWarehouse.get(key);
 	}
 
 	public CommandDefinition insertCommandDefinition(CommandKey key,
 			CommandDefinition definition) {
-
+		
 		commandsByViewWarehouse.put(key.getContext(), definition);
 		return commandsWarehouse.put(key, definition);
 	}
@@ -76,10 +67,13 @@ public final class CommandWarehouse {
 	
 	
 	// Método auxiliar de debug
-	public void printall() {
+	public void printall(String string) {
+		System.out.println("----"+string+" ("+commandsWarehouse.size()+") -----");
 		for (CommandKey ke : commandsWarehouse.keySet()) {
-			System.out.println("oi: " + ke);
+			System.out.println("chave a null? " + ke == null);
+			System.out.println("oi: " + ke + " - " + commandsWarehouse.get(ke));
 		}
+		System.out.println("----fim-----");
 	}
 
 	// Called when the Plug-in is destroyed (this needs to be done, in case to
