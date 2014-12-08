@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="iconIdentifier" name="Icon Identifier Extension" schema="schema/iconIdentifier.exsd"/>
+   <extension-point id="filterButton" name="Filter Button Extension" schema="schema/filterButton.exsd"/>
    <extension
          id="OsMelhoresParaSempre"
          name="Os Melhores Mesmo"
