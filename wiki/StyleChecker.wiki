@@ -12,7 +12,7 @@ Any contribution to StyleChecker has to extend one of the following extension po
 
 {{{
 /**
- * 
+ *  TODO explain this class and the sub-class "contract"  
  * @author joaomarques and josevaz
  *
  */
@@ -69,6 +69,9 @@ public abstract class AbstractVariableDeclarationRule extends AbstractStyleRule{
 }
 
 }}}
+
+= Examples: =
+
 
 = Links and Literature =
 
