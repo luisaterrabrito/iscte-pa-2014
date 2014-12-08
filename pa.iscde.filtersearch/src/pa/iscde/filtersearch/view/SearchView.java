@@ -12,21 +12,29 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.osgi.framework.Bundle;
@@ -57,6 +65,9 @@ public class SearchView implements PidescoView {
 	private static Image packageIcon;
 	private static Image classIcon;
 	private static Image categoryIcon;
+	private static Text searchText;
+
+	private final static String NO_RESULTS_FOUND = "No results found.";
 
 	public SearchView() {
 		Bundle bundle = FrameworkUtil.getBundle(SearchView.class);
@@ -112,27 +123,51 @@ public class SearchView implements PidescoView {
 		classIcon = images.get("classes.gif");
 		categoryIcon = images.get("searchtool.gif");
 
-		GridLayout gridLayout = new GridLayout(1, false);
+		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.verticalSpacing = 8;
 		viewArea.setLayout(gridLayout);
 
 		// Search
 		Label label = new Label(viewArea, SWT.NULL);
 		label.setText("Search: ");
-
-		Text searchText = new Text(viewArea, SWT.SINGLE | SWT.BORDER);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		searchText.setLayoutData(gridData);
+		label.setLayoutData(gridData);
+		gridData.horizontalSpan = 2;
+
+
+		searchText = new Text(viewArea, SWT.SINGLE | SWT.BORDER);
+		searchText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		Button btn = new Button(viewArea, SWT.RIGHT | SWT.NO_BACKGROUND);
+		btn.setImage(images.get("clear.gif"));
+
+
+		SelectionListener selectionListener = new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				searchText.setText("");
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		};
+
+
+		btn.addSelectionListener(selectionListener);
 
 		// TreeViewer
 		rootPackage = browserServices.getRootPackage();
 		tree = new TreeViewer(viewArea, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		tree.setContentProvider(new ViewContentProvider());
-		tree.setLabelProvider(new ViewLabelProvider());
+		tree.setLabelProvider(new DelegatingStyledCellLabelProvider(new ViewLabelProvider()));
 		loadCategories("");
 		tree.expandAll();
 
-		tree.getTree().setLayoutData(new GridData(GridData.FILL_BOTH | SWT.H_SCROLL | SWT.V_SCROLL));
+		gridData = new GridData(GridData.FILL_BOTH | SWT.H_SCROLL | SWT.V_SCROLL);
+		tree.getTree().setLayoutData(gridData);
+		gridData.horizontalSpan =2;
 
 		tree.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -178,8 +213,12 @@ public class SearchView implements PidescoView {
 			for(Object o : category.hits){
 				providerMap.put(o, p);
 			}
-			categories.add(category);
+			if(!category.hits.isEmpty())
+				categories.add(category);
 		}
+		if(categories.isEmpty())
+			categories.add(new SearchCategory(NO_RESULTS_FOUND));
+
 		tree.setInput(categories);
 		tree.expandAll();
 	}
@@ -196,23 +235,62 @@ public class SearchView implements PidescoView {
 
 
 
+
 	/**
 	 * Decide o que vai aparecer em cada item da árvore: nome e imagem
 	 * @author lcmms
 	 *
 	 */
-	class ViewLabelProvider extends LabelProvider {
+	class ViewLabelProvider implements DelegatingStyledCellLabelProvider.IStyledLabelProvider{
 
-		public String getText(Object obj) {
-			return obj.toString();
+		@Override
+		public void addListener(ILabelProviderListener listener) {
 		}
 
-		public Image getImage(Object obj) {
-			if(obj instanceof SearchCategory)
+		@Override
+		public void dispose() {
+		}
+
+		@Override
+		public boolean isLabelProperty(Object element, String property) {
+			return false;
+		}
+
+		@Override
+		public void removeListener(ILabelProviderListener listener) {
+		}
+
+		@Override
+		/***
+		 * Expressão regular para colocar o conteudo da string que procuramos a highlight .. 
+		 * ainda contêm mas já serve para o efeito
+		 */
+		public StyledString getStyledText(Object element) {
+
+			StyledString text = new StyledString();
+
+			String[] values = element.toString().split("(?i)"+searchText.getText());
+
+			if(values.length == 0 )
+				text.append(searchText.getText(),new StylerHighlighter());
+
+
+			for (int i = 0;i < values.length;i++) {
+				text.append(values[i].toString());
+				if(i < values.length - 1 || (values.length == 1 && element.toString().contains(searchText.getText())))
+					text.append(searchText.getText(),new StylerHighlighter());
+			}
+
+			return text;
+		}
+
+		@Override
+		public Image getImage(Object element) {
+			if(element instanceof SearchCategory)
 				return categoryIcon;
-			else if(obj instanceof PackageElement)
+			else if(element instanceof PackageElement)
 				return packageIcon;
-			else if(obj instanceof ClassElement)
+			else if(element instanceof ClassElement)
 				return classIcon;
 			return null;
 		}
@@ -262,6 +340,12 @@ public class SearchView implements PidescoView {
 			return !cat.hits.isEmpty();
 		}
 
+	}
+
+	class StylerHighlighter extends Styler{
+		public void applyStyles(TextStyle textStyle) {
+			textStyle.background = Display.getDefault().getSystemColor(SWT.COLOR_YELLOW);
+		}
 	}
 
 
