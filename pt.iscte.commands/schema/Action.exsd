@@ -6,7 +6,17 @@
          <meta.schema plugin="pa.iscde.commands" id="Action" name="Action"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         &lt;p&gt;This point extension will allow you to add actions to manipulate existing commands in the command view.&lt;/p&gt;
+
+&lt;p&gt;To use this extension point you must indicate a button label and create a class that implements the Action interface.&lt;/p&gt;
+
+&lt;p&gt;This interface contains an action method in which is called whenever the button is pressed.&lt;/p&gt;
+
+&lt;p&gt;In order to allow you to manipulate Commands, use the CommandDataAdaptor which contains in the main functions that can be use on the Commands View.&lt;/p&gt;
+
+&lt;/p&gt;To edit a command, obtain the selected command, through the methods of the CommandDataAdaptor and make the set on the returned command.&lt;/p&gt;
+
+
       </documentation>
    </annotation>
 
@@ -83,7 +93,28 @@
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         [Enter extension point usage example here.]
+         package pa.iscde.commands.features.actions;&lt;br&gt;&lt;br&gt;
+
+import pa.iscde.commands.internal.services.Action;&lt;br&gt;
+import pa.iscde.commands.models.CommandDataAdaptor;&lt;br&gt;
+import pa.iscde.commands.models.CommandDefinition;&lt;br&gt;&lt;br&gt;
+
+/**&lt;br&gt;
+* This class remove a command form the command view &lt;br&gt;
+*/&lt;br&gt;
+public class DeleteCommand implements Action {&lt;br&gt;&lt;br&gt;
+
+	@Override&lt;br&gt;
+	public void action(CommandDataAdaptor data) {&lt;br&gt;&lt;br&gt;
+
+		for (CommandDefinition command : data.getSelectedCommands()) {&lt;br&gt;
+			data.deleteCommandLine(command.getCommandKey());&lt;br&gt;
+		}&lt;br&gt;&lt;br&gt;
+
+	}&lt;br&gt;&lt;br&gt;
+
+}&lt;br&gt;
+
       </documentation>
    </annotation>
 
