@@ -22,6 +22,7 @@ public class CommandsController implements BundleActivator {
 
 			if (commandKeyDetected) {
 
+				
 				boolean ctrl_clicked = (event.stateMask & SWT.CTRL) == SWT.CTRL;
 				boolean alt_clicked = (event.stateMask & SWT.ALT) == SWT.ALT;
 				int keyCode_lastKey = event.keyCode;
@@ -30,10 +31,9 @@ public class CommandsController implements BundleActivator {
 
 				CommandKey typed = new CommandKey(viewActive, ctrl_clicked,
 						alt_clicked, (char) keyCode_lastKey);
-				CommandDefinition commandDefinitionTyped = CommandWarehouse
-						.getInstance().getCommandDefinition(typed);
-				System.out.println("CARALHO! "
-						+ commandDefinitionTyped.getCommandKey());
+				CommandDefinition commandDefinitionTyped = CommandWarehouse.getInstance().getCommandDefinition(typed);
+				
+				
 				if (commandDefinitionTyped != null) {
 					// This blocks means that the key typed is registered
 					commandDefinitionTyped.getCommand().action();
