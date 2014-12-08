@@ -164,26 +164,6 @@ public class ConventionsView implements PidescoView {
 		checkBoxEnum.setSize(10, 20);
 		checkBoxEnum.setText("Verificar Enumerados");
 
-		if(lista.size() > 1){
-		final Button novaConvention = new Button(viewArea, SWT.CHECK);
-		for(int i = 1; i!= lista.size();i++){
-			novaConvention.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e){
-					
-					
-					
-					if(checkBoxClass.getSelection()){
-						
-						
-					}
-				}
-				
-				
-				
-			});
-		}
-		}
 
 		//verificar classes.
 		checkBoxClass.addSelectionListener(new SelectionAdapter() {
