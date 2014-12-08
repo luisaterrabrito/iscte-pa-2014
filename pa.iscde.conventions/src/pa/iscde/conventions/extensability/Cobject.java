@@ -17,7 +17,7 @@ public class Cobject {
 		
 		
 		/**
-		 * 
+		 * Convention Object que define o Aviso e a condição a ser verificada.
 		 * @param warning - Recebe o aviso desejado para exibir na Classe.
 		 * @param condition - Condição que vai ser verificada.
 		 */
