@@ -33,6 +33,10 @@ final public class CommandKey {
 	public String getCommandName() {
 		return name;
 	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public boolean usesCtrl() {
 		return ctrl_key;

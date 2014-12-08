@@ -37,6 +37,10 @@ final public class ViewWarehouse {
 		return viewsWarehouse.contains(id);
 	}
 
+	public Set<String> getViewsWarehouse() {
+		return viewsWarehouse;
+	}
+
 	// This Method can only be when there are already WorkbenchPages and stuff
 	// related to the UI
 	// It returns a List of Strings with all Opened Views at the Moment

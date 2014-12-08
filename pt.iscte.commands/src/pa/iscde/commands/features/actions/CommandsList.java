@@ -1,8 +1,6 @@
 package pa.iscde.commands.features.actions;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -21,17 +19,8 @@ public class CommandsList extends CommandViewTree {
 	@Override
 	protected void addDataToTreeTable() {
 
-		List<CommandDefinition> contexts = new LinkedList<CommandDefinition>();
-
-		// TODO Pode ficar mais efeciente se for retornada alista de todos os
-		// comandos definidos
-		Set<String> aux = CommandWarehouse.getInstance().getCommandsContext();
-		for (String context : aux) {
-			for (CommandDefinition it : CommandWarehouse.getInstance()
-					.getCommandByContext(context)) {
-				contexts.add(it);
-			}
-		}
+		Collection<CommandDefinition> contexts = CommandWarehouse.getInstance()
+				.getAllCommandDefinitions();
 
 		String match = textField.getText();
 
