@@ -3,7 +3,7 @@ package pa.iscde.stylechecker.service;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
 
 /**
- * Service containing the operations offered by the Project Browser view.
+ * Service containing the operations offered by the StyleChecker view.
  */
 public interface StyleCheckerServices {
 
@@ -19,27 +19,27 @@ public interface StyleCheckerServices {
 	PackageElement getRootPackage();
 
 	/**
-	 * Activate filter
-	 * @param filterId (non-null) id of the filter to activate
+	 * Activate StyleRule
+	 * @param ruleId (non-null) id of the filter to activate
 	 */
-	void activateFilter(String filterId);
+	void activateRule(String ruleId);
 
 	/**
-	 * Deactivate filter
-	 * @param filterId (non-null) id of the filter to deactivate
+	 * Deactivate Rule
+	 * @param ruleId (non-null) id of the rule to deactivate
 	 */
-	void deactivateFilter(String filterId);
+	void deactivateRule(String ruleId);
 
 	/**
-	 * Add a project browser listener. If listener already added, does nothing.
+	 * Add a style checker listener. If listener already added, does nothing.
 	 * @param listener (non-null) reference to the listener
 	 */
-	void addListener(StyleCheckerListener listener);
+	void addListener(StyleCheckerRuleListener listener);
 
 	/**
-	 * Remove a project browser listener. If listener does not exist, does nothing.
+	 * Remove a style checker listener. If listener does not exist, does nothing.
 	 * @param listener (non-null) reference to the listener
 	 */
-	void removeListener(StyleCheckerListener listener);
+	void removeListener(StyleCheckerRuleListener listener);
 
 }

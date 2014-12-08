@@ -1,4 +1,4 @@
-package pa.iscde.stylechecker.sipke;
+package pa.iscde.stylechecker.domain;
 
 import java.util.List;
 

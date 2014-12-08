@@ -1,12 +1,16 @@
 package pa.iscde.stylechecker.internal;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
+import pa.iscde.stylechecker.domain.ProjectStyleChecker;
+import pa.iscde.stylechecker.domain.StyleCheckerASTVisitor;
 import pa.iscde.stylechecker.model.ui.StyleRuleTableView;
 import pa.iscde.stylechecker.sipke.DummyRule;
 import pt.iscte.pidesco.extensibility.PidescoView;
@@ -35,6 +39,16 @@ public class StyleCheckerView  implements PidescoView {
 			tbRules.addRule(new DummyRule("Try-Catch Stament Rule", 1, true),"ITryCatchStatementRule");
 			tbRules.addRule(new DummyRule("Dummy Rule XPTO", 1, true),"IDummyRule");
 			setDummyWarnings();
+			
+			ProjectStyleChecker checker = new ProjectStyleChecker(new StyleCheckerASTVisitor());
+			checker.checkWorkSpace();
+			StyleCheckerASTVisitor visitor = checker.getVisitor();
+			List<ImportDeclaration> importDeclarations = visitor.getImportDeclarations();
+			
+			for (ImportDeclaration importDeclaration : importDeclarations) {
+				
+			}
+			
 	}
 		
 //		viewArea.setLayout(new FillLayout());
@@ -94,20 +108,20 @@ public class StyleCheckerView  implements PidescoView {
 	
 	
 	public void setDummyWarnings() {
-		JavaEditorServices editorServices = JavaEditorActivator.getInstance().getServices();
-		File openedFile = editorServices.getOpenedFile();
-		
-		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "\nWildcard imports usage can be dangerous \n Use explict imports \n", 38, 19);
-		
-		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "\nMutiple imports statement \n Use one import statment per line \n ", 60, 51);
-		
-		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "  Dummy ", 113, 27);
-		
-		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "      Multipe variables declaration \n Use one viriable declaration per statement               ", 170, 26);
-
-		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "       Dummy Warning             ", 273, 22);
-
-		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "       Dummy Warning             ", 344, 19);
+//		JavaEditorServices editorServices = JavaEditorActivator.getInstance().getServices();
+//		File openedFile = editorServices.getOpenedFile();
+//		
+//		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "\nWildcard imports usage can be dangerous \n Use explict imports \n", 38, 19);
+//		
+//		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "\nMutiple imports statement \n Use one import statment per line \n ", 60, 51);
+//		
+//		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "  Dummy ", 113, 27);
+//		
+//		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "      Multipe variables declaration \n Use one viriable declaration per statement               ", 170, 26);
+//
+//		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "       Dummy Warning             ", 273, 22);
+//
+//		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "       Dummy Warning             ", 344, 19);
 
 			}	
 
