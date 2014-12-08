@@ -4,7 +4,7 @@
 
 Este ponto de extensão utiliza a convenção dada pela equipa para verificar se está correctamente escrita/implementada.
 
-Para utilizar este ponto de extensão terá que retornar um Cobject (Convention Object) que necessita de um Aviso e de uma condição booleana. 
+Para utilizar este ponto de extensão terá que retornar um Cobject (Convention Object) que necessita de um aviso e de uma condição booleana. 
 
 Através do typeof poderá se é para indicar se é para uma Classe, Métodos, Constantes ou para os Enumerados.
 Com o name poderá manipular e criar a sua própria convenção.
