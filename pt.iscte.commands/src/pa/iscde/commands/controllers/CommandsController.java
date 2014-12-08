@@ -55,6 +55,7 @@ public class CommandsController implements BundleActivator {
 
 	@Override
 	public void start(BundleContext context) throws Exception {
+		CommandsController.context = context;
 		ViewWarehouse.getInstance().loadAllViews();
 
 		ExtensionHandler handler = ExtensionHandler.getInstance();
