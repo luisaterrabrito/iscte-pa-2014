@@ -12,9 +12,7 @@ public class EditCommad implements Action {
 	public void action(CommandDataAdaptor data) {
 
 		if (data.getSelectedCommands().size() == 1) {
-			CommandInputDialog inputDialog = new CommandInputDialog(Display
-					.getCurrent().getActiveShell(), data.getSelectedCommands()
-					.get(0).getContext());
+			CommandInputDialog inputDialog = new CommandInputDialog(Display.getCurrent().getActiveShell(), data.getSelectedCommands().get(0));
 
 			inputDialog.open();
 
