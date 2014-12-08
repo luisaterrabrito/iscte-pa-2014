@@ -2,12 +2,38 @@
 
 = Introduction =
 
-Add your content here.
-
+Style Checker is a static code
 
 = Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+Any contribution to StyleChecker has to extend one of the following extension points :
+
+Extension point 1 :
+
+{{{
+/**
+ * 
+ * @author joaomarques and josevaz
+ *
+ */
+public abstract class AbstractTryStatementRule extends AbstractStyleRule{
+	
+	@Override
+	public boolean check(ASTNode node) {
+		return check((TryStatement)node);
+	}
+	
+	/**
+	 * This method implement the rule logical.
+	 * @param node the AST Node
+	 * @return - true if the node does not violate the rule otherwise false
+	 */
+	public abstract boolean check(TryStatement node) ;
+	
+	/**
+	 * @return warring message to be displayed on rule violations.
+	 */
+	public abstract String getWarningMessage() ;
+	
+}
+}}}
