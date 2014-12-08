@@ -7,17 +7,15 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
-
 final public class KeyPressDetector {
-	
+
 	public interface KeyDownListener {
 		public boolean keyPressed(Event c);
 	}
-	
+
 	public interface KeyUpListener {
 		public boolean keyRelease(Event c);
 	}
-	
 
 	private static KeyPressDetector instance;
 
@@ -31,8 +29,6 @@ final public class KeyPressDetector {
 	private List<KeyDownListener> downListeners;
 	private List<KeyUpListener> upListeners;
 
-	
-
 	private KeyPressDetector() {
 		downListeners = new LinkedList<KeyDownListener>();
 		upListeners = new LinkedList<KeyUpListener>();
@@ -45,7 +41,7 @@ final public class KeyPressDetector {
 			}
 
 		});
-		
+
 		Display.getDefault().addFilter(SWT.KeyUp, new Listener() {
 
 			@Override
@@ -63,7 +59,7 @@ final public class KeyPressDetector {
 	public void removeKeyPressListener(KeyDownListener listener) {
 		downListeners.remove(listener);
 	}
-	
+
 	public void addKeyReleaseListener(KeyUpListener listener) {
 		upListeners.add(listener);
 	}
@@ -80,15 +76,16 @@ final public class KeyPressDetector {
 		}
 
 	}
-	
-	
+
 	private void notifyUpListeners(Event event) {
 		if (upListeners.size() >= 1) {
 			upListeners.get(upListeners.size() - 1).keyRelease(event);
 		}
-		
+
 	}
 
-
+	public static void destroyInstance() {
+		instance = null;
+	}
 
 }
