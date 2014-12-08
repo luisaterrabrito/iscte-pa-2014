@@ -146,6 +146,7 @@ public class SearchView implements PidescoView {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				if(!searchText.getText().isEmpty())
 				searchText.setText("");
 			}
 
