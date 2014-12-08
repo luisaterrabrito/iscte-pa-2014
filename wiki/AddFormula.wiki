@@ -1,0 +1,7 @@
+#summary pa.iscde.formulas.createformula
+
+= Introduction =
+
+Este ponto de extensão permite criar uma nova formula para juntar às formulas já existentes. 
+Para adicionar esta formula tem que se selecionar a categoria, de uma das já existentes, preencher o nome da mesma, definir o numero de inputs, e inserir o algoritmo da mesma.
+A formula inserida, posteriormente pode ser utilizada no plugin para inserir codigo na classe aberta. 
