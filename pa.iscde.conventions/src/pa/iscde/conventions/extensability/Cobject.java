@@ -1,7 +1,8 @@
-package pa.iscde.conventions;
+package pa.iscde.conventions.extensability;
 
 public class Cobject {
-
+	
+	
 		String warning;
 		boolean condition;
 		
