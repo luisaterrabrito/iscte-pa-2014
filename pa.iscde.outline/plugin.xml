@@ -18,7 +18,7 @@
          name="Outline"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.outline.view.AMinhaView">
+            class="pa.iscde.outline.view.OutlineView">
       </view>
    </extension>
 
