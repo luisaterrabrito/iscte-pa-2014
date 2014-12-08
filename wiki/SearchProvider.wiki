@@ -1,0 +1,12 @@
+#summary pa.iscde.filtersearch.providers.SearchProvider
+
+= Introduction =
+
+Este ponto de extensão permite que o utilizador adicione o seu projecto ao conjunto de outros projectos que também implementam este ponto, de modo a efectuar pesquisas dentro dos mesmos.
+
+Por forma a realizar uma pesquisa, o utilizador tem disponível um campo de texto e, a cada caractér inserido/eliminado, os resultados são filtrados automáticamente. No entanto, cabe ao utilizador decidir alguns aspectos em relação aos resultados de pesquisa do seu projecto, sendo eles:
+
+ 1. Consoante o texto introduzido no campo de pesquisa, que resultados devem aparecer;
+ 2. Que icon deve ter cada tipo de objecto que aparece nos resultados;
+  
+ 3. Que acção deve acontecer ao efectuar um duplo clique em cima de um resultado.
