@@ -27,6 +27,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import pa.iscde.conventions.extensability.Cobject;
 import pa.iscde.conventions.extensability.ConventionService;
 import pa.iscde.conventions.extensability.TypeOf;
 import pt.iscte.pidesco.extensibility.PidescoView;
@@ -149,11 +150,11 @@ public class ConventionsView implements PidescoView {
 		//Verificar classes.
 		final Button checkBoxClass = new Button(viewArea, SWT.CHECK);
 		checkBoxClass.setSize(10, 20);
-		checkBoxClass.setText("Verificar a Primeira Letra da Classe");
+		checkBoxClass.setText("Verificar Classe");
 		//Verificar Metodos
 		final Button checkBoxMethod = new Button(viewArea, SWT.CHECK);
 		checkBoxMethod.setSize(10, 20);
-		checkBoxMethod.setText("Verificar a Primeira Letra / Tamanho dos Métodos ");
+		checkBoxMethod.setText("Verificar Métodos ");
 		//Verificar Constantes
 		final Button checkBoxConstant = new Button(viewArea, SWT.CHECK);
 		checkBoxConstant.setSize(10, 20);
@@ -163,6 +164,26 @@ public class ConventionsView implements PidescoView {
 		checkBoxEnum.setSize(10, 20);
 		checkBoxEnum.setText("Verificar Enumerados");
 
+		if(lista.size() > 1){
+		final Button novaConvention = new Button(viewArea, SWT.CHECK);
+		for(int i = 1; i!= lista.size();i++){
+			novaConvention.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e){
+					
+					
+					
+					if(checkBoxClass.getSelection()){
+						
+						
+					}
+				}
+				
+				
+				
+			});
+		}
+		}
 
 		//verificar classes.
 		checkBoxClass.addSelectionListener(new SelectionAdapter() {
