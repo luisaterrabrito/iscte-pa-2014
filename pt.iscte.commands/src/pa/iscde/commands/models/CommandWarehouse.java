@@ -1,5 +1,7 @@
 package pa.iscde.commands.models;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +68,13 @@ public final class CommandWarehouse {
 		return commandDefinition != null && result;
 	}
 
+	//The collection returned is just a copy of all the commands defined in the warehouse
+	//Changes made to the collection returned will not afect the warehouse
+	public Collection<CommandDefinition> getAllCommandDefinitions(){
+		return Collections.unmodifiableCollection(commandsWarehouse.values());
+	}
+	
+	
 	// Método auxiliar de debug
 	public void printall() {
 		for (CommandKey ke : commandsWarehouse.keySet()) {
