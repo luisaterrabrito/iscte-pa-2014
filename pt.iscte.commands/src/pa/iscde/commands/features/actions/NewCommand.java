@@ -1,12 +1,9 @@
 package pa.iscde.commands.features.actions;
 
 import org.eclipse.swt.widgets.Display;
-
-import pa.iscde.commands.features.comments.CommentFeature;
 import pa.iscde.commands.internal.services.Action;
 import pa.iscde.commands.models.CommandDataAdaptor;
-import pa.iscde.commands.models.CommandDefinition;
-import pa.iscde.commands.models.CommandKey;
+
 
 public class NewCommand implements Action {
 

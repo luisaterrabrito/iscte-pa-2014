@@ -60,9 +60,10 @@ public class CommandWarehouse {
 		}
 	}
 
-	public static void clearAll() {
-		commandsWarehouse.clear();
-		commandsByViewWarehouse.clear();
+	//Called when the Plug-in is destroyed (this needs to be done, in case to of re-launch the plug-in in run-time)
+	public static void eraseModel() {
+		commandsWarehouse = new HashMap<CommandKey, CommandDefinition>();
+		commandsByViewWarehouse = LinkedListMultimap.create();
 	}
 
 }

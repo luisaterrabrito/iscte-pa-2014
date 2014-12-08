@@ -1,5 +1,7 @@
 package pa.iscde.commands.features.actions;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -7,61 +9,165 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 
 import pa.iscde.commands.controllers.KeyPressDetector;
+import pa.iscde.commands.controllers.KeyPressDetector.KeyUpListener;
+import pa.iscde.commands.models.CommandDefinition;
 import pa.iscde.commands.models.CommandKey;
 import pa.iscde.commands.utils.Labels;
 
 class CommandInputDialog extends Dialog {
 
-	private Text keyInput;
+	private Label keyInput;
 	private Label inputLabel;
 
 	private KeyPressListener edit;
 	private CommandKey key;
-	private String context;
+	private CommandDefinition commandDefinition;
+	private Composite parent;
+	
+	private boolean pressing;
+	
+	private KeyUpListener keyUpListener = new KeyUpListener(){
 
-	public CommandInputDialog(Shell parent, String context) {
+		@Override
+		public boolean keyRelease(Event c) {
+			if(pressing){
+				System.out.println("Largaste algo que nao tinha nada..");
+				inputLabel.setText(Labels.CLICKKEYCOMBINATIONS_LBL);
+			}
+			pressing = false;
+			return true;
+		}
+		
+	};
+	
+	
+	final Thread changingColor = new Thread(new Runnable(){
+
+		@Override
+		public void run() {
+			try {
+				while(true){
+						
+					parent.getDisplay().syncExec(new Runnable(){
+						@Override
+						public void run() {
+							keyInput.setForeground(new Color(null, 255, 0, 0));
+						}
+					});
+					
+					
+					Thread.sleep(500);
+	
+					//O dialog pode. ser fechado logo a seguir da thread acordar, lançando o interrupt
+					//E assim controlamos que o display terá de estar vivo para fazer o attach do runnable
+					if(!Thread.interrupted()){
+					
+						parent.getDisplay().syncExec(new Runnable(){
+							@Override
+							public void run() {
+								keyInput.setForeground(new Color(null, 200, 200, 200));
+							}
+						});
+						
+						Thread.sleep(500);
+					}
+
+				}
+			} catch (InterruptedException e) {
+				
+			}
+			
+		}
+	});
+	
+
+	public CommandInputDialog(Shell parent, CommandDefinition commandDefinition) {
 		super(parent);
-		this.context = context;
+		this.commandDefinition = commandDefinition;
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent) {
+	protected Control createDialogArea(final Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
-		GridData fieldsLayout = new GridData();
-		fieldsLayout.horizontalAlignment = SWT.FILL;
-		fieldsLayout.grabExcessHorizontalSpace = true;
-		fieldsLayout.verticalAlignment = SWT.TOP;
-		fieldsLayout.grabExcessVerticalSpace = false;
+		this.parent = parent;
+		
+		
+		parent.getShell().addListener(SWT.Close, new Listener() {
+		      public void handleEvent(Event event) {
+		    	  if(changingColor.isAlive())
+		    		  changingColor.interrupt();
+		      }
+		});
 
-		keyInput = new Text(container, SWT.BORDER);
-		keyInput.setEditable(false);
-		keyInput.setBackground(new Color(null, 255, 255, 255));
+		GridData keyInputLayout = createGridData(15,  70);
+		keyInput = new Label(container, SWT.NONE);
+		keyInput.setText("...waiting...");
 		keyInput.setFocus();
+		keyInput.setLayoutData(keyInputLayout);
+
+		changingColor.start();
+		
+		
+		GridData fieldsLayout = createGridData(15,  215);
 		inputLabel = new Label(container, SWT.NONE);
 		inputLabel.setText(Labels.CLICKKEYCOMBINATIONS_LBL);
-
-		keyInput.setLayoutData(fieldsLayout);
-		fieldsLayout.heightHint = 15;
 		inputLabel.setLayoutData(fieldsLayout);
+		
+		
+		
+		GridData fieldsLayout2 = createGridData(15,  68);
+		Label l = new Label(container, SWT.NONE);
+		l.setText("CTRL + 'KEY'");
+		l.setLayoutData(fieldsLayout2);
+		
+		GridData fieldsLayout3 = createGridData(15,  62);
+		Label l2 = new Label(container, SWT.NONE);
+		l2.setText("ALT + 'KEY'");
+		l2.setLayoutData(fieldsLayout3);
+		
+		GridData fieldsLayout4 = createGridData(15,  105);
+		Label l3 = new Label(container, SWT.NONE);
+		l3.setText("CTRL + ALT + 'KEY'");
+		l3.setLayoutData(fieldsLayout4);
+		
+		
 
-		edit = new KeyPressListener(keyInput, context) {
+		edit = new KeyPressListener(keyInput, commandDefinition.getContext()) {
 			@Override
-			public void keyPressed(CommandKey c) {
-				super.keyPressed(c);
-
-				if (isKeyOK) {
+			public boolean keyPressed(Event event) {
+				boolean result = super.keyPressed(event);
+				pressing = true;
+				
+				if (result) {
 					inputLabel.setText(Labels.CLICKKEYCOMBINATIONS_LBL);
-				} else {
+					pressing = false;
+					System.out.println("bs");
+					parent.getShell().setBackgroundMode(SWT.INHERIT_FORCE);
+					keyInput.setBackground(null);
+					return true;
+				} else if(!defaultKeyPressed && !result) {
 					inputLabel.setText(Labels.KEYALREADYUSE_LBL);
+					pressing = false;
+					return false;
 				}
+				else{
+					System.out.println("a");
+					parent.getShell().setBackgroundMode(SWT.INHERIT_FORCE);
+					keyInput.setBackground(null);
+					inputLabel.setText("Waiting..");
+					return false;
+				}
+				
 			}
 		};
 		KeyPressDetector.getInstance().addKeyPressListener(edit);
+		KeyPressDetector.getInstance().addKeyReleaseListener(keyUpListener);
 
 		return container;
 	}
@@ -70,16 +176,32 @@ class CommandInputDialog extends Dialog {
 		return key;
 	}
 
+	private GridData createGridData(int x, int y){
+		GridData gridData = new GridData();
+		gridData.horizontalAlignment = SWT.CENTER;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.verticalAlignment = SWT.CENTER;
+		gridData.grabExcessVerticalSpace = true;
+		gridData.heightHint = x;
+		gridData.widthHint = y;
+		return gridData;
+	}
+	
+	
 	@Override
 	protected void okPressed() {
+		changingColor.interrupt();
 		key = edit.getKey();
 		KeyPressDetector.getInstance().removeKeyPressListener(edit);
+		KeyPressDetector.getInstance().removeKeyReleaseListener(keyUpListener);
 		super.okPressed();
 	}
 
 	@Override
 	protected void cancelPressed() {
+		changingColor.interrupt();
 		KeyPressDetector.getInstance().removeKeyPressListener(edit);
+		KeyPressDetector.getInstance().removeKeyReleaseListener(keyUpListener);
 		key = null;
 		super.cancelPressed();
 	}
@@ -92,7 +214,12 @@ class CommandInputDialog extends Dialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(320, 150);
+		return new Point(320, 300);
 	}
+	
+	
+	
+	
+
 
 }
