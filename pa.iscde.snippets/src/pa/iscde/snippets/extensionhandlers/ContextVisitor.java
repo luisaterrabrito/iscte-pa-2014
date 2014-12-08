@@ -46,6 +46,8 @@ public class ContextVisitor extends ASTVisitor {
 					&& cursorPosition < nodePosition + node.getLength())
 				treatModifiers(node.getModifiers());
 		}
+		if(topClassVisited != true)
+			topClassVisited = true;
 		return true;
 	}
 
