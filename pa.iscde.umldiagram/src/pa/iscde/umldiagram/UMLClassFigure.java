@@ -1,3 +1,4 @@
+
 package pa.iscde.umldiagram;
 
 
@@ -60,7 +61,7 @@ public class UMLClassFigure extends Figure {
 	}
 	
 	public static final Color GRAY = new Color(null, 230, 230, 230);
-	public static final Color WHITE = new Color(null, 255, 255, 255);
+	public static Color WHITE = new Color(null, 255, 255, 255);
 	
 
 	public void select() {
@@ -102,7 +103,4 @@ public class UMLClassFigure extends Figure {
 		add(methodsCompartment);
 	}
 
-	
-	
-	
 }
