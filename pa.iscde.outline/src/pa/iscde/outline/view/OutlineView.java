@@ -11,6 +11,7 @@ import org.eclipse.swt.events.TreeListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -53,6 +54,10 @@ public class OutlineView extends ASTVisitor implements PidescoView {
 					int length) {
 				System.out.println("File changed");
 				OutlineView activeView = OutlineView.getSingleton();
+				
+				for (Control control : activeView.viewArea.getChildren()) {
+			        control.dispose();
+			    }
 				activeView.drawOutlineView(file);
 			}
 
