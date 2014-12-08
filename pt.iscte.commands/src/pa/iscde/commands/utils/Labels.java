@@ -29,5 +29,6 @@ final public class Labels {
 	public static final String VIEWSANDCOMMANDS_LBL = "Views / Commands";
 	public static final String RIGHTTOLEFTTIP = "To add command, select 1 view form da left panel and 1 command from the rigth panel then click";
 	public static final String LEFTTORIGHTTIP = "To remove command, select one or more commands from the views in the left panel then click";
+	public static final String SEARCHTEXT = "Write text to search...";
 
 }

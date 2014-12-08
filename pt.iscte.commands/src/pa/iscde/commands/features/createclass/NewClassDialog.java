@@ -20,11 +20,16 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 
+import pa.iscde.commands.controllers.CommandsController;
+import pa.iscde.commands.utils.ExtensionPointsIDS;
 import pa.iscde.commands.utils.Labels;
+import pt.iscte.pidesco.extensibility.PidescoServices;
 
 final class NewClassDialog extends TitleAreaDialog {
 
@@ -35,9 +40,14 @@ final class NewClassDialog extends TitleAreaDialog {
 
 	private Button checkBoxAbstractModifier;
 	private Button checkBoxFinalModifier;
+	private PidescoServices services;
 
 	protected NewClassDialog(Shell shell) {
 		super(shell);
+		BundleContext context = CommandsController.getContext();
+		ServiceReference<PidescoServices> ref = context
+				.getServiceReference(PidescoServices.class);
+		services = context.getService(ref);
 	}
 
 	@Override
@@ -129,6 +139,7 @@ final class NewClassDialog extends TitleAreaDialog {
 		if (validClassName() && validatePackageName()) {
 			try {
 				createClass();
+				services.runTool(ExtensionPointsIDS.REFRESH_EXPLORER_ID.getID(), false);
 			} catch (IOException e) {
 				System.err
 						.println("An error secure while creating the java class file.");
@@ -164,7 +175,6 @@ final class NewClassDialog extends TitleAreaDialog {
 			if (bw != null) {
 				bw.close();
 			}
-			// TODO Fazer o refresh no project explorer
 		}
 
 	}
@@ -173,7 +183,7 @@ final class NewClassDialog extends TitleAreaDialog {
 		StringBuilder sb = new StringBuilder(100);
 
 		if (packageName.getText().length() != 0)
-			sb.append("package " + packageName.getText()
+			sb.append("package " + packageName.getText() + ";"
 					+ System.lineSeparator() + System.lineSeparator());
 
 		if (radioPublicModifier.getSelection())

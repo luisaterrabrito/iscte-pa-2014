@@ -2,7 +2,8 @@ package pa.iscde.commands.utils;
 
 public enum ExtensionPointsIDS {
 
-	ACTION_ID("pa.iscde.commands.action"), COMMAND_ID("pa.iscde.commands.command"), VIEW_ID("pt.iscte.pidesco.view");
+	ACTION_ID("pa.iscde.commands.action"), COMMAND_ID("pa.iscde.commands.command"), VIEW_ID("pt.iscte.pidesco.view"),
+		REFRESH_EXPLORER_ID("pt.iscte.pidesco.projectbrowser.refresh");
 
 	private String ID;
 
