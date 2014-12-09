@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="colorSelector" name="color selector" schema="schema/colorSelector.exsd"/>
+   <extension
+         id="teampackages"
+         name="Team Packages"
+         point="pa.iscde.team">
+      <member
+            name="Andre Domingos"
+            quote="Random sense"
+            user="asdss">
+      </member>
+      <member
+            name="Manuel Baioa"
+            quote="Vamos nadar"
+            user="mirba">
+      </member>
+   </extension>
+   <extension
+         id="umlpackages"
+         name="UML Packages"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.packagediagram.internal.PackageDiagramView">
+      </view>
+   </extension>
+   
+   
+<!--   <extension
+         id="id1"
+         name="name"
+         point="pt.iscte.pidesco.projectbrowser.filter">
+      <filter
+            class="pa.iscde.packagediagram.ProjectBrowserFilterPackageDiagram">
+      </filter>
+-->
+
+   <extension
+         id="refreshpackages"
+         name="Refresh Package"
+         point="pt.iscte.pidesco.tool">
+      <tool
+            class="pa.iscde.packagediagram.internal.RefreshToolPackageDiagram"
+            description="Refreshes the packages diagram"
+            icon="package.gif"
+            hasState="false"
+            view="pt.iscte.pidesco.projectbrowser.tree">
+      </tool>
+   </extension>
+
+
+
+
+
+
+</plugin>
