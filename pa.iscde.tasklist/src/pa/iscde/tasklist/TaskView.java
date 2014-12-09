@@ -176,6 +176,8 @@ public class TaskView implements PidescoView {
 			public boolean visit(LineComment node) {
 				
 				String tmp = fileText.substring(node.getStartPosition(), node.getStartPosition() + node.getLength());
+				
+				//Falta fazer aqui!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //				if(tmp.substring(2, 6).equals("TODO")){
 				String[] split = tmp.split(" ");
 				if(!split[0].equals("//")){
