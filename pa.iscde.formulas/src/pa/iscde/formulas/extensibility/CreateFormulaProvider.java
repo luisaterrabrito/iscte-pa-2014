@@ -1,5 +1,10 @@
 package pa.iscde.formulas.extensibility;
 
+/**
+ * Interface used by the extension point AddFormula.
+ * @author Gonçalo Horta & Tiago Saraiva
+ *
+ */
 public interface CreateFormulaProvider {
 	
 	public String setName();

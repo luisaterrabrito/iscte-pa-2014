@@ -24,6 +24,11 @@ import org.eclipse.swt.widgets.Text;
 import pa.iscde.formulas.Formula;
 import pa.iscde.formulas.util.InfoWindow;
 
+/**
+ * Class that implements SelectionListener used to draw and execute the calculator mode.
+ * @author Gonçalo Horta & Tiago Saraiva
+ *
+ */
 public class CalculatorListener implements SelectionListener{
 		
 		private ArrayList<Text> inputs_text = new ArrayList<Text>();

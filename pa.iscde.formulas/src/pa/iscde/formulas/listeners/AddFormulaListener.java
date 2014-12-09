@@ -28,6 +28,11 @@ import pa.iscde.formulas.InsertFormulaFormat;
 import pa.iscde.formulas.view.FormulasView;
 
 
+/**
+ * Class that implements SelectionListener used to draw and execute the add new formula mode.
+ * @author Gonçalo Horta & Tiago Saraiva
+ *
+ */
 public class AddFormulaListener implements SelectionListener{
 
 	private int inputsNumber =0;
