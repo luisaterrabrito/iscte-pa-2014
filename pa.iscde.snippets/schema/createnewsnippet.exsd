@@ -6,7 +6,7 @@
          <meta.schema plugin="pa.iscde.snippets" id="pa.iscde.snippets.createnewsnippet" name="Create New Snippet"/>
       </appinfo>
       <documentation>
-         Allows the insertion of programmed snippets, only loads at the beginning of program, anything defined whilst program is running will only be added the next time the program runs. 
+         Allows the insertion of programmed snippets, only loads at the beginning of program, anything defined whilst program is running will only be added the next time the program runs.
       </documentation>
    </annotation>
 
@@ -67,6 +67,13 @@
             <annotation>
                <documentation>
                   Snippet Language
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="new" type="boolean">
+            <annotation>
+               <documentation>
+                  This boolean value indicates if it&apos;s a new version of an already existing snippet or not, if the value is true the current version will be replaced.
                </documentation>
             </annotation>
          </attribute>

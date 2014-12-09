@@ -18,7 +18,8 @@ public class ProgrammaticSnippets{
 				.getExtensions()) {
 			for (IConfigurationElement snippet : ext.getConfigurationElements()) {
 				String name = snippet.getAttribute("name");
-				if(name.equals("") || f.checkIfNameAlreadyExists(name))
+				String newVersion = snippet.getAttribute("new");
+				if(name.equals("") || (f.checkIfNameAlreadyExists(name) && !newVersion.equals("true")))
 					return;
 				String code = snippet.getAttribute("code");
 				String language = snippet.getAttribute("language");
