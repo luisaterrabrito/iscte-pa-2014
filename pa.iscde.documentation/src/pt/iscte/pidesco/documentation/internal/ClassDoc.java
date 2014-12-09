@@ -3,14 +3,14 @@ package pt.iscte.pidesco.documentation.internal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import pt.iscte.pidesco.documentation.service.ITagComment;
 
 public class ClassDoc {
 	
-	public static ArrayList<String> validClassTags = new ArrayList<String>(Arrays.asList("@autor", "@versao"));
 	private static ClassDoc instance;
-	
+
 	private String classFullName;
 	private String comment;
 	private List<ITagComment> tags;
@@ -37,6 +37,9 @@ public class ClassDoc {
 	}
 	
 	public List<ITagComment> getTags() {
+		if (tags == null)
+			tags = new ArrayList<ITagComment>();
+		
 		return tags;
 	}
 	
@@ -59,4 +62,15 @@ public class ClassDoc {
 		return instance;
 	}
 
+	public StringBuilder toHTML() {
+		StringBuilder sb = new StringBuilder(); 
+		
+		sb.append("<br><b>Classe: </b>" + comment + "\n");
+		
+		for (ITagComment tag : tags) {
+			sb.append("<b>" + tag.getTagName() + ": </b>" + tag.getTagText() + "\n"); 
+		}
+		
+		return sb;
+	}
 }

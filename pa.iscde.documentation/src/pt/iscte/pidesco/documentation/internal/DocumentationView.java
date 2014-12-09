@@ -19,8 +19,8 @@ import org.osgi.framework.ServiceReference;
 
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
-
 import pt.iscte.pidesco.documentation.internal.TagCommentImpl;
+import pt.iscte.pidesco.documentation.service.ITagComment;
 
 public class DocumentationView implements PidescoView {
 
@@ -38,41 +38,26 @@ public class DocumentationView implements PidescoView {
 		
 		ServiceReference<JavaEditorServices> refEditor = context.getServiceReference(JavaEditorServices.class);
 		javaServices = context.getService(refEditor);
-		
-		//ServiceReference<ProjectBrowserServices> refProjectBrowser = context.getServiceReference(ProjectBrowserServices.class);
-		//browserServices = context.getService(refProjectBrowser);
 	}
 
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
-		
 		instance = this;
 
 		browser = new Browser(viewArea, SWT.NONE);
 		browser.setText("<b>ola</b>");
 		
-		classDoc = new ClassDoc();
-		
-		//table = new Table(viewArea, SWT.NONE);
-		//TableColumn nameCol = new org.eclipse.swt.widgets.TableColumn(table, SWT.NONE);
-		//nameCol.setText("Name");
-		//nameCol.setWidth(200);
-		//TableColumn descriptionCol = new org.eclipse.swt.widgets.TableColumn(table, SWT.NONE);
-		//descriptionCol.setText("Description");
-		//descriptionCol.setWidth(200);
-		
-		//table.setHeaderVisible(true);
-
 		if (javaServices.getOpenedFile() != null){
 			this.fillView();
 		}
-		
 	}
 
 	@SuppressWarnings("unchecked")
 	public void fillView() {
 		this.cleanView();
-		
+
+		classDoc = new ClassDoc();
+
 		ASTVisitor visitor = new ASTVisitor() {
 
 			// TODO: Don't let doc except class and interfaces
@@ -82,8 +67,6 @@ public class DocumentationView implements PidescoView {
 			 */
 			@Override
 			public boolean visit(Javadoc node) {
-				//TableItem item = new TableItem(table, SWT.NONE);
-
 				// Condition to get properties of the class
 				if (node.getParent() instanceof TypeDeclaration) {
 					classDoc.setClassFullName(((TypeDeclaration) node.getParent()).getName().getFullyQualifiedName());
@@ -94,10 +77,10 @@ public class DocumentationView implements PidescoView {
 							if (tag.getTagName() == null)
 								classDoc.setComment(fragment.toString());
 							else {
-								// Set tags from class TODO
-
+								// get all existing tags from class
+								ITagComment tagDefinition = new TagCommentImpl(tag.getTagName(), fragment.toString());
+								classDoc.getTags().add(tagDefinition);
 							}
-
 						}
 					}
 				}
@@ -118,10 +101,10 @@ public class DocumentationView implements PidescoView {
 							if (tag.getTagName() == null)
 								methodDoc.setComment(fragment.toString());
 							else {
-								// Set tags from method TODO
-								
+								// get all existing tags from method
+								ITagComment tagDefinition = new TagCommentImpl(tag.getTagName(), fragment.toString());
+								methodDoc.getTags().add(tagDefinition);
 							}
-
 						}
 					}
 					
@@ -129,7 +112,7 @@ public class DocumentationView implements PidescoView {
 					classDoc.getListMethods().add(methodDoc);
 				}
 				
-				browser.setText("<b>" + classDoc.toString() + "</b>");
+				//browser.setText("<b>" + classDoc.toString() + "</b>");
 				return false;
 			}
 
@@ -139,6 +122,14 @@ public class DocumentationView implements PidescoView {
 			javaServices.parseFile(javaServices.getOpenedFile(), visitor);
 		}
 		
+		// Apanha e escreve todas as tags
+		// mas se apanhar uma tag de ponto de extensão, utiliza essa!!!
+
+		// Coloca Texto no Browser
+		
+		
+		//browser.setText("<b>Teste</b>");
+		browser.setText(classDoc.toHTML().toString());
 	}
 	
 	public void cleanView() {

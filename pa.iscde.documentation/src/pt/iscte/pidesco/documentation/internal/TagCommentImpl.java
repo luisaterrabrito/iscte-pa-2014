@@ -5,17 +5,16 @@ import pt.iscte.pidesco.documentation.service.ITagComment;
 public class TagCommentImpl implements ITagComment {
 
 	private String tagName;
-	private String tagVariable;
 	private String tagText;
+	
+	public TagCommentImpl(String tagName, String tagText) {
+		this.tagName = tagName;
+		this.tagText = tagText;
+	}
 	
 	@Override
 	public String getTagName() {
 		return tagName;
-	}
-
-	@Override
-	public String getTagVariable() {
-		return tagVariable;
 	}
 
 	@Override
@@ -29,29 +28,8 @@ public class TagCommentImpl implements ITagComment {
 	}
 
 	@Override
-	public void setTagVariable(String tagVariable) {
-		this.tagVariable = tagVariable;
-	}
-
-	@Override
 	public void setTagText(String tagText) {
 		this.tagText = tagText;
-	}
-	
-	boolean isValidTag(String tagName, String type){
-		
-		
-		
-		boolean isValid = false;
-		
-		if (!tagName.trim().isEmpty()){
-			if (tagName.startsWith("@")){
-				tagName = tagName.trim().substring(1);
-			}
-						
-		}
-		
-		return isValid;
 	}
 	
 }

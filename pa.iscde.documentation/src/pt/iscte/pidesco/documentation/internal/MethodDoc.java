@@ -28,6 +28,9 @@ public class MethodDoc {
 		this.comment = comment;
 	}
 	public List<ITagComment> getTags() {
+		if (tags == null)
+			tags = new ArrayList<ITagComment>();
+
 		return tags;
 	}
 	public void setTags(List<ITagComment> tags) {
