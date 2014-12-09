@@ -15,4 +15,9 @@ public class AppendTextInsideProcedure implements ContextDefinitionInterface {
 		return new ValidateMessage("This snippet must be inside a procedure or function.", e.isInsideMethod());
 	}
 
+	@Override
+	public String getIdentifier() {
+		return "AppendTextInsideProcedure";
+	}
+
 }
