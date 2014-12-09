@@ -1,10 +1,15 @@
 package pa.iscte.dropcode.gui;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import pa.iscde.dropcode.services.DropBar;
@@ -27,8 +32,13 @@ public class DropBarContainer extends Composite {
 		headerData.minimumHeight = 36;
 		header = new Composite(this, SWT.NONE);
 		header.setLayoutData(headerData);
+		header.setLayout(new FillLayout());
+		header.setBackground(new Color(Display.getCurrent(), 200, 200, 250));
 
 		title = new Label(header, SWT.NONE);
+		FontData[] fD = title.getFont().getFontData();
+		fD[0].setHeight(16);
+		title.setFont(new Font(Display.getCurrent(), fD[0]));
 		title.setText(dropBar.getName());
 
 		GridData contentData = new GridData();
