@@ -17,4 +17,9 @@ public class ScreenshotMustJava implements ContextDefinitionInterface {
 				.equals(e.getSnippetLanguage().toLowerCase()));
 	}
 
+	@Override
+	public String getIdentifier() {
+		return "ScreenshotMustJava";
+	}
+
 }

@@ -15,4 +15,9 @@ public class formOutsideClass implements ContextDefinitionInterface {
 		return new ValidateMessage("This snippet must be out of the class body.", e.isOutsideTopClass());
 	}
 
+	@Override
+	public String getIdentifier() {
+		return "formOutsideClass";
+	}
+
 }

@@ -3,6 +3,8 @@ package pa.iscde.snippets.external;
 
 public interface ContextDefinitionInterface {
 
+	public String getIdentifier();
+	
 	public String getTargetSnippet();
 
 	public ValidateMessage validateContext(CursorContext e);
