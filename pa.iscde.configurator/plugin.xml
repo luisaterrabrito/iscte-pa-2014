@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="propertyProvider" name="Property Provider" schema="schema/propertyProvider.exsd"/>
    <extension
          id="idConfigurator"
          name="Configurator"
@@ -23,6 +24,18 @@
       <view
             class="pa.iscde.configurator.view.ConfiguratorView">
       </view>
+   </extension>
+   <extension
+         point="pa.iscde.configurator.propertyProvider">
+      <provider
+            class="pa.iscde.configurator.model.interfaces.PropertyProviderImpl">
+         <view
+               id="pa.iscde.configurator.view1">
+         </view>
+         <view
+               id="pt.iscte.pidesco.projectbrowser">
+         </view>
+      </provider>
    </extension>
 
 </plugin>
