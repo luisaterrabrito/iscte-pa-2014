@@ -18,7 +18,7 @@ The first, getIdentifier(), it's a method with a return type string. This string
 
 The second, getTargetSnippet(), it's a method that has to return the name of the snippet whose context will be defined. The name is not case sensitive.
 
-The third, validateContext(CursorContext e), is a method that receives a cursor Context, wich is a data object that contains a lot of information about the context of the cursor. This will be the method that defines the context. To do that the interface implementation can define the need for some boolean (or all of them) attributes of the context to be false, or true, the need for the visibility to be private, etc. The method must return a ValidateMessage, which is an object that has a boolean valid that says if the snippet is valid in that context or not, and a error message to display to the user in case the context is not valid. So, as long as the return type is respected, the implementation has a lot of freedom to define the context.
+The third, validateContext(CursorContext e), is a method that receives a cursor Context, which is a data object that contains a lot of information about the context of the cursor. This will be the method that defines the context. To do that the interface implementation can define the need for some boolean (or all of them) attributes of the context to be false, or true, the need for the visibility to be private, etc. The method must return a ValidateMessage, which is an object that has a boolean valid that says if the snippet is valid in that context or not, and a error message to display to the user in case the context is not valid. So, as long as the return type is respected, the implementation has a lot of freedom to define the context.
 
 == Examples ==
 
