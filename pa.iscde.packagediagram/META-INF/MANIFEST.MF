@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Package diagram
+Bundle-SymbolicName: pa.iscde.packagediagram;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: pt.iscte.pidesco;bundle-version="0.1.0",
+ pt.iscte.pidesco.javaeditor;bundle-version="1.1.0",
+ pa.iscde;bundle-version="0.1.0",
+ org.eclipse.swt;bundle-version="3.103.1",
+ org.eclipse.zest.core;bundle-version="1.5.100",
+ org.eclipse.zest.layouts;bundle-version="1.1.100",
+ pt.iscte.pidesco.projectbrowser;bundle-version="0.1.0",
+ org.eclipse.osgi,
+ javax.inject,
+ org.eclipse.equinox.registry,
+ org.eclipse.jface;bundle-version="3.10.1"
+Import-Package: org.eclipse.core.resources,
+ org.eclipse.jdt.core.dom,
+ pt.iscte.pidesco.projectbrowser.extensibility,
+ pt.iscte.pidesco.projectbrowser.model,
+ pt.iscte.pidesco.projectbrowser.service
+Bundle-ActivationPolicy: lazy
+Export-Package: pa.iscde.packagediagram.extensibility
