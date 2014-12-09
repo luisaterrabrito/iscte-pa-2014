@@ -11,8 +11,7 @@ Tem que se extender a class de Formula
 {{{
 public abstract class Formula{
 	
-	private SelectionListener currentListener;
-	
+		
 	/**
 	 * Set formula inputs number
 	 * @return inputs
