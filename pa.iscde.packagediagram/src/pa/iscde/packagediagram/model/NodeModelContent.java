@@ -59,10 +59,10 @@ public class NodeModelContent {
 				javaServices.parseFile(e.getFile(), packageDiagramAstVisitor);
 
 				PackageDeclaration packageDeclaration = packageDiagramAstVisitor.getPackageDeclaration();
-				String name = packageDeclaration == null ? "" : packageDeclaration.getName().toString();
+				String name = packageDeclaration == null ? "packageDefault" : packageDeclaration.getName().toString();
 			
 
-				NodeModel packageNode = new NodeModel(name,name);
+				NodeModel packageNode = new NodeModel(name);
 				if (!nodes.contains(packageNode)) {
 					nodes.add(packageNode);
 				}
@@ -100,7 +100,7 @@ public class NodeModelContent {
 					
 					
 					
-					NodeModel importNode = new NodeModel(packageImport,packageImport);
+					NodeModel importNode = new NodeModel(packageImport);
 					
 					if (!nodes.contains(importNode)) {
 						nodes.add(importNode);
