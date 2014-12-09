@@ -12,9 +12,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import pa.iscde.dropcode.DropCodeActivator;
@@ -68,7 +66,6 @@ public class DropCodeView implements PidescoView {
 
 			@Override
 			public void createContents(Composite parent) {
-				parent.setLayout(new FillLayout(SWT.VERTICAL));
 				if (dropClass != null)
 					for (DropField df : dropClass.getFields()) {
 						new DropRow(df.getNode(), parent, SWT.NONE, df,
@@ -86,7 +83,6 @@ public class DropCodeView implements PidescoView {
 
 			@Override
 			public void createContents(Composite parent) {
-				parent.setLayout(new FillLayout(SWT.VERTICAL));
 				if (dropClass != null)
 					for (DropMethod dc : dropClass.getConstructors()) {
 						new DropRow(dc.getNode(), parent, SWT.NONE, dc,
@@ -104,7 +100,6 @@ public class DropCodeView implements PidescoView {
 
 			@Override
 			public void createContents(Composite parent) {
-				parent.setLayout(new FillLayout(SWT.VERTICAL));
 				if (dropClass != null)
 					for (DropMethod dm : dropClass.getMethods()) {
 						new DropRow(dm.getNode(), parent, SWT.NONE, dm,
