@@ -107,7 +107,7 @@ public class DropCodeView implements PidescoView {
 			}
 		}));
 
-		addPluginDropbars(scrollComp);
+		addPluginDropbars(bars);
 
 		// bars.setBackgroundImage(images.get("background.jpg"));
 		bars.layout(true, true);
