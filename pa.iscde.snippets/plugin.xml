@@ -39,5 +39,8 @@
       <member
             definition="contextdefinitiontests.ScreenshotMustJava">
       </member>
+      <member
+            definition="contextdefinitiontests.DirectoryListingOverlyComplex">
+      </member>
    </extension>
 </plugin>
