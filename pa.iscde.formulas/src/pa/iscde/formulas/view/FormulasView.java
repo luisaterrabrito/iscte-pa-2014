@@ -49,9 +49,16 @@ import pa.iscde.formulas.statistic.Variance;
 import pa.iscde.formulas.util.DrawEquationUtil;
 import pa.iscde.formulas.util.EquationFinder;
 import pa.iscde.formulas.util.FileReaderUtil;
+import pa.iscde.formulas.util.HighlighterCode;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
+/**
+ * 
+ * 
+ * @author Gonçalo Horta & Tiago Saraiva
+ *
+ */
 public class FormulasView implements PidescoView {
 	
 	private static HashMap<String,LinkedList<Formula>> allFormulas = new HashMap<String, LinkedList<Formula>>();
@@ -357,6 +364,9 @@ public class FormulasView implements PidescoView {
 			label.setImage(formulaImage.getImage());
 			formulasBoard.put(label,text);
 		}
+		String teste = "asdasdasdasd";
+		new HighlighterCode().getStyledText(teste);
+		javaeditor.insertLine(javaeditor.getOpenedFile(), teste, 1);
 		viewArea.pack();
 	}
 
