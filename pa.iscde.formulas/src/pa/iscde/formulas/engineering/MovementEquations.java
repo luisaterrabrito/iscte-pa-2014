@@ -14,7 +14,7 @@ public class MovementEquations extends Formula{
 
 	@Override
 	public String name() {
-		return "Movement Equations";
+		return "MovementEquations";
 	}
 
 	@Override

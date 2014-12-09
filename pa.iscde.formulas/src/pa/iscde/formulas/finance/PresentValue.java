@@ -12,7 +12,7 @@ public class PresentValue extends Formula{
 
 	@Override
 	public String name() {
-		return "Present Value";
+		return "PresentValue";
 	}
 
 	@Override
