@@ -1,16 +1,25 @@
 package pa.iscte.dropcode.gui;
 
+import java.util.LinkedList;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.ExpandBar;
-import org.eclipse.swt.widgets.ExpandItem;
 
 import pa.iscde.dropcode.DropCodeActivator;
 import pa.iscde.dropcode.dropreflection.DropClass;
 import pa.iscde.dropcode.dropreflection.DropField;
+import pa.iscde.dropcode.dropreflection.DropMethod;
+import pa.iscde.dropcode.services.DropBar;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
 public class DropCodeView implements PidescoView {
@@ -21,10 +30,9 @@ public class DropCodeView implements PidescoView {
 		return instance;
 	}
 
-	private ExpandBar bar;
-	private Composite fields, constructors, methods;
-	private ExpandItem fieldsBarItem, constructorsBarItem, methodsBarItem;
+	private Composite bars;
 	private DropClass dropClass;
+	private LinkedList<DropBarContainer> tabComps;
 
 	@Override
 	public void createContents(Composite comp,
@@ -33,105 +41,112 @@ public class DropCodeView implements PidescoView {
 		ClosableLabel.image_up = images.get("x.png");
 		ClosableLabel.image_down = images.get("x2.png");
 
+		tabComps = new LinkedList<DropBarContainer>();
+
 		instance = this;
-		bar = new ExpandBar(comp, SWT.V_SCROLL);
 
-		fields = new Composite(bar, SWT.NONE);
-		fields.setLayout(new FillLayout(SWT.VERTICAL));
-		fieldsBarItem = new ExpandItem(bar, SWT.NONE, 0);
-		fieldsBarItem.setText("Fields");
-		fieldsBarItem.setControl(fields);
+		ScrolledComposite scrollComp = new ScrolledComposite(comp, SWT.BORDER
+				| SWT.V_SCROLL);
+		scrollComp.setExpandHorizontal(true);
+		scrollComp.setExpandVertical(false);
+		//scrollComp.setBounds(0, 0, 200, 200);
 
-		constructors = new Composite(bar, SWT.NONE);
-		constructors.setLayout(new FillLayout(SWT.VERTICAL));
-		constructorsBarItem = new ExpandItem(bar, SWT.NONE, 1);
-		constructorsBarItem.setText("Constructors");
-		constructorsBarItem.setControl(constructors);
+		bars = new Composite(scrollComp, SWT.NONE);
+		bars.setLayout(new RowLayout(SWT.VERTICAL));
+		scrollComp.setContent(bars);
 
-		methods = new Composite(bar, SWT.NONE);
-		methods.setLayout(new FillLayout(SWT.VERTICAL));
-		methodsBarItem = new ExpandItem(bar, SWT.NONE, 2);
-		methodsBarItem.setText("Methods");
-		methodsBarItem.setControl(methods);
+		tabComps.add(new DropBarContainer(bars, new DropBar() {
 
-		// c.setBackgroundImage(images.get("background.jpg"));
+			@Override
+			public String getName() {
+				return "Fields";
+			}
+
+			@Override
+			public void createContents(Composite parent) {
+				parent.setLayout(new FillLayout(SWT.VERTICAL));
+				if (dropClass != null)
+					for (DropField df : dropClass.getFields()) {
+						new DropRow(parent, SWT.NONE, df);
+					}
+			}
+		}));
+
+		tabComps.add(new DropBarContainer(bars, new DropBar() {
+
+			@Override
+			public String getName() {
+				return "Constructors";
+			}
+
+			@Override
+			public void createContents(Composite parent) {
+				parent.setLayout(new FillLayout(SWT.VERTICAL));
+				if (dropClass != null)
+					for (DropMethod df : dropClass.getConstructors()) {
+						new DropRow(parent, SWT.NONE, df);
+					}
+			}
+		}));
+
+		tabComps.add(new DropBarContainer(bars, new DropBar() {
+
+			@Override
+			public String getName() {
+				return "Methods";
+			}
+
+			@Override
+			public void createContents(Composite parent) {
+				parent.setLayout(new FillLayout(SWT.VERTICAL));
+				if (dropClass != null)
+					for (DropMethod df : dropClass.getMethods()) {
+						new DropRow(parent, SWT.NONE, df);
+					}
+			}
+		}));
+
+		addPluginDropbars(scrollComp);
+
+		bars.setBackgroundImage(images.get("background.jpg"));
+		
+		new Button(bars, SWT.BORDER).setText("A TUA MAE");
+		new Button(bars, SWT.BORDER).setText("A TUA TIA");
+
+		bars.layout(true, true);
 	}
 
-	public void update() {
+	public void updateContent() {
 		System.out.println("DropCodeView.update()");
 		dropClass = DropCodeActivator.getDropClass();
-		clearFields();
-		clearConstructors();
-		clearMethods();
-		if (dropClass != null) {
-			updateFields();
-			updateConstructors();
-			updateMethods();
+
+		for (DropBarContainer d : tabComps) {
+			d.updateContents();
+			System.out.println(d.getDropBar().getName() + " update()");
 		}
-		fields.layout();
-		fieldsBarItem.setHeight(fields.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		bars.setSize(bars.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
-		// constructors.layout();
-		// constructorsBarItem.setHeight(constructors.computeSize(SWT.DEFAULT,
-		// SWT.DEFAULT).y);
-
-		// methods.layout();
-		// methods.setHeight(methods.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-
-		bar.layout();
-
+		// setHeight(fields.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 	}
 
+	private void addPluginDropbars(Composite parent) {
+		IExtensionPoint extp = Platform.getExtensionRegistry()
+				.getExtensionPoint("pa.iscde.dropcode.dropbars"); // TODO
 
-	private void clearFields() {
-		for (Control child : fields.getChildren()) {
-			System.out.println("Disposing of " + child);
-			child.dispose();
-		}
-	}
-	
-	private void clearMethods() {
-		for (Control child : methods.getChildren()) {
-			System.out.println("Disposing of " + child);
-			child.dispose();
-		}
-	}
+		if (extp != null) // TODO
+			for (IExtension ext : extp.getExtensions()) {
 
-	private void clearConstructors() {
-		for (Control child : constructors.getChildren()) {
-			System.out.println("Disposing of " + child);
-			child.dispose();
-		}
-	}
+				// String name = viewExtension.getContributor().getName();
+				// String id = viewExtension.getUniqueIdentifier();
+				// String label = viewExtension.getLabel();
 
-
-	private void updateFields() {
-
-		for (DropField df : dropClass.getFields()) {
-			new DropRow(fields, SWT.NONE, df);
-		}
-
-		fieldsBarItem.setExpanded(dropClass.getFields().size() > 0);
-
-	}
-
-	private void updateConstructors() {
-
-		for (DropField df : dropClass.getFields()) {
-			new DropRow(constructors, SWT.NONE, df);
-		}
-
-		fieldsBarItem.setExpanded(dropClass.getConstructors().size() > 0);
-
-	}
-
-	private void updateMethods() {
-
-		for (DropField df : dropClass.getFields()) {
-			new DropRow(methods, SWT.NONE, df);
-		}
-
-		fieldsBarItem.setExpanded(dropClass.getMethods().size() > 0);
-
+				IConfigurationElement e = ext.getConfigurationElements()[0];
+				try {
+					tabComps.add(new DropBarContainer(parent, (DropBar) e
+							.createExecutableExtension("class")));// TODO
+				} catch (CoreException e1) {
+					e1.printStackTrace();
+				}
+			}
 	}
 }

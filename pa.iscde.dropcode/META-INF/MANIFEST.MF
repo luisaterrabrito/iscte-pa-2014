@@ -13,3 +13,5 @@ Require-Bundle: pa.iscde;bundle-version="0.1.0",
  pt.iscte.pidesco.projectbrowser;bundle-version="0.1.0"
 Bundle-Activator: pa.iscde.dropcode.DropCodeActivator
 Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.core.runtime
+Export-Package: pa.iscde.dropcode.services;uses:="org.eclipse.swt.widgets"

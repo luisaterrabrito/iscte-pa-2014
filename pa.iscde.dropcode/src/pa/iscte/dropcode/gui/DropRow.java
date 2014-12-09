@@ -97,21 +97,7 @@ public class DropRow extends Composite {
 		t.setText(dropable.name());
 	}
 
-	private void setContent(String name) {
-
-		if (name.equals("jButton1")) {
-			ClosableLabel cl = new ClosableLabel(this, SWT.NONE, "static");
-			ClosableLabel cl2 = new ClosableLabel(this, SWT.NONE, "final");
-			ClosableLabel cl3 = new ClosableLabel(this, SWT.NONE, "abstract");
-		} else if (name.equals("jTextField1")) {
-			ClosableLabel cl2 = new ClosableLabel(this, SWT.NONE, "final");
-		} else {
-			ClosableLabel cl = new ClosableLabel(this, SWT.NONE, "static");
-		}
-
-	}
-
 	public void update() {
-		// TODO UPDATE DROPROW
+		// TODO 1 Prioridade - Update Droprow
 	}
 }

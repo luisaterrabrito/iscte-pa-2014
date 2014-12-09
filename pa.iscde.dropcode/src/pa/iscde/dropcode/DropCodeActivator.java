@@ -35,6 +35,8 @@ public class DropCodeActivator implements BundleActivator {
 		// .getServiceReference(ProjectBrowserServices.class);
 		// ProjectBrowserServices javaBrowser = context.getService(browserRef);
 
+		// TODO 2 priority javaEditor.insertText(file, text, offset, length);
+
 		javaEditor.addListener(new JavaEditorListener() {
 
 			@Override
@@ -45,7 +47,7 @@ public class DropCodeActivator implements BundleActivator {
 			@Override
 			public void fileSaved(File file) {
 				openFile(file);
-				System.out.println("File Opened " + file);
+				System.out.println("File Saved " + file);
 			}
 
 			@Override
@@ -83,7 +85,7 @@ public class DropCodeActivator implements BundleActivator {
 			return;
 
 		dropClass = new DropClass(javaEditor);
-		DropCodeView.getInstance().update();
+		DropCodeView.getInstance().updateContent();
 		System.out.println("fileOpened()");
 	}
 }
