@@ -24,6 +24,11 @@ public class DropBarContainer extends Composite {
 		super(parent, SWT.BORDER);
 		this.dropBar = dropBar;
 
+		GridData data = new GridData();
+		data.horizontalAlignment = GridData.FILL;
+		data.grabExcessHorizontalSpace = true;
+		setLayoutData(data);
+
 		GridLayout gridLayout = new GridLayout();
 		setLayout(gridLayout);
 
