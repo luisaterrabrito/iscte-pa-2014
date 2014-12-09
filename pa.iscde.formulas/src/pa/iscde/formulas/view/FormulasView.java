@@ -61,25 +61,25 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
  */
 public class FormulasView implements PidescoView {
 	
-	private static HashMap<String,LinkedList<Formula>> allFormulas = new HashMap<String, LinkedList<Formula>>();
-	private static HashMap<Button,Formula> buttons = new HashMap<Button,Formula>();
+	private HashMap<String,LinkedList<Formula>> allFormulas = new HashMap<String, LinkedList<Formula>>();
+	private HashMap<Button,Formula> buttons = new HashMap<Button,Formula>();
 	
-	private static LinkedList<Formula> basic_formulas = new LinkedList<Formula>();
-	private static LinkedList<Formula> engineering_formulas = new LinkedList<Formula>();
-	private static LinkedList<Formula> finance_formulas = new LinkedList<Formula>();
-	private static LinkedList<Formula> statistics_formulas = new LinkedList<Formula>();
+	private LinkedList<Formula> basic_formulas = new LinkedList<Formula>();
+	private LinkedList<Formula> engineering_formulas = new LinkedList<Formula>();
+	private LinkedList<Formula> finance_formulas = new LinkedList<Formula>();
+	private LinkedList<Formula> statistics_formulas = new LinkedList<Formula>();
 	
 	
-	private static HashMap<String,LinkedList<Formula>> categories = new HashMap<String,LinkedList<Formula>>();
+	private HashMap<String,LinkedList<Formula>> categories = new HashMap<String,LinkedList<Formula>>();
 	
-	private static Composite viewArea;
-	private static TabFolder tabFolder;
-	private static boolean drawFormulas = false;
-	private static HashMap<Label,Text> formulasBoard;
+	private Composite viewArea;
+	private TabFolder tabFolder;
+	private boolean drawFormulas = false;
+	private HashMap<Label,Text> formulasBoard;
 	
 	private static FormulasView formulasView;
-	private static JavaEditorServices javaeditor;
-	private static File fileTarget;
+	private JavaEditorServices javaeditor;
+	private File fileTarget;
 	
 	private CreateFormulaProvider create_formula_provider;
 	private CreateCategoryProvider create_category_provider;
@@ -90,8 +90,7 @@ public class FormulasView implements PidescoView {
 		ServiceReference<JavaEditorServices> ref = context.getServiceReference(JavaEditorServices.class);
 		JavaEditorServices javaeditor = context.getService(ref);
 		
-		FormulasView.javaeditor=javaeditor;
-		//FormulasView.fileTarget = javaeditor.getOpenedFile();
+		this.javaeditor=javaeditor;
 		
 		
 		basic_formulas.add(new QuadraticFormula());
@@ -208,7 +207,7 @@ public class FormulasView implements PidescoView {
 	}
 		
 	
-	private static void createFormula(String string) {
+	private void createFormula(String string) {
 		String[] lines1 = string.split("222");
 		String[] lines2  = lines1[1].split("333");
 		String line_1 = lines1[0].split("111")[1];
@@ -250,22 +249,22 @@ public class FormulasView implements PidescoView {
 		return formulasView;
 	}
 	
-	public static void setTarget(JavaEditorServices javaeditor, File file){
-		FormulasView.javaeditor = javaeditor;
-		FormulasView.fileTarget = file;
+	public void setTarget(JavaEditorServices javaeditor, File file){
+		this.javaeditor = javaeditor;
+		this.fileTarget = file;
 	}
 	
 	
 	@Override
 	public void createContents(final Composite viewArea, Map<String, Image> imageMap) {
-		FormulasView.formulasView=this;
-		FormulasView.viewArea = viewArea;
+		formulasView=this;
+		this.viewArea = viewArea;
 		viewArea.setLayout(new GridLayout(2,false));
 		createTabs();
 	}
 	
 	
-	private static void createTabs() {
+	private void createTabs() {
 		tabFolder = new TabFolder(viewArea, SWT.FILL);  
 		for (String area : allFormulas.keySet()) {
 			TabItem tab = new TabItem(tabFolder,SWT.CLOSE);
@@ -275,7 +274,7 @@ public class FormulasView implements PidescoView {
         viewArea.pack();
 	}
 
-	private static Composite createTabContent(Composite parent, LinkedList<Formula> formulas ) {
+	private Composite createTabContent(Composite parent, LinkedList<Formula> formulas ) {
 	    Composite c = new Composite( parent, SWT.NONE );
 	    c.setLayout( new GridLayout( formulas.size(), false ));
 	    for( Formula formula : formulas ) {
@@ -291,7 +290,7 @@ public class FormulasView implements PidescoView {
 	}
 
 
-	public static void setFormulaInjector(){
+	public  void setFormulaInjector(){
 		if(drawFormulas){
 			clearFormulasBoard();
 			createTabs();
@@ -308,7 +307,7 @@ public class FormulasView implements PidescoView {
 	}
 
 
-	private static void clearFormulasBoard() {
+	private  void clearFormulasBoard() {
 		if(formulasBoard!=null && !formulasBoard.isEmpty()){
 			for (Label label : formulasBoard.keySet()) {
 				label.dispose();
@@ -322,7 +321,7 @@ public class FormulasView implements PidescoView {
 	}
 
 
-	public static void setCalculatorMode() {
+	public  void setCalculatorMode() {
 		if(drawFormulas){
 			clearFormulasBoard();
 			createTabs();
@@ -337,7 +336,7 @@ public class FormulasView implements PidescoView {
 
 	
 
-	public static void setDrawEquaitonMode() throws IOException {
+	public  void setDrawEquaitonMode() throws IOException {
 		clearFormulasBoard();
 		drawFormulas = true;
 		buttons.clear();
@@ -371,7 +370,7 @@ public class FormulasView implements PidescoView {
 	}
 
 
-	public static void loadAllFormulas(String formula) {
+	public void loadAllFormulas(String formula) {
 		tabFolder.dispose();
 		createFormula(formula);
 		createTabs();

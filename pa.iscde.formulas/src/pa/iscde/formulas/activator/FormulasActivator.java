@@ -22,9 +22,8 @@ public class FormulasActivator implements BundleActivator {
 		javaeditor.addListener(new JavaEditorListener.Adapter(){
 			@Override
 			public void fileOpened(File file) {
-				System.out.println("FILE OPEN!");
-				FormulasView.getInstance();
-				FormulasView.setTarget(javaeditor,file);
+				FormulasView formulaView = FormulasView.getInstance();
+				formulaView.setTarget(javaeditor,file);
 			}
 			
 			
