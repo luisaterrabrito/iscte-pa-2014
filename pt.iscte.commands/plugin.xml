@@ -62,50 +62,26 @@
    </extension>
    <extension
          point="pa.iscde.commands.command">
-      <command_editor
-            alt_key="false"
-            command_implementation="pa.iscde.commands.features.comments.CommentFeature"
-            ctrl_key="true"
-            description="comando editor"
-            key="A"
-            name="pa.iscde.commands.command_editor1">
-      </command_editor>
-   </extension>
-   <extension
-         point="pa.iscde.commands.command">
-      <command_view
-            alt_key="false"
-            command_implementation="pa.iscde.commands.features.comments.CommentFeature"
-            context_view="pa.iscde.commands.CommandsView"
-            ctrl_key="true"
-            description="comando view"
-            key="A"
-            name="pa.iscde.commands.command_view1">
-      </command_view>
-   </extension>
-   <extension
-         point="pa.iscde.commands.command">
-      <command_view
-            alt_key="false"
-            command_implementation="pa.iscde.commands.features.search.SearchWord"
-            context_view="pa.iscde.commands.CommandsView"
-            ctrl_key="true"
-            description="Search"
-            key="F"
-            name="pa.iscde.commands.search">
-      </command_view>
-   </extension>
-   <extension
-         point="pa.iscde.commands.command">
       <command_view
             alt_key="false"
             command_implementation="pa.iscde.commands.features.createclass.NewClass"
             context_view="pt.iscte.pidesco.projectbrowser.tree"
             ctrl_key="true"
-            description="New Class"
+            description="Create a new Class"
             key="L"
             name="New Class">
       </command_view>
+   </extension>
+   <extension
+         point="pa.iscde.commands.command">
+      <command_editor
+            alt_key="false"
+            command_implementation="pa.iscde.commands.features.search.SearchWord"
+            ctrl_key="true"
+            description="Search in Editor"
+            key="O"
+            name="Search">
+      </command_editor>
    </extension>
 
 </plugin>
