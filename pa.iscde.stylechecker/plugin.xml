@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="pa.iscde.stylechecker.stylerule" name="StyleRule" schema="schema/pa.iscde.stylechecker.stylerule.exsd"/>
    <extension
          id="StyleChecker"
          name="StyleChecker"
@@ -9,6 +10,12 @@
             class="pa.iscde.stylechecker.internal.StyleCheckerView"
             icon="stylechecker_icon.gif">
       </view>
+   </extension>
+   <extension
+         point="pa.iscde.stylechecker.stylerule">
+      <importRules
+            class="pa.iscde.stylechecker.internal.extension.ImportDeclarationNoWildCardRule">
+      </importRules>
    </extension>
 
 </plugin>
