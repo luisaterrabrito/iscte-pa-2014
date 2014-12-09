@@ -3,6 +3,11 @@ package pa.iscde.formulas;
 import java.util.Arrays;
 
 
+/**
+ * Generic class of the new formulas created by the user.
+ * @author Gonçalo Horta & Tiago Saraiva
+ *
+ */
 public class NewFormula extends Formula{
 
 	private String name;
@@ -10,6 +15,12 @@ public class NewFormula extends Formula{
 	private String algorithm;
 	private String javacode;
 	
+	/**
+	 * @param name
+	 * @param inputs
+	 * @param algorithm
+	 * @param javacode
+	 */
 	public NewFormula(String name, String[] inputs, String algorithm,
 			String javacode) {
 		this.name = name;
