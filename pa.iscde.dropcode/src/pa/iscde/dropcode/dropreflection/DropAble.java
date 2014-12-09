@@ -3,19 +3,25 @@ package pa.iscde.dropcode.dropreflection;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.eclipse.jdt.core.dom.ASTNode;
+
 import pa.iscde.dropcode.dropreflection.DropModifier.DM_Others;
 import pa.iscde.dropcode.dropreflection.DropModifier.DM_Visibility;
 
 public class DropAble {
+
+	ASTNode node;
+
 	private String name;
 	private HashMap<String, DropAnnotation> annotations;
 	private HashSet<DM_Others> modifiers;
 	private DM_Visibility visibility_modifier;
 
-	public DropAble(String name) {
+	public DropAble(ASTNode node, String name) {
 		this.name = name;
 		modifiers = new HashSet<>();
 		annotations = new HashMap<>();
+		this.node = node;
 	}
 
 	public void setModifiers(int modsBitwise) {
@@ -53,5 +59,8 @@ public class DropAble {
 	public void removeModifier(DM_Others mod) {
 		modifiers.remove(mod);
 	}
-}
 
+	public ASTNode getNode() {
+		return node;
+	}
+}

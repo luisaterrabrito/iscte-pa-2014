@@ -6,6 +6,8 @@ import org.eclipse.swt.graphics.Image;
 public interface DropButton {
 
 	public Image getIcon();
-	
+
+	public String getText();
+
 	public void clicked(ASTNode node);
 }

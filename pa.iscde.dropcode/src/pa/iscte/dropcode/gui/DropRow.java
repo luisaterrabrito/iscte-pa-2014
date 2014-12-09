@@ -2,9 +2,13 @@ package pa.iscte.dropcode.gui;
 
 import java.util.LinkedList;
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -20,11 +24,13 @@ import pa.iscte.dropcode.gui.ClosableLabel.ClosableLabelEvent;
 public class DropRow extends Composite {
 
 	private DropRow me;
+	private ASTNode node;
 
-	public DropRow(Composite parent, int style, DropAble dropable,
+	public DropRow(ASTNode node, Composite parent, int style, DropAble dropable,
 			LinkedList<DropButton> dropbuttons) {
 		super(parent, style);
 		me = this;
+		this.node = node;
 		RowLayout layout = new RowLayout();
 		setLayout(layout);
 		if (dropable instanceof DropField) {
@@ -37,6 +43,22 @@ public class DropRow extends Composite {
 			addCombo_other_modifiers(dropable);
 			addTextfield_name(dropable);
 		}
+		addPluginButtons(dropbuttons);
+	}
+
+	private void addPluginButtons(LinkedList<DropButton> dropbuttons) {
+		for (DropButton dropButton : dropbuttons) {
+			final DropButton db = dropButton;
+			Button b = new Button(this, SWT.None);
+			b.setText(db.getText());
+			b.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseUp(MouseEvent e) {
+					db.clicked(node);
+				}
+			});
+		}
+
 	}
 
 	private void addCombo_visibility_modifier(DropAble dropable) {
