@@ -8,7 +8,6 @@ import pa.iscde.dropcode.dropreflection.DropModifier.DM_Visibility;
 
 public class DropAble {
 	private String name;
-	private String type;
 	private HashMap<String, DropAnnotation> annotations;
 	private HashSet<DM_Others> modifiers;
 	private DM_Visibility visibility_modifier;
@@ -51,11 +50,8 @@ public class DropAble {
 		return annotations.get(annotation);
 	}
 
-	public String getType() {
-		return type;
-	}
-
 	public void removeModifier(DM_Others mod) {
 		modifiers.remove(mod);
 	}
 }
+
