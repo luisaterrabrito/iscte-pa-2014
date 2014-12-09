@@ -47,7 +47,43 @@
       </complexType>
    </element>
 
-   <element name="category" type="string">
+   <element name="category">
+      <complexType>
+         <attribute name="tag" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Abreviação que permite identificar a categoria no código.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Nome da categoria.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="icon" type="string">
+            <annotation>
+               <documentation>
+                  Icone a ser apresentado na tabela de tarefas.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.swt.graphics.Image:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="color" type="string">
+            <annotation>
+               <documentation>
+                  Cor que vai servir para realçar o método em que está inserido no diagrama de UML.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.swt.graphics.Color:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
    </element>
 
    <annotation>
