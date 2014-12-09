@@ -2,6 +2,7 @@ package pa.iscde.configurator.controller;
 
 import java.util.LinkedList;
 
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -21,6 +22,7 @@ public class Constructor {
 		IExtensionPoint extensionPoint = reg
 				.getExtensionPoint("pt.iscte.pidesco.view");
 
+		
 		componentList.add(new Component(extensionPoint.getContributor()
 				.getName(), true));
 		System.out.println("O PRINCIPAL: "
@@ -34,6 +36,8 @@ public class Constructor {
 			System.out.println("O SECUNDARIO: " + contributor.getName());
 			// Bundle b = Platform.getBundle(contributor.getName());
 
+//			IConfigurationElement[] confs = ext.getConfigurationElements();
+			
 		}
 		return componentList;
 
