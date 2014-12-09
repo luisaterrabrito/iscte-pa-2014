@@ -54,7 +54,8 @@ import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 /**
- * 
+ * View class for the plugin
+ * There is 3 Types of modes on this plugin, Calculator , Code Injector and Equations Draw
  * 
  * @author Gonçalo Horta & Tiago Saraiva
  *
@@ -82,8 +83,10 @@ public class FormulasView implements PidescoView {
 	private File fileTarget;
 	
 	private CreateFormulaProvider create_formula_provider;
-	private CreateCategoryProvider create_category_provider;
 	
+	/**
+	 * Constructor 
+	 */
 	public FormulasView() {
 		Bundle bundle = FrameworkUtil.getBundle(this.getClass());
 		BundleContext context = bundle.getBundleContext();
@@ -125,7 +128,7 @@ public class FormulasView implements PidescoView {
 		for(IExtension ext : reg.getExtensionPoint("pa.iscde.formulas.createcategory").getExtensions()) {
 			for(IConfigurationElement category : ext.getConfigurationElements()) {
 				final String category_name = category.getAttribute("Name");
-				create_category_provider = new CreateCategoryProvider() {
+				new CreateCategoryProvider() {
 					
 					@Override
 					public String setName() {
@@ -245,10 +248,19 @@ public class FormulasView implements PidescoView {
 	}
 
 
+	/**
+	 * @return the instance of FormulaView
+	 */
 	public static FormulasView getInstance(){
 		return formulasView;
 	}
 	
+	/**
+	 * Set the JavaEditor target where the changes going to happen
+	 * 
+	 * @param javaeditor
+	 * @param file
+	 */
 	public void setTarget(JavaEditorServices javaeditor, File file){
 		this.javaeditor = javaeditor;
 		this.fileTarget = file;
@@ -290,6 +302,9 @@ public class FormulasView implements PidescoView {
 	}
 
 
+	/**
+	 *  Set the mode for Formula Injector
+	 */
 	public  void setFormulaInjector(){
 		if(drawFormulas){
 			clearFormulasBoard();
@@ -321,6 +336,9 @@ public class FormulasView implements PidescoView {
 	}
 
 
+	/**
+	 * Set the mode for Calculator mode
+	 */
 	public  void setCalculatorMode() {
 		if(drawFormulas){
 			clearFormulasBoard();
@@ -336,6 +354,11 @@ public class FormulasView implements PidescoView {
 
 	
 
+	/**
+	 * 
+	 * Set the mode for Draw Equations mode
+	 * @throws IOException
+	 */
 	public  void setDrawEquaitonMode() throws IOException {
 		clearFormulasBoard();
 		drawFormulas = true;
@@ -370,6 +393,11 @@ public class FormulasView implements PidescoView {
 	}
 
 
+	/**
+	 * Add new formulas
+	 * 
+	 * @param formula
+	 */
 	public void loadAllFormulas(String formula) {
 		tabFolder.dispose();
 		createFormula(formula);
@@ -377,6 +405,9 @@ public class FormulasView implements PidescoView {
 	}
 
 
+	/**
+	 * @return all the categories
+	 */
 	public Set<String> getCategories() {
 		return allFormulas.keySet();
 	}
