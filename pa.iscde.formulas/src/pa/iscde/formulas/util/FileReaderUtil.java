@@ -9,8 +9,19 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 
+/**
+ * Class that reads all the files from the path formulas to load formulas
+ * 
+ * @author Gonçalo Horta & Tiago Saraiva
+ *
+ */
 public class FileReaderUtil {
 
+	/**
+	 * Reads the files ang returns all the files in Formulas path
+	 * 
+	 * @return allfromulas
+	 */
 	public static String readFile(){
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();

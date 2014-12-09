@@ -20,6 +20,12 @@ import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
 
+/**
+ * Class that from a String formula converts to SWT Image
+ * 
+ * @author Gonçalo Horta & Tiago Saraiva
+ *
+ */
 public class DrawEquationUtil {
 
 	private Composite viewArea;
@@ -30,6 +36,11 @@ public class DrawEquationUtil {
 		this.formula_string = formula_string;
 	}
 
+	/**
+	 * Method that returns the Image in SWT format
+	 * 
+	 * @return image;
+	 */
 	public org.eclipse.swt.graphics.Image getImage() {
 		TeXFormula formula = new TeXFormula(formula_string);
 		TeXIcon icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20);

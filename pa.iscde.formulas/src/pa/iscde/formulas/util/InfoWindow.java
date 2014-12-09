@@ -8,9 +8,20 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-
+/**
+ * Class that creates a Info window
+ * 
+ * @author Gonçalo Horta & Tiago Saraiva
+ *
+ */
 public class InfoWindow {
 	
+	/**
+	 * Creates a window to show the solution
+	 * 
+	 * @param title
+	 * @param solution
+	 */
 	public static void createWindow(String title, String solution) {
 		final Shell dialog = new Shell(new Shell(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		dialog.setText(title+ " results:");

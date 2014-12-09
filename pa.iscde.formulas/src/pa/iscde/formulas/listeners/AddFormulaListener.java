@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
 import pa.iscde.formulas.InsertFormulaFormat;
 import pa.iscde.formulas.view.FormulasView;
 
@@ -246,7 +245,7 @@ public class AddFormulaListener implements SelectionListener{
 		}
 	
 		
-		FormulasView.loadAllFormulas(iff.getFormula());
+		FormulasView.getInstance().loadAllFormulas(iff.getFormula());
 	}
 
 	

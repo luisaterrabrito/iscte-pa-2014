@@ -8,6 +8,13 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
 
+/**
+ * Class that analyses each line, and identifies the mathematical equations
+ * 
+ * @author Gonçalo Horta & Tiago Saraiva
+ *
+ */
+
 public class EquationFinder {
 	
 	char aux1 = '"';
@@ -15,6 +22,10 @@ public class EquationFinder {
 	
 	private Multimap<String,Integer> equations = ArrayListMultimap.create();
 	
+	/**
+	 * @param file, represents the open class
+	 * @throws FileNotFoundException
+	 */
 	public EquationFinder(File file) throws FileNotFoundException {
 		analyseFile(file);
 	}
@@ -33,7 +44,7 @@ public class EquationFinder {
 		s.close();
 	}
 	
-	public String removeA(String str){
+	private String removeA(String str){
 		String aux = str;
 		aux = aux.replace(" ", "");
 
@@ -88,7 +99,7 @@ public class EquationFinder {
 		return equations;
 	}
 	
-	public static String frac(String str) {
+	private static String frac(String str) {
 		if(!str.contains("/"))
 			return str;
 		
