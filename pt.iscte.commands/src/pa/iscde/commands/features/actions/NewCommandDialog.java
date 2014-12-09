@@ -228,7 +228,9 @@ class NewCommandDialog extends Dialog {
 					if (items[i].getChecked()) {
 						CommandDefinition def = (CommandDefinition) items[i]
 								.getData();
-						commandKey.setName(def.getDescription());
+
+						commandKey
+								.setName(def.getCommandKey().getCommandName());
 						CommandWarehouse.getInstance().insertCommandDefinition(
 								commandKey,
 								new CommandDefinition(commandKey, view, def
