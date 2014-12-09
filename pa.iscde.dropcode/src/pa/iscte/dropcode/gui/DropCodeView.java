@@ -2,6 +2,8 @@ package pa.iscte.dropcode.gui;
 
 import java.util.LinkedList;
 
+import javax.swing.JOptionPane;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -12,7 +14,6 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import pa.iscde.dropcode.DropCodeActivator;
@@ -49,7 +50,7 @@ public class DropCodeView implements PidescoView {
 				| SWT.V_SCROLL);
 		scrollComp.setExpandHorizontal(true);
 		scrollComp.setExpandVertical(false);
-		//scrollComp.setBounds(0, 0, 200, 200);
+		// scrollComp.setBounds(0, 0, 200, 200);
 
 		bars = new Composite(scrollComp, SWT.NONE);
 		bars.setLayout(new RowLayout(SWT.VERTICAL));
@@ -108,11 +109,7 @@ public class DropCodeView implements PidescoView {
 
 		addPluginDropbars(scrollComp);
 
-		bars.setBackgroundImage(images.get("background.jpg"));
-		
-		new Button(bars, SWT.BORDER).setText("A TUA MAE");
-		new Button(bars, SWT.BORDER).setText("A TUA TIA");
-
+		// bars.setBackgroundImage(images.get("background.jpg"));
 		bars.layout(true, true);
 	}
 
@@ -136,14 +133,15 @@ public class DropCodeView implements PidescoView {
 		if (extp != null) // TODO
 			for (IExtension ext : extp.getExtensions()) {
 
-				// String name = viewExtension.getContributor().getName();
-				// String id = viewExtension.getUniqueIdentifier();
-				// String label = viewExtension.getLabel();
+				String name = ext.getContributor().getName();
+				// String id = ext.getUniqueIdentifier();
+				// String label = ext.getLabel();
 
 				IConfigurationElement e = ext.getConfigurationElements()[0];
 				try {
 					tabComps.add(new DropBarContainer(parent, (DropBar) e
-							.createExecutableExtension("class")));// TODO
+							.createExecutableExtension("class")));
+					JOptionPane.showMessageDialog(null, "Extension Loaded: " + name);
 				} catch (CoreException e1) {
 					e1.printStackTrace();
 				}
