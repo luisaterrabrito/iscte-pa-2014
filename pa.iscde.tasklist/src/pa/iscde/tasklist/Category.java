@@ -16,5 +16,20 @@ public class Category {
 		this.icon = icon;
 		this.color = color;
 	}
-
+	
+	public Image getIcon() {
+		return icon;
+	}
+	
+	public String getTag() {
+		return tag;
+	}
+	
+	public Color getColor() {
+		return color;
+	}
+	
+	public String getName() {
+		return name;
+	}
 }
