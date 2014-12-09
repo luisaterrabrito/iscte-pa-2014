@@ -10,6 +10,11 @@ import pa.iscde.formulas.view.FormulasView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
+/**
+ * Class that starts the BundleActivator for the formulas.
+ * @author Gonçalo Horta & Tiago Saraiva
+ *
+ */
 public class FormulasActivator implements BundleActivator {
 
 	
