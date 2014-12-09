@@ -5,7 +5,7 @@ import org.eclipse.jdt.core.dom.ImportDeclaration;
 
 public class ImportDeclarationNoWildCardRule extends AbstractImportDeclarationRule {
 	
-	private static final String WILD_CARD_WARNING = " Upss gra*** Wild Card tho' ? ";
+	private static final String WILD_CARD_WARNING = " Ho** cra**, Wild Card tho' ? ";
 	
 	
 	@Override

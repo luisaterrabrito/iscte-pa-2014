@@ -14,6 +14,8 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
+import pt.iscte.pidesco.projectbrowser.model.PackageElement;
+
 public class ProjectStyleChecker {
 
 	private StyleCheckerASTVisitor visitor;
@@ -54,7 +56,12 @@ public class ProjectStyleChecker {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void checkRootPackage(PackageElement root){
+		root.getChildren();
+		
+	}
+	
 	private void checkPackage(ICompilationUnit[] compilationUnits) {
 		for (ICompilationUnit compUnit : compilationUnits) {
 			 checkJavaFile(compUnit);

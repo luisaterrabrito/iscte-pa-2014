@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <component id="pa.iscde.stylechecker" version="2">
+    <resource path="src/pa/iscde/stylechecker/extensibility/AbstractTryStatementRule.java" type="pa.iscde.stylechecker.extensibility.AbstractTryStatementRule">
+        <filter id="576720909">
+            <message_arguments>
+                <message_argument value="AbstractStyleRule"/>
+                <message_argument value="AbstractTryStatementRule"/>
+            </message_arguments>
+        </filter>
+    </resource>
+    <resource path="src/pa/iscde/stylechecker/extensibility/AbstractVariableDeclarationRule.java" type="pa.iscde.stylechecker.extensibility.AbstractVariableDeclarationRule">
+        <filter id="576720909">
+            <message_arguments>
+                <message_argument value="AbstractStyleRule"/>
+                <message_argument value="AbstractVariableDeclarationRule"/>
+            </message_arguments>
+        </filter>
+    </resource>
     <resource path="src/pa/iscde/stylechecker/model/ui/StyleRuleTableItem.java" type="pa.iscde.stylechecker.model.ui.StyleRuleTableItem">
         <filter comment="Teste" id="571473929">
             <message_arguments>

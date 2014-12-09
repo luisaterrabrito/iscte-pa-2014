@@ -1,5 +1,6 @@
 package pa.iscde.stylechecker.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -11,8 +12,14 @@ public class StyleCheckerASTVisitor extends ASTVisitor {
 
 	private List<ImportDeclaration> importDeclarations;
 	private List<TryStatement> tryStatements;
-	private List<VariableDeclarationStatement> vriableDeclarationStatements;
+	private List<VariableDeclarationStatement> variableDeclarationStatements;
 
+	public StyleCheckerASTVisitor() {
+		importDeclarations = new ArrayList<>();
+		tryStatements = new ArrayList<>();
+		variableDeclarationStatements = new ArrayList<>();
+	}
+	
 	@Override
 	public boolean visit(ImportDeclaration node) {
 		importDeclarations.add(node);
@@ -27,7 +34,7 @@ public class StyleCheckerASTVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(VariableDeclarationStatement node) {
-		vriableDeclarationStatements.add(node);
+		variableDeclarationStatements.add(node);
 		return super.visit(node);
 	}
 
@@ -40,7 +47,7 @@ public class StyleCheckerASTVisitor extends ASTVisitor {
 	}
 
 	public List<VariableDeclarationStatement> getVriableDeclarationStatements() {
-		return vriableDeclarationStatements;
+		return variableDeclarationStatements;
 	}
 
 }

@@ -1,22 +1,22 @@
 package pa.iscde.stylechecker.internal;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.Status;
+import org.eclipse.equinox.log.Logger;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.internal.Workbench;
+import org.eclipse.ui.statushandlers.StatusManager;
 
 import pa.iscde.stylechecker.domain.ProjectStyleChecker;
 import pa.iscde.stylechecker.domain.StyleCheckerASTVisitor;
 import pa.iscde.stylechecker.model.ui.StyleRuleTableView;
 import pa.iscde.stylechecker.sipke.DummyRule;
 import pt.iscte.pidesco.extensibility.PidescoView;
-import pt.iscte.pidesco.javaeditor.internal.JavaEditorActivator;
-import pt.iscte.pidesco.javaeditor.service.AnnotationType;
-import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 
 
@@ -29,7 +29,6 @@ public class StyleCheckerView  implements PidescoView {
 	public StyleCheckerView() {
 	
 	}
-	
 	
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		StyleRuleTableView tbRules = new StyleRuleTableView(viewArea, SWT.FILL);
@@ -44,10 +43,10 @@ public class StyleCheckerView  implements PidescoView {
 			checker.checkWorkSpace();
 			StyleCheckerASTVisitor visitor = checker.getVisitor();
 			List<ImportDeclaration> importDeclarations = visitor.getImportDeclarations();
-			
 			for (ImportDeclaration importDeclaration : importDeclarations) {
-				
+				System.out.println(importDeclaration);
 			}
+			
 			
 	}
 		
