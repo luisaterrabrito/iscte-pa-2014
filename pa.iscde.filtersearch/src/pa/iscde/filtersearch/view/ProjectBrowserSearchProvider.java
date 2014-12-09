@@ -12,7 +12,8 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import pa.iscde.filtersearch.providers.SearchProvider;
-import pa.iscde.filtersearch.view.SearchView.ViewLabelProvider;
+import pa.iscde.filtersearch.view.SearchView.SearchCategory;
+import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.ClassElement;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
@@ -23,7 +24,8 @@ public class ProjectBrowserSearchProvider implements SearchProvider {
 
 	private ProjectBrowserServices browserServices;
 	private JavaEditorServices editorServices;
-	private ViewLabelProvider labelProvider;
+	private PidescoServices pidescoServices;
+	
 
 	public ProjectBrowserSearchProvider() {
 
@@ -34,6 +36,9 @@ public class ProjectBrowserSearchProvider implements SearchProvider {
 
 		ServiceReference<JavaEditorServices> serviceReference_javaEditor = context.getServiceReference(JavaEditorServices.class);
 		editorServices = context.getService(serviceReference_javaEditor);
+		
+		ServiceReference<PidescoServices> serviceReference_pidesco = context.getServiceReference(PidescoServices.class);
+		pidescoServices = context.getService(serviceReference_pidesco);
 	}
 
 	@Override
@@ -73,7 +78,13 @@ public class ProjectBrowserSearchProvider implements SearchProvider {
 	 */
 	@Override
 	public Image setImage(Object object) {
-		return labelProvider.getImage(object);
+		if(object instanceof SearchCategory)
+			return pidescoServices.getImageFromPlugin("pa.iscde.filtersearch", "searchtool.gif");
+		else if(object instanceof PackageElement)
+			return pidescoServices.getImageFromPlugin("pa.iscde.filtersearch", "package_obj.gif");
+		else if(object instanceof ClassElement)
+			return pidescoServices.getImageFromPlugin("pa.iscde.filtersearch", "classes.gif");
+		return null;
 	}
 
 	@Override
