@@ -34,46 +34,30 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 
 import pa.iscde.filtersearch.providers.SearchProvider;
 import pt.iscte.pidesco.extensibility.PidescoView;
-import pt.iscte.pidesco.projectbrowser.model.ClassElement;
-import pt.iscte.pidesco.projectbrowser.model.PackageElement;
-import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 
 public class SearchView implements PidescoView {
 
 	private final static String NO_RESULTS_FOUND = "No results found.";
 
-	private List<SearchProvider> providers = new ArrayList<>(); 
-	private Map<Object, SearchProvider> providerMap;
+	private List<SearchProvider> providers = new ArrayList<>();
+	private List<SearchCategory> categories = new ArrayList<>();
+	private Map<SearchProvider, String> providerAndImageMap = new HashMap<SearchProvider, String>();
+	private Map<Object, SearchProvider> provideAndObjectMap = new HashMap<Object, SearchProvider>();
 
-	private ProjectBrowserServices browserServices;
-
-	@SuppressWarnings("unused")
-	private static Composite viewArea;
-	@SuppressWarnings("unused")
-	private PackageElement rootPackage;
 	private TreeViewer tree;	
-	private static Image packageIcon;
-	private static Image classIcon;
-	private static Image categoryIcon;
-	private static Text searchText;
+	private Text searchText;
+
+
+	private Map<String, Image> images;
 
 	/**
 	 * Construtor da classe
 	 */
 	public SearchView() {
-
-		Bundle bundle = FrameworkUtil.getBundle(SearchView.class);
-		BundleContext context  = bundle.getBundleContext();
-		ServiceReference<ProjectBrowserServices> serviceReference_projectBrowser = context.getServiceReference(ProjectBrowserServices.class);
-		browserServices = context.getService(serviceReference_projectBrowser);
 
 		getProviders();
 
@@ -90,13 +74,20 @@ public class SearchView implements PidescoView {
 
 		for(IExtension ext : extensions){
 			for(IConfigurationElement configurationElement : ext.getConfigurationElements()){
+
 				SearchProvider p = null;
+				String iconName = null;
+
 				try {
 					p = (SearchProvider) configurationElement.createExecutableExtension("className");
+					iconName = configurationElement.getAttribute("iconName");
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
 				providers.add(p);
+				providerAndImageMap.put(p, iconName);
+
+				System.out.println(iconName);
 			}
 		}
 	}
@@ -105,11 +96,7 @@ public class SearchView implements PidescoView {
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> images) {
 
-		SearchView.viewArea = viewArea;
-
-		packageIcon = images.get("package_obj.gif");
-		classIcon = images.get("classes.gif");
-		categoryIcon = images.get("searchtool.gif");
+		this.images = images;
 
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.verticalSpacing = 8;
@@ -150,7 +137,7 @@ public class SearchView implements PidescoView {
 		});
 	}
 
-	
+
 	/**
 	 * Cria a componente gráfica correspondente ao botão "clear"
 	 * 
@@ -178,7 +165,6 @@ public class SearchView implements PidescoView {
 	 * @param viewArea
 	 */
 	private void treeLabel(Composite viewArea) {
-		rootPackage = browserServices.getRootPackage();
 		tree = new TreeViewer(viewArea, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		tree.setContentProvider(new ViewContentProvider());
 		tree.setLabelProvider(new DelegatingStyledCellLabelProvider(new ViewLabelProvider()));
@@ -196,7 +182,7 @@ public class SearchView implements PidescoView {
 				IStructuredSelection s = (IStructuredSelection) tree.getSelection();
 				if(s.size() == 1) {
 					Object element = s.getFirstElement();
-					SearchProvider provider = providerMap.get(element);
+					SearchProvider provider = provideAndObjectMap.get(element);
 					provider.doubleClickAction(tree, element);
 				}
 			}
@@ -211,24 +197,24 @@ public class SearchView implements PidescoView {
 	 */
 
 	private void loadCategories(String text) {
-		providerMap = new HashMap<Object, SearchProvider>();
-		List<SearchCategory> categories = new ArrayList<>();
-		for(SearchProvider p : providers) {
-			SearchCategory category = new SearchCategory(p.getClass().getSimpleName());
-			category.hits = p.getResults(text);
+
+		categories.clear();
+
+		for(Map.Entry<SearchProvider, String> entry : providerAndImageMap.entrySet()){
+			SearchCategory category = new SearchCategory(entry.getKey().getClass().getSimpleName(), images.get(entry.getValue()));
+			category.hits = entry.getKey().getResults(text);
 			for(Object o : category.hits){
-				providerMap.put(o, p);
+				provideAndObjectMap.put(o, entry.getKey());
 			}
 			if(!category.hits.isEmpty())
 				categories.add(category);
 		}
 		if(categories.isEmpty())
-			categories.add(new SearchCategory(NO_RESULTS_FOUND));
+			categories.add(new SearchCategory(NO_RESULTS_FOUND, null));
 
 		tree.setInput(categories);
 		tree.expandAll();
 	}
-
 
 
 	/**
@@ -243,17 +229,24 @@ public class SearchView implements PidescoView {
 	 * 
 	 * @authors LuisMurilhas & DavidAlmas
 	 */
+
 	class SearchCategory {
 		String name;
+		Image icon;
 		List<Object> hits = new ArrayList<>();
 
-		SearchCategory(String name) {
+		SearchCategory(String name, Image icon) {
 			this.name = name;
+			this.icon = icon;
 		}
 
 		@Override
 		public String toString() {
 			return name; 
+		}
+
+		public Image getIcon(){
+			return icon;
 		}
 	}
 
@@ -266,7 +259,7 @@ public class SearchView implements PidescoView {
 	 */
 	class ViewLabelProvider implements DelegatingStyledCellLabelProvider.IStyledLabelProvider{
 
-		
+
 		/**
 		 * Expressão regular que coloca os resultados a highlight, quando estes possuem texto igual ao introduzido na pesquisa. 
 		 */
@@ -288,15 +281,25 @@ public class SearchView implements PidescoView {
 			return text;
 		}
 
-		
-		@Override
+
+		/**
+		 * Recebe a imagem que tem que desenhar, para o objecto passado como argumento
+		 */
 		public Image getImage(Object object) {
-			if(object instanceof SearchCategory)
-				return categoryIcon;
-			else if(object instanceof PackageElement)
-				return packageIcon;
-			else if(object instanceof ClassElement)
-				return classIcon;
+
+			if(object instanceof SearchCategory) {
+				for(SearchCategory category : categories){
+					if(object.equals(category))
+						return category.getIcon();
+				}
+			}
+			else {
+				for(Map.Entry<Object, SearchProvider> entry : provideAndObjectMap.entrySet()){
+					if(entry.getKey().equals(object))
+						return entry.getValue().setImage(object);
+				}
+			}
+
 			return null;
 		}
 

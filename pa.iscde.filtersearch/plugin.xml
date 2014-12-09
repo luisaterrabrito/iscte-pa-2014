@@ -31,7 +31,8 @@
    <extension
          point="pa.iscde.filtersearch.SearchProvider">
       <SearchProvider
-            className="pa.iscde.filtersearch.view.ProjectBrowserSearchProvider">
+            className="pa.iscde.filtersearch.view.ProjectBrowserSearchProvider"
+            iconName="searchtool.gif">
       </SearchProvider>
    </extension>
 </plugin>
