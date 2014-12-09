@@ -2,11 +2,14 @@ package pa.iscde.formulas.view;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -86,8 +89,9 @@ public class FormulasView implements PidescoView {
 	
 	/**
 	 * Constructor 
+	 * @throws CoreException 
 	 */
-	public FormulasView() {
+	public FormulasView() throws CoreException {
 		Bundle bundle = FrameworkUtil.getBundle(this.getClass());
 		BundleContext context = bundle.getBundleContext();
 		ServiceReference<JavaEditorServices> ref = context.getServiceReference(JavaEditorServices.class);
@@ -145,13 +149,13 @@ public class FormulasView implements PidescoView {
 				final String category = formula.getAttribute("category");
 				final String name = formula.getAttribute("name");
 				final String method = formula.getAttribute("method");
-				final String result = formula.getAttribute("result");
-				final String inputs = formula.getAttribute("inputs");
+				final Formula result = (Formula) formula.createExecutableExtension("result");
+				
 				create_formula_provider = new CreateFormulaProvider() {
 					
 					@Override
 					public String setResult() {
-						return result;
+						return result.result(result.inputs());
 					}
 					
 					@Override
@@ -161,12 +165,21 @@ public class FormulasView implements PidescoView {
 					
 					@Override
 					public String setMethodCode() {
-						return method;
+						ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+						InputStream is = classloader.getResourceAsStream(method);
+						
+						String method_str = "";
+						Scanner s = new Scanner(is);
+							while(s.hasNext()){
+								method_str+=s.nextLine()+"\n";
+							}
+						s.close();
+						return method_str;
 					}
 					
 					@Override
 					public String[] setInputs() {
-						return inputs.split("");
+						return result.inputs();
 					}
 
 					@Override
@@ -176,19 +189,19 @@ public class FormulasView implements PidescoView {
 				};
 				switch(create_formula_provider.setCategory()){
 				case "Basics":
-					basic_formulas.add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setName(), create_formula_provider.setName()));
+					basic_formulas.add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setMethodCode(), create_formula_provider.setMethodCode()));
 				break;
 				case "Engineering":
-					engineering_formulas.add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setName(), create_formula_provider.setName()));
+					engineering_formulas.add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setMethodCode(), create_formula_provider.setMethodCode()));
 				break;
 				case "Finance":
-					finance_formulas.add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setName(), create_formula_provider.setName()));
+					finance_formulas.add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setMethodCode(), create_formula_provider.setMethodCode()));
 				break;
 				case "Statistic":
-					statistics_formulas.add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setName(), create_formula_provider.setName()));
+					statistics_formulas.add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setMethodCode(), create_formula_provider.setMethodCode()));
 				break;
 				default:
-					categories.get(category).add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setName(), create_formula_provider.setName()));
+					categories.get(category).add(new NewFormula(create_formula_provider.setName(), create_formula_provider.setInputs(), create_formula_provider.setMethodCode(), create_formula_provider.setMethodCode()));
 				}
 				
 			}

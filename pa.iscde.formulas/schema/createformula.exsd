@@ -75,25 +75,24 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="inputs" type="string" use="default" value="Inputs">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
          <attribute name="method" type="string" use="default" value="Method">
             <annotation>
                <documentation>
                   
                </documentation>
+               <appinfo>
+                  <meta.attribute kind="resource"/>
+               </appinfo>
             </annotation>
          </attribute>
-         <attribute name="result" type="string" use="default" value="Result">
+         <attribute name="result" type="string" use="required">
             <annotation>
                <documentation>
                   
                </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="pa.iscde.formulas.Formula:"/>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>

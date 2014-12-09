@@ -67,10 +67,9 @@
          point="pa.iscde.formulas.createformula">
       <NewFormula
             category="Basics"
-            inputs="Inputs"
-            method="Method"
-            name="Name"
-            result="Result">
+            method="formulas/Quadratic.txt"
+            name="Formula"
+            result="pa.iscde.formulas.basics.QuadraticFormula">
       </NewFormula>
    </extension>
    <extension
