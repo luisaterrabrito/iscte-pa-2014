@@ -6,7 +6,7 @@ public class FriisFormula extends Formula{
 	
 	@Override
 	public String name() {
-		return "Friis";
+		return "FriisFormula";
 	}
 
 	@Override

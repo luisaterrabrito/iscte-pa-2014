@@ -12,7 +12,7 @@ public class NumberOfPayments extends Formula{
 
 	@Override
 	public String name() {
-		return "Number of Payments";
+		return "NumberOfPayments";
 	}
 
 	@Override

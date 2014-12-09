@@ -11,7 +11,7 @@ public class DecibelConverter extends Formula{
 	}
 	@Override
 	public String name() {
-		return "Decibel Converter";
+		return "DecibelConverter";
 	}
 
 	@Override

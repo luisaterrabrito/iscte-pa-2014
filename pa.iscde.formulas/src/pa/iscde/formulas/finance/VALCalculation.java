@@ -15,7 +15,7 @@ public class VALCalculation extends Formula {
 
 	@Override
 	public String name() {
-		return "VAL";
+		return "VALCalculation";
 	}
 
 	@Override

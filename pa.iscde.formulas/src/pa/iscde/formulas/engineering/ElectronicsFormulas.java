@@ -20,7 +20,7 @@ public class ElectronicsFormulas extends Formula {
 
 	@Override
 	public String name() {
-		return "Electronic Formulas";
+		return "ElectronicFormulas";
 	}
 
 	@Override

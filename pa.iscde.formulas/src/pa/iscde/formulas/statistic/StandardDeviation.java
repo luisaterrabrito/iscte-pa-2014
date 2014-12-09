@@ -15,7 +15,7 @@ public class StandardDeviation extends Formula{
 
 	@Override
 	public String name() {
-		return "Standard Deviation";
+		return "StandardDeviation";
 	}
 
 	@Override
