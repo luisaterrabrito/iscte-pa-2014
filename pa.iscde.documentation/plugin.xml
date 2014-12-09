@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="tags" name="JavaDoc tags" schema="schema/tags.exsd"/>
    <extension
          id="docTeam"
          name="Programador"
@@ -22,6 +23,13 @@
       <view
             class="pt.iscte.pidesco.documentation.internal.DocumentationView">
       </view>
+   </extension>
+   <extension
+         point="pa.iscde.documentation.tags">
+      <tag
+            name="mytag"
+            provider="pa.iscde.documentation.TagContentProvider1">
+      </tag>
    </extension>
 
 </plugin>
