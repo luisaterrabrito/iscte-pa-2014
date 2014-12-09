@@ -1,4 +1,4 @@
-package pa.iscde.formulas.view;
+package pa.iscde.formulas.extensibility;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +40,7 @@ import pa.iscde.formulas.engineering.ElectronicsFormulas;
 import pa.iscde.formulas.engineering.FriisFormula;
 import pa.iscde.formulas.engineering.MovementEquations;
 import pa.iscde.formulas.extensibility.CreateCategoryProvider;
+import pa.iscde.formulas.extensibility.CreateFormulaProvider;
 import pa.iscde.formulas.finance.NumberOfPayments;
 import pa.iscde.formulas.finance.PresentValue;
 import pa.iscde.formulas.finance.VALCalculation;
@@ -145,11 +146,22 @@ public class FormulasView implements PidescoView {
 			for(IConfigurationElement formula : ext.getConfigurationElements()) {
 				
 				final String category = formula.getAttribute("Category");
-				final Formula addFormula = (Formula) formula.createExecutableExtension("addformula");
+				final CreateFormulaProvider addFormula = (CreateFormulaProvider) formula.createExecutableExtension("addformula");
+				final String method = formula.getAttribute("method");
+				
+				ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+				InputStream is = classloader.getResourceAsStream(method);
+				
+				String formula_method = "";
+				Scanner s = new Scanner(is);
+					while(s.hasNext()){
+						formula_method+=s.nextLine()+"\n";
+					}
+				s.close();
 				
 				switch(category){
 				case "Basics":
-					basic_formulas.add(addFormula);
+					basic_formulas.add(new NewFormula(addFormula.setName(), addFormula.setInputs(), formula_method, javacode));
 				break;
 				case "Engineering":
 					engineering_formulas.add(addFormula);

@@ -1,12 +1,11 @@
 package pa.iscde.formulas;
 
-import java.io.InputStream;
-import java.util.Scanner;
 
 import org.eclipse.swt.events.SelectionListener;
 
 import pa.iscde.formulas.listeners.CalculatorListener;
 import pa.iscde.formulas.listeners.CodeEjectorListener;
+import pa.iscde.formulas.util.ReadUtil;
 
 
 /**
@@ -18,26 +17,31 @@ public abstract class Formula{
 	
 	private SelectionListener currentListener;
 	
+	/**
+	 * Set formula inputs number
+	 * @return inputs
+	 */
 	public abstract String[] inputs();
+	/**
+	 * Set formula name
+	 * @return name
+	 */
 	public abstract String name();
+	
+	/**
+	 * Set the code for the calculator mode
+	 * 
+	 * @param inputs
+	 * @return result
+	 */
 	public abstract String result(String[] inputs);
 
 	/**
 	 * Opens the file that contains the formula code.
 	 * @return method
 	 */
-	public String methodCode() {
-		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-		InputStream is = classloader.getResourceAsStream("formulas\\"+name()+".txt");
-		
-		String method = "";
-		Scanner s = new Scanner(is);
-			while(s.hasNext()){
-				method+=s.nextLine()+"\n";
-			}
-		s.close();
-		
-		return method;
+	public String methodCode(String file) {
+		return ReadUtil.read(file);
 	}
 	
 	/**

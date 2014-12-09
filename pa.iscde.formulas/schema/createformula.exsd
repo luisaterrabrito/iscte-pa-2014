@@ -49,7 +49,17 @@
 
    <element name="NewFormula">
       <complexType>
-         <attribute name="category" use="required">
+         <attribute name="addformula" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="pa.iscde.formulas.Formula:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="Category" use="required">
             <annotation>
                <documentation>
                   
@@ -67,33 +77,6 @@
                   </enumeration>
                </restriction>
             </simpleType>
-         </attribute>
-         <attribute name="name" type="string" use="default" value="Name">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="method" type="string" use="default" value="Method">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-               <appinfo>
-                  <meta.attribute kind="resource"/>
-               </appinfo>
-            </annotation>
-         </attribute>
-         <attribute name="result" type="string" use="required">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-               <appinfo>
-                  <meta.attribute kind="java" basedOn="pa.iscde.formulas.Formula:"/>
-               </appinfo>
-            </annotation>
          </attribute>
       </complexType>
    </element>

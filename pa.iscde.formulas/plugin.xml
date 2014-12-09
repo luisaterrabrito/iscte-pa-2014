@@ -64,15 +64,6 @@
       </tool>
    </extension>
    <extension
-         point="pa.iscde.formulas.createformula">
-      <NewFormula
-            category="Basics"
-            method="formulas/Quadratic.txt"
-            name="Formula"
-            result="pa.iscde.formulas.basics.QuadraticFormula">
-      </NewFormula>
-   </extension>
-   <extension
          point="pa.iscde.formulas.createcategory">
       <AddCategory
             Name="Exemple">

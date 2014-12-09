@@ -57,7 +57,6 @@ public class NewFormulaJUnit {
 	@Test
 	public void equal() {
 		Assert.assertEquals(nf.name(), anotherNF.name());
-		Assert.assertEquals(nf.methodCode(), anotherNF.methodCode());
 	}
 	
 	@Test
