@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JLabel;
-import javax.swing.Popup;
-import javax.swing.PopupFactory;
-
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -125,7 +121,7 @@ public class TaskView implements PidescoView {
 		
 		createComboBox(viewArea);
 		createTable(viewArea);
-//		createCategories();
+		createCategories();
 		
 		try {
 			commentReader();
@@ -335,7 +331,7 @@ public class TaskView implements PidescoView {
 		});
 		
 	}
-	
+
 	private void createCategories(){
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
 		
