@@ -30,9 +30,6 @@
       <provider
             class="pa.iscde.configurator.model.interfaces.PropertyProviderImpl">
          <view
-               id="pa.iscde.configurator.view1">
-         </view>
-         <view
                id="pt.iscte.pidesco.projectbrowser">
          </view>
       </provider>
