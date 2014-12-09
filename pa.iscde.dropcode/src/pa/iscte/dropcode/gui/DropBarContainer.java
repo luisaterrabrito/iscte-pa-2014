@@ -22,6 +22,7 @@ public class DropBarContainer extends Composite {
 
 	public DropBarContainer(Composite parent, DropBar dropBar) {
 		super(parent, SWT.BORDER);
+		
 		this.dropBar = dropBar;
 
 		GridData data = new GridData();
@@ -50,6 +51,7 @@ public class DropBarContainer extends Composite {
 		contentData.grabExcessVerticalSpace = true;
 		content = new Composite(this, SWT.NONE);
 		content.setLayoutData(contentData);
+		content.setLayout(new FillLayout(SWT.VERTICAL));
 	}
 
 	public void clearContents() {
