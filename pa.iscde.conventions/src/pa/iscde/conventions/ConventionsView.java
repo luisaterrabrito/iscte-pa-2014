@@ -115,6 +115,7 @@ public class ConventionsView implements PidescoView {
 				}
 			}
 		};
+			
 		
 		lista = new LinkedList<ConventionService>();
 		lista.add(cs);
@@ -299,6 +300,8 @@ public class ConventionsView implements PidescoView {
 		ASTVisitor v = new ASTVisitor() {
 			@Override
 			public boolean visit(MethodDeclaration node) {
+				
+				
 				
 				String id = node.getName().getFullyQualifiedName();
 				
