@@ -13,6 +13,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -55,7 +56,7 @@ public class DropCodeView implements PidescoView {
 		// scrollComp.setBounds(0, 0, 200, 200);
 
 		bars = new Composite(scrollComp, SWT.NONE);
-		bars.setLayout(new RowLayout(SWT.VERTICAL));
+		bars.setLayout(new GridLayout(1, true));
 		scrollComp.setContent(bars);
 
 		tabComps.add(new DropBarContainer(bars, new DropBar() {
