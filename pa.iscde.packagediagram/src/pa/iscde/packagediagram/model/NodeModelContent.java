@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.swt.SWT;
 import org.eclipse.zest.core.widgets.GraphConnection;
 import org.eclipse.zest.core.widgets.GraphNode;
@@ -57,10 +58,11 @@ public class NodeModelContent {
 				PackageDiagramASTVisitor packageDiagramAstVisitor = new PackageDiagramASTVisitor();
 				javaServices.parseFile(e.getFile(), packageDiagramAstVisitor);
 
-				String packageDeclaration = packageDiagramAstVisitor
-						.getPackageDeclaration().getName().toString();
+				PackageDeclaration packageDeclaration = packageDiagramAstVisitor.getPackageDeclaration();
+				String name = packageDeclaration == null ? "" : packageDeclaration.getName().toString();
+			
 
-				NodeModel packageNode = new NodeModel(packageDeclaration,packageDeclaration);
+				NodeModel packageNode = new NodeModel(name,name);
 				if (!nodes.contains(packageNode)) {
 					nodes.add(packageNode);
 				}
