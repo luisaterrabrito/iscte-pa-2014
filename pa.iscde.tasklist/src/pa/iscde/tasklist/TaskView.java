@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JLabel;
+import javax.swing.Popup;
+import javax.swing.PopupFactory;
+
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.BlockComment;
 import org.eclipse.jdt.core.dom.Comment;
@@ -35,13 +39,12 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
-
 public class TaskView implements PidescoView {
 	
 	public enum TaskType {
 		PROJECT, PACKAGE, FILE;
 	}
-	
+
 	private Table table;
 	private Combo combo;
 	private JavaEditorServices javaServices;
@@ -104,7 +107,7 @@ public class TaskView implements PidescoView {
 	//Create the task view table
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
-		viewArea.setLayout(new FillLayout(2));
+		viewArea.setLayout(new FillLayout(1));
 		
 		createComboBox(viewArea);
 		createTable(viewArea);
@@ -173,7 +176,6 @@ public class TaskView implements PidescoView {
 			
 			@Override
 			public boolean visit(BlockComment node) {
-				System.out.println("Block Comment");
 		        return true;
 			}
 		};
@@ -218,7 +220,6 @@ public class TaskView implements PidescoView {
 				files.add(f);
 			}
 		}
-		
 		return files;
 	}
 	
@@ -296,7 +297,16 @@ public class TaskView implements PidescoView {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				System.out.println(table.getSelectionIndex());
+				
+				ArrayList<File> tmp = getFiles(browserServices.getRootPackage().getFile());
+				
+				int selected = table.getSelectionIndex();
+				
+				for(int i = 0; i < tmp.size(); i++){
+					if(tmp.get(i).getName().equals(table.getItem(selected).getText(1) + ".java")){
+						javaServices.openFile(tmp.get(i));
+					}
+				}
 			}
 			
 			@Override
