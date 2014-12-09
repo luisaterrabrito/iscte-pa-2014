@@ -2,6 +2,7 @@ package pa.iscde.formulas.basics;
 
 
 import pa.iscde.formulas.Formula;
+import pa.iscde.formulas.annotations.FormulaCreator;
 
 public class Areas extends Formula{
 	
