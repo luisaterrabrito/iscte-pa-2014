@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Text;
 
 import pa.iscde.dropcode.dropreflection.DropAble;
 import pa.iscde.dropcode.dropreflection.DropField;
+import pa.iscde.dropcode.dropreflection.DropMethod;
 import pa.iscde.dropcode.dropreflection.DropModifier.DM_Others;
 import pa.iscde.dropcode.dropreflection.DropModifier.DM_Visibility;
 import pa.iscde.dropcode.dropreflection.DropType;
@@ -23,6 +24,11 @@ public class DropRow extends Composite {
 		RowLayout layout = new RowLayout();
 		setLayout(layout);
 		if (dropable instanceof DropField) {
+			addCombo_visibility_modifier(dropable);
+			addCombo_other_modifiers(dropable);
+			addCombo_type(dropable);
+			addTextfield_name(dropable);
+		}else if(dropable instanceof DropMethod){
 			addCombo_visibility_modifier(dropable);
 			addCombo_other_modifiers(dropable);
 			addCombo_type(dropable);
