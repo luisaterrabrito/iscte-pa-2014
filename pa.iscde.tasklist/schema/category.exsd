@@ -1,13 +1,120 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="null" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="pa.iscde.tasklist" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="null" id="null" name="null"/>
+         <meta.schema plugin="pa.iscde.tasklist" id="category" name="Task Category"/>
       </appinfo>
       <documentation>
-         
+         This extension point is to create a new task category.
       </documentation>
    </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="category"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="category">
+      <complexType>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The name of the category.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="tag" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The abreviation or tag used to represent the category.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="icon" type="string">
+            <annotation>
+               <documentation>
+                  The image to use as the icon to represent the category. This value should be the name of the file, and this should be in the &quot;images&quot; folder of the project.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="color" type="string">
+            <annotation>
+               <documentation>
+                  The color used to indicate, in the UML diagram, that a certain method contains a task of this category. The string should be of the type &quot;r,g,b&quot; (no spaces), and each value shall be an integer between 0 and 255 (both included).
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
 
 </schema>
