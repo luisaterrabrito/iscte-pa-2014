@@ -2,6 +2,7 @@ package pa.iscde.dropcode.dropreflection;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -13,15 +14,15 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class DropClass {
 
-	private HashMap<String, DropField> fields;
-	private HashMap<String, DropMethod> constructors;
-	private HashMap<String, DropMethod> methods;
+	private LinkedList<DropField> fields;
+	private LinkedList<DropMethod> constructors;
+	private LinkedList<DropMethod> methods;
 
 	public DropClass(JavaEditorServices javaEditor) {
 
-		fields = new HashMap<>();
-		constructors = new HashMap<>();
-		methods = new HashMap<>();
+		fields = new LinkedList<>();
+		constructors = new LinkedList<>();
+		methods = new LinkedList<>();
 
 		// CONSTRUCT THE JAVA CLASS //
 
@@ -39,7 +40,7 @@ public class DropClass {
 				field.getStartPosition();
 				field.getLength();
 
-				fields.put(newField.name(), newField);
+				fields.add(newField);
 				return true;
 			}
 
@@ -50,6 +51,7 @@ public class DropClass {
 
 				// MODS
 				newMethod.setModifiers(method.getModifiers());
+				newMethod.setVisibilityModifier(method.getModifiers());
 
 				@SuppressWarnings("unchecked")
 				List<SingleVariableDeclaration> params = (List<SingleVariableDeclaration>) method
@@ -61,9 +63,9 @@ public class DropClass {
 				}
 
 				if (method.isConstructor()) {
-					constructors.put(newMethod.name(), newMethod);
+					constructors.add(newMethod);
 				} else {
-					methods.put(newMethod.name(), newMethod);
+					methods.add(newMethod);
 				}
 				return false;
 			}
@@ -72,24 +74,16 @@ public class DropClass {
 
 	}
 
-	public DropField getField(String name) {
-		return fields.get(name);
-	}
-
 	public Collection<DropField> getFields() {
-		return fields.values();
-	}
-
-	public DropMethod getMethod(String name) {
-		return methods.get(name);
+		return new LinkedList<>(fields);
 	}
 
 	public Collection<DropMethod> getConstructors() {
-		return constructors.values();
+		return new LinkedList<>(constructors);
 	}
 
 	public Collection<DropMethod> getMethods() {
-		return methods.values();
+		return new LinkedList<>(methods);
 	}
 
 }
