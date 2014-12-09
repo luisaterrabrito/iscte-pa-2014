@@ -30,8 +30,8 @@ public class DropClass {
 
 			@Override
 			public boolean visit(FieldDeclaration field) {
-				DropField newField = new DropField(field.fragments().get(0)
-						.toString(), field.getType().toString());
+				DropField newField = new DropField(field, field.fragments()
+						.get(0).toString(), field.getType().toString());
 				// MODS
 				newField.setModifiers(field.getModifiers());
 				newField.setVisibilityModifier(field.getModifiers());
@@ -46,7 +46,7 @@ public class DropClass {
 
 			@Override
 			public boolean visit(MethodDeclaration method) {
-				DropMethod newMethod = new DropMethod(method.getName()
+				DropMethod newMethod = new DropMethod(method, method.getName()
 						.getFullyQualifiedName(), method.isConstructor());
 
 				// MODS

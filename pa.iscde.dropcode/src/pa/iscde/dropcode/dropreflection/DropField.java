@@ -1,11 +1,13 @@
 package pa.iscde.dropcode.dropreflection;
 
+import org.eclipse.jdt.core.dom.ASTNode;
+
 public class DropField extends DropAble {
 
 	private String type;
 
-	public DropField(String name, String type) {
-		super(name);
+	public DropField(ASTNode node, String name, String type) {
+		super(node, name);
 		this.type = type;
 	}
 
@@ -16,4 +18,5 @@ public class DropField extends DropAble {
 	public String getType() {
 		return type;
 	}
+
 }

@@ -70,7 +70,8 @@ public class DropCodeView implements PidescoView {
 				parent.setLayout(new FillLayout(SWT.VERTICAL));
 				if (dropClass != null)
 					for (DropField df : dropClass.getFields()) {
-						new DropRow(parent, SWT.NONE, df, dropbuttons);
+						new DropRow(df.getNode(), parent, SWT.NONE, df,
+								dropbuttons);
 					}
 			}
 		}));
@@ -86,8 +87,9 @@ public class DropCodeView implements PidescoView {
 			public void createContents(Composite parent) {
 				parent.setLayout(new FillLayout(SWT.VERTICAL));
 				if (dropClass != null)
-					for (DropMethod df : dropClass.getConstructors()) {
-						new DropRow(parent, SWT.NONE, df, dropbuttons);
+					for (DropMethod dc : dropClass.getConstructors()) {
+						new DropRow(dc.getNode(), parent, SWT.NONE, dc,
+								dropbuttons);
 					}
 			}
 		}));
@@ -103,8 +105,9 @@ public class DropCodeView implements PidescoView {
 			public void createContents(Composite parent) {
 				parent.setLayout(new FillLayout(SWT.VERTICAL));
 				if (dropClass != null)
-					for (DropMethod df : dropClass.getMethods()) {
-						new DropRow(parent, SWT.NONE, df, dropbuttons);
+					for (DropMethod dm : dropClass.getMethods()) {
+						new DropRow(dm.getNode(), parent, SWT.NONE, dm,
+								dropbuttons);
 					}
 			}
 		}));
