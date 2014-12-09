@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="customLayoutProvider" name="Custom Layout" schema="schema/CustomLayoutProvider.exsd"/>
+   <extension-point id="exportAsProvider" name="Export CallGraph" schema="schema/exportAsProvider.exsd"/>
+   <extension
+         id="pa.iscde.callgraph"
+         name="callgraph"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.callgraph.MyView">
+      </view>
+   </extension>
+   <extension
+         id="pa.iscde.callgraph"
+         name="callgraph"
+         point="pa.iscde.team">
+      <member
+            name="João Alves, Pedro Neves"
+            quote="swag"
+            user="callgraph">
+      </member>
+   </extension>
+
+</plugin>
