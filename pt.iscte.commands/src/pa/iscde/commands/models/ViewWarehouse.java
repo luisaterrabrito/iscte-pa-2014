@@ -9,6 +9,7 @@ import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import pa.iscde.commands.controllers.CommandsController;
@@ -67,7 +68,8 @@ final public class ViewWarehouse {
 	}
 
 	public static String getActiveView() {
-		BundleContext context = CommandsController.getContext();
+		BundleContext context = FrameworkUtil.getBundle(CommandsController.class)
+				.getBundleContext();
 		ServiceReference<PidescoServices> ref = context
 				.getServiceReference(PidescoServices.class);
 		PidescoServices services = context.getService(ref);
