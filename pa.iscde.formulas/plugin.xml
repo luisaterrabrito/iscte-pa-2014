@@ -68,6 +68,13 @@
       <AddCategory
             Name="Exemple">
       </AddCategory>
+   </extension>
+   <extension
+         point="pa.iscde.formulas.createformula">
+      <NewFormula
+            Category="Statistic"
+            addformula="pa.iscde.formulas.view.Teste">
+      </NewFormula>
    </extension> 
 
 </plugin>
