@@ -16,3 +16,4 @@ Require-Bundle: pa.iscde;bundle-version="0.1.0",
 Bundle-Activator: pa.iscde.filtersearch.activator.FilterSearchActivator
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.core.internal.resources
+Export-Package: pa.iscde.filtersearch.providers
