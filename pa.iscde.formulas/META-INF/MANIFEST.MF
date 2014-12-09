@@ -7,7 +7,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: pa.iscde;bundle-version="0.1.0",
  pt.iscte.pidesco;bundle-version="0.1.0",
  org.eclipse.swt;bundle-version="3.103.1",
- pa.iscde.formulas.drawlib;bundle-version="1.0.0",
  org.eclipse.osgi;bundle-version="3.10.1",
  pt.iscte.pidesco.javaeditor,
  com.google.guava;bundle-version="18.0.0",
@@ -15,6 +14,9 @@ Require-Bundle: pa.iscde;bundle-version="0.1.0",
  org.eclipse.core.resources;bundle-version="3.9.1",
  org.eclipse.core.runtime;bundle-version="3.10.0",
  org.junit;bundle-version="4.11.0",
- org.eclipse.jface;bundle-version="3.10.1"
+ org.eclipse.jface;bundle-version="3.10.1",
+ pa.iscde.formulas.drawlib;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: pa.iscde.formulas.activator.FormulasActivator
+Export-Package: pa.iscde.formulas,
+ pa.iscde.formulas.util
