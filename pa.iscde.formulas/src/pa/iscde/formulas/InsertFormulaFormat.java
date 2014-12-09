@@ -5,6 +5,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Class used to store the formula specifications into a file format.
+ * @author Gonçalo Horta & Tiago Saraiva
+ *
+ */
 public class InsertFormulaFormat {
 
 	private String category;
@@ -15,6 +20,14 @@ public class InsertFormulaFormat {
 	private String codeJava;
 	private ArrayList<String> allStringsToTheFile= new ArrayList<String>(); 
 
+	/**
+	 * @param category
+	 * @param formulaName
+	 * @param inputsName
+	 * @param inputsNumber
+	 * @param algorithm
+	 * @param codeJava
+	 */
 	public InsertFormulaFormat(String category, String formulaName,
 			String[] inputsName, int inputsNumber, String algorithm, String codeJava) {
 		super();
@@ -26,6 +39,10 @@ public class InsertFormulaFormat {
 		this.codeJava = codeJava;
 	}
 
+	/**
+	 * Create the text based on the formula specifications to insert in the text file.
+	 * @return bytes
+	 */
 	public  byte [] createText(){
 		String allInputs="";
 		for (int i = 0; i < inputs.length; i++) {
@@ -60,6 +77,10 @@ public class InsertFormulaFormat {
 
 		}
 	
+		/**
+		 * Returns all the text that will be inserted on the text file.
+		 * @return aux
+		 */
 		public String getFormula(){
 			String aux = "";
 			for (String string : allStringsToTheFile) {
