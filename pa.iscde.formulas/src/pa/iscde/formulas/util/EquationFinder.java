@@ -2,7 +2,18 @@ package pa.iscde.formulas.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
+
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
+
+import pa.iscde.formulas.Formula;
+import pa.iscde.formulas.extensibility.CreateCategoryProvider;
+import pa.iscde.formulas.extensibility.DrawEquationsProvider;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -21,6 +32,8 @@ public class EquationFinder {
 	char aux2 = '+';
 	
 	private Multimap<String,Integer> equations = ArrayListMultimap.create();
+	private DrawEquationsProvider drawEquationsProvider;
+	private ArrayList<JavaToLatexFormat> newLatexOperations;
 	
 	/**
 	 * @param file, represents the open class
@@ -28,6 +41,24 @@ public class EquationFinder {
 	 */
 	public EquationFinder(File file) throws FileNotFoundException {
 		analyseFile(file);
+		
+		IExtensionRegistry reg = Platform.getExtensionRegistry();
+		for(IExtension ext : reg.getExtensionPoint("pa.iscde.formulas.newEquationToDraw").getExtensions()) {
+			for(IConfigurationElement newEquationToDraw : ext.getConfigurationElements()) {
+				final String javaOperation = newEquationToDraw.getAttribute("javaOperation");
+				final String operationLatexFormat = newEquationToDraw.getAttribute("operationLatexFormat");
+				
+				drawEquationsProvider= new DrawEquationsProvider() {
+					
+					@Override
+					public void newEquationToDraw(String javaOperation,
+							String operationLatexFormat) {
+						
+					}
+				};
+			}
+		}
+		
 	}
 
 	private void analyseFile(File file) throws FileNotFoundException {
