@@ -43,4 +43,23 @@
             definition="contextdefinitiontests.DirectoryListingOverlyComplex">
       </member>
    </extension>
+   <extension
+         point="pa.iscde.filtersearch.SearchProvider">
+      <SearchProvider
+            SearchProvider="pa.iscde.snippets.extensions.SearchProviderSnippets"
+            className="pa.iscde.snippets.SearchProvider1"
+            iconName="pa.iscde.snippets.SearchProvider1">
+      </SearchProvider>
+   </extension>
+   <extension
+         point="pa.iscde.commands.command">
+      <command_editor
+            alt_key="true"
+            command_implementation="pa.iscde.snippets.Command1"
+            ctrl_key="true"
+            description="pa.iscde.snippets.command_editor1"
+            key="u"
+            name="pa.iscde.snippets.command_editor1">
+      </command_editor>
+   </extension>
 </plugin>
