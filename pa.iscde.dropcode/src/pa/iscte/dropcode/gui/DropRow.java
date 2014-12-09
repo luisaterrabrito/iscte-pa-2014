@@ -1,5 +1,7 @@
 package pa.iscte.dropcode.gui;
 
+import java.util.LinkedList;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.RowLayout;
@@ -12,13 +14,15 @@ import pa.iscde.dropcode.dropreflection.DropMethod;
 import pa.iscde.dropcode.dropreflection.DropModifier.DM_Others;
 import pa.iscde.dropcode.dropreflection.DropModifier.DM_Visibility;
 import pa.iscde.dropcode.dropreflection.DropType;
+import pa.iscde.dropcode.services.DropButton;
 import pa.iscte.dropcode.gui.ClosableLabel.ClosableLabelEvent;
 
 public class DropRow extends Composite {
 
 	private DropRow me;
 
-	public DropRow(Composite parent, int style, DropAble dropable) {
+	public DropRow(Composite parent, int style, DropAble dropable,
+			LinkedList<DropButton> dropbuttons) {
 		super(parent, style);
 		me = this;
 		RowLayout layout = new RowLayout();
@@ -28,10 +32,9 @@ public class DropRow extends Composite {
 			addCombo_other_modifiers(dropable);
 			addCombo_type(dropable);
 			addTextfield_name(dropable);
-		}else if(dropable instanceof DropMethod){
+		} else if (dropable instanceof DropMethod) {
 			addCombo_visibility_modifier(dropable);
 			addCombo_other_modifiers(dropable);
-			addCombo_type(dropable);
 			addTextfield_name(dropable);
 		}
 	}
@@ -83,7 +86,8 @@ public class DropRow extends Composite {
 			// combo.select(i);
 			// }
 		}
-		String type = dropable.getType();
+		String type = ((DropField) dropable).getType();
+		System.out.println(type);
 		combo.setText(type == null ? "Object" : type);
 		combo.setEditable(true);
 	}

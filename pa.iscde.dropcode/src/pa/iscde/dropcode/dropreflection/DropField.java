@@ -1,9 +1,19 @@
 package pa.iscde.dropcode.dropreflection;
 
-public class DropField extends DropAble{
+public class DropField extends DropAble {
 
-	public DropField(String name) {
+	private String type;
+
+	public DropField(String name, String type) {
 		super(name);
+		this.type = type;
 	}
 
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getType() {
+		return type;
+	}
 }

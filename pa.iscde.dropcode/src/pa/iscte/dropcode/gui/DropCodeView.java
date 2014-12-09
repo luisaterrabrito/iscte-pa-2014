@@ -21,6 +21,7 @@ import pa.iscde.dropcode.dropreflection.DropClass;
 import pa.iscde.dropcode.dropreflection.DropField;
 import pa.iscde.dropcode.dropreflection.DropMethod;
 import pa.iscde.dropcode.services.DropBar;
+import pa.iscde.dropcode.services.DropButton;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
 public class DropCodeView implements PidescoView {
@@ -34,6 +35,7 @@ public class DropCodeView implements PidescoView {
 	private Composite bars;
 	private DropClass dropClass;
 	private LinkedList<DropBarContainer> tabComps;
+	private LinkedList<DropButton> dropbuttons;
 
 	@Override
 	public void createContents(Composite comp,
@@ -68,7 +70,7 @@ public class DropCodeView implements PidescoView {
 				parent.setLayout(new FillLayout(SWT.VERTICAL));
 				if (dropClass != null)
 					for (DropField df : dropClass.getFields()) {
-						new DropRow(parent, SWT.NONE, df);
+						new DropRow(parent, SWT.NONE, df, dropbuttons);
 					}
 			}
 		}));
@@ -85,7 +87,7 @@ public class DropCodeView implements PidescoView {
 				parent.setLayout(new FillLayout(SWT.VERTICAL));
 				if (dropClass != null)
 					for (DropMethod df : dropClass.getConstructors()) {
-						new DropRow(parent, SWT.NONE, df);
+						new DropRow(parent, SWT.NONE, df, dropbuttons);
 					}
 			}
 		}));
@@ -102,12 +104,13 @@ public class DropCodeView implements PidescoView {
 				parent.setLayout(new FillLayout(SWT.VERTICAL));
 				if (dropClass != null)
 					for (DropMethod df : dropClass.getMethods()) {
-						new DropRow(parent, SWT.NONE, df);
+						new DropRow(parent, SWT.NONE, df, dropbuttons);
 					}
 			}
 		}));
 
 		addPluginDropbars(bars);
+		addPluginDropbuttons();
 
 		// bars.setBackgroundImage(images.get("background.jpg"));
 		bars.layout(true, true);
@@ -128,9 +131,9 @@ public class DropCodeView implements PidescoView {
 
 	private void addPluginDropbars(Composite parent) {
 		IExtensionPoint extp = Platform.getExtensionRegistry()
-				.getExtensionPoint("pa.iscde.dropcode.dropbars"); // TODO
+				.getExtensionPoint("pa.iscde.dropcode.dropbars");
 
-		if (extp != null) // TODO
+		if (extp != null)
 			for (IExtension ext : extp.getExtensions()) {
 
 				String name = ext.getContributor().getName();
@@ -141,7 +144,35 @@ public class DropCodeView implements PidescoView {
 				try {
 					tabComps.add(new DropBarContainer(parent, (DropBar) e
 							.createExecutableExtension("class")));
-					JOptionPane.showMessageDialog(null, "Extension Loaded: " + name);
+					JOptionPane.showMessageDialog(null,
+							"Bar Extension Loaded: " + name);
+				} catch (CoreException e1) {
+					e1.printStackTrace();
+				}
+			}
+	}
+
+	private void addPluginDropbuttons() {
+
+		dropbuttons = new LinkedList<>();
+
+		IExtensionPoint extp = Platform.getExtensionRegistry()
+				.getExtensionPoint("pa.iscde.dropcode.dropbutton");
+
+		if (extp != null)
+			for (IExtension ext : extp.getExtensions()) {
+
+				String name = ext.getContributor().getName();
+				// String id = ext.getUniqueIdentifier();
+				// String label = ext.getLabel();
+
+				IConfigurationElement e = ext.getConfigurationElements()[0];
+				try {
+
+					dropbuttons.add((DropButton) e
+							.createExecutableExtension("class"));
+					JOptionPane.showMessageDialog(null,
+							"Button Extension Loaded: " + name);
 				} catch (CoreException e1) {
 					e1.printStackTrace();
 				}

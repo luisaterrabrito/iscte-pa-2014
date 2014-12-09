@@ -31,7 +31,7 @@ public class DropClass {
 			@Override
 			public boolean visit(FieldDeclaration field) {
 				DropField newField = new DropField(field.fragments().get(0)
-						.toString());
+						.toString(), field.getType().toString());
 				// MODS
 				newField.setModifiers(field.getModifiers());
 				newField.setVisibilityModifier(field.getModifiers());
