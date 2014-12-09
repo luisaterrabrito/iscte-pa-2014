@@ -1,126 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="pa.iscde.tasklist" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="null" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="pa.iscde.tasklist" id="category" name="Task category"/>
+         <meta.schema plugin="null" id="null" name="null"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         
       </documentation>
    </annotation>
-
-   <element name="extension">
-      <annotation>
-         <appinfo>
-            <meta.element />
-         </appinfo>
-      </annotation>
-      <complexType>
-         <sequence>
-            <element ref="category"/>
-         </sequence>
-         <attribute name="point" type="string" use="required">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="id" type="string">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="name" type="string">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-               <appinfo>
-                  <meta.attribute translatable="true"/>
-               </appinfo>
-            </annotation>
-         </attribute>
-      </complexType>
-   </element>
-
-   <element name="category">
-      <complexType>
-         <attribute name="tag" type="string" use="required">
-            <annotation>
-               <documentation>
-                  Abreviação que permite identificar a categoria no código.
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="name" type="string" use="required">
-            <annotation>
-               <documentation>
-                  Nome da categoria.
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="icon" type="string">
-            <annotation>
-               <documentation>
-                  Icone a ser apresentado na tabela de tarefas.
-               </documentation>
-               <appinfo>
-                  <meta.attribute kind="java" basedOn="org.eclipse.swt.graphics.Image:"/>
-               </appinfo>
-            </annotation>
-         </attribute>
-         <attribute name="color" type="string">
-            <annotation>
-               <documentation>
-                  Cor que vai servir para realçar o método em que está inserido no diagrama de UML.
-               </documentation>
-               <appinfo>
-                  <meta.attribute kind="java" basedOn="org.eclipse.swt.graphics.Color:"/>
-               </appinfo>
-            </annotation>
-         </attribute>
-      </complexType>
-   </element>
-
-   <annotation>
-      <appinfo>
-         <meta.section type="since"/>
-      </appinfo>
-      <documentation>
-         [Enter the first release in which this extension point appears.]
-      </documentation>
-   </annotation>
-
-   <annotation>
-      <appinfo>
-         <meta.section type="examples"/>
-      </appinfo>
-      <documentation>
-         [Enter extension point usage example here.]
-      </documentation>
-   </annotation>
-
-   <annotation>
-      <appinfo>
-         <meta.section type="apiinfo"/>
-      </appinfo>
-      <documentation>
-         [Enter API information here.]
-      </documentation>
-   </annotation>
-
-   <annotation>
-      <appinfo>
-         <meta.section type="implementation"/>
-      </appinfo>
-      <documentation>
-         [Enter information about supplied implementation of this extension point.]
-      </documentation>
-   </annotation>
-
 
 </schema>

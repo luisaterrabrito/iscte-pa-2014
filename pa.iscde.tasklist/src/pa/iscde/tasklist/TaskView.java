@@ -12,6 +12,10 @@ import javax.swing.JLabel;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.BlockComment;
 import org.eclipse.jdt.core.dom.Comment;
@@ -20,6 +24,7 @@ import org.eclipse.jdt.core.dom.LineComment;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -34,6 +39,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
@@ -45,16 +51,20 @@ public class TaskView implements PidescoView {
 		PROJECT, PACKAGE, FILE;
 	}
 
+	public static final String CATEGORY_ID = "category";
+	
 	private Table table;
 	private Combo combo;
 	private JavaEditorServices javaServices;
 	private ProjectBrowserServices browserServices;
+	private PidescoServices pidescoServices;
 	private TaskType type;
 	private ArrayList<File> files;
 	private File rootFile;
 	private String fileText;
 	private String[] views = {"Project", "Package", "Open File"};
 	private File currentFile;
+	private ArrayList<Category> catList;
 	
 	//Constructor for class
 	public TaskView() {
@@ -100,6 +110,10 @@ public class TaskView implements PidescoView {
 		ServiceReference<ProjectBrowserServices> ref1 = context.getServiceReference(ProjectBrowserServices.class);
 		browserServices = context.getService(ref1);
 		
+		ServiceReference<PidescoServices> ref2 = context.getServiceReference(PidescoServices.class);
+		pidescoServices = context.getService(ref2);
+		
+		catList = new ArrayList<Category>();
 		files = new ArrayList<File>();
 		currentFile = null;
 	}
@@ -111,6 +125,7 @@ public class TaskView implements PidescoView {
 		
 		createComboBox(viewArea);
 		createTable(viewArea);
+//		createCategories();
 		
 		try {
 			commentReader();
@@ -161,7 +176,9 @@ public class TaskView implements PidescoView {
 			public boolean visit(LineComment node) {
 				
 				String tmp = fileText.substring(node.getStartPosition(), node.getStartPosition() + node.getLength());
-				if(tmp.substring(2, 6).equals("TODO")){
+//				if(tmp.substring(2, 6).equals("TODO")){
+				String[] split = tmp.split(" ");
+				if(!split[0].equals("//")){
 					
 					item = new TableItem(table, SWT.SIMPLE);
 					
@@ -170,6 +187,7 @@ public class TaskView implements PidescoView {
 					item.setText(3, tmp.substring(7));
 					item.setText(4, "Category");
 					item.setText(5, "Priority");
+				} else{
 				}
 		        return true;
 			}
@@ -314,6 +332,34 @@ public class TaskView implements PidescoView {
 			}
 		});
 		
+	}
+	
+	private void createCategories(){
+		IExtensionRegistry reg = Platform.getExtensionRegistry();
+		
+		for(IExtension ext : reg.getExtensionPoint(CATEGORY_ID).getExtensions()){
+			
+			for(IConfigurationElement member : ext.getConfigurationElements()){
+				Image img = null;
+				Color c = null;
+				
+				String tag = member.getAttribute("tag");
+				String name = member.getAttribute("name");
+				String icon = member.getAttribute("icon");
+				if(icon != null){
+					Image i = pidescoServices.getImageFromPlugin(ext.getContributor().getName(), icon);
+					if(i != null){
+						img = i;
+					}
+				}
+				String[] color = member.getAttribute("color").split(",");
+				c = new Color(null, Integer.parseInt(color[0]), Integer.parseInt(color[1]), Integer.parseInt(color[2]));
+				
+				Category cat = new Category(tag, name, img, c);
+				catList.add(cat);
+			}
+			
+		}
 	}
 	
 }
