@@ -24,8 +24,10 @@ public class EquationFinder {
 		Scanner s = new Scanner(file);
 		while(s.hasNext()){
 			String line = s.nextLine();
-			if(line.contains("/") || line.contains("Math.sqrt") || line.contains("Math.pow") || line.contains("*"))
+			if(line.contains("/") || line.contains("Math.sqrt") || line.contains("Math.pow") || line.contains("*")){
+				new HighlighterCode().getStyledText(line);
 				equations.put(delimitateLine(removeA(frac(line))),lines);
+			}
 			lines++;
 		}
 		s.close();
@@ -117,5 +119,6 @@ public class EquationFinder {
 		return str;
 			
 	}
+	
 
 }
