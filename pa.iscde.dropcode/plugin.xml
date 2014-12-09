@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="dropbars" name="dropbars" schema="schema/dropbars.exsd"/>
+   <extension-point id="dropbutton" name="Drop Button" schema="schema/dropbutton.exsd"/>
    <extension
          id="dropcode"
          name="DropCode"
