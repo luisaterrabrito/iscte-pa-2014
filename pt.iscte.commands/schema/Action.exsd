@@ -58,14 +58,14 @@
          <attribute name="label" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  This field will be the button label
                </documentation>
             </annotation>
          </attribute>
          <attribute name="Class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  This field will be the action listener in the button
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":pa.iscde.commands.internal.services.Action"/>
