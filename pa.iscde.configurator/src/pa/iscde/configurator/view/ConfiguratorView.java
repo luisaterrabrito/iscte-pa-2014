@@ -5,9 +5,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
@@ -29,11 +35,13 @@ import org.eclipse.zest.core.widgets.ZestStyles;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 
+import pa.iscde.configurator.ConfiguratorExtensionPoint;
 import pa.iscde.configurator.controller.Controller;
 import pa.iscde.configurator.model.Component;
 import pa.iscde.configurator.model.Dependency;
 import pa.iscde.configurator.model.interfaces.PropertyProvider;
 import pa.iscde.configurator.model.interfaces.PropertyProviderImpl;
+import pt.iscte.pidesco.extensibility.PidescoExtensionPoint;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
 public class ConfiguratorView implements PidescoView{
@@ -50,7 +58,7 @@ public class ConfiguratorView implements PidescoView{
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		Display display = viewArea.getDisplay();
-		Color white = new Color(display, 255,255,255);
+		final Color white = new Color(display, 255,255,255);
 		// TODO Auto-generated method stub
 		
 		
@@ -60,7 +68,6 @@ public class ConfiguratorView implements PidescoView{
 		Composite comp = new Composite(scroll, SWT.NONE);
 		comp.setLayout(new GridLayout(1, false));
 		comp.setBackground(white);
-		
 		
 		componentNode=new HashMap<Component, GraphNode>();
 		dependencyConnection=new HashMap<Dependency, GraphConnection>();
@@ -72,34 +79,55 @@ public class ConfiguratorView implements PidescoView{
 		dependencies = controller.getDependencies(runningComponents);
 		paintGivenDependencies();
 		
-		
-		
-		PropertyProviderImpl ppi = new PropertyProviderImpl();
-		
-		
-		Table table = new Table(comp, SWT.BORDER | SWT.V_SCROLL
-		        | SWT.H_SCROLL);
-		    table.setHeaderVisible(true);
-		    String[] titles = { "Propriedades", "Descrição" };
-		    
-		    for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
-		        TableColumn column = new TableColumn(table, SWT.NULL);
-		        column.setText(titles[loopIndex]);
-		      }
-		    
-		    for (String string :ppi.getProperties() ) {
-		    	TableItem item = new TableItem(table, SWT.NULL);
-		    	item.setText(string);
-		    	item.setText(0,string);
-		    	item.setText(1,ppi.getValue(string));
+		graph.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+				System.out.println(((Graph) e.widget).getSelection());
+				
 			}
-		    
-		      for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
-		        table.getColumn(loopIndex).pack();
-		      }
-		      
-		table.setBounds(25, 25, 220, 200);
-		table.setLayoutData(new GridData(600,150 ));
+
+		});
+		
+		for(IExtension viewExtension :ConfiguratorExtensionPoint.PROPERTYPROVIDER.getExtensions()) {
+			String pluginId = viewExtension.getContributor().getName();
+			String viewId = viewExtension.getUniqueIdentifier();
+			String viewTitle = viewExtension.getLabel();
+			
+			try {
+				PropertyProvider ppi = (PropertyProvider) viewExtension.getConfigurationElements()[0].createExecutableExtension("class");
+				Table table = new Table(comp, SWT.BORDER | SWT.V_SCROLL
+				        | SWT.H_SCROLL);
+				    table.setHeaderVisible(true);
+				    String[] titles = { "Propriedades", "Descrição" };
+				    
+				    for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
+				        TableColumn column = new TableColumn(table, SWT.NULL);
+				        column.setText(titles[loopIndex]);
+				      }
+				    
+				    for (String string :ppi.getProperties() ) {
+				    	TableItem item = new TableItem(table, SWT.NULL);
+				    	item.setText(string);
+				    	item.setText(0,string);
+				    	item.setText(1,ppi.getValue(string));
+					}
+				    
+				      for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
+				        table.getColumn(loopIndex).pack();
+				      }
+				      
+				table.setBounds(25, 25, 220, 200);
+				table.setLayoutData(new GridData(600,150 ));
+			} catch (InvalidRegistryObjectException | CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	/*	PropertyProviderImpl ppi = new PropertyProviderImpl();
+		
+		
+		*/
 		
 		    
 		scroll.setContent(comp);

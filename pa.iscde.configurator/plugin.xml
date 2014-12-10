@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="propertyProvider" name="Property Provider" schema="schema/propertyProvider.exsd"/>
+   <extension-point id="propertyprovider" name="Property Provider" schema="schema/propertyProvider.exsd"/>
    <extension
          id="idConfigurator"
          name="Configurator"
@@ -26,7 +26,9 @@
       </view>
    </extension>
    <extension
-         point="pa.iscde.configurator.propertyProvider">
+         id="propertyprovider"
+         name="Property Provider"
+         point="pa.iscde.configurator.propertyprovider">
       <provider
             class="pa.iscde.configurator.model.interfaces.PropertyProviderImpl">
          <view
