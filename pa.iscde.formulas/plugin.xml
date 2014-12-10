@@ -3,6 +3,7 @@
 <plugin>
    <extension-point id="createformula" name="Create Formula" schema="schema/createformula.exsd"/>
    <extension-point id="createcategory" name="Create Category" schema="schema/createcategory.exsd"/>
+   <extension-point id="newEquationToDraw" name="NewEquationToDraw" schema="schema/newEquationToDraw.exsd"/>
    <extension
          id="formulas"
          name="Formulas Team"
@@ -75,6 +76,12 @@
             Category="Statistic"
             addformula="pa.iscde.formulas.view.Teste">
       </NewFormula>
+   </extension>
+   <extension
+         point="pa.iscde.formulas.newEquationToDraw">
+      <newOperation
+            newOperation="pa.iscde.formulas.view.TesteDraw">
+      </newOperation>
    </extension> 
 
 </plugin>

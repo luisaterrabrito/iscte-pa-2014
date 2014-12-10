@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -32,7 +33,6 @@ public class EquationFinder {
 	char aux2 = '+';
 	
 	private Multimap<String,Integer> equations = ArrayListMultimap.create();
-	private DrawEquationsProvider drawEquationsProvider;
 	private ArrayList<JavaToLatexFormat> newLatexOperations;
 	
 	/**
@@ -40,25 +40,19 @@ public class EquationFinder {
 	 * @throws FileNotFoundException
 	 */
 	public EquationFinder(File file) throws FileNotFoundException {
-		analyseFile(file);
-		
+		newLatexOperations = new ArrayList<JavaToLatexFormat>();
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
 		for(IExtension ext : reg.getExtensionPoint("pa.iscde.formulas.newEquationToDraw").getExtensions()) {
 			for(IConfigurationElement newEquationToDraw : ext.getConfigurationElements()) {
-				final String javaOperation = newEquationToDraw.getAttribute("javaOperation");
-				final String operationLatexFormat = newEquationToDraw.getAttribute("operationLatexFormat");
-				
-				drawEquationsProvider= new DrawEquationsProvider() {
-					
-					@Override
-					public void newEquationToDraw(String javaOperation,
-							String operationLatexFormat) {
-						
-					}
-				};
+				try {
+					DrawEquationsProvider drawProviders = (DrawEquationsProvider) newEquationToDraw.createExecutableExtension("newOperation");
+					newLatexOperations.add(new JavaToLatexFormat(drawProviders.setJavaOperation(), drawProviders.setOperationLatexFormat()));
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		
+		analyseFile(file);
 	}
 
 	private void analyseFile(File file) throws FileNotFoundException {
@@ -66,8 +60,12 @@ public class EquationFinder {
 		Scanner s = new Scanner(file);
 		while(s.hasNext()){
 			String line = s.nextLine();
+			for (JavaToLatexFormat javaToLatexFormat : newLatexOperations) {
+				if(line.contains(javaToLatexFormat.getJavaOperation())){
+					equations.put(transformJavaLatext(delimitateLine(removeA(frac(line))),javaToLatexFormat.getJavaOperation(),javaToLatexFormat.getOperationLatexFormat()),lines);
+				}
+			}
 			if(line.contains("/") || line.contains("Math.sqrt") || line.contains("Math.pow") || line.contains("*")){
-				new HighlighterCode().getStyledText(line);
 				equations.put(delimitateLine(removeA(frac(line))),lines);
 			}
 			lines++;
@@ -118,6 +116,10 @@ public class EquationFinder {
 			result = convertPow(line);
 		}
 		return result;
+	}
+	
+	private String transformJavaLatext(String line, String java , String latex){
+		return line.replace(java, latex);
 	}
 
 	private String convertPow(String line) {

@@ -359,9 +359,6 @@ public class FormulasView implements PidescoView {
 			label.setImage(formulaImage.getImage());
 			formulasBoard.put(label,text);
 		}
-		String teste = "asdasdasdasd";
-		new HighlighterCode().getStyledText(teste);
-		javaeditor.insertLine(javaeditor.getOpenedFile(), teste, 1);
 		viewArea.pack();
 	}
 

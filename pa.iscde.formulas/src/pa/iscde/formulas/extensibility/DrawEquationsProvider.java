@@ -7,6 +7,8 @@ package pa.iscde.formulas.extensibility;
  */
 public interface DrawEquationsProvider {
 	
-	public void newEquationToDraw(String javaOperation, String operationLatexFormat);
+	public String setJavaOperation();
+	
+	public String setOperationLatexFormat();
 
 }
