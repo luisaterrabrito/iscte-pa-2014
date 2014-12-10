@@ -4,23 +4,28 @@ import java.util.ArrayList;
 
 import org.eclipse.zest.core.widgets.GraphNode;
 
+import pa.iscde.umldiagram.UmlTheme.ClassType;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 
 public class Node {
 	private GraphNode node;
-	private String name;
+	private String name="";
 	private SourceElement sourceElement;
 	private ArrayList<String> fields = new ArrayList<String>();
 	private ArrayList<String> classInstances = new ArrayList<String>();
 	private String superC= new String(" ");
 	private ArrayList<String> implementClasses = new ArrayList<String>();
+	private ClassType type;
 	
 	public ArrayList<String> getClassInstances() {
 		return classInstances;
 	}
 
+	public ClassType getType() {
+		return type;
+	}
+
 	public Node(GraphNode node, String name, SourceElement sourceElement) {
-		super();
 		this.node = node;
 		this.name = name;
 		this.sourceElement = sourceElement;
@@ -62,6 +67,11 @@ public class Node {
 
 	public String getSuperC() {
 		return superC;
+	}
+
+	public void setType(ClassType type) {
+		this.type=type;
+		
 	}
 
 	
