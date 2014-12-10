@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="conventionservice" name="Convention Service" schema="schema/conventionservice.exsd"/>
+   <extension-point id="filterbymodifier" name="Filter by Modifier" schema="schema/filterbymodifier.exsd"/>
    <extension
          id="Convetions"
          name="Code Coventions"
@@ -29,6 +30,12 @@
       <conventionservice
             class="pa.iscde.conventions.teste">
       </conventionservice>
+   </extension>
+   <extension
+         point="pa.iscde.conventions.filterbymodifier">
+      <filterbymodifier
+            filterbymodifier="pa.iscde.conventions.testeMetodo">
+      </filterbymodifier>
    </extension>
 
 </plugin>
