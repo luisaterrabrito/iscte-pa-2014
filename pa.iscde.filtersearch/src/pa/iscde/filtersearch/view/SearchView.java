@@ -15,13 +15,10 @@ import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.TextStyle;
@@ -36,6 +33,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import pa.iscde.filtersearch.providers.SearchProvider;
+import pa.iscde.filtersearch.providers.ViewContentProvider;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
 
@@ -72,11 +70,11 @@ public class SearchView implements PidescoView {
 		IExtensionPoint extensionPoint = reg.getExtensionPoint("pa.iscde.filtersearch.SearchProvider");
 		IExtension[] extensions = extensionPoint.getExtensions();
 
+		SearchProvider p = null;
+		String iconName = null;
+		
 		for(IExtension ext : extensions){
 			for(IConfigurationElement configurationElement : ext.getConfigurationElements()){
-
-				SearchProvider p = null;
-				String iconName = null;
 
 				try {
 					p = (SearchProvider) configurationElement.createExecutableExtension("className");
@@ -86,8 +84,6 @@ public class SearchView implements PidescoView {
 				}
 				providers.add(p);
 				providerAndImageMap.put(p, iconName);
-
-				System.out.println(iconName);
 			}
 		}
 	}
@@ -216,6 +212,10 @@ public class SearchView implements PidescoView {
 		tree.expandAll();
 	}
 
+	
+	
+	
+	
 
 	/**
 	 *  ##########################################
@@ -225,39 +225,12 @@ public class SearchView implements PidescoView {
 
 
 	/**
-	 * Uma SearchCategory vai corresponder a nada mais nada menos que um projecto que implemente a interface SearchProvider.
-	 * 
-	 * @authors LuisMurilhas & DavidAlmas
-	 */
-
-	class SearchCategory {
-		String name;
-		Image icon;
-		List<Object> hits = new ArrayList<>();
-
-		SearchCategory(String name, Image icon) {
-			this.name = name;
-			this.icon = icon;
-		}
-
-		@Override
-		public String toString() {
-			return name; 
-		}
-
-		public Image getIcon(){
-			return icon;
-		}
-	}
-
-
-	/**
 	 * Classe onde é definido que elementos gráficos devem aparecer no plugin, tais como os ícones de cada componente da árvore.
 	 * É também responsável pelo desenho do efeito highlight nos resultados de pesquisa, consoante o texto de entrada.
 	 * 
 	 * @authors LuisMurilhas & DavidAlmas
 	 */
-	class ViewLabelProvider implements DelegatingStyledCellLabelProvider.IStyledLabelProvider{
+	public class ViewLabelProvider implements DelegatingStyledCellLabelProvider.IStyledLabelProvider{
 
 
 		/**
@@ -320,46 +293,6 @@ public class SearchView implements PidescoView {
 		public void removeListener(ILabelProviderListener listener) {
 		}
 	}	
-
-
-	/**
-	 * Classe onde são definidos os elementos que vão aparecer nos resultados
-	 * 
-	 * @authors LuisMurilhas & DavidAlmas
-	 */
-	private static class ViewContentProvider implements IStructuredContentProvider, ITreeContentProvider {
-
-		@SuppressWarnings("unchecked")
-		public Object[] getElements(Object input) {
-			List<SearchCategory> categories = (List<SearchCategory>) input;
-			return categories.toArray();
-
-		}
-
-		public Object getParent(Object child) {
-			// SearchCategory cat = (SearchCategory) child;
-			return null;
-		}
-
-		public Object[] getChildren(Object parent) {
-			SearchCategory cat = (SearchCategory) parent;
-			return cat.hits.toArray();
-		}
-
-		public boolean hasChildren(Object parent) {
-			if(!(parent instanceof SearchCategory))
-				return false;
-
-			SearchCategory cat = (SearchCategory) parent;
-			return !cat.hits.isEmpty();
-		}
-
-		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-		}
-
-		public void dispose() {
-		}
-	}
 
 	/**
 	 * Classe responsável por definir o estido do highlight 

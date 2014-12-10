@@ -1,4 +1,4 @@
-package pa.iscde.filtersearch.view;
+package pa.iscde.filtersearch.providers;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,8 +11,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-import pa.iscde.filtersearch.providers.SearchProvider;
-import pa.iscde.filtersearch.view.SearchView.SearchCategory;
+import pa.iscde.filtersearch.view.SearchCategory;
 import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.ClassElement;
