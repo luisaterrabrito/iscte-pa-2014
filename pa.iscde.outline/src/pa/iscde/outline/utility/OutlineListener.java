@@ -1,10 +1,19 @@
 package pa.iscde.outline.utility;
 
-import java.io.File;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 public interface OutlineListener {
 
-	ASTNode getSelectedNode();
+	void itemSelected(ASTNode node);
+	
+	public class Adapter implements OutlineListener {
+
+		@Override
+		public void itemSelected(ASTNode node) {
+			
+		}
+
+		
+	}
 
 }
