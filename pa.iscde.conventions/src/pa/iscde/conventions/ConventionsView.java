@@ -186,8 +186,8 @@ public class ConventionsView implements PidescoView {
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				if(checkBoxMethod.getSelection()){
-					verificarLetraMetodo(javaServices.getOpenedFile());
-					verificaTamanhoMetodo(javaServices.getOpenedFile());
+					verificarMetodo(javaServices.getOpenedFile());
+//					verificaTamanhoMetodo(javaServices.getOpenedFile());
 				}
 			}
 		});
@@ -275,7 +275,7 @@ public class ConventionsView implements PidescoView {
 		javaServices.parseFile(f, v);
 	}
 
-	private void verificarLetraMetodo(final File f) {
+	private void verificarMetodo(final File f) {
 		ASTVisitor v = new ASTVisitor() {
 			@Override
 			public boolean visit(MethodDeclaration node) {
@@ -283,34 +283,15 @@ public class ConventionsView implements PidescoView {
 					String id = node.getName().getFullyQualifiedName();
 					
 					for(ConventionService s : lista){
-					if(s.verificarConvencao(id, TypeOf.METHOD).getCondition()){
+					
+						if(s.verificarConvencao(id, TypeOf.METHOD).getCondition()){
 						javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
 					}
-					}
-				}
-				return true;
-			}
-
-		};
-
-		javaServices.parseFile(f, v);
-	}
-
-	private void verificaTamanhoMetodo(final File f) {
-		ASTVisitor v = new ASTVisitor() {
-			@Override
-			public boolean visit(MethodDeclaration node) {
-				
-				
-				
-				String id = node.getName().getFullyQualifiedName();
-				
-				for(ConventionService s : lista){
-				if(!node.isConstructor()){
-					if(s.verificarConvencao(id, TypeOf.METHOD).getCondition()){
+					
+						if(s.verificarConvencao(id, TypeOf.METHOD).getCondition()){
 						javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(),  node.getName().getLength());
 					}
-				}
+					}
 				}
 				return true;
 			}
@@ -319,6 +300,30 @@ public class ConventionsView implements PidescoView {
 
 		javaServices.parseFile(f, v);
 	}
+
+//	private void verificaTamanhoMetodo(final File f) {
+//		ASTVisitor v = new ASTVisitor() {
+//			@Override
+//			public boolean visit(MethodDeclaration node) {
+//				
+//				
+//				
+//				String id = node.getName().getFullyQualifiedName();
+//				
+//				for(ConventionService s : lista){
+//				if(!node.isConstructor()){
+//					if(s.verificarConvencao(id, TypeOf.METHOD).getCondition()){
+//						javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(),  node.getName().getLength());
+//					}
+//				}
+//				}
+//				return true;
+//			}
+//
+//		};
+//
+//		javaServices.parseFile(f, v);
+//	}
 
 	private void verificaConstantes(final File f) {
 		ASTVisitor v = new ASTVisitor() {
