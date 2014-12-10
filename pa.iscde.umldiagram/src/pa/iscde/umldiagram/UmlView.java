@@ -5,6 +5,7 @@ package pa.iscde.umldiagram;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +34,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import pa.iscde.umldiagram.UmlTheme.ClassType;
 import pa.iscde.umldiagram.utils.UmlVisitor;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
@@ -50,29 +52,73 @@ public class UmlView implements PidescoView {
 	private ServiceReference<JavaEditorServices> ref = context.getServiceReference(JavaEditorServices.class);
 	private JavaEditorServices javaServices = context.getService(ref);
 	private ArrayList<Node> nodes = new ArrayList<Node>();
-	private HashMap<String, UmlTheme> themes = new HashMap<String, UmlTheme>();
+	private HashMap<String, ChangeTheme> themes = new HashMap<String, ChangeTheme>();
 	
 	 
 	public UmlView() {
 		umlView = this;
+	}
+	
+	/*
+	 * class auxiliar para implementar os pontos de extensão
+	 */
+	public static class ChangeTheme{
+		private UmlTheme cTheme;
+		
+		public ChangeTheme(UmlTheme cTheme){
+			this.cTheme=cTheme;
+		}
+		
+		public Color getColor(String className){
+			return cTheme.getColor(className);
+		}
+
+		public UmlTheme getTheme() {
+			return cTheme;
+		}
 	}
 
 	@Override
 	public void createContents(Composite umlArea, Map<String, Image> imageMap) {
 		umlGraph = new Graph(umlArea, SWT.NONE);
 		loadColorThemeExtensions();
-		//UMLClassFigure f = new UMLClassFigure("COCO");
-		//GraphNode node = new GraphNode(umlGraph, SWT.NONE);
-		
 		Menu menu = new Menu(umlGraph);
-		MenuItem item = new MenuItem(menu, SWT.PUSH);
-		item.setText("Change Theme");
-		item.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				System.out.println("menu");
-			}
-		});
+		Iterator it = themes.entrySet().iterator();
+		MenuItem item=null;
+	    while (it.hasNext()) {
+	        Map.Entry name = (Map.Entry)it.next();
+	        item = new MenuItem(menu, SWT.PUSH);
+			item.setText(name.getKey().toString());
+	        item.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					MenuItem aux = (MenuItem)e.getSource();
+					ChangeTheme cTheme = themes.get(aux.getText());
+						if(cTheme!=null){
+							for (Node n : nodes) {
+								if(cTheme.getTheme().getClassName()!=null){
+									if(n.getName().equals(cTheme.getTheme().getClassName())){
+										Color color = cTheme.getColor(cTheme.getTheme().getClassName());
+										if(color!=null){
+											n.getNode().setBackgroundColor(color);
+										}
+									}
+								}
+								if(cTheme.getTheme().getClassType()!=null){
+									if(n.getType() == cTheme.getTheme().getClassType()){
+										Color color = cTheme.getTheme().getTypeColor(cTheme.getTheme().getClassType());
+										if(color!=null){
+											n.getNode().setBackgroundColor(color);
+										}
+									}
+									
+								}
+							}
+					}
+				}
+			});
+	    }
+		
 		umlGraph.setMenu(menu);
 	}
 
@@ -89,7 +135,7 @@ public class UmlView implements PidescoView {
 				IConfigurationElement element = ext.getConfigurationElements()[0];
 				try {
 					UmlTheme t = (UmlTheme) element.createExecutableExtension("class");
-					themes.put(name, t);
+					themes.put(name, new ChangeTheme(t));
 				} catch (CoreException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -140,7 +186,7 @@ public class UmlView implements PidescoView {
 					}
 				}
 				if(node1.getSuperC()!=null){
-					if(node1 != node2 && node1.getSuperC().equals(node2.getName())){
+					if(node1.getSuperC().equals(node2.getName())){
 						GraphConnection c = new GraphConnection(umlGraph, ZestStyles.CONNECTIONS_DIRECTED, node1.getNode(), node2.getNode());
 						c.setText("extends");
 					}
@@ -184,6 +230,15 @@ public class UmlView implements PidescoView {
 		//node.setText("Class "+classes.getName().replace(".java", "")+"\n");
 		Node n = new Node(node, cName, classes);
 		//if(themes.containsValue(null)){
+		if(prefix.contains("<enum>")){
+			n.setType(ClassType.ENUM);
+		}else{
+			if(prefix.contains("<interface")){
+				n.setType(ClassType.INTERFACE);
+			}else{
+				n.setType(ClassType.CLASS);
+			}
+		}
 		
 			//figure.setBackgroundColor(themes.get(null).getColor(cName.getClass()));
 		//}

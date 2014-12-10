@@ -32,7 +32,8 @@
          name="Default"
          point="pa.iscde.umldiagram.colortheme">
       <theme
-            class="pa.iscde.umldiagram.extentionpoint.Default">
+            class="pa.iscde.umldiagram.extentionpoint.Default"
+            className="UmlTheme">
       </theme>
    </extension>
 
