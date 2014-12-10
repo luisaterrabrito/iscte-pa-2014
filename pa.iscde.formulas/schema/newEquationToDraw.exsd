@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="newequationtodraw"/>
+            <element ref="newOperation"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,9 +47,9 @@
       </complexType>
    </element>
 
-   <element name="newequationtodraw">
+   <element name="newOperation">
       <complexType>
-         <attribute name="class" type="string" use="required">
+         <attribute name="newOperation" type="string" use="required">
             <annotation>
                <documentation>
                   
