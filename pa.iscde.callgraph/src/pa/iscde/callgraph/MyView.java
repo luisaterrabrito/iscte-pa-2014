@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
@@ -73,7 +74,7 @@ public class MyView implements PidescoView {
 	private Graph graph;
 	private static MyView instance;
 	private Combo cmbPluginsList;
-	
+	public Image callGraphIcon;
 	private MethodDeclaration currentMethod;
 	private ArrayList<MethodDeclaration> aboveMethods;
 	private ArrayList<MethodInvocation> belowMethods;
@@ -158,6 +159,7 @@ public class MyView implements PidescoView {
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		instance = this;
+		System.out.println(callGraphIcon);
 		this.viewArea = viewArea;
 		layouts = new HashMap<String, LayoutAlgorithm>();
 		exportButtons = new HashMap<String, ExportButton>();
@@ -447,6 +449,10 @@ public class MyView implements PidescoView {
 		for (int j = 0; j < objects.length; j++) {
 			((GraphNode) objects[j]).dispose();
 		}
+	}
+
+	public void selectMethod(ASTNode node) {
+		
 	}	
 
 }

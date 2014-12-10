@@ -12,10 +12,12 @@ Require-Bundle: pa.iscde;bundle-version="0.1.0",
  org.eclipse.zest.core;bundle-version="1.5.100",
  org.eclipse.zest.doc.isv;bundle-version="1.5.100",
  org.eclipse.zest.layouts;bundle-version="1.1.100"
-Import-Package: org.eclipse.jdt.core.compiler,
+Import-Package: extensibility,
+ org.eclipse.jdt.core.compiler,
  org.eclipse.swt.widgets,
  org.eclipse.ui.part,
  org.osgi.framework,
+ pa.iscde.dropcode.services,
  pt.iscte.pidesco.javaeditor.service,
  pt.iscte.pidesco.projectbrowser.model,
  pt.iscte.pidesco.projectbrowser.service

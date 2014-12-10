@@ -6,7 +6,7 @@
          <meta.schema plugin="pa.iscde.callgraph" id="customLayoutProvider" name="Custom Layout"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension allows you to provide your own customized layout to Call Graph viewer.
       </documentation>
    </annotation>
 
@@ -74,7 +74,7 @@
          <meta.section type="since"/>
       </appinfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         09/12/2014
       </documentation>
    </annotation>
 
@@ -83,7 +83,13 @@
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         [Enter extension point usage example here.]
+         @Override
+public LayoutAlgorithm getCustomLayout() {
+	SpringLayoutAlgorithm layout = new SpringLayoutAlgorithm?(); 
+	layout.setEntityAspectRatio(3.0); 	
+	layout.setStyle(2); 
+	return layout;
+}
       </documentation>
    </annotation>
 
@@ -92,7 +98,7 @@
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         [Enter API information here.]
+         You will need to implement CustomLayout, and override the method getCustomLayout() and return a LayoutAlgorithm object. This object can be processed as you want.
       </documentation>
    </annotation>
 

@@ -21,5 +21,11 @@
             user="callgraph">
       </member>
    </extension>
+   <extension
+         point="pa.iscde.dropcode.dropbutton">
+      <dropbutton
+            class="pa.iscde.callgraph.dropcodeextension.dropcodeExtension">
+      </dropbutton>
+   </extension>
 
 </plugin>

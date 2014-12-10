@@ -6,7 +6,7 @@
          <meta.schema plugin="pa.iscde.callgraph" id="exportAsProvider" name="Export CallGraph"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension allows you to receive the Call Graph diagram structure and process it as you want.
       </documentation>
    </annotation>
 
@@ -74,7 +74,7 @@
          <meta.section type="since"/>
       </appinfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         09/12/2014
       </documentation>
    </annotation>
 
@@ -83,7 +83,25 @@
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         [Enter extension point usage example here.]
+         public void export(MethodDeclaration selectedMethod,
+			ArrayList&lt;MethodDeclaration&gt; aboveMethods,
+			ArrayList&lt;MethodInvocation&gt; belowMethods, Display display) {
+		System.out.println(&quot;sou o plugin: &quot; + &quot;Metodo: &quot; + selectedMethod);
+		for (MethodDeclaration methodDeclaration : aboveMethods) {
+			System.out.println(&quot;MD:&quot; + methodDeclaration.getName().toString());
+		}
+		
+		for (MethodInvocation methodInvocation : belowMethods) {
+			System.out.println(&quot;MI: &quot; + methodInvocation.getName().toString());
+		}
+		
+		
+		Shell shell = new Shell(display);
+		shell.setMinimumSize(200, 50);
+		shell.setText(&quot;Plugin janela&quot;);
+		shell.pack();
+		shell.open();
+	}
       </documentation>
    </annotation>
 
@@ -92,7 +110,7 @@
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         [Enter API information here.]
+         You will need to implement ExportButton and override the export(Method, List, List) method. The display object can be useful if you need to create a new window (browse, for example). The Call Graph structure is explained in the javadoc documentation.
       </documentation>
    </annotation>
 
