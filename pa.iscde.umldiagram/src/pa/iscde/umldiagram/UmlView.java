@@ -1,20 +1,28 @@
 package pa.iscde.umldiagram;
 
 
-import java.awt.Color;
-import java.awt.Font;
-import java.lang.reflect.Modifier;
+	
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Widget;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.zest.core.widgets.CGraphNode;
 import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.core.widgets.GraphConnection;
@@ -30,7 +38,6 @@ import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
-import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 /**
  * @author Nuno e Diogo
@@ -43,6 +50,8 @@ public class UmlView implements PidescoView {
 	private ServiceReference<JavaEditorServices> ref = context.getServiceReference(JavaEditorServices.class);
 	private JavaEditorServices javaServices = context.getService(ref);
 	private ArrayList<Node> nodes = new ArrayList<Node>();
+	private HashMap<String, UmlTheme> themes = new HashMap<String, UmlTheme>();
+	
 	 
 	public UmlView() {
 		umlView = this;
@@ -51,17 +60,43 @@ public class UmlView implements PidescoView {
 	@Override
 	public void createContents(Composite umlArea, Map<String, Image> imageMap) {
 		umlGraph = new Graph(umlArea, SWT.NONE);
-		
+		loadColorThemeExtensions();
 		//UMLClassFigure f = new UMLClassFigure("COCO");
 		//GraphNode node = new GraphNode(umlGraph, SWT.NONE);
 		
-		
+		Menu menu = new Menu(umlGraph);
+		MenuItem item = new MenuItem(menu, SWT.PUSH);
+		item.setText("tr");
+		item.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				System.out.println("menu");
+			}
+		});
+		umlGraph.setMenu(menu);
 	}
 
 	public static UmlView getInstance() {
 		return umlView;
 	}
 
+	private void loadColorThemeExtensions() {
+		IExtensionRegistry reg = Platform.getExtensionRegistry();
+		for(IExtension ext : reg.getExtensionPoint("pa.iscde.umldiagram.colortheme").getExtensions()) {
+			String name = ext.getLabel();
+			System.out.println(name);
+			if(ext.getConfigurationElements().length>0){
+				IConfigurationElement element = ext.getConfigurationElements()[0];
+				try {
+					UmlTheme t = (UmlTheme) element.createExecutableExtension("class");
+					themes.put(name, t);
+				} catch (CoreException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	/**
 	 * this is a recursive function, that draws the UML of all the classes of a selected package
 	 * @param selection = element selected on the project browser
@@ -104,43 +139,48 @@ public class UmlView implements PidescoView {
 						new GraphConnection(umlGraph, ZestStyles.CONNECTIONS_DIRECTED, node1.getNode(), node2.getNode());
 					}
 				}
-				//ver
-				sdwef
-				if(node1.getClass().isInstance(node2.getClass()) && node1 != node2 && node1.isSuper()){
-					System.out.println(node1.getName()+"-"+node2.getName());
-					new GraphConnection(umlGraph, ZestStyles.NODES_FISHEYE, node1.getNode(), node2.getNode());
+				if(node1.getSuperC()!=null){
+					if(node1 != node2 && node1.getSuperC().equals(node2.getName())){
+						GraphConnection c = new GraphConnection(umlGraph, ZestStyles.CONNECTIONS_DIRECTED, node1.getNode(), node2.getNode());
+						c.setText("extends");
+					}
 				}
-				//if(node1.getNode().getText().contains(node2.getName()) && node1!=node2)
+				
 			}
 		}
 	}
 
 	private synchronized void paintNode(SourceElement classes) {
-		if(classes.getFile().getClass().isInterface()==true){
-			System.out.println("LOOOL");
-		}
 		UmlVisitor visitor = new UmlVisitor();
 		javaServices.parseFile(classes.getFile(), visitor);
-		if(!visitor.getEnums().isEmpty()){
-			paintEnum(visitor);
-		}else{
-			paintClass(classes, visitor);
-		}
+		paintClass(classes, visitor);
+		
 		
 	}
 	
 	private void paintClass(SourceElement classes, UmlVisitor visitor) {
-		String prefix = "Class ";
-		if(visitor.isSuperClass()) {
-			prefix = "Abstract "+prefix;
+		String prefix = "";
+		String cName = classes.getName().replace(".java", "");
+		if(visitor.isInterface()) {
+			prefix = "<interface> ";
 		}
-		UMLClassFigure figure = new UMLClassFigure(prefix+classes.getName().replace(".java", ""));
+		for (EnumDeclaration e: visitor.getEnums()) {
+			if(e.getName().toString().equals(cName)){
+				prefix = "<enum> ";
+			}
+		}
+		UMLClassFigure figure = new UMLClassFigure(prefix+cName);
 		CGraphNode node = new CGraphNode(umlGraph, SWT.NONE, figure);
+		
 		
 		//GraphNode node = new GraphNode(umlGraph, SWT.NONE);
 		//node.setText("Class "+classes.getName().replace(".java", "")+"\n");
-		Node n = new Node(node, classes.getName().replace(".java", ""), classes);
-		if(prefix.contains("Abstract")) n.setSuperClass(true);
+		Node n = new Node(node, cName, classes);
+		//if(themes.containsValue(null)){
+		
+			//figure.setBackgroundColor(themes.get(null).getColor(cName.getClass()));
+		//}
+		
 		nodes.add(n);
 		//node.setText(node.getText()+"---------------------------"+"\n");
 		//for(ClassInstanceCreation ins : )
@@ -167,27 +207,36 @@ public class UmlView implements PidescoView {
 				}
 			}
 		}
-		n.setClassInstances(visitor.getClassInstances());
-	}
-
-	private void paintEnum(UmlVisitor visitor) {
-		UMLClassFigure figure = new UMLClassFigure("Enum "+visitor.getEnums().get(0).getName());
-		CGraphNode node = new CGraphNode(umlGraph, SWT.NONE, figure);
-		figure.addNameMethod(node.getText()+visitor.getEnums().get(0).enumConstants());
-		nodes.add(new Node(node, visitor.getEnums().get(0).getName().toString(), null));
-		figure.drawLine();
-		for (int i = 0; i < visitor.getMethods().size(); i++) {
-			if(!visitor.getMethods().get(i).isConstructor()){
-				if(visitor.getMethods().get(i).getReturnType2()!=null){
-					figure.addNameMethod(visitor.getMethods().get(i).getName()+" :"+visitor.getMethods().get(i).getReturnType2().toString());;
-					
-				}else{
-					figure.addNameMethod(visitor.getMethods().get(i).getName()+" : Void");
-				}
+		
+		for (EnumDeclaration e: visitor.getEnums()) {
+			if(!e.getName().equals(cName)){
+				figure.addNameMethod("enum "+e.getName()+" : "+e.enumConstants());
 			}
 		}
 		
+		n.setClassInstances(visitor.getClassInstances());
+		n.setSuperClass(visitor.getSuperClass());
+		
 	}
+
+//	private void paintEnum(UmlVisitor visitor) {
+//		UMLClassFigure figure = new UMLClassFigure("Enum "+visitor.getEnums().get(0).getName());
+//		CGraphNode node = new CGraphNode(umlGraph, SWT.NONE, figure);
+//		figure.addNameMethod(node.getText()+visitor.getEnums().get(0).enumConstants());
+//		nodes.add(new Node(node, visitor.getEnums().get(0).getName().toString(), null));
+//		figure.drawLine();
+//		for (int i = 0; i < visitor.getMethods().size(); i++) {
+//			if(!visitor.getMethods().get(i).isConstructor()){
+//				if(visitor.getMethods().get(i).getReturnType2()!=null){
+//					figure.addNameMethod(visitor.getMethods().get(i).getName()+" :"+visitor.getMethods().get(i).getReturnType2().toString());;
+//					
+//				}else{
+//					figure.addNameMethod(visitor.getMethods().get(i).getName()+" : Void");
+//				}
+//			}
+//		}
+//		
+//	}
 
 	public synchronized void clearGraph() {
 		nodes.clear();

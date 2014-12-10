@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
 public class UmlVisitor extends ASTVisitor{
 
@@ -22,17 +23,34 @@ public class UmlVisitor extends ASTVisitor{
 	private ArrayList<FieldDeclaration> fields = new ArrayList<FieldDeclaration>();
 	private ArrayList<EnumDeclaration> enums = new ArrayList<EnumDeclaration>();
 	private ArrayList<String> classInstances = new ArrayList<String>();
-	private ArrayList<String> superClass = new ArrayList<String>();
+	private String superClass;
+	private ArrayList<String> implementClasses;
+	private boolean isInterface = false;
 
+
+
+	public String getSuperClass() {
+		return superClass;
+	}
 	
+	@Override
+	public boolean visit(TypeDeclaration node) {
+		if(node.getSuperclassType()!=null){
+			superClass=node.getSuperclassType().toString();
+		}
+		if(node.isInterface()){
+			isInterface=true;
+		}
+		
+		if(node.superInterfaceTypes()!=null)
+			implementClasses = new ArrayList<>(node.superInterfaceTypes());
+		return true;
+	}
 	@Override
 	public boolean visit(MethodDeclaration m) {
 		methods.add(m);
 		return true;
 	}
-
-
-
 
 	@Override
 	public boolean visit(ClassInstanceCreation c) {
@@ -40,26 +58,11 @@ public class UmlVisitor extends ASTVisitor{
 		return true;
 	}
 
-
-
-
 	@Override
 	public boolean visit(EnumDeclaration e) {
 		enums.add(e);
 		return true;
 	}
-
-
-	@Override
-	public boolean visit(Modifier node) {
-		if(node.toString().equals("abstract")){
-			superClass.add(node.toString());
-		}
-		return true;
-	}
-
-
-
 
 	@Override
 	public boolean visit(FieldDeclaration f) {
@@ -79,23 +82,14 @@ public class UmlVisitor extends ASTVisitor{
 		return fields;
 	}
 
-	
-	
-	
-
 	public ArrayList<String> getClassInstances() {
 		return classInstances;
 	}
-
-
-
-
-	public boolean isSuperClass() {
-		if(!superClass.isEmpty()){
-			return true;
-		}else{
-			return false;
-		}
+	public ArrayList<String> getImplementClasses() {
+		return implementClasses;
+	}
+	public boolean isInterface() {
+		return isInterface;
 	}
 
 }
