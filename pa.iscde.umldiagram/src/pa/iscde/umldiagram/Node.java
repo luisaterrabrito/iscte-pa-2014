@@ -13,6 +13,7 @@ public class Node {
 	private ArrayList<String> fields = new ArrayList<String>();
 	private ArrayList<String> classInstances = new ArrayList<String>();
 	private String superC= new String(" ");
+	private ArrayList<String> implementClasses = new ArrayList<String>();
 	
 	public ArrayList<String> getClassInstances() {
 		return classInstances;
@@ -49,7 +50,14 @@ public class Node {
 
 	public void setSuperClass(String string) {
 		this.superC=string;
-		
+	}
+	
+	public void setImplementClasses(ArrayList<String> implementClasses){
+		this.implementClasses=implementClasses;
+	}
+	
+	public ArrayList<String> getImplementClasses() {
+		return implementClasses;
 	}
 
 	public String getSuperC() {

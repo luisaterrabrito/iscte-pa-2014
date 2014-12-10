@@ -66,7 +66,7 @@ public class UmlView implements PidescoView {
 		
 		Menu menu = new Menu(umlGraph);
 		MenuItem item = new MenuItem(menu, SWT.PUSH);
-		item.setText("tr");
+		item.setText("Change Theme");
 		item.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -145,7 +145,14 @@ public class UmlView implements PidescoView {
 						c.setText("extends");
 					}
 				}
-				
+				if(node1.getImplementClasses()!=null){
+					for(String implementedClass : node1.getImplementClasses()){
+						if(implementedClass.equals(node2.getName().toString())){
+							GraphConnection c = new GraphConnection(umlGraph, ZestStyles.CONNECTIONS_DIRECTED, node1.getNode(), node2.getNode());
+							c.setText("implements");
+						}
+					}
+				}
 			}
 		}
 	}
@@ -216,7 +223,7 @@ public class UmlView implements PidescoView {
 		
 		n.setClassInstances(visitor.getClassInstances());
 		n.setSuperClass(visitor.getSuperClass());
-		
+		n.setImplementClasses(visitor.getImplementClasses());
 	}
 
 //	private void paintEnum(UmlVisitor visitor) {
