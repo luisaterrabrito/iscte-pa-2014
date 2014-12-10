@@ -24,7 +24,7 @@ public class UmlVisitor extends ASTVisitor{
 	private ArrayList<EnumDeclaration> enums = new ArrayList<EnumDeclaration>();
 	private ArrayList<String> classInstances = new ArrayList<String>();
 	private String superClass;
-	private ArrayList<String> implementClasses;
+	private ArrayList<String> implementClasses = new ArrayList<String>();
 	private boolean isInterface = false;
 
 
@@ -42,8 +42,13 @@ public class UmlVisitor extends ASTVisitor{
 			isInterface=true;
 		}
 		
-		if(node.superInterfaceTypes()!=null)
-			implementClasses = new ArrayList<>(node.superInterfaceTypes());
+		if(node.superInterfaceTypes()!=null){
+			for (int i = 0; i <node.superInterfaceTypes().size(); i++) {
+				String e = node.superInterfaceTypes().get(i).toString();
+				implementClasses.add(e);
+			}
+				
+		}
 		return true;
 	}
 	@Override
@@ -91,5 +96,7 @@ public class UmlVisitor extends ASTVisitor{
 	public boolean isInterface() {
 		return isInterface;
 	}
+	
+	
 
 }
