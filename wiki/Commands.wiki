@@ -1,11 +1,44 @@
-#summary pa.iscde.commands.action
+#summary pa.iscde.commands.command
+#labels Featured,Phase-Implementation,Phase-Deploy
 
 = Introduction =
 
-This point extension  will allow you to add actions to manipulate existing commands in the command view.
+Details for using the Command Extension Point, configure and use your own command implementation and binding!
 
-To use this extension point you must indicate a button label and *create a class that implements the Action interface*.
 
-This interface contains an action method in which is called whenever the button is pressed.
+= Details =
 
-In order to allow you to manipulate Commands, use the CommandDataAdaptor which contains in the main functions that can be use on the Commands View.
+<p>This extension point allows you to configure your OWN commands</p>
+
+<p>It's easly implemented, you just need to configure four different things:</p>
+
+<b><p>1 - You need to choose where the command applies to</p></b>
+
+<p>When adding a command you need to choose between the following type of contexts</p>
+<p>1.1 - Editor [The command will apply only to the Editor itself]</p>
+<p>1.2 - PidescoViews [The command will apply only to the View you specify]</p>
+
+<b><p>2 - You need to give a name to the command, the name will be used to list the commands on the Commands Manager</p></b>
+
+<b><p>3 - You need to give a description to the command, it might be a simple sentence describing what is the function of the command, will also be used in the Commands Manager</p></b>
+
+<b><p>4 - You need to choose the binding for your Command, by binding we mean which keys will invoke your own Command</p></b>
+
+<p>You can use some of the following combinations:</p>
+
+<p>CTRL + 'KEY'</p>
+<p>ALT + 'KEY'</p>
+<p>CTRL + ALT + 'KEY'</p>
+
+<p>Where 'KEY' can be any key from A to Z, the case doesn't matter, can be either upper or lower case.</p>
+
+<b><p>5 - You need to choose where the command applies to <u>( ONLY FOR OPTION 1.2 )</u></p></b>
+
+<p>You need to choose which view will be the context for your command to work, this options is only required when choosing the point 1.2.
+
+<b><p>6 - The most important part is what your command will do, you need to create a class that implements our "Command" interface, that has only a action() method to be defined. When you trigger your key at your context, we will invoke the method you defined.</p></b>
+
+
+
+<p>For any questions, suggestions or bugs feel free to text me trvms@iscte-iul.pt</p>
+<p>Thank you</p>
