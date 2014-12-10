@@ -21,7 +21,8 @@
          name="Commands"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.commands.external.services.CommandView">
+            class="pa.iscde.commands.external.services.CommandView"
+            icon="keygroups_obj.gif">
       </view>
    </extension>
    <extension
@@ -82,6 +83,12 @@
             key="O"
             name="Search">
       </command_editor>
+   </extension>
+   <extension
+         point="pa.iscde.conventions.conventionservice">
+      <conventionservice
+            class="pa.iscde.commands.external.services.ConstantsStartWord">
+      </conventionservice>
    </extension>
 
 </plugin>
