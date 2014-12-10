@@ -6,7 +6,45 @@
          <meta.schema plugin="pa.iscde.commands" id="Command" name="Command"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         &lt;p&gt;This extension point allows you to configure your OWN commands&lt;/p&gt;
+
+&lt;p&gt;It&apos;s easly implemented, you just need to configure four different things:&lt;/p&gt;
+
+&lt;p&gt;1 - You need to choose where the command applies to&lt;/p&gt;
+
+&lt;p&gt;When adding a &lt;/p&gt;
+&lt;p&gt;1.1 - Editor [The command will apply only to the Editor itself]&lt;/p&gt;
+&lt;p&gt;1.2 - PidescoViews [The command will apply only to the View you specify]&lt;/p&gt;
+
+&lt;p&gt;2 - You need to give a name to the command, the name will be used to list the commands on the Commands Manager&lt;/p&gt;
+
+&lt;p&gt;3 - You need to give a description to the command, it might be a simple sentence describing what is the function of the command, will also be used in the Commands Manager&lt;/p&gt;
+
+&lt;p&gt;4 - You need to choose the binding for your Command, by binding we mean which keys will invoke your own Command&lt;/p&gt;
+
+&lt;p&gt;You can use some of the following combinations:&lt;/p&gt;
+
+&lt;p&gt;CTRL + &apos;KEY&apos;&lt;/p&gt;
+&lt;p&gt;ALT + &apos;KEY&apos;&lt;/p&gt;
+&lt;p&gt;CTRL + ALT + &apos;KEY&apos;&lt;/p&gt;
+
+&lt;p&gt;Where &apos;KEY&apos; can be any key from A to Z, the case doesn&apos;t matter, can be either upper or lower case.&lt;/p&gt;
+
+&lt;p&gt;5 - You need to choose where the command applies to [ONLY FOR OPTION 1.2]&lt;/p&gt;
+
+&lt;p&gt;You need to choose which view will be the context for your command to work, this options is only required when choosing the point 1.2.
+
+&lt;p&gt;6 - The most important part is what your command will do, you need to create a class that implements our &quot;Command&quot; interface, that has only a action() method to be defined. When you trigger your key at your context, we will invoke the method you defined.&lt;/p&gt;
+
+
+
+&lt;p&gt;For any questions, suggestions or bugs feel free to text me trvms@iscte-iul.pt&lt;/p&gt;
+&lt;p&gt;Thank you&lt;/p&gt;
+
+
+
+
+
       </documentation>
    </annotation>
 
@@ -172,7 +210,21 @@
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         [Enter extension point usage example here.]
+         import pa.iscde.commands.internal.services.Command;&lt;br&gt;&lt;br&gt;
+
+/**&lt;br&gt;
+* This class is just a random Command implementation&lt;br&gt;
+*/&lt;br&gt;
+public class UselessCommand implements Command {&lt;br&gt;&lt;br&gt;
+
+ @Override&lt;br&gt;
+ public void action() {&lt;br&gt;&lt;br&gt;
+
+  System.out.println(&quot;This is a useless command implementation, that just prints this ugly sentence, how useful is this?&quot;);&lt;br&gt;
+
+ }&lt;br&gt;&lt;br&gt;
+
+}&lt;br&gt;
       </documentation>
    </annotation>
 
