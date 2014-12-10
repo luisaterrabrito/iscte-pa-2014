@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="propertyprovider" name="Property Provider" schema="schema/propertyProvider.exsd"/>
+   <extension-point id="dependencyStyle" name="Dependency Style" schema="schema/dependencyStyle.exsd"/>
    <extension
          id="idConfigurator"
          name="Configurator"

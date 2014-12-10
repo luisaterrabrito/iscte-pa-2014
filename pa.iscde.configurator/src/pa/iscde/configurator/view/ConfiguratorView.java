@@ -147,6 +147,7 @@ public class ConfiguratorView implements PidescoView{
 			GraphNode node=new GraphNode(graph, SWT.NONE, c.getName());
 			componentNode.put(c, node);
 		}
+		
 		graph.setLayoutAlgorithm(new SpringLayoutAlgorithm(), true);
 		graph.applyLayout();
 		
