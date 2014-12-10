@@ -82,6 +82,13 @@
       <newOperation
             newOperation="pa.iscde.formulas.view.TesteDraw">
       </newOperation>
+   </extension>
+   <extension
+         point="pa.iscde.filtersearch.SearchProvider">
+      <SearchProvider
+            SearchProvider="pa.iscde.formulas.view.TesteSearchProvider"
+            iconName="mathfunction.gif">
+      </SearchProvider>
    </extension> 
 
 </plugin>
