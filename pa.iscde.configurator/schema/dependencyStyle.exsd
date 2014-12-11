@@ -50,9 +50,9 @@
    <element name="styler">
       <complexType>
          <sequence>
-            <element ref="component" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="component"/>
          </sequence>
-         <attribute name="new_attribute" type="string" use="required">
+         <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
                   
