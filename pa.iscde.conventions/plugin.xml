@@ -37,12 +37,5 @@
             class="pa.iscde.conventions.integrationpoints.IntegrationPointPackageDiagram">
       </colorSelector>
    </extension>
-   <extension
-         point="pa.iscde.callgraph.customLayoutProvider">
-      <customLayout
-            class="pa.iscde.conventions.integrationpoints.IntegrationPointCustomLayout"
-            name="IntegrationPointCustomLayout">
-      </customLayout>
-   </extension>
 
 </plugin>

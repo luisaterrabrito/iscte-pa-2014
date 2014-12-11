@@ -23,13 +23,24 @@ public class ConventionVisitor {
 	private LinkedList<FilterByModifier> listaModifier;
 	JavaEditorServices javaServices;
 	
-	
+	/**
+	 * Initializes the convention of the visitor with the lists and the java service.
+	 * @param lista - receives a list of the extension point ConventionService
+	 * @param listaModifier - receives the list of the extension point FIlterByModifier
+	 * @param javaServices - receives the java service.
+	 */
 	public ConventionVisitor(LinkedList<ConventionService> lista,LinkedList<FilterByModifier> listaModifier, JavaEditorServices javaServices ) {
 		this.lista = lista;
 		this.listaModifier=listaModifier;
 		this.javaServices=javaServices;
 	}
 	
+	
+	/**
+	 * Uses the AST Visitor to check if the name of the class is according to the conventions.
+	 * @param f - Receives the opened File
+	 * @param identifier - Receives the identifier to obtain the convention service of the list.
+	 */
 	public void visitorOfClass(final File f,final int identifier) {
 		v = new ASTVisitor() {
 			@Override
@@ -47,7 +58,11 @@ public class ConventionVisitor {
 		javaServices.parseFile(f, v);
 	}
 	
-	
+	/**
+	 * Uses the AST Visitor to check if the Methods are according to the conventions.
+	 * @param f - Receives the opened File
+	 * @param identifier - Receives the identifier to obtain the convention service of the list.
+	 */
 	public void visitorOfMethod(final File f, final int identifier){
 		v = new ASTVisitor() {
 			@Override
@@ -55,8 +70,7 @@ public class ConventionVisitor {
 				if(!node.isConstructor()){
 					String id = node.getName().getFullyQualifiedName();
 
-					
-
+	
 						if(lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getCondition()){
 							javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
 						}
@@ -74,6 +88,12 @@ public class ConventionVisitor {
 		javaServices.parseFile(f, v);
 	}
 	
+	
+	/**
+	 * Uses the AST Visitor to check if the constants are according to the conventions.
+	 * @param f - Receives the opened File
+	 * @param identifier - Receives the identifier to obtain the convention service of the list.
+	 */
 	public void visitorOfConstants(final File f, final int identifier){
 		v = new ASTVisitor() {
 
@@ -104,6 +124,12 @@ public class ConventionVisitor {
 		javaServices.parseFile(f, v);
 	}
 	
+	
+	/**
+	 * Uses the AST Visitor to check if the Enumerate is according to the conventions.
+	 * @param f - Receives the opened File
+	 * @param identifier - Receives the identifier to obtain the convention service of the list.
+	 */
 	public void visitorOfEnum(final File f, final int identifier){
 		v = new ASTVisitor() {
 
@@ -123,7 +149,13 @@ public class ConventionVisitor {
 		javaServices.parseFile(f, v);
 	}
 	
-	
+	/**
+	 * Uses the AST Visitor to check if the methods that are being filtered with the modifier are according to the conventions
+	 * @param f - Receives the opened File
+	 * @param m - Receives the Modifier
+	 * @param identifier - Receives the identifier to obtain the convention service of the list.
+	 * 
+	 */
 	public void visitorOfModifier(final File f, final int m, final int identifier){
 		
 		if(!listaModifier.isEmpty()){
@@ -175,8 +207,7 @@ public class ConventionVisitor {
 
 
 						if(node.getModifiers()==m){
-							
-
+			
 								if(lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getCondition()){
 									javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
 								}
@@ -186,10 +217,6 @@ public class ConventionVisitor {
 								}
 												
 						}
-
-
-
-
 					}
 					return true;
 				}

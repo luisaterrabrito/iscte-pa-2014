@@ -4,7 +4,6 @@ package pa.iscde.conventions;
 
 import java.util.LinkedList;
 import java.util.Map;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -22,7 +21,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
-
 import pa.iscde.conventions.extensability.Cobject;
 import pa.iscde.conventions.extensability.ConventionService;
 import pa.iscde.conventions.extensability.FilterByModifier;
@@ -35,10 +33,8 @@ public class ConventionsView implements PidescoView {
 
 
 	private JavaEditorServices javaServices;
-
 	private static final String EXT_POINT_CONVENTION = "pa.iscde.conventions.conventionservice";
 	private static final String EXT_POINT_MODIFIER = "pa.iscde.conventions.filterbymodifier";
-
 	private LinkedList<ConventionService> lista;
 	private LinkedList<FilterByModifier> listModifier;
 	private ConventionVisitor visitor;
@@ -267,7 +263,6 @@ public class ConventionsView implements PidescoView {
 		IExtensionRegistry regMod = Platform.getExtensionRegistry();
 
 		IConfigurationElement[] extensionsMod = regMod.getConfigurationElementsFor(EXT_POINT_MODIFIER);
-		System.out.println(extensionsMod.length);
 		for(IConfigurationElement ext : extensionsMod){
 
 
@@ -294,15 +289,15 @@ public class ConventionsView implements PidescoView {
 					final ConventionService s = (ConventionService) ext.createExecutableExtension("class");
 					lista.add(s);
 					final String type = ext.getAttribute("Type");
-					final Button newButton = new Button(viewArea, SWT.CHECK);  
-					newButton.setText(ext.getAttribute("ConventionName"));
+					final Button checkBoxConvention = new Button(viewArea, SWT.CHECK);  
+					checkBoxConvention.setText(ext.getAttribute("ConventionName"));
 
-					// save the button
-					botao.add(newButton);
-					newButton.addSelectionListener(new SelectionAdapter() {
-
+				
+					botao.add(checkBoxConvention);
+					checkBoxConvention.addSelectionListener(new SelectionAdapter() {
 						@Override
 						public void widgetSelected(SelectionEvent e) {
+							if(checkBoxConvention.getSelection()){
 							switch (type) {
 							case "CLASS":
 								visitor.visitorOfClass(javaServices.getOpenedFile(),getElementList(lista, s));
@@ -323,20 +318,15 @@ public class ConventionsView implements PidescoView {
 
 							default:
 								break;
+								}
 							}
-
-
 						}
-
 					});
 				} catch (CoreException e1) {
 					e1.printStackTrace();
 				}
-				
 			}
-			
 	}
-
 
 	private boolean checkFirstLetterLowerCase(String name){ 
 		return Character.isLowerCase(name.charAt(0));
@@ -366,7 +356,6 @@ public class ConventionsView implements PidescoView {
 		return true;
 	}
 
-
 	private int getElementList(LinkedList<ConventionService> cs, ConventionService s){
 		int id = 0;
 
@@ -374,14 +363,8 @@ public class ConventionsView implements PidescoView {
 			if(cs.get(i).equals(s)){
 				return id = i;
 			}
-
 		}
-
-
 		return id;
-
-
 	}
-
 
 }
