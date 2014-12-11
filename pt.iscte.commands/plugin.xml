@@ -87,6 +87,8 @@
    <extension
          point="pa.iscde.conventions.conventionservice">
       <conventionservice
+            ConventionName="Start with Const word"
+            Type="CONSTANT"
             class="pa.iscde.commands.external.services.ConstantsStartWord">
       </conventionservice>
    </extension>
