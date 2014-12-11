@@ -10,7 +10,7 @@ public class ConstantsStartWord implements ConventionService {
 	@Override
 	public Cobject verificarConvencao(String name, TypeOf typeof) {
 		return new Cobject(Labels.CONSTANTSSTARTWORD,
-				typeof.equals(TypeOf.CONSTANTS) && name.contains("CONST_"));
+				typeof.equals(TypeOf.CONSTANTS) && !name.contains("CONST_"));
 	}
 
 }
