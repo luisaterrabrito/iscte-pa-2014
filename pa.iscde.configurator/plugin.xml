@@ -38,6 +38,7 @@
       </provider>
    </extension>
    <extension
+         id="dependencystyle"
          point="pa.iscde.configurator.dependencystyle">
       <styler
             class="pa.iscde.configurator.model.interfaces.DependencyStyleDefault">

@@ -1,6 +1,6 @@
 /*
  * Interface used to extend pa.iscde.configurator.propertyProvider extension Point
- * @author João Diogo Medeiros & Luís Dias
+ * @author Joï¿½o Diogo Medeiros & Luï¿½s Dias
  * 
  */
 package pa.iscde.configurator.model.interfaces;
@@ -22,4 +22,5 @@ public interface PropertyProvider {
 	 * @return Value of given property 
 	 */
 	String getValue(String property);
+	
 }
