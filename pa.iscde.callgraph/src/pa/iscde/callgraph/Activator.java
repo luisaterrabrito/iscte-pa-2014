@@ -19,6 +19,7 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 public class Activator implements BundleActivator {
 
 	private static Activator INSTANCE;
+	private BundleContext context;
 	private MyView view;
 	
 	/**
@@ -33,6 +34,16 @@ public class Activator implements BundleActivator {
 	
 	/**
 	 * 
+	 * Returns the associated BundleContext
+	 * 
+	 * @return the activator instance
+	 */
+	public BundleContext getContext(){
+		return context;
+	}
+	
+	/**
+	 * 
 	 * The starting point of CallGraph plugin.
 	 * 
 	 * @param context the ISCDE context in which CallGraph will be placed
@@ -42,6 +53,7 @@ public class Activator implements BundleActivator {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		INSTANCE = this;
+		this.context = context;
 		ServiceReference<JavaEditorServices> ref = context.getServiceReference(JavaEditorServices.class);
 		JavaEditorServices javaServices = context.getService(ref);
 		javaServices.addListener(new JavaEditorListener.Adapter() {
@@ -50,7 +62,12 @@ public class Activator implements BundleActivator {
 				view = MyView.getInstance();
 				view.newFile(file);
 			}
+			public void fileOpened(File file) {
+				view = MyView.getInstance();
+				view.setCurrentFile(file);
+			}
 		});
+		
 	}
 
 	/**
