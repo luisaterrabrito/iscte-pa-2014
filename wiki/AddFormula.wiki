@@ -11,8 +11,6 @@ Tem que se extender a class de Formula
 
 {{{
 public abstract class Formula{
-	
-		
 	/**
 	 * Set formula inputs number
 	 * @return inputs
