@@ -1,0 +1,16 @@
+#labels pa.iscde.metrics
+
+= Introduction =
+
+This extension point offers other plugins the ability to add new metrics to the metrics table that I provide. The extention point requires a class that implements the interface Metricable. This interface establishes that the class provided must have the name of the metric and how it is calculated.
+
+= Details =
+{{{
+public interface Metricable {
+
+	public String getMetricName();
+	public double calculateMetric();
+	
+}
+
+}}}
