@@ -48,7 +48,7 @@ public class Activator implements BundleActivator {
 	 * 
 	 * @param context the ISCDE context in which CallGraph will be placed
 	 * 
-	 * @throws NÃO SEI!!!*********************************************************************
+	 * @throws exception
 	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -76,7 +76,7 @@ public class Activator implements BundleActivator {
 	 * 
 	 * @param context the ISCDE context in which CallGraph is placed
 	 * 
-	 * @throws NÃO SEI!!!*********************************************************************
+	 * @throws exception
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {

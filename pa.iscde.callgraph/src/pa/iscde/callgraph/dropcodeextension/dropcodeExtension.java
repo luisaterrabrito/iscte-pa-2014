@@ -44,7 +44,7 @@ public class dropcodeExtension implements DropButton{
 	 */
 	@Override
 	public void clicked(ASTNode node) {
-//		MyView.getInstance().selectMethod(node);
+		MyView.getInstance().selectMethod(node);
 	}
 	
 

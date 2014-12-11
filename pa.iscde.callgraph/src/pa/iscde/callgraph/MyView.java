@@ -1,6 +1,6 @@
 package pa.iscde.callgraph;
 
-import java.io.File;  
+import java.io.File;   
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,7 +47,6 @@ import org.osgi.framework.ServiceReference;
 import pa.iscde.callgraph.extensibility.CustomLayout;
 import pa.iscde.callgraph.extensibility.ExportButton;
 import pt.iscte.pidesco.extensibility.PidescoView;
-import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.ClassElement;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
@@ -83,6 +82,12 @@ public class MyView implements PidescoView {
 	HashMap<String, HashMap<MethodDeclaration, ArrayList<MethodInvocation>>> classMethods;
 	private File currentFile;
 	
+	/**
+	 * 
+	 * Saves the current opened file to process nodes coming from extensions.
+	 * 
+	 * @param file the file to be set as current.
+	 */
 	public void setCurrentFile(File file){
 		currentFile = file;
 	}
@@ -112,6 +117,8 @@ public class MyView implements PidescoView {
 	/**
 	 * 
 	 * Searches for custom layouts and incorporates them in the GUI
+	 * 
+	 * @param shell allows the method to create new swt frames.
 	 */
 	public void loadExportButtons(Shell shell){
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
