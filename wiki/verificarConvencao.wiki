@@ -2,20 +2,25 @@
 
 = Introduction =
 
-Este ponto de extensão utiliza a convenção dada pela equipa para verificar se está correctamente escrita/implementada.
+This extension point uses the convention given by the team to verify if it is correctly implemented/written.
 
-Para utilizar este ponto de extensão terá que retornar um Cobject (Convention Object) que necessita de um aviso e de uma condição booleana. 
+To use this extension point you will need to return a Cobect (Convention Object) that requires a Warning and a Boolean condition.
 
-Através do typeof poderá se é para indicar se é para uma Classe, Métodos, Constantes ou para os Enumerados.
-Com o name poderá manipular e criar a sua própria convenção.
-
+Trough the typeof you can choose if it is for a class, method, constant ou enum.
+With the name you can manipulate and create your own convention.
 
 = Details =
 
-Exemplo:
+Example:
 {{{
 @Override
 public Cobject verificarConvencao(String name, TypeOf typeof) {
 	return new Cobject("Método contém underscore",typeof.equals(TypeOf.METHOD) && name.contains("_"));
 }
 }}}
+
+==FAQ:==
+
+*How to use the extension point:*
+
+When you run your view you choose the checkBox refering to your convention, in the example bellow you should choose the "Verify All Methods" checkbox.
