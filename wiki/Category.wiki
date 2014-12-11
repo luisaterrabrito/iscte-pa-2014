@@ -1,0 +1,18 @@
+#summary pa.iscde.tasklist.category
+
+= Introduction =
+
+This plugin is used to create a new category. We need to give a tag (in this case, a small word, like "bug"), a name, an image (or icon, which is optional) and a color (this color will appear in UML table, to highlight the method that contains the task, which is optional too).
+
+= Details =
+
+{{{	
+
+public Category(String tag, String name, Image icon, Color color){
+		this.tag = tag;
+		this.name = name;
+		this.icon = icon;
+		this.color = color;
+}
+
+}}}
