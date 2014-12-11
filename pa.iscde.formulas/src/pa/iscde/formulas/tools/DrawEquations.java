@@ -18,7 +18,7 @@ public class DrawEquations implements PidescoTool {
 	public void run(boolean activate) {
 			System.out.println("DRAW EQUATION MODE");
 			try {
-				FormulasView.getInstance().setDrawEquaitonMode();
+				FormulasView.getInstance().setDrawEquationMode(null);
 			} catch (IOException e) {
 			e.printStackTrace();
 			}
