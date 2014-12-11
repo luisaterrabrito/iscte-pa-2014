@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -33,8 +34,10 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.core.widgets.GraphConnection;
+import org.eclipse.zest.core.widgets.GraphItem;
 import org.eclipse.zest.core.widgets.GraphNode;
 import org.eclipse.zest.core.widgets.ZestStyles;
+import org.eclipse.zest.layouts.LayoutStyles;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 
@@ -55,10 +58,11 @@ public class ConfiguratorView implements PidescoView {
 	private LinkedList<String> notRunningComponents;
 	private HashMap<Component, GraphNode> componentNode;
 	private HashMap<Dependency, GraphConnection> dependencyConnection;
+	private HashMap<String, String> propertyTable;
 	private Graph graph;
+	private Table table;
 
 	private List<DependencyStyle> styles;
-	private Map<String, List<PropertyProvider>> providers;
 
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
@@ -67,7 +71,6 @@ public class ConfiguratorView implements PidescoView {
 		// TODO Auto-generated method stub
 
 		styles = new Vector<DependencyStyle>();
-		providers = new HashMap<String, List<PropertyProvider>>();
 		viewArea.setLayout(new FillLayout());
 		ScrolledComposite scroll = new ScrolledComposite(viewArea, SWT.H_SCROLL
 				| SWT.V_SCROLL);
@@ -82,6 +85,8 @@ public class ConfiguratorView implements PidescoView {
 		runningComponents = controller.getRunningComponents();
 		graph = new Graph(comp, SWT.NONE);
 		graph.setLayoutData(new GridData(750, 500));
+		
+		
 		for (IExtension dependencyExtension : ConfiguratorExtensionPoint.DEPENDENCYSTYLE
 				.getExtensions()) {
 			try {
@@ -102,63 +107,65 @@ public class ConfiguratorView implements PidescoView {
 		dependencies = controller.getDependencies(runningComponents);
 		paintGivenDependencies();
 		ColorDependencies();
+		
+		
 		graph.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
-				System.out.println(((Graph) e.widget).getSelection());
-
+				
+				if (((Graph) e.widget).getSelection().size()!=0)
+				{
+					graph.setSelection(new GraphItem[]{(GraphItem)e.item});
+					Object selectedObject = ((Graph) e.widget).getSelection().get(0);
+					GraphItem selectedItem = (GraphItem) selectedObject;
+					propertyTable = controller.getProperties(selectedItem.getText());
+					fillTable();
+				}
+				else
+				{
+					table.removeAll();
+					table.pack();
+				}
 			}
-
 		});
 
-		for (IExtension viewExtension : ConfiguratorExtensionPoint.PROPERTYPROVIDER
-				.getExtensions()) {
-			String pluginId = viewExtension.getContributor().getName();
-			String viewId = viewExtension.getUniqueIdentifier();
-			String viewTitle = viewExtension.getLabel();
 
-			try {
-				PropertyProvider ppi = (PropertyProvider) viewExtension
-						.getConfigurationElements()[0]
-						.createExecutableExtension("class");
-				Table table = new Table(comp, SWT.BORDER | SWT.V_SCROLL
-						| SWT.H_SCROLL);
-				table.setHeaderVisible(true);
-				String[] titles = { "Propriedades", "Descrição" };
+		table = new Table(comp, SWT.BORDER | SWT.V_SCROLL
+				| SWT.H_SCROLL);
+		table.setHeaderVisible(true);
+		String[] titles = { "Propriedades", "Descrição" };
 
-				for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
-					TableColumn column = new TableColumn(table, SWT.NULL);
-					column.setText(titles[loopIndex]);
-				}
-
-				for (String string : ppi.getProperties()) {
-					TableItem item = new TableItem(table, SWT.NULL);
-					item.setText(string);
-					item.setText(0, string);
-					item.setText(1, ppi.getValue(string));
-				}
-
-				for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
-					table.getColumn(loopIndex).pack();
-				}
-
-				table.setBounds(25, 25, 220, 200);
-				table.setLayoutData(new GridData(600, 150));
-			} catch (InvalidRegistryObjectException | CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
+			TableColumn column = new TableColumn(table, SWT.NULL);
+			column.setText(titles[loopIndex]);
+		}
+		
+		for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
+			table.getColumn(loopIndex).pack();
 		}
 
-		/*
-		 * PropertyProviderImpl ppi = new PropertyProviderImpl();
-		 */
+		table.setBounds(25, 25, 220, 200);
+		table.pack();
 
 		scroll.setContent(comp);
 		scroll.setMinSize(300, comp.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		scroll.setExpandHorizontal(true);
 		scroll.setExpandVertical(true);
 
+	}
+	
+	private void fillTable()
+	{
+		table.removeAll();
+		for (Entry<String, String> entry : propertyTable.entrySet())
+			{
+				TableItem item = new TableItem(table, SWT.NULL);
+				item.setText(entry.getKey());
+				item.setText(0, entry.getKey());
+				item.setText(1, entry.getValue());
+			}
+		table.pack();
+		
 	}
 
 	private void ColorNodes() {
@@ -181,11 +188,13 @@ public class ConfiguratorView implements PidescoView {
 	private void paintRunningComponents() {
 		for (Component c : runningComponents) {
 			GraphNode node = new GraphNode(graph, SWT.NONE, c.getName());
+			node.setSize(-1, -1);
 			componentNode.put(c, node);
 		}
+		
+		
+		graph.setLayoutAlgorithm(new SpringLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING), true);
 
-		graph.setLayoutAlgorithm(new SpringLayoutAlgorithm(), true);
-		graph.applyLayout();
 
 	}
 
