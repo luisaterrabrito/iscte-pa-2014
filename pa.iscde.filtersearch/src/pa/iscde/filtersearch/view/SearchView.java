@@ -31,9 +31,16 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
+import pa.iscde.filtersearch.externalImages.ExternalImage;
+import pa.iscde.filtersearch.providers.ProjectBrowserSearchProvider;
 import pa.iscde.filtersearch.providers.SearchProvider;
 import pa.iscde.filtersearch.providers.ViewContentProvider;
+import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
 
@@ -43,20 +50,25 @@ public class SearchView implements PidescoView {
 
 	private List<SearchProvider> providers = new ArrayList<>();
 	private List<SearchCategory> categories = new ArrayList<>();
-	private Map<SearchProvider, String> providerAndImageMap = new HashMap<SearchProvider, String>();
+	private Map<SearchProvider, ExternalImage> providerAndImageMap = new HashMap<SearchProvider, ExternalImage>();
 	private Map<Object, SearchProvider> provideAndObjectMap = new HashMap<Object, SearchProvider>();
 
 	private TreeViewer tree;	
 	private Text searchText;
 
+	private PidescoServices pidescoServices;
 
-	private Map<String, Image> images;
 
 	/**
 	 * Construtor da classe
 	 */
 	public SearchView() {
 
+		Bundle bundle = FrameworkUtil.getBundle(ProjectBrowserSearchProvider.class);
+		BundleContext context  = bundle.getBundleContext();
+		ServiceReference<PidescoServices> serviceReference_pidesco = context.getServiceReference(PidescoServices.class);
+		pidescoServices = context.getService(serviceReference_pidesco);
+		
 		getProviders();
 
 	}
@@ -75,15 +87,14 @@ public class SearchView implements PidescoView {
 		
 		for(IExtension ext : extensions){
 			for(IConfigurationElement configurationElement : ext.getConfigurationElements()){
-
 				try {
-					p = (SearchProvider) configurationElement.createExecutableExtension("className");
+					p = (SearchProvider) configurationElement.createExecutableExtension("SearchProvider");
 					iconName = configurationElement.getAttribute("iconName");
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
 				providers.add(p);
-				providerAndImageMap.put(p, iconName);
+				providerAndImageMap.put(p, new ExternalImage(iconName,ext.getContributor().getName()));
 			}
 		}
 	}
@@ -91,8 +102,6 @@ public class SearchView implements PidescoView {
 
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> images) {
-
-		this.images = images;
 
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.verticalSpacing = 8;
@@ -196,8 +205,15 @@ public class SearchView implements PidescoView {
 
 		categories.clear();
 
-		for(Map.Entry<SearchProvider, String> entry : providerAndImageMap.entrySet()){
-			SearchCategory category = new SearchCategory(entry.getKey().getClass().getSimpleName(), images.get(entry.getValue()));
+		for(Map.Entry<SearchProvider, ExternalImage> entry : providerAndImageMap.entrySet()){
+			
+			
+			SearchCategory category = new SearchCategory(entry.getKey().getClass().getSimpleName(), pidescoServices.getImageFromPlugin(entry.getValue().getPlugin(), entry.getValue().getImageName()));
+			
+			System.out.println("--------");
+			System.out.println(entry.getKey().getClass().getSimpleName());
+			System.out.println(entry.getValue().getImageName());
+			
 			category.hits = entry.getKey().getResults(text);
 			for(Object o : category.hits){
 				provideAndObjectMap.put(o, entry.getKey());
