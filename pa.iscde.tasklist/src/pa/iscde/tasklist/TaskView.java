@@ -18,6 +18,8 @@ import org.eclipse.jdt.core.dom.Comment;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.LineComment;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
@@ -27,6 +29,8 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -35,6 +39,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import pa.iscde.tasklist.extensibility.Category;
 import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
@@ -46,8 +51,9 @@ public class TaskView implements PidescoView {
 	public enum TaskType {
 		PROJECT, PACKAGE, FILE;
 	}
-
-	public static final String CATEGORY_ID = "category";
+	
+	public static final String EXT_POINT_ID_1 = "pa.iscde.tasklist.category";
+	public static final String EXT_POINT_ID_2 = "pa.iscde.tasklist.categoryAction";
 	
 	private Table table;
 	private Combo combo;
@@ -172,20 +178,38 @@ public class TaskView implements PidescoView {
 			public boolean visit(LineComment node) {
 				
 				String tmp = fileText.substring(node.getStartPosition(), node.getStartPosition() + node.getLength());
+				String[] splitSpace = tmp.split(" ");
 				
-				//Falta fazer aqui!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//				if(tmp.substring(2, 6).equals("TODO")){
-				String[] split = tmp.split(" ");
-				if(!split[0].equals("//")){
-					
-					item = new TableItem(table, SWT.SIMPLE);
-					
-					item.setText(0, currentFile.getParentFile().getName());
-					item.setText(1, currentFile.getName().substring(0, currentFile.getName().indexOf(".")));
-					item.setText(3, tmp.substring(7));
-					item.setText(4, "Category");
-					item.setText(5, "Priority");
-				} else{
+				for(Category c: catList){
+					if(splitSpace[0].substring(2).equals(c.getTag())){
+						
+						item = new TableItem(table, SWT.SIMPLE);
+						
+						item.setText(0, currentFile.getParentFile().getName());
+						item.setText(1, currentFile.getName().substring(0, currentFile.getName().indexOf(".")));
+						item.setText(3, tmp.substring(splitSpace[0].length() + 1));
+						item.setText(4, c.getName());
+						if(c.getIcon() != null)
+							item.setImage(5, c.getIcon());
+						else
+							item.setText(5, "no icon available");
+						
+					} else {
+						if(splitSpace.length > 1 && splitSpace[1].equals(c.getTag())){
+							
+							item = new TableItem(table, SWT.SIMPLE);
+							
+							item.setText(0, currentFile.getParentFile().getName());
+							item.setText(1, currentFile.getName().substring(0, currentFile.getName().indexOf(".")));
+							item.setText(3, tmp.substring(splitSpace[0].length() + splitSpace[1].length() + 2));
+							item.setText(4, c.getName());
+							if(c.getIcon() != null)
+								item.setImage(5, c.getIcon());
+							else
+								item.setText(5, "no icon available");
+							
+						}
+					}
 				}
 		        return true;
 			}
@@ -296,46 +320,72 @@ public class TaskView implements PidescoView {
 		classCol.setWidth(130);
 		TableColumn lineCol = new TableColumn(table, SWT.NONE, 2);
 		lineCol.setText("Line");
-		lineCol.setWidth(35);
+		lineCol.setWidth(45);
 		TableColumn textCol = new TableColumn(table, SWT.NONE, 3);
 		textCol.setText("Text");
 		textCol.setWidth(215);
 		TableColumn categoryCol = new TableColumn(table, SWT.NONE, 4);
 		categoryCol.setText("Category");
-		categoryCol.setWidth(110);
-		TableColumn priorityCol = new TableColumn(table, SWT.NONE, 5);
-		priorityCol.setText("Priority");
-		priorityCol.setWidth(80);
+		categoryCol.setWidth(75);
+		TableColumn iconCol = new TableColumn(table, SWT.NONE, 5);
+		iconCol.setText("Icon");
+		iconCol.setWidth(90);
 		
 		table.setHeaderVisible(true);
 		
-		table.addSelectionListener(new SelectionListener() {
+		table.addMouseListener(new MouseListener() {
 			
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				
+			public void mouseUp(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
 				ArrayList<File> tmp = getFiles(browserServices.getRootPackage().getFile());
-				
 				int selected = table.getSelectionIndex();
-				
 				for(int i = 0; i < tmp.size(); i++){
 					if(tmp.get(i).getName().equals(table.getItem(selected).getText(1) + ".java")){
 						javaServices.openFile(tmp.get(i));
+						table.select(selected);
 					}
 				}
 			}
 			
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void mouseDoubleClick(MouseEvent e) {
+				
+				Menu popup = new Menu(table);
+				MenuItem item = new MenuItem(popup, SWT.NONE);
+				
+//				IExtensionRegistry reg = Platform.getExtensionRegistry();
+//				for(IExtension ext : reg.getExtensionPoint(EXT_POINT_ID_2).getExtensions()){
+//					
+//					for(IConfigurationElement member : ext.getConfigurationElements()){
+//						String tag = member.getAttribute("tag");
+//						
+//						item.setText("Popup shown");
+//						popup.setDefaultItem(item);
+//					}
+//					
+//				}
+				
+				item.setText(table.getItem(table.getSelectionIndex()).getText(1));
+				popup.setDefaultItem(item);
+				
+				popup.setVisible(true);
+				
+				table.select(table.getSelectionIndex());
+				
 			}
 		});
 		
 	}
 
+	//Creates category objects, accordingly to the extensions created
 	private void createCategories(){
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
 		
-		for(IExtension ext : reg.getExtensionPoint(CATEGORY_ID).getExtensions()){
+		for(IExtension ext : reg.getExtensionPoint(EXT_POINT_ID_1).getExtensions()){
 			
 			for(IConfigurationElement member : ext.getConfigurationElements()){
 				Image img = null;
@@ -355,8 +405,7 @@ public class TaskView implements PidescoView {
 				
 				Category cat = new Category(tag, name, img, c);
 				catList.add(cat);
-			}
-			
+			}	
 		}
 	}
 	

@@ -23,5 +23,13 @@
             class="pa.iscde.tasklist.TaskView">
       </view>
    </extension>
+   <extension
+         point="pa.iscde.tasklist.category">
+      <category
+            color="173,216,230"
+            name="Todo"
+            tag="TODO">
+      </category>
+   </extension>
 
 </plugin>
