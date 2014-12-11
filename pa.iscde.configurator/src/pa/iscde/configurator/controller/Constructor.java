@@ -52,14 +52,13 @@ public class Constructor {
 				.getExtensionPoint("pt.iscte.pidesco.view");
 		IContributor mainContributor = extensionPoint.getContributor();
 		IExtension[] extensions = extensionPoint.getExtensions();
-
 		for (IExtension ext : extensions) {
 			IContributor contributor = ext.getContributor();
 
 				dependenciesList.add(new Dependency(getComponentByName(
 						components, mainContributor.getName()),
-						getComponentByName(components, contributor.getName())));
-			
+						getComponentByName(components, contributor.getName()),extensionPoint.getUniqueIdentifier()));
+						
 			IExtensionPoint otherCompExtPoints = reg
 					.getExtensionPoint(contributor.getName());
 			if (otherCompExtPoints != null) {
@@ -71,7 +70,7 @@ public class Constructor {
 						dependenciesList.add(new Dependency(getComponentByName(
 								components, contributor.getName()),
 								getComponentByName(components,
-										otherContributors.getName())));
+										otherContributors.getName()),otherCompExtPoints.getUniqueIdentifier()));
 					
 				}
 			}
