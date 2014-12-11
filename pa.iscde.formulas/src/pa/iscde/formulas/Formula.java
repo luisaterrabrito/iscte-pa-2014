@@ -9,7 +9,7 @@ import pa.iscde.formulas.util.ReadUtil;
 
 
 /**
- * Its a generic class used for all formulas.
+ * Its a generic class used for all formulas and as a extention point.
  * @author Gonçalo Horta & Tiago Saraiva
  *
  */

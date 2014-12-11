@@ -3,7 +3,6 @@ package pa.iscde.formulas.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Scanner;
 
 import org.eclipse.core.runtime.CoreException;
@@ -12,8 +11,6 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
-import pa.iscde.formulas.Formula;
-import pa.iscde.formulas.extensibility.CreateCategoryProvider;
 import pa.iscde.formulas.extensibility.DrawEquationsProvider;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -34,8 +31,10 @@ public class EquationFinder {
 	
 	private Multimap<String,Integer> equations = ArrayListMultimap.create();
 	private ArrayList<JavaToLatexFormat> newLatexOperations;
+	private ArrayList<FormulaAnnotation> annotations = new ArrayList<FormulaAnnotation>();
 	
 	/**
+	 * @param javaeditor 
 	 * @param file, represents the open class
 	 * @throws FileNotFoundException
 	 */
@@ -57,20 +56,29 @@ public class EquationFinder {
 
 	private void analyseFile(File file) throws FileNotFoundException {
 		int lines = 1;
+		int offset=0;
+		int i=0;
 		Scanner s = new Scanner(file);
 		while(s.hasNext()){
 			String line = s.nextLine();
 			for (JavaToLatexFormat javaToLatexFormat : newLatexOperations) {
 				if(line.contains(javaToLatexFormat.getJavaOperation())){
 					equations.put(transformJavaLatext(delimitateLine(removeA(frac(line))),javaToLatexFormat.getJavaOperation(),javaToLatexFormat.getOperationLatexFormat()),lines);
+					i++;
 				}
 			}
 			if(line.contains("/") || line.contains("Math.sqrt") || line.contains("Math.pow") || line.contains("*")){
 				equations.put(delimitateLine(removeA(frac(line))),lines);
+				annotations.add(new FormulaAnnotation("Formula "+i,offset,line.length()));
 			}
+			offset+=(line.length()+1);
 			lines++;
 		}
 		s.close();
+	}
+	
+	public ArrayList<FormulaAnnotation> getAnnotations(){
+		return annotations;
 	}
 	
 	private String removeA(String str){

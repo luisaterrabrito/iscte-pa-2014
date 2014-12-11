@@ -71,12 +71,6 @@
       </AddCategory>
    </extension>
    <extension
-         point="pa.iscde.formulas.newEquationToDraw">
-      <newOperation
-            newOperation="pa.iscde.formulas.view.TesteDraw">
-      </newOperation>
-   </extension>
-   <extension
          point="pa.iscde.filtersearch.SearchProvider">
       <SearchProvider
             SearchProvider="pa.iscde.formulas.external.MathSearch"
@@ -84,12 +78,87 @@
       </SearchProvider>
    </extension>
    <extension
-         name="PresentValue"
+         name="Formulas"
          point="pa.iscde.formulas.createformula">
       <NewFormula
             Category="Basics"
-            addformula="pa.iscde.formulas.view.Teste"
+            addformula="pa.iscde.formulas.basics.QuadraticFormula"
             formula_method="formulas/Quadratic.txt">
+      </NewFormula>
+      <NewFormula
+            Category="Basics"
+            addformula="pa.iscde.formulas.basics.Areas"
+            formula_method="formulas/Areas.txt">
+      </NewFormula>
+      <NewFormula
+            Category="Basics"
+            addformula="pa.iscde.formulas.basics.PythagoreanTheorem"
+            formula_method="formulas/PythagoreanTheorem.txt">
+      </NewFormula>
+      <NewFormula
+            Category="Engineering"
+            addformula="pa.iscde.formulas.engineering.DecibelConverter"
+            formula_method="formulas/DecibelConverter.txt">
+      </NewFormula>
+      <NewFormula
+            Category="Engineering"
+            addformula="pa.iscde.formulas.engineering.ElectronicsFormulas"
+            formula_method="formulas/ElectronicFormulas.txt">
+      </NewFormula>
+      <NewFormula
+            Category="Engineering"
+            addformula="pa.iscde.formulas.engineering.FriisFormula"
+            formula_method="formulas/FriisFormula.txt">
+      </NewFormula>
+      <NewFormula
+            Category="Engineering"
+            addformula="pa.iscde.formulas.engineering.MovementEquations"
+            formula_method="formulas/MovementEquations.txt">
+      </NewFormula>
+      <NewFormula
+            Category="Finance"
+            addformula="pa.iscde.formulas.finance.NumberOfPayments"
+            formula_method="formulas/NumberOfPayments.txt">
+      </NewFormula>
+      <NewFormula
+            Category="Finance"
+            addformula="pa.iscde.formulas.finance.PresentValue"
+            formula_method="formulas/PresentValue.txt">
+      </NewFormula>
+      <NewFormula
+            Category="Finance"
+            addformula="pa.iscde.formulas.finance.VALCalculation"
+            formula_method="formulas/VALCalculation.txt">
+      </NewFormula>
+      <NewFormula
+            Category="Statistic"
+            addformula="pa.iscde.formulas.statistic.Mean"
+            formula_method="formulas/Mean.txt">
+      </NewFormula>
+      <NewFormula
+            Category="Statistic"
+            addformula="pa.iscde.formulas.statistic.Median"
+            formula_method="formulas/Median.txt">
+      </NewFormula>
+      <NewFormula
+            Category="Statistic"
+            addformula="pa.iscde.formulas.statistic.StandardDeviation"
+            formula_method="formulas/StandardDeviation.txt">
+      </NewFormula>
+      <NewFormula
+            Category="Statistic"
+            addformula="pa.iscde.formulas.statistic.Variance"
+            formula_method="formulas/Variance.txt">
+      </NewFormula>
+      <NewFormula
+            Category="Basics"
+            addformula="pa.iscde.formulas.basics.Volumes"
+            formula_method="formulas/Volumes.txt">
+      </NewFormula>
+      <NewFormula
+            Category="Basics"
+            addformula="pa.iscde.formulas.basics.TrigonometricFormula"
+            formula_method="formulas/Trignometric.txt">
       </NewFormula>
    </extension> 
 
