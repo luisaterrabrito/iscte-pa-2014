@@ -23,4 +23,4 @@ public Cobject verificarConvencao(String name, TypeOf typeof) {
 
 *How to use the extension point:*
 
-When you run your view you choose the checkBox refering to your convention, in the example bellow you should choose the "Verify All Methods" checkbox.
+When you run your view you choose the checkBox refering to your convention, in the example above you should choose the "Verify All Methods" checkbox.
