@@ -297,16 +297,14 @@ public class FormulasView implements PidescoView {
 	 * Set the mode for Draw Equations mode
 	 * @throws IOException
 	 */
-	public  void setDrawEquaitonMode() throws IOException {
+	public  void setDrawEquationMode(EquationFinder eq) throws IOException {
 		clearFormulasBoard();
 		drawFormulas = true;
 		buttons.clear();
 		tabFolder.dispose();
 		formulasBoard = new HashMap<Label,Text>();
-		
-		//viewArea.setBackground(new Color(viewArea.getDisplay(), 255,255,255));
-		EquationFinder eq = new EquationFinder(fileTarget);
-		
+		if(eq==null)
+			 eq = new EquationFinder(fileTarget);
 		for (String equation : eq.getEquations().keySet()) {
 			DrawEquationUtil formulaImage = new DrawEquationUtil(viewArea,equation); 
 			Text text = new Text(viewArea, SWT.NONE);
