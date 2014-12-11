@@ -46,7 +46,7 @@ public class NewFormula extends Formula{
 	}
 	
 	@Override
-	public String methodCode(String file) {
+	public String methodCode() {
 		return javacode;
 	}
 

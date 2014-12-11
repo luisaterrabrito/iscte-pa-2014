@@ -78,6 +78,16 @@
                </restriction>
             </simpleType>
          </attribute>
+         <attribute name="formula_method" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="resource"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
