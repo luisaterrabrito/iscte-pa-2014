@@ -12,6 +12,9 @@ public interface ConventionService {
 	 * @param typeof - Type of Enum defined by TypeOf (METHOD, CLASS, CONSTANTS, ENUM).
 	 * @return Cobject - Object of type convention that recives a warning and a convention.
 	 * 
+	 * 
+	 * Any doubts go to : https://code.google.com/p/iscte-pa-2014/wiki/verificarConvencao
+	 * 
 	 * Exemplo:
 	 * 
 	 * @Override
