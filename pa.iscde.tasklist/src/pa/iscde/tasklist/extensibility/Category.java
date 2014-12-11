@@ -1,4 +1,4 @@
-package pa.iscde.tasklist;
+package pa.iscde.tasklist.extensibility;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;

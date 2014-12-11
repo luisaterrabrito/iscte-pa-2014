@@ -3,7 +3,7 @@
 <schema targetNamespace="pa.iscde.tasklist" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="pa.iscde.tasklist" id="category" name="Task Category"/>
+         <meta.schema plugin="pa.iscde.tasklist" id="pa.iscde.tasklist.category" name="Task Category"/>
       </appinfo>
       <documentation>
          This extension point is to create a new task category.
