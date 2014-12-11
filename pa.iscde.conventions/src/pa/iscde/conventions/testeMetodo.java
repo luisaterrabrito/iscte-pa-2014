@@ -10,8 +10,6 @@ public class testeMetodo implements FilterByModifier{
 	public int verificarModificadorMetodo() {
 		
 		return Modifier.PRIVATE;
-		
-		
 	}
 
 	

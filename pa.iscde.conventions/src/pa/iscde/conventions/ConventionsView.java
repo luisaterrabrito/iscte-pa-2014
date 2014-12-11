@@ -1,7 +1,7 @@
 package pa.iscde.conventions;
 
 
-import java.io.File;
+
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -9,11 +9,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -33,7 +29,6 @@ import pa.iscde.conventions.extensability.ConventionService;
 import pa.iscde.conventions.extensability.FilterByModifier;
 import pa.iscde.conventions.extensability.TypeOf;
 import pt.iscte.pidesco.extensibility.PidescoView;
-import pt.iscte.pidesco.javaeditor.service.AnnotationType;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 
@@ -47,6 +42,9 @@ public class ConventionsView implements PidescoView {
 
 	private LinkedList<ConventionService> lista;
 	private LinkedList<FilterByModifier> listModifier;
+	private ConventionVisitor visitor;
+	private String convencaoEquipa ="";
+	
 
 	public ConventionsView() {
 		Bundle bundle = FrameworkUtil.getBundle(ConventionsView.class);
@@ -58,10 +56,9 @@ public class ConventionsView implements PidescoView {
 
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
-
-
+		
+		
 		ConventionService cs = new ConventionService() {
-
 			@Override
 			public Cobject verificarConvencao(String name, TypeOf to) {
 				switch (to) {
@@ -73,7 +70,6 @@ public class ConventionsView implements PidescoView {
 						return new Cobject("", false);
 					}
 				}
-
 
 				case METHOD:{
 
@@ -120,52 +116,14 @@ public class ConventionsView implements PidescoView {
 			}
 		};
 
-
+		listModifier = new LinkedList<FilterByModifier>();
 		lista = new LinkedList<ConventionService>();
 		lista.add(cs);
 
-		IExtensionRegistry reg = Platform.getExtensionRegistry();
+		handleConventionExtension();
+		handleFilterByModExtension();
 
-		IConfigurationElement[] extensions = reg.getConfigurationElementsFor(EXT_POINT_CONVENTION);
-
-		for(IConfigurationElement ext : extensions){
-
-
-			try {
-
-				ConventionService s = (ConventionService) ext.createExecutableExtension("class");
-				lista.add(s);
-
-
-			} catch (CoreException e1) {
-				e1.printStackTrace();
-			}
-		}
-
-
-
-
-		listModifier = new LinkedList<FilterByModifier>();
-
-
-		IExtensionRegistry regMod = Platform.getExtensionRegistry();
-
-		IConfigurationElement[] extensionsMod = regMod.getConfigurationElementsFor(EXT_POINT_MODIFIER);
-
-		for(IConfigurationElement ext : extensionsMod){
-
-
-			try {
-
-				FilterByModifier m = (FilterByModifier) ext.createExecutableExtension("filterbymodifier");
-				listModifier.add(m);
-
-			} catch (CoreException e1) {
-				e1.printStackTrace();
-			}
-		}
-
-
+		visitor= new ConventionVisitor(lista, listModifier, javaServices);
 
 		RowLayout rowLayout = new RowLayout();
 		rowLayout.type = SWT.VERTICAL;
@@ -193,6 +151,46 @@ public class ConventionsView implements PidescoView {
 		final Button checkBoxMethodMod = new Button(viewArea, SWT.CHECK);
 		checkBoxMethodMod.setSize(10, 20);
 		
+		final Button checkBoxConvention = new Button(viewArea, SWT.CHECK);
+		checkBoxConvention.setSize(10, 20);
+		
+		if(lista.size()>1){
+
+			checkBoxConvention.setText(convencaoEquipa);
+			checkBoxConvention.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e){
+					if(checkBoxConvention.getSelection()){
+						
+					for(int i=1 ;i!=lista.size();i++){
+							System.out.println(lista.get(i).toString());
+
+					if(lista.get(i).verificarConvencao("", TypeOf.CLASS).getCondition()){
+						
+						visitor.visitorOfClass(javaServices.getOpenedFile());
+						}
+						if(lista.get(i).verificarConvencao("",TypeOf.METHOD).getCondition()){
+							visitor.visitorOfMethod(javaServices.getOpenedFile());
+						}
+						
+						if(lista.get(i).verificarConvencao("",TypeOf.CONSTANTS).getCondition()){
+							visitor.visitorOfConstants(javaServices.getOpenedFile());
+						}
+						
+						if(lista.get(i).verificarConvencao("",TypeOf.ENUM).getCondition()){
+							visitor.visitorOfEnum(javaServices.getOpenedFile());
+						}
+						
+					}
+				
+					}
+			
+				}
+			});
+		
+	}
+		
+		
 		if(listModifier.isEmpty()){
 		checkBoxMethodMod.setText("Filtrar Método por Modifier igual a : ");
 		}else{
@@ -219,13 +217,13 @@ public class ConventionsView implements PidescoView {
 
 				switch (comboDropDown.getText()) {
 				case "PUBLIC":
-					mod =1;
+					mod = 1;
 					break;
 				case "PRIVATE":
-					mod =2;
+					mod = 2;
 					break;	
 				case "PROTECTED":
-					mod =4;
+					mod = 4;
 					break;	
 
 				default:
@@ -233,7 +231,7 @@ public class ConventionsView implements PidescoView {
 				}
 
 				if(checkBoxMethodMod.getSelection()){
-					verificarMetodoModifier(javaServices.getOpenedFile(),mod);
+					visitor.visitorOfModifier(javaServices.getOpenedFile(),mod);
 				}
 			}
 		});
@@ -244,11 +242,8 @@ public class ConventionsView implements PidescoView {
 		checkBoxClass.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-
-
-
 				if(checkBoxClass.getSelection()){
-					verificaClass(javaServices.getOpenedFile());
+					visitor.visitorOfClass(javaServices.getOpenedFile());
 				}
 			}
 		});
@@ -260,7 +255,7 @@ public class ConventionsView implements PidescoView {
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				if(checkBoxMethod.getSelection()){
-					verificarMetodo(javaServices.getOpenedFile());
+					visitor.visitorOfMethod(javaServices.getOpenedFile());
 					//					verificaTamanhoMetodo(javaServices.getOpenedFile());
 				}
 			}
@@ -272,11 +267,10 @@ public class ConventionsView implements PidescoView {
 
 		//Verificar Constantes
 		checkBoxConstant.addSelectionListener(new SelectionAdapter() {
-
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(checkBoxConstant.getSelection()){
-					verificaConstantes(javaServices.getOpenedFile());
+					visitor.visitorOfConstants(javaServices.getOpenedFile());
 				}
 			}
 		});
@@ -284,11 +278,10 @@ public class ConventionsView implements PidescoView {
 
 		//Verificar Enumerados
 		checkBoxEnum.addSelectionListener(new SelectionAdapter() {
-
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(checkBoxEnum.getSelection()){
-					verificaEnum(javaServices.getOpenedFile());
+					visitor.visitorOfEnum(javaServices.getOpenedFile());
 				}
 			}
 		});
@@ -298,11 +291,46 @@ public class ConventionsView implements PidescoView {
 	}
 
 
-	private boolean checkFirstLetterLowerCase(String name){ 
-		return Character.isLowerCase(name.charAt(0));
+	private void handleFilterByModExtension() {
+		IExtensionRegistry regMod = Platform.getExtensionRegistry();
+
+		IConfigurationElement[] extensionsMod = regMod.getConfigurationElementsFor(EXT_POINT_MODIFIER);
+
+		for(IConfigurationElement ext : extensionsMod){
+
+
+			try {
+
+				FilterByModifier m = (FilterByModifier) ext.createExecutableExtension("filterbymodifier");
+				listModifier.add(m);
+
+			} catch (CoreException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 
 
+	private void handleConventionExtension() {
+		IExtensionRegistry reg = Platform.getExtensionRegistry();
+
+		IConfigurationElement[] extensions = reg.getConfigurationElementsFor(EXT_POINT_CONVENTION);
+
+		for(IConfigurationElement ext : extensions){
+			try {
+				ConventionService s = (ConventionService) ext.createExecutableExtension("class");
+				convencaoEquipa = ext.getAttribute("ConventionName");
+				lista.add(s);
+			} catch (CoreException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+
+
+	private boolean checkFirstLetterLowerCase(String name){ 
+		return Character.isLowerCase(name.charAt(0));
+	}
 
 	private boolean verifySize(String word){
 		if(word.length()>=20){
@@ -310,7 +338,6 @@ public class ConventionsView implements PidescoView {
 		}
 		return false;
 	}
-
 
 	private boolean checkVariableUnderScore(String name){
 		return (name.charAt(0)=='_');
@@ -320,9 +347,7 @@ public class ConventionsView implements PidescoView {
 		return (name.charAt(0)=='$');
 	}
 
-
 	private boolean checkVariableLowerCase(String word){
-
 		for(int i = 0; i!= word.length();i++){
 			if(Character.isLowerCase(word.charAt(i))){
 				return false;
@@ -331,189 +356,6 @@ public class ConventionsView implements PidescoView {
 		return true;
 	}
 
-	private void verificaClass(final File f) {
-		ASTVisitor v = new ASTVisitor() {
-			@Override
-			public boolean visit(TypeDeclaration node) {
-				String id = node.getName().getFullyQualifiedName();
-
-				for(ConventionService s : lista){
-					if(s.verificarConvencao(id, TypeOf.CLASS).getCondition()){
-						javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.CLASS).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
-					}
-				}
-
-				return true;
-			}
-		};
-		javaServices.parseFile(f, v);
-	}
-
-	private void verificarMetodo(final File f) {
-
-
-
-		ASTVisitor v = new ASTVisitor() {
-
-
-
-			@Override
-			public boolean visit(MethodDeclaration node) {
-				if(!node.isConstructor()){
-					String id = node.getName().getFullyQualifiedName();
-
-					for(ConventionService s : lista){
-
-						if(s.verificarConvencao(id, TypeOf.METHOD).getCondition()){
-							javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
-						}
-
-						if(s.verificarConvencao(id, TypeOf.METHOD).getCondition()){
-							javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(),  node.getName().getLength());
-						}
-					}
-				}
-				return true;
-			}
-
-		};
-
-		javaServices.parseFile(f, v);
-	}
-
-
-
-	private void verificaConstantes(final File f) {
-		ASTVisitor v = new ASTVisitor() {
-
-			public boolean visit(VariableDeclarationFragment node) {
-
-				String id = node.getName().getFullyQualifiedName();
-
-				for(ConventionService s : lista){
-
-
-					if(s.verificarConvencao(id, TypeOf.CONSTANTS).getCondition()){ //checkVariableLowerCase
-						javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.CONSTANTS).getWarning(),
-								node.getName().getStartPosition(), node.getName().getLength());
-					}
-
-
-					if(s.verificarConvencao(id, TypeOf.CONSTANTS).getCondition()){ // checkVariableDollar
-						javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.CONSTANTS).getWarning(),
-								node.getName().getStartPosition(), node.getName().getLength());
-					}
-
-					if(s.verificarConvencao(id, TypeOf.CONSTANTS).getCondition()){ //checkVariableUnderScore
-						javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.CONSTANTS).getWarning(),
-								node.getName().getStartPosition(), node.getName().getLength());
-					}
-
-				}
-				return true;
-			};
-
-
-		};
-		javaServices.parseFile(f, v);
-	}
-
-	private void verificaEnum(final File f) {
-		ASTVisitor v = new ASTVisitor() {
-
-			public boolean visit(EnumConstantDeclaration node) {
-
-				String id = node.getName().getFullyQualifiedName();
-
-				for(ConventionService s : lista){
-					if(s.verificarConvencao(id, TypeOf.ENUM).getCondition()){
-						javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.ENUM).getWarning(),
-								node.getName().getStartPosition(), node.getName().getLength());
-					}
-				}
-				return true;
-			}
-		};
-
-		javaServices.parseFile(f, v);
-	}
-
-
-	private void verificarMetodoModifier(final File f, final int m) {
-
-
-		if(!listModifier.isEmpty()){
-
-			for(final FilterByModifier mod : listModifier){
-
-				ASTVisitor v = new ASTVisitor() {
-
-
-					@Override
-					public boolean visit(MethodDeclaration node) {
-						if(!node.isConstructor()){
-							String id = node.getName().getFullyQualifiedName();
-
-
-							if(node.getModifiers()==mod.verificarModificadorMetodo()){
-								for(ConventionService s : lista){
-
-									if(s.verificarConvencao(id, TypeOf.METHOD).getCondition()){
-										javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
-									}
-
-									if(s.verificarConvencao(id, TypeOf.METHOD).getCondition()){
-										javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(),  node.getName().getLength());
-									}
-								}					
-							}
-
-
-
-
-						}
-						return true;
-					}
-
-				};
-
-				javaServices.parseFile(f, v);
-			}
-		}else{
-			
-			ASTVisitor v = new ASTVisitor() {
-
-
-				@Override
-				public boolean visit(MethodDeclaration node) {
-					if(!node.isConstructor()){
-						String id = node.getName().getFullyQualifiedName();
-
-
-						if(node.getModifiers()==m){
-							for(ConventionService s : lista){
-
-								if(s.verificarConvencao(id, TypeOf.METHOD).getCondition()){
-									javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
-								}
-
-								if(s.verificarConvencao(id, TypeOf.METHOD).getCondition()){
-									javaServices.addAnnotation(f, AnnotationType.WARNING, s.verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(),  node.getName().getLength());
-								}
-							}					
-						}
-
-
-
-
-					}
-					return true;
-				}
-
-			};
-
-			javaServices.parseFile(f, v);
-		}
-	}
+	
 
 }
