@@ -126,24 +126,24 @@ public class ConventionsView implements PidescoView {
 		rowLayout.type = SWT.VERTICAL;
 		viewArea.setLayout(rowLayout);
 		final Label label = new Label(viewArea, SWT.NONE);
-		label.setText("Escolha uma das opções para Validar a Classe:");
-
+		label.setText("Choose one of the options to validate the Class:");
+		
 		//Verificar classes.
 		final Button checkBoxClass = new Button(viewArea, SWT.CHECK);
 		checkBoxClass.setSize(10, 20);
-		checkBoxClass.setText("Verificar Classe");
+		checkBoxClass.setText("Verify Class");
 		//Verificar Metodos
 		final Button checkBoxMethod = new Button(viewArea, SWT.CHECK);
 		checkBoxMethod.setSize(10, 20);
-		checkBoxMethod.setText("Verificar Todos os Métodos ");
+		checkBoxMethod.setText("Verify All Methods");
 		//Verificar Constantes
 		final Button checkBoxConstant = new Button(viewArea, SWT.CHECK);
 		checkBoxConstant.setSize(10, 20);
-		checkBoxConstant.setText("Verificar Constantes/Variáveis (Minisculas, '$' , '_' )");
+		checkBoxConstant.setText("Verify Constants/Variables (LowerCase, '$' , '_' )");
 		//Verificar Enumerados
 		final Button checkBoxEnum = new Button(viewArea, SWT.CHECK);
 		checkBoxEnum.setSize(10, 20);
-		checkBoxEnum.setText("Verificar Enumerados");
+		checkBoxEnum.setText("Verify Enum");
 
 		final Button checkBoxMethodMod = new Button(viewArea, SWT.CHECK);
 		checkBoxMethodMod.setSize(10, 20);
@@ -151,9 +151,9 @@ public class ConventionsView implements PidescoView {
 		
 		
 		if(listModifier.isEmpty()){
-		checkBoxMethodMod.setText("Filtrar Método por Modifier igual a : ");
+		checkBoxMethodMod.setText("Filter Method by Modifier equals to : ");
 		}else{
-			checkBoxMethodMod.setText("Filtrar Método por Modifier");
+			checkBoxMethodMod.setText("Filter Method by Modifier");
 		}
 
 		final Combo comboDropDown = new Combo(viewArea, SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
