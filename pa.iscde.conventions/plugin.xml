@@ -28,7 +28,6 @@
    <extension
          point="pa.iscde.conventions.conventionservice">
       <conventionservice
-            ConventionName="Teste"
             class="pa.iscde.conventions.teste">
       </conventionservice>
    </extension>

@@ -59,13 +59,6 @@
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="ConventionName" type="string" use="required">
-            <annotation>
-               <documentation>
-                  O nome que a equipa quer dar á sua convenção.
-               </documentation>
-            </annotation>
-         </attribute>
       </complexType>
    </element>
 
