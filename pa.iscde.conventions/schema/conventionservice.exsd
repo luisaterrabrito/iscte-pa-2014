@@ -59,6 +59,35 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="ConventionName" type="string" use="required">
+            <annotation>
+               <documentation>
+                  It should have the name of the convention that the teams desires to use
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="Type" use="required">
+            <annotation>
+               <documentation>
+                  Here the teams have to choose one of this types for there convention and has to match the TypeOf they choose on the extension point.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier"/>
+               </appinfo>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="METHOD">
+                  </enumeration>
+                  <enumeration value="ENUM">
+                  </enumeration>
+                  <enumeration value="CLASS">
+                  </enumeration>
+                  <enumeration value="CONSTANT">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
       </complexType>
    </element>
 
