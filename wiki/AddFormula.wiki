@@ -3,11 +3,12 @@
 = Introduction =
 
 Este ponto de extensão permite criar uma nova formula para juntar às formulas já existentes. 
-Para o efeito deve-se selecionar a categoria, e associar uma class que extenda Formula.
+Para o efeito deve-se selecionar a categoria, e associar uma class que extenda Formula e deve-se dar um ficheiro com o codigo para inserir na classe.
 A formula inserida, posteriormente pode ser utilizada no plugin para inserir código na classe aberta ou em modo calculadora. 
 
 = Details =
 Tem que se extender a class de Formula
+
 {{{
 public abstract class Formula{
 	
@@ -31,17 +32,6 @@ public abstract class Formula{
 	 */
 	public abstract String result(String[] inputs);
 
-	/**
-	 * Opens the file that contains the formula code.
-         * In case of new Formula you must Override this method
-	 * @return method
-	 */
-	public String methodCode(String file) {
-		return ReadUtil.read(file);
-	}
-	
-
-	
 
 }
 
