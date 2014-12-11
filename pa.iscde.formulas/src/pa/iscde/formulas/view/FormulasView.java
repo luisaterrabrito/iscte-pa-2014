@@ -28,28 +28,14 @@ import org.osgi.framework.ServiceReference;
 
 import pa.iscde.formulas.Formula;
 import pa.iscde.formulas.NewFormula;
-import pa.iscde.formulas.basics.Areas;
-import pa.iscde.formulas.basics.PythagoreanTheorem;
-import pa.iscde.formulas.basics.QuadraticFormula;
-import pa.iscde.formulas.basics.TrigonometricFormula;
-import pa.iscde.formulas.basics.Volumes;
-import pa.iscde.formulas.engineering.DecibelConverter;
-import pa.iscde.formulas.engineering.ElectronicsFormulas;
-import pa.iscde.formulas.engineering.FriisFormula;
-import pa.iscde.formulas.engineering.MovementEquations;
 import pa.iscde.formulas.extensibility.CreateCategoryProvider;
-import pa.iscde.formulas.finance.NumberOfPayments;
-import pa.iscde.formulas.finance.PresentValue;
-import pa.iscde.formulas.finance.VALCalculation;
 import pa.iscde.formulas.listeners.CodeEjectorListener;
-import pa.iscde.formulas.statistic.Mean;
-import pa.iscde.formulas.statistic.Median;
-import pa.iscde.formulas.statistic.StandardDeviation;
-import pa.iscde.formulas.statistic.Variance;
 import pa.iscde.formulas.util.DrawEquationUtil;
 import pa.iscde.formulas.util.EquationFinder;
 import pa.iscde.formulas.util.FileReaderUtil;
+import pa.iscde.formulas.util.FormulaAnnotation;
 import pt.iscte.pidesco.extensibility.PidescoView;
+import pt.iscte.pidesco.javaeditor.service.AnnotationType;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 /**
@@ -63,6 +49,7 @@ public class FormulasView implements PidescoView {
 	
 	private HashMap<String,LinkedList<Formula>> allFormulas = new HashMap<String, LinkedList<Formula>>();
 	private HashMap<Button,Formula> buttons = new HashMap<Button,Formula>();
+	private HashMap<Formula,String> tips = new HashMap<Formula,String>();
 	
 	private LinkedList<Formula> basic_formulas = new LinkedList<Formula>();
 	private LinkedList<Formula> engineering_formulas = new LinkedList<Formula>();
@@ -94,42 +81,16 @@ public class FormulasView implements PidescoView {
 		JavaEditorServices javaeditor = context.getService(ref);
 		
 		this.javaeditor=javaeditor;
-		
-		
-		basic_formulas.add(new QuadraticFormula());
-		basic_formulas.add(new TrigonometricFormula());		
-		basic_formulas.add(new PythagoreanTheorem());
-		basic_formulas.add(new Areas());
-		basic_formulas.add(new Volumes());
-		
-		engineering_formulas.add(new FriisFormula());
-		engineering_formulas.add(new DecibelConverter());
-		engineering_formulas.add(new MovementEquations());
-		engineering_formulas.add(new ElectronicsFormulas());
-		
-		finance_formulas.add(new VALCalculation());
-		finance_formulas.add(new NumberOfPayments());
-		finance_formulas.add(new PresentValue());
-		
-		statistics_formulas.add(new Mean());
-		statistics_formulas.add(new Median());
-		statistics_formulas.add(new StandardDeviation());
-		statistics_formulas.add(new Variance());
-		
-		//map with all formulas
 		allFormulas.put("Basic",basic_formulas);
 		allFormulas.put("Engineering",engineering_formulas);
 		allFormulas.put("Finance",finance_formulas);
 		allFormulas.put("Statistics",statistics_formulas);
-		
-		
 		
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
 		for(IExtension ext : reg.getExtensionPoint("pa.iscde.formulas.createcategory").getExtensions()) {
 			for(IConfigurationElement category : ext.getConfigurationElements()) {
 				final String category_name = category.getAttribute("Name");
 				new CreateCategoryProvider() {
-					
 					@Override
 					public String setName() {
 						return category_name;
@@ -148,7 +109,7 @@ public class FormulasView implements PidescoView {
 				
 				addFormula.setPluginID(ext.getContributor().getName());
 				addFormula.setFile(method_file);
-				
+				tips.put(addFormula, "Contributor: "+ext.getContributor().getName());
 				switch(category){
 				case "Basics":
 					basic_formulas.add(addFormula);
@@ -267,6 +228,7 @@ public class FormulasView implements PidescoView {
 	    c.setLayout( new GridLayout( formulas.size(), false ));
 	    for( Formula formula : formulas ) {
 	    	Button button = new Button(c, SWT.PUSH);
+	    	button.setToolTipText(tips.get(formula));
 	    	button.setText(formula.name());
 	    	CodeEjectorListener codeejector = (CodeEjectorListener) formula.getCodeEjectorListener();
     		codeejector.setTarget(javaeditor);
@@ -361,6 +323,10 @@ public class FormulasView implements PidescoView {
 			Label label = new Label(viewArea,SWT.NONE);
 			label.setImage(formulaImage.getImage());
 			formulasBoard.put(label,text);
+		}
+		
+		for (FormulaAnnotation formula : eq.getAnnotations()) {
+			javaeditor.addAnnotation(javaeditor.getOpenedFile(), AnnotationType.INFO, formula.getFormula(), formula.getOffset(), formula.getLenght());
 		}
 		viewArea.pack();
 	}
