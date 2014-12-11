@@ -43,7 +43,6 @@ public class ConventionsView implements PidescoView {
 	private LinkedList<ConventionService> lista;
 	private LinkedList<FilterByModifier> listModifier;
 	private ConventionVisitor visitor;
-	private String convencaoEquipa ="";
 	
 
 	public ConventionsView() {
@@ -82,8 +81,6 @@ public class ConventionsView implements PidescoView {
 						return new Cobject("", false);
 					}
 				}
-
-
 
 				case CONSTANTS:{
 					if(checkVariableLowerCase(name)){
@@ -151,44 +148,6 @@ public class ConventionsView implements PidescoView {
 		final Button checkBoxMethodMod = new Button(viewArea, SWT.CHECK);
 		checkBoxMethodMod.setSize(10, 20);
 		
-		final Button checkBoxConvention = new Button(viewArea, SWT.CHECK);
-		checkBoxConvention.setSize(10, 20);
-		
-		if(lista.size()>1){
-
-			checkBoxConvention.setText(convencaoEquipa);
-			checkBoxConvention.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e){
-					if(checkBoxConvention.getSelection()){
-						
-					for(int i=1 ;i!=lista.size();i++){
-							System.out.println(lista.get(i).toString());
-
-					if(lista.get(i).verificarConvencao("", TypeOf.CLASS).getCondition()){
-						
-						visitor.visitorOfClass(javaServices.getOpenedFile());
-						}
-						if(lista.get(i).verificarConvencao("",TypeOf.METHOD).getCondition()){
-							visitor.visitorOfMethod(javaServices.getOpenedFile());
-						}
-						
-						if(lista.get(i).verificarConvencao("",TypeOf.CONSTANTS).getCondition()){
-							visitor.visitorOfConstants(javaServices.getOpenedFile());
-						}
-						
-						if(lista.get(i).verificarConvencao("",TypeOf.ENUM).getCondition()){
-							visitor.visitorOfEnum(javaServices.getOpenedFile());
-						}
-						
-					}
-				
-					}
-			
-				}
-			});
-		
-	}
 		
 		
 		if(listModifier.isEmpty()){
@@ -319,7 +278,6 @@ public class ConventionsView implements PidescoView {
 		for(IConfigurationElement ext : extensions){
 			try {
 				ConventionService s = (ConventionService) ext.createExecutableExtension("class");
-				convencaoEquipa = ext.getAttribute("ConventionName");
 				lista.add(s);
 			} catch (CoreException e1) {
 				e1.printStackTrace();
