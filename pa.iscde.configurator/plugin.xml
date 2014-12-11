@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="propertyprovider" name="Property Provider" schema="schema/propertyProvider.exsd"/>
-   <extension-point id="dependencyStyle" name="Dependency Style" schema="schema/dependencyStyle.exsd"/>
+   <extension-point id="dependencystyle" name="Dependency Style" schema="schema/dependencyStyle.exsd"/>
    <extension
          id="idConfigurator"
          name="Configurator"
@@ -36,6 +36,15 @@
                id="pt.iscte.pidesco.projectbrowser">
          </view>
       </provider>
+   </extension>
+   <extension
+         point="pa.iscde.configurator.dependencystyle">
+      <styler
+            class="pa.iscde.configurator.model.interfaces.DependencyStyleDefault">
+         <component
+               id="pa.iscde.configurator">
+         </component>
+      </styler>
    </extension>
 
 </plugin>

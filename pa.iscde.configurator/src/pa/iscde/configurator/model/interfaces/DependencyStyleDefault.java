@@ -3,7 +3,7 @@ package pa.iscde.configurator.model.interfaces;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
-public class DependencyStyleImpl implements DependencyStyle {
+public class DependencyStyleDefault implements DependencyStyle {
 
 	@Override
 	public Color getNodeColor(String bundleId) {
@@ -18,7 +18,7 @@ public class DependencyStyleImpl implements DependencyStyle {
 		// TODO Auto-generated method stub
 
 		Display display=Display.getCurrent();
-		return new Color(display,255,0,0);
+		return new Color(display,0,255,0);
 	}
 
 }

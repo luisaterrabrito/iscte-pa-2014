@@ -5,7 +5,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
 public enum ConfiguratorExtensionPoint {
-	PROPERTYPROVIDER;
+	PROPERTYPROVIDER,DEPENDENCYSTYLE;
 	
 	private IExtensionRegistry reg = Platform.getExtensionRegistry();
 	
