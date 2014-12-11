@@ -17,9 +17,9 @@ public class Cobject {
 		
 		
 		/**
-		 * Convention Object que define o Aviso e a condição a ser verificada.
-		 * @param warning - Recebe o aviso desejado para exibir na Classe.
-		 * @param condition - Condição que vai ser verificada.
+		 * Convention Object defines the warning and the condition to verify.
+		 * @param warning - It receives the desired warning to show on the class.
+		 * @param condition - Condition that is to be verified.
 		 */
 		public Cobject(String warning, boolean  condition){
 			this.warning = warning;
