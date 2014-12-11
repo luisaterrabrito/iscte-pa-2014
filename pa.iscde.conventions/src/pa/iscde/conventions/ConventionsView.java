@@ -52,7 +52,14 @@ public class ConventionsView implements PidescoView {
 		javaServices = context.getService(ref);
 	}
 
-
+	
+	/**
+	 * Creates the Graphical User Interface.
+	 *
+	 * @author Vitor Sousa - Nº 33593
+	 * @author Pedro Cananão - Nº 33585
+	 * @author PA - MEI
+	 */
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 
@@ -118,9 +125,9 @@ public class ConventionsView implements PidescoView {
 		lista.add(cs);
 
 
-
 		visitor= new ConventionVisitor(lista, listModifier, javaServices);
 
+		
 		RowLayout rowLayout = new RowLayout();
 		rowLayout.type = SWT.VERTICAL;
 		viewArea.setLayout(rowLayout);
@@ -146,7 +153,6 @@ public class ConventionsView implements PidescoView {
 
 		final Button checkBoxMethodMod = new Button(viewArea, SWT.CHECK);
 		checkBoxMethodMod.setSize(10, 20);
-
 
 
 		if(listModifier.isEmpty()){
@@ -198,12 +204,9 @@ public class ConventionsView implements PidescoView {
 		});
 
 
-
+		
 		handleConventionExtension(viewArea);
 		handleFilterByModExtension();
-
-
-
 
 
 
