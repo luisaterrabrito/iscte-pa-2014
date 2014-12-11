@@ -71,13 +71,6 @@
       </AddCategory>
    </extension>
    <extension
-         point="pa.iscde.formulas.createformula">
-      <NewFormula
-            Category="Statistic"
-            addformula="pa.iscde.formulas.view.Teste">
-      </NewFormula>
-   </extension>
-   <extension
          point="pa.iscde.formulas.newEquationToDraw">
       <newOperation
             newOperation="pa.iscde.formulas.view.TesteDraw">
@@ -86,9 +79,18 @@
    <extension
          point="pa.iscde.filtersearch.SearchProvider">
       <SearchProvider
-            SearchProvider="pa.iscde.formulas.view.TesteSearchProvider"
+            SearchProvider="pa.iscde.formulas.external.MathSearch"
             iconName="mathfunction.gif">
       </SearchProvider>
+   </extension>
+   <extension
+         name="PresentValue"
+         point="pa.iscde.formulas.createformula">
+      <NewFormula
+            Category="Basics"
+            addformula="pa.iscde.formulas.view.Teste"
+            formula_method="formulas/Quadratic.txt">
+      </NewFormula>
    </extension> 
 
 </plugin>

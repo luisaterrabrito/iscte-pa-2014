@@ -15,6 +15,9 @@ import pa.iscde.formulas.util.ReadUtil;
  */
 public abstract class Formula{
 	
+	private String pluginID = "pa.iscde.formulas";
+	private String file = "formulas\\"+name()+".txt";
+	
 	private SelectionListener currentListener;
 	
 	/**
@@ -40,8 +43,8 @@ public abstract class Formula{
 	 * Opens the file that contains the formula code.
 	 * @return method
 	 */
-	public String methodCode(String file) {
-		return ReadUtil.read(file);
+	public String methodCode() {
+		return ReadUtil.read(pluginID,file);
 	}
 	
 	/**
@@ -51,6 +54,15 @@ public abstract class Formula{
 	public SelectionListener getCalculatorListener() {
 		currentListener = new CalculatorListener(this);
 		return currentListener;
+	}
+	
+	/**
+	 * File could be from a diffrent plugin
+	 * 
+	 * @param pluginID
+	 */
+	public void setPluginID(String pluginID){
+		this.pluginID=pluginID;
 	}
 	
 	/**
@@ -68,6 +80,15 @@ public abstract class Formula{
 	 */
 	public SelectionListener getCurrentListener() {
 		return currentListener;
+	}
+	
+	/**
+	 * Set file name
+	 * 
+	 * @param method_file
+	 */
+	public void setFile(String method_file) {
+		file=method_file;
 	}
 	
 

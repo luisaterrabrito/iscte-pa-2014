@@ -2,11 +2,9 @@ package pa.iscde.formulas.view;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
@@ -51,7 +49,6 @@ import pa.iscde.formulas.statistic.Variance;
 import pa.iscde.formulas.util.DrawEquationUtil;
 import pa.iscde.formulas.util.EquationFinder;
 import pa.iscde.formulas.util.FileReaderUtil;
-import pa.iscde.formulas.util.HighlighterCode;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
@@ -83,6 +80,7 @@ public class FormulasView implements PidescoView {
 	private static FormulasView formulasView;
 	private JavaEditorServices javaeditor;
 	private File fileTarget;
+	private Map<String, Image> images;
 	
 	
 	/**
@@ -146,6 +144,10 @@ public class FormulasView implements PidescoView {
 				
 				final String category = formula.getAttribute("Category");
 				final Formula addFormula = (Formula) formula.createExecutableExtension("addformula");
+				final String method_file = formula.getAttribute("formula_method");
+				
+				addFormula.setPluginID(ext.getContributor().getName());
+				addFormula.setFile(method_file);
 				
 				switch(category){
 				case "Basics":
@@ -243,6 +245,7 @@ public class FormulasView implements PidescoView {
 	@Override
 	public void createContents(final Composite viewArea, Map<String, Image> imageMap) {
 		formulasView=this;
+		images=imageMap;
 		this.viewArea = viewArea;
 		viewArea.setLayout(new GridLayout(2,false));
 		createTabs();
@@ -380,6 +383,11 @@ public class FormulasView implements PidescoView {
 	 */
 	public Set<String> getCategories() {
 		return allFormulas.keySet();
+	}
+
+
+	public Map<String, Image> getImages() {
+		return images;
 	}
 	
 
