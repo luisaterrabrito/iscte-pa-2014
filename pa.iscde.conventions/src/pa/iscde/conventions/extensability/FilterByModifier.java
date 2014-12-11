@@ -1,16 +1,16 @@
 package pa.iscde.conventions.extensability;
 
-import org.eclipse.jdt.core.dom.Modifier;
-
 
 public interface FilterByModifier {
 
-	/**	Utiliza a class Modifier do java para filtrar os métodos a que o utilizador quer verificar
-	 * 	para tal é necessário utilizar mesmo o Modifier do java pois com este é que conseguimos filtar por
+	/**	Uses the class Modifier from java to filter the methods that the user wants to check
+	 * 	for that ir is required the use Modifier java because it is with this class that we can filter through method that are
 	 * 	private, public, protected, synchronized,etc.
-	 * @param modifier- representa o modificador de método que o utilizador vai escolher
+	 *
+	 * @param modifier- represents the modifier of the method that the user chooses
 	 * 
-	 * Exemplo
+	 * 
+	 * Example
 	 * public class testeMetodo implements FilterByModifier{
 
 		@Override
