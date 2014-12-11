@@ -1,4 +1,4 @@
-#summary One-pa.iscde.conventions.filterbymodifier
+#summary pa.iscde.conventions.filterbymodifier
 
 This extension point makes the teams choose the modifier they want to filter the annotation to the desired methods.
 
