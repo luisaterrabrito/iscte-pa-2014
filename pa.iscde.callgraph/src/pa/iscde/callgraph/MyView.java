@@ -47,6 +47,7 @@ import org.osgi.framework.ServiceReference;
 import pa.iscde.callgraph.extensibility.CustomLayout;
 import pa.iscde.callgraph.extensibility.ExportButton;
 import pt.iscte.pidesco.extensibility.PidescoView;
+import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.ClassElement;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
@@ -78,6 +79,13 @@ public class MyView implements PidescoView {
 	private MethodDeclaration currentMethod;
 	private ArrayList<MethodDeclaration> aboveMethods;
 	private ArrayList<MethodInvocation> belowMethods;
+	HashMap<MethodDeclaration, ArrayList<MethodInvocation>> invocationsForMethods;
+	HashMap<String, HashMap<MethodDeclaration, ArrayList<MethodInvocation>>> classMethods;
+	private File currentFile;
+	
+	public void setCurrentFile(File file){
+		currentFile = file;
+	}
 	
 	/**
 	 * 
@@ -159,7 +167,6 @@ public class MyView implements PidescoView {
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		instance = this;
-		System.out.println(callGraphIcon);
 		this.viewArea = viewArea;
 		layouts = new HashMap<String, LayoutAlgorithm>();
 		exportButtons = new HashMap<String, ExportButton>();
@@ -249,6 +256,7 @@ public class MyView implements PidescoView {
 					btnChoosePlugin.addListener(SWT.Selection, new Listener() {
 						@Override
 						public void handleEvent(Event arg0) {
+							selectMethod(currentMethod);
 							exportButtons.get("" + cmbPluginsList.getText()).export
 							(currentMethod, aboveMethods, belowMethods, display);
 							shell.dispose();
@@ -281,14 +289,17 @@ public class MyView implements PidescoView {
 	 */
 	public void newFile(File file) {
 
-		// Hashmap que guarda os métodos declarados e a invocação de métodos da classe seleccionada
-		final HashMap<MethodDeclaration, ArrayList<MethodInvocation>> invocationsForMethods =
-				new HashMap<MethodDeclaration, ArrayList<MethodInvocation>>();
+//		// Hashmap que guarda os métodos declarados e a invocação de métodos da classe seleccionada
+//		final HashMap<MethodDeclaration, ArrayList<MethodInvocation>> invocationsForMethods =
+//				new HashMap<MethodDeclaration, ArrayList<MethodInvocation>>();
+//
+//		// Hashmap que guarda todos os métodos (delcarados e invocados) de acordo com a classe dentro
+//		// do pacote
+//		final HashMap<String, HashMap<MethodDeclaration, ArrayList<MethodInvocation>>> classMethods =
+//				new HashMap<String, HashMap<MethodDeclaration,ArrayList<MethodInvocation>>>();
 
-		// Hashmap que guarda todos os métodos (delcarados e invocados) de acordo com a classe dentro
-		// do pacote
-		final HashMap<String, HashMap<MethodDeclaration, ArrayList<MethodInvocation>>> classMethods =
-				new HashMap<String, HashMap<MethodDeclaration,ArrayList<MethodInvocation>>>();
+		invocationsForMethods = new HashMap<MethodDeclaration, ArrayList<MethodInvocation>>();
+		classMethods = new HashMap<String, HashMap<MethodDeclaration,ArrayList<MethodInvocation>>>();
 
 		
 		// Visitor() que percorre todas as classes do package e guarda 
@@ -367,67 +378,70 @@ public class MyView implements PidescoView {
 		};
 
 		javaServices.parseFile(javaServices.getOpenedFile(), visitor);
+		drawDiagram();
+		
+	}
 
+	private void drawDiagram() {
 		// Itera no hashmap
-		Iterator<MethodDeclaration> keySetIterator = invocationsForMethods.keySet().iterator();
-		while(keySetIterator.hasNext()) {
+				Iterator<MethodDeclaration> keySetIterator = invocationsForMethods.keySet().iterator();
+				while(keySetIterator.hasNext()) {
 
-			MethodDeclaration key = keySetIterator.next();
+					MethodDeclaration key = keySetIterator.next();
 
-			// Se o texto (ou cursor) está seleccionado nalgum método, é criado na View, um GraphNode
-			// como o nó central (seleccionado)
-			
-			// Azul - Método seleccionado
-			// Vermelho - Métodos de outras classes que chamam o método seleccionado
-			// Verde - Métodos que são invocados dentro do método seleccionado
-			
-			if(key == currentMethod) {
-
-				aboveMethods = new ArrayList<MethodDeclaration>();
-				belowMethods = new ArrayList<MethodInvocation>();
-				
-				// Métodos abaixo do nó central (seleccionado)
-				GraphNode nodeKey = new GraphNode(graph, SWT.NONE, "" + key.getName());
-				nodeKey.setBackgroundColor(viewArea.getDisplay().getSystemColor(SWT.COLOR_BLUE));
-				
-				// Se existir métodos invocados dentro do método seleccionado, é criado para cada
-				// invocação, um GraphNode com cor verde e uma respectiva conexão
-				ArrayList<MethodInvocation> aux = invocationsForMethods.get(key);
-				for (MethodInvocation mi : aux) {
-					belowMethods.add(mi);
-					GraphNode nodeInvocation = new GraphNode(graph, SWT.NONE, "" + mi);
-					nodeInvocation.setBackgroundColor(viewArea.getDisplay().getSystemColor(SWT.COLOR_GREEN));
-					new GraphConnection(graph, ZestStyles.CONNECTIONS_DIRECTED, nodeKey, nodeInvocation);
-				}
-
-				// Métodos acima do nó central (seleccionado)
-				// Ciclo que diz respeito à iteração de cada linha do hashmap onde
-				// a key == nome da classe e o valor == hashmap (onde a key == declaração do método
-				// e o valor == lista de invocações de métodos)
-				for (HashMap.Entry<String, HashMap<MethodDeclaration, ArrayList<MethodInvocation>>> entry : classMethods.entrySet()) {
+					// Se o texto (ou cursor) está seleccionado nalgum método, é criado na View, um GraphNode
+					// como o nó central (seleccionado)
 					
-					// Ciclo que itera no segundo hashmap (contido no primeiro) cada declaração de métodos
-					for (HashMap.Entry<MethodDeclaration, ArrayList<MethodInvocation>> entry2 : entry.getValue().entrySet()) {
+					// Azul - Método seleccionado
+					// Vermelho - Métodos de outras classes que chamam o método seleccionado
+					// Verde - Métodos que são invocados dentro do método seleccionado
+					
+					if(key == currentMethod) {
+
+						aboveMethods = new ArrayList<MethodDeclaration>();
+						belowMethods = new ArrayList<MethodInvocation>();
 						
-						// Ciclo que itera cada invocação de métodos em relação a declaração de métodos anterior
-						for (MethodInvocation mi2 : classMethods.get(entry.getKey()).get(entry2.getKey())) {
+						// Métodos abaixo do nó central (seleccionado)
+						GraphNode nodeKey = new GraphNode(graph, SWT.NONE, "" + key.getName());
+						nodeKey.setBackgroundColor(viewArea.getDisplay().getSystemColor(SWT.COLOR_BLUE));
+						
+						// Se existir métodos invocados dentro do método seleccionado, é criado para cada
+						// invocação, um GraphNode com cor verde e uma respectiva conexão
+						ArrayList<MethodInvocation> aux = invocationsForMethods.get(key);
+						for (MethodInvocation mi : aux) {
+							belowMethods.add(mi);
+							GraphNode nodeInvocation = new GraphNode(graph, SWT.NONE, "" + mi);
+							nodeInvocation.setBackgroundColor(viewArea.getDisplay().getSystemColor(SWT.COLOR_GREEN));
+							new GraphConnection(graph, ZestStyles.CONNECTIONS_DIRECTED, nodeKey, nodeInvocation);
+						}
+
+						// Métodos acima do nó central (seleccionado)
+						// Ciclo que diz respeito à iteração de cada linha do hashmap onde
+						// a key == nome da classe e o valor == hashmap (onde a key == declaração do método
+						// e o valor == lista de invocações de métodos)
+						for (HashMap.Entry<String, HashMap<MethodDeclaration, ArrayList<MethodInvocation>>> entry : classMethods.entrySet()) {
 							
-							// Compara se existe alguma invocação de método em outras classes em relação ao método
-							// seleccionado. Se sim, é criado um GraphNode com o nome do método (declarado) e a
-							// classe que pertence
-							if(mi2.getName().toString().equals(currentMethod.getName().toString())) {
-								aboveMethods.add(entry2.getKey());
-								GraphNode nodeInvoke = new GraphNode(graph, SWT.NONE, "" + entry2.getKey().getName().toString() + "\n" + "(" + entry.getKey() + ")");
-								nodeInvoke.setBackgroundColor(viewArea.getDisplay().getSystemColor(SWT.COLOR_RED));
-								new GraphConnection(graph, ZestStyles.CONNECTIONS_DIRECTED, nodeInvoke, nodeKey);
+							// Ciclo que itera no segundo hashmap (contido no primeiro) cada declaração de métodos
+							for (HashMap.Entry<MethodDeclaration, ArrayList<MethodInvocation>> entry2 : entry.getValue().entrySet()) {
+								
+								// Ciclo que itera cada invocação de métodos em relação a declaração de métodos anterior
+								for (MethodInvocation mi2 : classMethods.get(entry.getKey()).get(entry2.getKey())) {
+									
+									// Compara se existe alguma invocação de método em outras classes em relação ao método
+									// seleccionado. Se sim, é criado um GraphNode com o nome do método (declarado) e a
+									// classe que pertence
+									if(mi2.getName().toString().equals(currentMethod.getName().toString())) {
+										aboveMethods.add(entry2.getKey());
+										GraphNode nodeInvoke = new GraphNode(graph, SWT.NONE, "" + entry2.getKey().getName().toString() + "\n" + "(" + entry.getKey() + ")");
+										nodeInvoke.setBackgroundColor(viewArea.getDisplay().getSystemColor(SWT.COLOR_RED));
+										new GraphConnection(graph, ZestStyles.CONNECTIONS_DIRECTED, nodeInvoke, nodeKey);
+									}
+								}
 							}
 						}
 					}
 				}
-			}
-		}
-
-		graph.setLayoutAlgorithm(new TreeLayoutAlgorithm(), true);
+				graph.setLayoutAlgorithm(new TreeLayoutAlgorithm(), true);
 	}
 
 	/**
@@ -451,8 +465,17 @@ public class MyView implements PidescoView {
 		}
 	}
 
-	public void selectMethod(ASTNode node) {
-		
+	/**
+	 * 
+	 * Given an ASTNode, prints the associated diagram.
+	 * 
+	 * @param node node to be printed
+	 */
+	public void selectMethod(final ASTNode node) {
+		currentMethod = (MethodDeclaration) node;
+		newFile(currentFile);
+		clearGraph(graph);
+		drawDiagram();
 	}	
 
 }
