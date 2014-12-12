@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="pa.iscde.metrics.createMetric" name="Create Metric" schema="schema/pa.iscde.metrics.createMetric.exsd"/>
    <extension
          id="metrics"
          name="metrics"
@@ -11,12 +12,24 @@
       </member>
    </extension>
    <extension
-         id="metrics"
+         id="pa.iscde.metrics"
          name="Metrics"
          point="pt.iscte.pidesco.view">
       <view
             class="pa.iscde.metrics.MetricsView">
       </view>
+   </extension>
+   <extension
+         id="pa.iscde.metrics.refreshTool"
+         name="Refresh"
+         point="pt.iscte.pidesco.tool">
+      <tool
+            class="pa.iscde.metrics.RefreshTool"
+            description="Refreshes the table"
+            hasState="false"
+            icon="refresh.gif"
+            view="pa.iscde.metrics">
+      </tool>
    </extension>
 
 </plugin>
