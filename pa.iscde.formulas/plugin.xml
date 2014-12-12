@@ -71,13 +71,6 @@
       </AddCategory>
    </extension>
    <extension
-         point="pa.iscde.filtersearch.SearchProvider">
-      <SearchProvider
-            SearchProvider="pa.iscde.formulas.external.MathSearch"
-            iconName="mathfunction.gif">
-      </SearchProvider>
-   </extension>
-   <extension
          name="Formulas"
          point="pa.iscde.formulas.createformula">
       <NewFormula
