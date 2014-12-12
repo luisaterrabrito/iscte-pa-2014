@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="pa.iscde.filtersearch.SearchProvider">
+      <SearchProvider
+            SearchProvider="pa.iscde.formulas.tmsas.MathSearch"
+            iconName="mathfunction.gif">
+      </SearchProvider>
+   </extension>
+
+</plugin>
