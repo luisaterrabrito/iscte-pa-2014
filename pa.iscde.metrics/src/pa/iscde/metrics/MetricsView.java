@@ -2,21 +2,50 @@ package pa.iscde.metrics;
 
 import java.util.Map;
 
-
+import org.eclipse.jdt.internal.core.ProjectReferenceChange;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
+import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoView;
+import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
+import pt.iscte.pidesco.projectbrowser.model.PackageElement;
+import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
-public class MetricsView implements PidescoView{
+public class MetricsView implements PidescoView {
+
+	private static final String VIEW_ID = "pa.iscde.metrics";
+	private static MetricsView instance;
+	// serve para abrir views
+	private static PidescoServices services;
+
+	// serve para aceder ao ficheiro aberto
+	private JavaEditorServices javaServices;
+	private ProjectBrowserServices browserServices;
+
+	// Quando a classe é compilada pela primeira vez o bloco static é executado
+	static {
+		Bundle bundle = FrameworkUtil.getBundle(MetricsView.class);
+		BundleContext context = bundle.getBundleContext();
+		ServiceReference<PidescoServices> reference = context
+				.getServiceReference(PidescoServices.class);
+		services = context.getService(reference);
+	}
 
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
-
-		Table table = new Table (viewArea, SWT.NONE);
+		// Definir a instancia da classe MetricsView como a instancia da view
+		// que esta a ser criada
+		instance = this;
+		Table table = new Table(viewArea, SWT.NONE);
 		TableColumn metricName = new TableColumn(table, SWT.NONE);
 		TableColumn metricValue = new TableColumn(table, SWT.NONE);
 		
@@ -24,10 +53,92 @@ public class MetricsView implements PidescoView{
 		metricName.setWidth(200);
 		metricValue.setText("Value");
 		metricValue.setWidth(50);
-		
+
 		table.setHeaderVisible(true);
+
+//		 Combo c = new Combo(table, SWT.READ_ONLY);
+//		    c.setBounds(50, 50, 150, 65);
+//		    String items[] = { "Package", "Class"};
+//		    c.setItems(items);
+		    
+//		    combo.addSelectionListener(new SelectionListener() {
+//		        public void widgetSelected(SelectionEvent e) {
+//		          System.out.println("Selected index: " + combo.getSelectionIndex() + ", selected item: " + combo.getItem(combo.getSelectionIndex()) + ", text content in the text field: " + combo.getText());
+//		        }
+//
+//		        public void widgetDefaultSelected(SelectionEvent e) {
+//		          System.out.println("Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : combo.getItem(combo.getSelectionIndex())) + ", text content in the text field: " + combo.getText());
+//		          String text = combo.getText();
+//		          if(combo.indexOf(text) < 0) { // Not in the list yet. 
+//		            combo.add(text);
+//		            // Re-sort
+//		            String[] items = combo.getItems();
+//		            Arrays.sort(items);
+//		            combo.setItems(items);
+//		          }
+//		        }
+//		      });
+		    
+		    
+		
+		MetricsVisitor visitor = new MetricsVisitor();
+
+		Bundle bundle = FrameworkUtil.getBundle(MetricsView.class);
+		BundleContext context = bundle.getBundleContext();
+		ServiceReference<JavaEditorServices> reference = context
+				.getServiceReference(JavaEditorServices.class);
+		javaServices = context.getService(reference);
+
+	//	javaServices.parseFile(javaServices.getOpenedFile(), visitor);
 		
 		
+		browserServices = context.getService(context
+				.getServiceReference(ProjectBrowserServices.class));
+		PackageElement root = browserServices.getRootPackage();//parseFile(browser., visitor);
+		visitor.visit(root);
+		
+		TableItem tableItem = new TableItem(table, SWT.NONE);
+		tableItem.setText(0, "Number of declared methods");
+		tableItem.setText(1, "" + visitor.getMethodCounter());
+
+		TableItem tableItem2 = new TableItem(table, SWT.NONE);
+		tableItem2.setText(0, "Number of static methods");
+		tableItem2.setText(1, "" + visitor.getStaticMethods());
+
+		TableItem tableItem3= new TableItem(table, SWT.NONE);
+		tableItem3.setText(0,"Total lines of code");
+		tableItem3.setText(1,"" + visitor.getLineCounter());
+
+		TableItem tableItem4 = new TableItem(table, SWT.NONE);
+		tableItem4.setText(0, "Number of classes");
+		tableItem4.setText(1, "" + visitor.getClassCounter());
+
+		TableItem tableItem5 = new TableItem(table, SWT.NONE);
+		tableItem5.setText(0, "Number of attributes");
+		tableItem5.setText(1, "" + visitor.getStaticMethods());
+
+		TableItem tableItem6 = new TableItem(table, SWT.NONE);
+		tableItem6.setText(0, "Number of packages");
+		tableItem6.setText(1, "" + visitor.getPackageCounter());
+
+		TableItem tableItem7 = new TableItem(table, SWT.NONE);
+		tableItem7.setText(0, "Number of interfaces");
+		tableItem7.setText(1, "" + visitor.getInterfaceCounter());
+
+		TableItem tableItem8 = new TableItem(table, SWT.NONE);
+		tableItem8.setText(0, "Depht of inheritance tree");
+		tableItem8.setText(1, "" + visitor.getStaticMethods());
+
+	}
+
+	public static MetricsView getInstance() {
+		if (instance == null)
+			services.openView(VIEW_ID);
+		return instance;
+	}
+
+	public void refresh() {
+		System.out.println("REFRESH!!!");
 	}
 
 }
