@@ -31,7 +31,6 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class ConventionsView implements PidescoView {
 
-
 	private JavaEditorServices javaServices;
 	private static final String EXT_POINT_CONVENTION = "pa.iscde.conventions.conventionservice";
 	private static final String EXT_POINT_MODIFIER = "pa.iscde.conventions.filterbymodifier";
@@ -59,7 +58,7 @@ public class ConventionsView implements PidescoView {
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 
-
+		
 		ConventionService cs = new ConventionService() {
 			@Override
 			public Cobject verificarConvencao(String name, TypeOf to) {
