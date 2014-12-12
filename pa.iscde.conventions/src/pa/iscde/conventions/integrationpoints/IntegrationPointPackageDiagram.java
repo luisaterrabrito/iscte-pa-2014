@@ -1,14 +1,18 @@
 package pa.iscde.conventions.integrationpoints;
-
-
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.graphics.Color;
-
-import pt.iscte.pidesco.projectbrowser.model.PackageElement;
-
-
 import pa.iscde.packagediagram.extensibility.PackageDiagramColorExtension;
+
+
+/**
+ * This implementation use the PackageDiagram extension to modify the colors and
+ *  letters of the wanted package, in this case the chosen package was impl
+ * 
+ * @author Pedro Cananão
+ *
+ */
+
+
 
 public class IntegrationPointPackageDiagram implements PackageDiagramColorExtension {
 
