@@ -1,7 +1,0 @@
-	private String MovementEquations(double xo, double vox, double yo, double voy, double t) {
-		double gravity = 9.8
-		double x = xo + (vox*t);
-		double aux= (gravity/2)*Math.pow(t, 2);
-		double y = yo +(voy*t) -aux;
-		return "x = " + x +"e y = " + y;
-	}

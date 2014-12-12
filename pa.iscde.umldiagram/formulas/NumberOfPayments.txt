@@ -1,7 +1,0 @@
-	private double NumberOfPayments(double ratePercentage, double futureValue, double periodicPayment, double ) {
-		double rate = ratePercentage/100;
-		double aux = ((rate*futureValue)/periodicPayment);
-		double upperOperation = -Math.log10(1-aux); 
-		double downOperation = Math.log10(1+rate);
-		return (upperOperation/downOperation);
-		}

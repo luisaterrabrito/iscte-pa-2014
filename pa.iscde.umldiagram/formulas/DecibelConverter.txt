@@ -1,5 +1,0 @@
-	public String result(double power) {
-		double dbw = (Math.log10(power))*10;
-		double dbm = dbw+30;
-		return dbw+"dBW e " + dbm + "dBm";
-	}
