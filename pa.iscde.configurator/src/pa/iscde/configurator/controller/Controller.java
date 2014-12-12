@@ -1,13 +1,21 @@
 package pa.iscde.configurator.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.InvalidRegistryObjectException;
+
+import pa.iscde.configurator.EnumExtensionPoint;
 import pa.iscde.configurator.model.Component;
 import pa.iscde.configurator.model.Dependency;
+import pa.iscde.configurator.model.interfaces.DependencyStyle;
 import pa.iscde.configurator.model.interfaces.PropertyProvider;
 
 public class Controller {
@@ -15,12 +23,16 @@ public class Controller {
 	LinkedList<Component> components;
 	LinkedList<Dependency> dependencies;
 	HashMap<PropertyProvider, List<String>> properties;
+	HashMap<DependencyStyle, String> styles;
 
 	public Controller() {
 		constructor = new Constructor();
 		components = constructor.createComponents();
-		properties = constructor.createProperties();
+		properties = loadProperties();
 		dependencies = constructor.createDependencies(components);
+		styles = loadStyles();
+
+		
 	}
 
 	public LinkedList<Component> getRunningComponents() {
@@ -51,6 +63,11 @@ public class Controller {
 	
 	}
 	
+	public HashMap<DependencyStyle, String> getStyles()
+	{
+		return styles;
+	}
+	
 	public HashMap<String,String> getProperties(String selectedComponent)
 	{
 		HashMap<String,String> properties = new HashMap<String,String>();
@@ -66,6 +83,8 @@ public class Controller {
 		}
 		return properties;
 	}
+
+	
 
 	private boolean thereIsComponentWithName(
 			LinkedList<Component> runningComponents, Component mainComponent) {
@@ -85,6 +104,61 @@ public class Controller {
 	public LinkedList<Dependency> getAllDependencies() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private HashMap<PropertyProvider, List<String>> loadProperties()
+	{
+		HashMap<PropertyProvider, List<String>> ppiComponents = new HashMap<PropertyProvider, List<String>>();
+		for (IExtension viewExtension : EnumExtensionPoint.PROPERTYPROVIDER
+				.getExtensions()) {
+			ArrayList<String> components = new ArrayList<String>();
+			
+			
+			/*String pluginId = viewExtension.getContributor().getName();
+			String viewId = viewExtension.getUniqueIdentifier();
+			String viewTitle = viewExtension.getLabel();*/
+			try {
+				PropertyProvider ppi = (PropertyProvider)viewExtension.getConfigurationElements()[0].createExecutableExtension("class");
+				for (IConfigurationElement component : viewExtension.getConfigurationElements()[0].getChildren())
+				{
+				components.add(component.getAttribute("id"));
+				}
+				
+				ppiComponents.put(ppi, components);	
+				
+				
+			} catch (InvalidRegistryObjectException | CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		return ppiComponents;
+	}
+	
+	public HashMap<DependencyStyle,String> loadStyles()
+	{
+		HashMap<DependencyStyle,String> styles = new HashMap<DependencyStyle,String>();
+		for (IExtension viewExtension : EnumExtensionPoint.DEPENDENCYSTYLE
+				.getExtensions()) {
+			
+			
+			/*String pluginId = viewExtension.getContributor().getName();
+			String viewId = viewExtension.getUniqueIdentifier();
+			String viewTitle = viewExtension.getLabel();*/
+			try {
+				DependencyStyle ds = (DependencyStyle)viewExtension.getConfigurationElements()[0].createExecutableExtension("class");
+				
+				styles.put(ds, ds.getName());
+				
+				
+			} catch (InvalidRegistryObjectException | CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		return styles;
 	}
 
 }

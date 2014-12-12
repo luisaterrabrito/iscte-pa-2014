@@ -42,9 +42,6 @@
          point="pa.iscde.configurator.dependencystyle">
       <styler
             class="pa.iscde.configurator.model.interfaces.DependencyStyleDefault">
-         <component
-               id="pa.iscde.configurator">
-         </component>
       </styler>
    </extension>
 

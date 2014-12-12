@@ -14,7 +14,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
 
-import pa.iscde.configurator.ConfiguratorExtensionPoint;
+import pa.iscde.configurator.EnumExtensionPoint;
 import pa.iscde.configurator.model.Component;
 import pa.iscde.configurator.model.Dependency;
 import pa.iscde.configurator.model.interfaces.PropertyProvider;
@@ -64,6 +64,9 @@ public class Constructor {
 				dependenciesList.add(new Dependency(getComponentByName(
 						components, mainContributor.getName()),
 						getComponentByName(components, contributor.getName()),extensionPoint.getUniqueIdentifier()));
+				
+				
+				
 						
 			IExtensionPoint otherCompExtPoints = reg
 					.getExtensionPoint(contributor.getName());
@@ -77,41 +80,13 @@ public class Constructor {
 								components, contributor.getName()),
 								getComponentByName(components,
 										otherContributors.getName()),otherCompExtPoints.getUniqueIdentifier()));
+						
+
 					
 				}
 			}
 		}
 		return dependenciesList;
-	}
-	
-	public HashMap<PropertyProvider, List<String>> createProperties()
-	{
-		HashMap<PropertyProvider, List<String>> ppiComponents = new HashMap<PropertyProvider, List<String>>();
-		for (IExtension viewExtension : ConfiguratorExtensionPoint.PROPERTYPROVIDER
-				.getExtensions()) {
-			ArrayList<String> components = new ArrayList<String>();
-			
-			
-			/*String pluginId = viewExtension.getContributor().getName();
-			String viewId = viewExtension.getUniqueIdentifier();
-			String viewTitle = viewExtension.getLabel();*/
-			try {
-				PropertyProvider ppi = (PropertyProvider)viewExtension.getConfigurationElements()[0].createExecutableExtension("class");
-				for (IConfigurationElement component : viewExtension.getConfigurationElements()[0].getChildren())
-				{
-				components.add(component.getAttribute("id"));
-				}
-				
-				ppiComponents.put(ppi, components);	
-				
-				
-			} catch (InvalidRegistryObjectException | CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-		return ppiComponents;
 	}
 
 	private Component getComponentByName(LinkedList<Component> components,

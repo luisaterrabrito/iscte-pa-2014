@@ -6,4 +6,6 @@ import org.osgi.framework.Bundle;
 public interface DependencyStyle {
 	Color getNodeColor(String bundleId);
 	Color getDependencyColor(String extensionPointId);
+	Color getSelectedNodeColor(String bundleId);
+	String getName();
 }
