@@ -5,6 +5,7 @@ Requirements: a class that implements our interface (see below):
 
 ===Interface details=== 
 
+{{{
 public interface UmlTheme {
 	/**
 	 * enum avaible to set classType
@@ -41,3 +42,4 @@ public interface UmlTheme {
 	 */
 	public ClassType getClassType();
 }
+}}}
