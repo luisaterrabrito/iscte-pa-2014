@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Gmsha
+Bundle-SymbolicName: pa.iscde.formulas.gmsha;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: pt.iscte.pidesco;bundle-version="0.1.0",
+ pt.iscte.pidesco.projectbrowser;bundle-version="0.1.0",
+ pt.iscte.pidesco.javaeditor;bundle-version="1.1.0",
+ pa.iscde;bundle-version="0.1.0",
+ pa.iscde.conventions;bundle-version="1.0.0"
