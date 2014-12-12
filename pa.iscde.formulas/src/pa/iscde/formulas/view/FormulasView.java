@@ -1,16 +1,22 @@
 package pa.iscde.formulas.view;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -32,7 +38,6 @@ import pa.iscde.formulas.extensibility.CreateCategoryProvider;
 import pa.iscde.formulas.listeners.CodeEjectorListener;
 import pa.iscde.formulas.util.DrawEquationUtil;
 import pa.iscde.formulas.util.EquationFinder;
-import pa.iscde.formulas.util.FileReaderUtil;
 import pa.iscde.formulas.util.FormulaAnnotation;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.AnnotationType;
@@ -47,6 +52,7 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
  */
 public class FormulasView implements PidescoView {
 	
+	public static final String PLUGIN_ID = "pa.iscde.formulas";
 	private HashMap<String,LinkedList<Formula>> allFormulas = new HashMap<String, LinkedList<Formula>>();
 	private HashMap<Button,Formula> buttons = new HashMap<Button,Formula>();
 	private HashMap<Formula,String> tips = new HashMap<Formula,String>();
@@ -137,12 +143,47 @@ public class FormulasView implements PidescoView {
 	
 	
 	private void loadFormulas() {
-		String aux = FileReaderUtil.readFile();
+		String aux = readFile();
 		if(aux!=null){
 			for (int i = 0; i < aux.split("END").length; i++) {
 				createFormula(aux.split("END")[i]);
 			}
 		}
+	}
+	
+	
+	private String readFile(){
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IWorkspaceRoot root = workspace.getRoot();
+		IPath location = root.getLocation();
+		IPath append = location.append("formulas");
+		
+		if(!root.getFolder(append).exists()){
+			File directory = append.toFile();
+			directory.mkdir();
+		}
+		
+		File dir = append.toFile();
+		File[] listFiles = dir.listFiles();
+		String allFormulas = "";
+		
+		if(listFiles.length!=0){
+		for (int i = 0; i < listFiles.length; i++) {
+			Scanner s;
+			try {
+				s = new Scanner(listFiles[i]);
+				while(s.hasNext()){
+					allFormulas+=s.nextLine()+System.lineSeparator();
+				}
+				allFormulas+="END";
+				s.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		}else
+			return null;
+		return allFormulas;
 	}
 		
 	

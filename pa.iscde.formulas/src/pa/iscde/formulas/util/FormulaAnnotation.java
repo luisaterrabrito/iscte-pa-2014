@@ -6,6 +6,13 @@ public class FormulaAnnotation {
 	private int offset;
 	private int lenght;
 	
+	/**
+	 * Class to add a Annotation for each formula
+	 * 
+	 * @param formula
+	 * @param offset
+	 * @param lenght
+	 */
 	public FormulaAnnotation(String formula, int offset, int lenght) {
 		super();
 		this.formula = formula;

@@ -11,9 +11,24 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.osgi.framework.Bundle;
 
-public class ReadUtil {
+public class FileReadUtil {
 	
 	public static String read(String plugin, String name){
+		String result = "";
+		Scanner s = null;
+		try {
+			s = new Scanner(loadFile(plugin,name));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+			while(s.hasNext()){
+				result+=s.nextLine()+"\n";
+			}
+		s.close();
+		return result;
+	}
+	
+	public static File loadFile(String plugin,String name){
 		Bundle bundle = Platform.getBundle(plugin);
 		URL fileURL = bundle.getEntry(name);
 		File file = null;
@@ -24,19 +39,7 @@ public class ReadUtil {
 		} catch (IOException e1) {
 		    e1.printStackTrace();
 		}
-		
-		String result = "";
-		Scanner s = null;
-		try {
-			s = new Scanner(file);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-			while(s.hasNext()){
-				result+=s.nextLine()+"\n";
-			}
-		s.close();
-		return result;
+		return file;
 	}
 	
 }
