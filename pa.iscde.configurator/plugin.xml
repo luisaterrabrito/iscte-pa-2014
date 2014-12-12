@@ -44,5 +44,11 @@
             class="pa.iscde.configurator.model.interfaces.DependencyStyleDefault">
       </styler>
    </extension>
+   <extension
+         point="pa.iscde.configurator.dependencystyle">
+      <styler
+            class="pa.iscde.configurator.model.interfaces.DependencyStyleTeste">
+      </styler>
+   </extension>
 
 </plugin>
