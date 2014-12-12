@@ -15,11 +15,12 @@ Require-Bundle: pa.iscde;bundle-version="0.1.0",
  org.eclipse.core.runtime;bundle-version="3.10.0",
  org.junit;bundle-version="4.11.0",
  org.eclipse.jface;bundle-version="3.10.1",
- pa.iscde.formulas.drawlib;bundle-version="1.0.0",
  pa.iscde.filtersearch;bundle-version="1.0.0",
  pt.iscte.pidesco.projectbrowser,
- org.eclipse.jdt.core
+ org.eclipse.jdt.core,
+ pa.iscde.formulas.drawlib;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: pa.iscde.formulas.activator.FormulasActivator
 Export-Package: pa.iscde.formulas,
- pa.iscde.formulas.util
+ pa.iscde.formulas.util,
+ pa.iscde.formulas.view

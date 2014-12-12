@@ -5,7 +5,8 @@ import org.eclipse.swt.events.SelectionListener;
 
 import pa.iscde.formulas.listeners.CalculatorListener;
 import pa.iscde.formulas.listeners.CodeEjectorListener;
-import pa.iscde.formulas.util.ReadUtil;
+import pa.iscde.formulas.util.FileReadUtil;
+import pa.iscde.formulas.view.FormulasView;
 
 
 /**
@@ -15,7 +16,7 @@ import pa.iscde.formulas.util.ReadUtil;
  */
 public abstract class Formula{
 	
-	private String pluginID = "pa.iscde.formulas";
+	private String pluginID = FormulasView.PLUGIN_ID;
 	private String file = "formulas\\"+name()+".txt";
 	
 	private SelectionListener currentListener;
@@ -44,7 +45,7 @@ public abstract class Formula{
 	 * @return method
 	 */
 	public String methodCode() {
-		return ReadUtil.read(pluginID,file);
+		return FileReadUtil.read(pluginID,file);
 	}
 	
 	/**

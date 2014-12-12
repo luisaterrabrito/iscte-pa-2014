@@ -5,6 +5,13 @@ public class JavaToLatexFormat {
 	private String javaOperation;
 	private String operationLatexFormat;
 	
+	/**
+	 * Used by the extension point allows the user to create a object to connect Java text type with
+	 * Latex text type
+	 * 
+	 * @param javaOperation java String
+	 * @param operationLatexForma latex String
+	 */
 	public JavaToLatexFormat(String javaOperation, String operationLatexForma) {
 		super();
 		this.javaOperation = javaOperation;
