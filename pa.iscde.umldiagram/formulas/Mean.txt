@@ -1,9 +1,0 @@
-	public double Mean(double []values) {
-		double aux=0;
-		for (int i = 0; i < values.length; i++) {
-			aux+=values[i];
-		}
-		double result = aux/values.length;
-		return result;
-		}
-	}

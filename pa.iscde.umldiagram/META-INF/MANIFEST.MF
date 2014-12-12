@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: TiagoSaraiva
-Bundle-SymbolicName: pa.iscde.formulas.tmsas;singleton:=true
+Bundle-SymbolicName: pa.iscde.formulas.umldiagram;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: pa.iscde;bundle-version="0.1.0",
