@@ -37,11 +37,5 @@
             class="pa.iscde.conventions.integrationpoints.IntegrationPointPackageDiagram">
       </colorSelector>
    </extension>
-   <extension
-         point="pa.iscde.dropcode.dropbutton">
-      <dropbutton
-            class="pa.iscde.conventions.integrationpoints.IntegrationPointDropButton">
-      </dropbutton>
-   </extension>
 
 </plugin>
