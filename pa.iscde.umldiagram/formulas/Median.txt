@@ -1,0 +1,12 @@
+	public double Median(double [] values) {
+		double [] b = new double[values.length];
+		System.arraycopy(values, 0, b, 0, b.length);
+		Arrays.sort(values);
+		if(values.length%2==0){
+			double aux = ((b[(b.length / 2) - 1] + b[b.length / 2]) / 2.0);
+			return aux;
+		}else{
+			double aux = b[b.length / 2];
+			return aux;
+		}
+	}
