@@ -1,0 +1,10 @@
+private double TrignometricCalculateCos(double senx) {
+			double aux = 1-(Math.pow(senx, 2));
+			return Math.sqrt(aux);
+	}
+	
+	private double TrignometricCalculateSen(double cosx) {
+			double aux = 1-(Math.pow(cosx, 2));
+			return Math.sqrt(aux);
+	}
+	

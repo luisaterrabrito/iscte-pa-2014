@@ -1,0 +1,7 @@
+private double result(double pt, double gt, double gr, double wavelength, double distance) {
+		double topCalculation = ((Math.pow(wavelength, 2))*gt*gr);
+		double aux = 4*Math.PI*distance;
+		double downCalculation = Math.pow(aux, 2);
+		double result = ((topCalculation/downCalculation)*pt);
+		return result;
+	}	

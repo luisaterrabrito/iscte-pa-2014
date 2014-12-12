@@ -1,40 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="colortheme" name="Color Theme" schema="schema/colortheme.exsd"/>
    <extension
-         id="umldiagram"
-         name="umldiagram"
-         point="pa.iscde.team">
-      <member
-            name="nuno"
-            photo="nuno.gif"
-            quote="54378"
-            user="nbcot">
-      </member>
-      <member
-            name="diogo"
-            photo="peres.gif"
-            quote="54411"
-            user="drbps">
-      </member>
-   </extension>
-   <extension
-         id="umlview"
-         name="UML View"
-         point="pt.iscte.pidesco.view">
-      <view
-            class="pa.iscde.umldiagram.UmlView"
-            icon="icon.gif">
-      </view>
-   </extension>
-   <extension
-         name="Default"
-         point="pa.iscde.umldiagram.colortheme">
-      <theme
-            class="pa.iscde.umldiagram.extentionpoint.Default"
-            className="UmlTheme">
-      </theme>
+         point="pa.iscde.filtersearch.SearchProvider">
+      <SearchProvider
+            SearchProvider="pa.iscde.formulas.tmsas.MathSearch"
+            iconName="mathfunction.gif">
+      </SearchProvider>
    </extension>
 
 </plugin>
