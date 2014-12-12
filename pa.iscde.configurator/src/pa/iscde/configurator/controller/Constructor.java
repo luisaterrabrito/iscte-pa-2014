@@ -28,7 +28,6 @@ public class Constructor {
 		IExtensionPoint extensionPoint = reg
 				.getExtensionPoint("pt.iscte.pidesco.view");
 
-		
 		componentList.add(new Component(extensionPoint.getContributor()
 				.getName(), true));
 		System.out.println("O PRINCIPAL: "
@@ -42,8 +41,8 @@ public class Constructor {
 			System.out.println("O SECUNDARIO: " + contributor.getName());
 			// Bundle b = Platform.getBundle(contributor.getName());
 
-//			IConfigurationElement[] confs = ext.getConfigurationElements();
-			
+			// IConfigurationElement[] confs = ext.getConfigurationElements();
+
 		}
 		return componentList;
 
@@ -53,39 +52,64 @@ public class Constructor {
 			LinkedList<Component> components) {
 		// TODO Auto-generated method stub
 		LinkedList<Dependency> dependenciesList = new LinkedList<Dependency>();
-		IExtensionRegistry reg = Platform.getExtensionRegistry();
-		IExtensionPoint extensionPoint = reg
-				.getExtensionPoint("pt.iscte.pidesco.view");
-		IContributor mainContributor = extensionPoint.getContributor();
-		IExtension[] extensions = extensionPoint.getExtensions();
-		for (IExtension ext : extensions) {
-			IContributor contributor = ext.getContributor();
+		// IExtensionRegistry reg = Platform.getExtensionRegistry();
+		// IExtensionPoint extensionPoint = reg
+		// .getExtensionPoint("pt.iscte.pidesco.view");
+		// IContributor mainContributor = extensionPoint.getContributor();
+		// IExtension[] extensions = extensionPoint.getExtensions();
+		// for (IExtension ext : extensions) {
+		// IContributor contributor = ext.getContributor();
+		//
+		// dependenciesList.add(new Dependency(getComponentByName(
+		// components, mainContributor.getName()),
+		// getComponentByName(components,
+		// contributor.getName()),extensionPoint.getUniqueIdentifier()));
+		//
 
-				dependenciesList.add(new Dependency(getComponentByName(
-						components, mainContributor.getName()),
-						getComponentByName(components, contributor.getName()),extensionPoint.getUniqueIdentifier()));
-				
-				
-				
-						
-			IExtensionPoint otherCompExtPoints = reg
-					.getExtensionPoint(contributor.getName());
-			if (otherCompExtPoints != null) {
-				IExtension[] otherCompExtensions = otherCompExtPoints
-						.getExtensions();
-				for (IExtension iExtension : otherCompExtensions) {
-					IContributor otherContributors = iExtension
-							.getContributor();
-						dependenciesList.add(new Dependency(getComponentByName(
-								components, contributor.getName()),
-								getComponentByName(components,
-										otherContributors.getName()),otherCompExtPoints.getUniqueIdentifier()));
-						
-
-					
+		IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
+		IExtensionPoint[] extensionPoints = extensionRegistry
+				.getExtensionPoints();
+		for (Component c : components) {
+			for (IExtensionPoint ep : extensionPoints) {
+				if (ep.getUniqueIdentifier().contains(c.getName())) {
+					IExtension[] exts = ep.getExtensions();
+					for (IExtension iExtension : exts) {
+						IContributor cont = iExtension.getContributor();
+						if (getComponentByName(components, cont.getName()) != null)
+							dependenciesList.add(new Dependency(c,
+									getComponentByName(components,
+											cont.getName()), ep
+											.getUniqueIdentifier()));
+					}
 				}
 			}
 		}
+
+		// if(contributor.getName().equals("pa.iscde.configurator")){
+		// IExtensionPoint otherCompExtPoints = reg
+		// .getExtensionPoint("pa.iscde.configurator.dependencystyle");
+		// System.out.println("Nome do contributor " + contributor.getName());
+		//
+		// if (otherCompExtPoints != null) {
+		// System.out.println("Nome do extension point " +
+		// otherCompExtPoints.getUniqueIdentifier());
+		// IExtension[] otherCompExtensions = otherCompExtPoints
+		// .getExtensions();
+		// for (IExtension iExtension : otherCompExtensions) {
+		// IContributor otherContributors = iExtension
+		// .getContributor();
+		// dependenciesList.add(new Dependency(getComponentByName(
+		// components, contributor.getName()),
+		// getComponentByName(components,
+		// otherContributors.getName()),otherCompExtPoints.getUniqueIdentifier()));
+		//
+		//
+		//
+		// }
+		// }
+		// }
+		// }
+
 		return dependenciesList;
 	}
 
