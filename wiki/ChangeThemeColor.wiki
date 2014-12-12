@@ -1,3 +1,4 @@
+#labels pa.iscde.umldiagram.colortheme
 This extension point offers other plugins the ability to create and change the theme of the UML Diagram that we provied. 
 
 Requirements: a class that implements our interface (see below):
