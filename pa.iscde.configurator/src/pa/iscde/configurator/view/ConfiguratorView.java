@@ -25,6 +25,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -41,7 +42,7 @@ import org.eclipse.zest.layouts.LayoutStyles;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 
-import pa.iscde.configurator.ConfiguratorExtensionPoint;
+import pa.iscde.configurator.EnumExtensionPoint;
 import pa.iscde.configurator.controller.Controller;
 import pa.iscde.configurator.model.Component;
 import pa.iscde.configurator.model.Dependency;
@@ -59,10 +60,13 @@ public class ConfiguratorView implements PidescoView {
 	private HashMap<Component, GraphNode> componentNode;
 	private HashMap<Dependency, GraphConnection> dependencyConnection;
 	private HashMap<String, String> propertyTable;
+	private HashMap<DependencyStyle,String> styles;
+	
 	private Graph graph;
 	private Table table;
+	private Composite comp;
+	private Combo combo;
 
-	private List<DependencyStyle> styles;
 
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
@@ -70,12 +74,11 @@ public class ConfiguratorView implements PidescoView {
 		final Color white = new Color(display, 255, 255, 255);
 		// TODO Auto-generated method stub
 
-		styles = new Vector<DependencyStyle>();
 		viewArea.setLayout(new FillLayout());
 		ScrolledComposite scroll = new ScrolledComposite(viewArea, SWT.H_SCROLL
 				| SWT.V_SCROLL);
 
-		Composite comp = new Composite(scroll, SWT.NONE);
+		comp = new Composite(scroll, SWT.NONE);
 		comp.setLayout(new GridLayout(1, false));
 		comp.setBackground(white);
 
@@ -83,31 +86,48 @@ public class ConfiguratorView implements PidescoView {
 		dependencyConnection = new HashMap<Dependency, GraphConnection>();
 		controller = new Controller();
 		runningComponents = controller.getRunningComponents();
+		styles = controller.getStyles();
 		graph = new Graph(comp, SWT.NONE);
 		graph.setLayoutData(new GridData(750, 500));
 		
 		
-		for (IExtension dependencyExtension : ConfiguratorExtensionPoint.DEPENDENCYSTYLE
-				.getExtensions()) {
-			try {
-				DependencyStyle ds = (DependencyStyle) dependencyExtension
-						.getConfigurationElements()[0]
-						.createExecutableExtension("class");
-				styles.add(ds);
-
-			} catch (InvalidRegistryObjectException | CoreException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-		}
-
+		createTable();
+		createCombo();
 		paintRunningComponents();
-		ColorNodes();
 		dependencies = controller.getDependencies(runningComponents);
 		paintGivenDependencies();
-		ColorDependencies();
 		
+
+		scroll.setContent(comp);
+		scroll.setMinSize(300, comp.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		scroll.setExpandHorizontal(true);
+		scroll.setExpandVertical(true);
+		
+		
+		
+
+	}
+	
+	
+	private void createTable()
+	{
+
+		table = new Table(comp, SWT.BORDER | SWT.V_SCROLL
+				| SWT.H_SCROLL);
+		table.setHeaderVisible(true);
+		String[] titles = { "Propriedades", "Descrição" };
+
+		for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
+			TableColumn column = new TableColumn(table, SWT.NULL);
+			column.setText(titles[loopIndex]);
+		}
+		
+		for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
+			table.getColumn(loopIndex).pack();
+		}
+
+		table.setBounds(25, 25, 220, 200);
+		table.pack();
 		
 		graph.addSelectionListener(new SelectionAdapter() {
 
@@ -128,31 +148,46 @@ public class ConfiguratorView implements PidescoView {
 				}
 			}
 		});
-
-
-		table = new Table(comp, SWT.BORDER | SWT.V_SCROLL
-				| SWT.H_SCROLL);
-		table.setHeaderVisible(true);
-		String[] titles = { "Propriedades", "Descrição" };
-
-		for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
-			TableColumn column = new TableColumn(table, SWT.NULL);
-			column.setText(titles[loopIndex]);
-		}
-		
-		for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
-			table.getColumn(loopIndex).pack();
-		}
-
-		table.setBounds(25, 25, 220, 200);
-		table.pack();
-
-		scroll.setContent(comp);
-		scroll.setMinSize(300, comp.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		scroll.setExpandHorizontal(true);
-		scroll.setExpandVertical(true);
-
 	}
+	
+	private void createCombo()
+	{
+		combo = new Combo(comp, SWT.READ_ONLY);
+	    combo.setBounds(50, 50, 150, 65);
+	    String items[] = styles.values().toArray(new String[styles.size()]);
+	    combo.setItems(items);
+	    combo.setLayoutData(new GridData(100, 500));
+	    combo.addSelectionListener(new SelectionAdapter() {
+	        public void widgetSelected(SelectionEvent e) {
+	        	for(Entry<DependencyStyle, String> entry : styles.entrySet()) {
+	        		if (entry.getValue().equals(combo.getText()))
+	        		{
+
+	        				Set<Component> set = componentNode.keySet();
+	        				ArrayList<Component> list = new ArrayList<Component>();
+	        				list.addAll(set);
+	        				if (!styles.isEmpty()) {
+	        					for (Component c : list) {
+	        				Color color=entry.getKey().getNodeColor(c.getName());
+	        				componentNode.get(c).setBackgroundColor(color);
+	        				color=entry.getKey().getSelectedNodeColor(c.getName());
+	        				componentNode.get(c).setHighlightColor(color);
+	        				
+	        					}
+	        					
+	        					for (Dependency c : dependencies) {
+	        						Color color=entry.getKey().getDependencyColor(c.getExtensionPointId());
+	        						dependencyConnection.get(c).changeLineColor(color);
+	        					}
+	        			
+	        		}
+
+	        	}
+	        }
+	        }
+	      });
+	}
+	
 	
 	private void fillTable()
 	{
@@ -168,34 +203,13 @@ public class ConfiguratorView implements PidescoView {
 		
 	}
 
-	private void ColorNodes() {
-		Set<Component> set = componentNode.keySet();
-		ArrayList<Component> list = new ArrayList<Component>();
-		list.addAll(set);
-		if (!styles.isEmpty()) {
-			for (Component c : list) {
-				Color color=styles.get(0).getNodeColor(c.getName());
-				componentNode.get(c).setBackgroundColor(color);
-			}
-		}
-	}
-
-	private void ColorDependencies() {
-		// TODO Auto-generated method stub
-
-	}
-
 	private void paintRunningComponents() {
 		for (Component c : runningComponents) {
 			GraphNode node = new GraphNode(graph, SWT.NONE, c.getName());
 			node.setSize(-1, -1);
 			componentNode.put(c, node);
 		}
-		
-		
 		graph.setLayoutAlgorithm(new SpringLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING), true);
-
-
 	}
 
 	private void paintGivenDependencies() {
