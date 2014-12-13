@@ -24,13 +24,13 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import activator.SnippetsActivator;
 import pa.iscde.snippets.data.Variable;
 import pa.iscde.snippets.extensionhandlers.SnippetContextDefinitionManager;
 import pa.iscde.snippets.external.ContextDefinitionInterface.ValidateMessage;
 import pa.iscde.snippets.fileoperations.FileOperations;
 import pa.iscde.snippets.gui.dialogboxes.NewLanguageDialog;
 import pa.iscde.snippets.gui.dialogboxes.ValueInsertionDialog;
+import activator.SnippetsActivator;
 
 public class SnippetCode extends Composite {
 	private Text snippetNameTextBox;
@@ -45,7 +45,7 @@ public class SnippetCode extends Composite {
 		super(viewArea, style);
 		this.viewArea = viewArea;
 		fileOperations = new FileOperations(f);
-		createContents();
+		createContents("");
 		setSnippetTextAndName();
 		setSelectedFileLanguage();
 		snippetNameTextBox.setEditable(false);
@@ -59,17 +59,17 @@ public class SnippetCode extends Composite {
 		 */
 	}
 
-	public SnippetCode(Composite viewArea, int style) {
+	public SnippetCode(Composite viewArea, int style, String s) {
 		super(viewArea, style);
 		this.viewArea = viewArea;
 		fileOperations = new FileOperations();
-		createContents();
+		createContents(s);
 		editButton.setSelection(true);
 		selectDefaultLanguage();
 
 	}
 
-	public void createContents() {
+	public void createContents(String selectedText) {
 		this.setLayout(new GridLayout(1, false));
 		Composite nameAndEditAndLanguageSelectComposite = new Composite(this,
 				SWT.None);
@@ -140,9 +140,7 @@ public class SnippetCode extends Composite {
 		snippetCodeText.setText("Insert Code Here...");
 		snippetCodeText.setFont(SWTResourceManager.getFont("Segoe UI", 11,
 				SWT.ITALIC));
-		if (SnippetsActivator.getInstance().getSelectedText() != null
-				&& !SnippetsActivator.getInstance().getSelectedText()
-						.equals("")) {
+		if (selectedText != null && !selectedText.equals("")) {
 			snippetCodeText.setText(SnippetsActivator.getInstance()
 					.getSelectedText());
 			snippetCodeText.setFont(SWTResourceManager.getFont("Segoe UI", 11,
@@ -402,7 +400,8 @@ public class SnippetCode extends Composite {
 
 	private HashMap<String, Variable> getVariables() {
 		HashMap<String, Variable> variables = new HashMap<String, Variable>();
-		Scanner scanner = new Scanner(snippetCodeText.getText().concat(System.lineSeparator()));
+		Scanner scanner = new Scanner(snippetCodeText.getText().concat(
+				System.lineSeparator()));
 		String token;
 		while (scanner.hasNextLine()) {
 			token = "";
@@ -419,7 +418,7 @@ public class SnippetCode extends Composite {
 					}
 				}
 			}
-				scanner.nextLine();
+			scanner.nextLine();
 		}
 		scanner.close();
 		return variables;
