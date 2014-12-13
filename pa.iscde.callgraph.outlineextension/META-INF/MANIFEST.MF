@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Outlineextension
+Bundle-SymbolicName: pa.iscde.callgraph.outlineextension;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.eclipse.jdt.core.dom,
+ org.eclipse.swt.graphics
+Require-Bundle: pa.iscde;bundle-version="0.1.0",
+ pa.iscde.callgraph;bundle-version="1.0.0",
+ pa.iscde.outline;bundle-version="0.0.0",
+ pt.iscte.pidesco;bundle-version="0.1.0"
