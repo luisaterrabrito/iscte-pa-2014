@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="snippetssearch"
+         name="Snippets Search"
+         point="pa.iscde.filtersearch.SearchProvider">
+      <SearchProvider
+            SearchProvider="pa.iscde.snippets.extensions.SnippetsSearchProvider"
+            iconName="lemon.png">
+      </SearchProvider>
+   </extension>
+
+</plugin>
