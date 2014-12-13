@@ -2,13 +2,13 @@ package pa.iscde.packagediagram.model;
 
 public class ConnectionModel {
 
-	  final String id; 
+ 
 	  final String label; 
 	  final NodeModel source;
 	  final NodeModel destination;
 	  
-	  public ConnectionModel(String id, String label, NodeModel source, NodeModel destination) {
-	    this.id = id;
+	  public ConnectionModel(String label, NodeModel source, NodeModel destination) {
+
 	    this.label = label;
 	    this.source = source;
 	    this.destination = destination;

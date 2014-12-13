@@ -39,16 +39,8 @@ public class NodeModelContent {
 	    searchClass(root);
 		
 	}
-	
-	/**
-	 * private void searchPackage(PackageElement root, GraphNode parentNode) {
-	 * for(SourceElement e : root.getChildren()) if(e.isPackage()) { GraphNode
-	 * sonNode = new GraphNode(graph, SWT.NONE, e.getName());
-	 * 
-	 * new GraphConnection(graph, ZestStyles.CONNECTIONS_DIRECTED, parentNode,
-	 * sonNode); searchPackage((PackageElement) e, sonNode); } }
-	 **/
 
+	//pesquisa as classes/nós
 	private void searchClass(PackageElement root) {
 		for (SourceElement e : root.getChildren()) {
 			if (e.isPackage()) {
@@ -58,10 +50,12 @@ public class NodeModelContent {
 				PackageDiagramASTVisitor packageDiagramAstVisitor = new PackageDiagramASTVisitor();
 				javaServices.parseFile(e.getFile(), packageDiagramAstVisitor);
 
+				
 				PackageDeclaration packageDeclaration = packageDiagramAstVisitor.getPackageDeclaration();
 				String name = packageDeclaration == null ? "packageDefault" : packageDeclaration.getName().toString();
 			
 
+				//vai buscar o packageNode - nó
 				NodeModel packageNode = new NodeModel(name);
 				if (!nodes.contains(packageNode)) {
 					nodes.add(packageNode);
@@ -69,9 +63,8 @@ public class NodeModelContent {
 				else
 					packageNode = nodes.get(nodes.indexOf(packageNode));
 
-
-				for (ImportDeclaration x : packageDiagramAstVisitor
-						.getImportList()) {
+				//buscar o nome do IMPORT e filtra o nome
+				for (ImportDeclaration x : packageDiagramAstVisitor.getImportList()) {
 
 					String packageImport = x.getName().toString();
 					
@@ -80,6 +73,7 @@ public class NodeModelContent {
 					
 					int i;
 
+					//filtra até tirar o nome da classe, LETRA MAIÚSCULA
 					for(i = listString.length-1; i>=0; i--) {
 						String str =  listString[i];
 
@@ -88,18 +82,15 @@ public class NodeModelContent {
 						}
 					}
 					
-					
+					// ESCREVE A PALAVRA FILTRADA NO PACKAGEIMPORT
 					packageImport = "";
 					for (int j=0; j<=i; j++) {
 						if(packageImport.length()>0)
 							packageImport += ".";
 						packageImport += listString[j];
 					}
-					
-
-					
-					
-					
+				
+					// cria nó com o nome filtrado e correto
 					NodeModel importNode = new NodeModel(packageImport);
 					
 					if (!nodes.contains(importNode)) {
@@ -108,7 +99,8 @@ public class NodeModelContent {
 					else
 						importNode = nodes.get(nodes.indexOf(importNode));
 					
-					new ConnectionModel("import", "import", packageNode, importNode);
+					// cria ligação
+					new ConnectionModel("import", packageNode, importNode);
 				}
 
 			}

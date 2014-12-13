@@ -3,7 +3,7 @@
 <schema targetNamespace="pa.iscde.packagediagram" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="pa.iscde.packagediagram" id="colorSelector" name="color selector"/>
+         <meta.schema plugin="pa.iscde.packagediagram" id="actionSelector" name="action selector"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <choice minOccurs="1" maxOccurs="unbounded">
-            <element ref="colorSelector"/>
+            <element ref="actionSelector"/>
          </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,15 +47,15 @@
       </complexType>
    </element>
 
-   <element name="colorSelector">
+   <element name="actionSelector">
       <complexType>
-         <attribute name="class" type="string">
+         <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":pa.iscde.packagediagram.extensibility.PackageDiagramColorExtension"/>
+                  <meta.attribute kind="java" basedOn=":pa.iscde.packagediagram.extensibility.PackageDiagramActionExtension"/>
                </appinfo>
             </annotation>
          </attribute>

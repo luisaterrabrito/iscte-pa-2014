@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="colorSelector" name="color selector" schema="schema/colorSelector.exsd"/>
+   <extension-point id="actionSelector" name="action selector" schema="schema/actionSelector.exsd"/>
    <extension
          id="teampackages"
          name="Team Packages"
@@ -41,12 +42,30 @@
          name="Refresh Package"
          point="pt.iscte.pidesco.tool">
       <tool
-            class="pa.iscde.packagediagram.internal.RefreshToolPackageDiagram"
+            class="pa.iscde.packagediagram.internal.ColorToolPackageDiagram"
             description="Refreshes the packages diagram"
             icon="package.gif"
             hasState="false"
-            view="pt.iscte.pidesco.projectbrowser.tree">
+            view="pa.iscde.packagediagram.umlpackages">
       </tool>
+   </extension>
+   <extension
+         id="id1"
+         name="name"
+         point="pt.iscte.pidesco.tool">
+      <tool
+            class="pa.iscde.packagediagram.PidescoTool_test"
+            hasState="false"
+            icon="refresh.gif"
+            view="pa.iscde.packagediagram.umlpackages">
+      </tool>
+   </extension>
+   <extension
+         point="pa.iscde.packagediagram.colorSelector">
+      <colorSelector
+            Name="pa.iscde.packagediagram.colorSelector1"
+            class="pa.iscde.packagediagram.Lol">
+      </colorSelector>
    </extension>
 
 
