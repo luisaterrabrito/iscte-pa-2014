@@ -90,7 +90,7 @@ public class NodeModelContent {
 						packageImport += listString[j];
 					}
 				
-					//jA4jg3jy4sk6
+					
 					// ignorar import a si próprios
 					if(packageNode.getName().compareTo(packageImport)==0)
 						continue;
