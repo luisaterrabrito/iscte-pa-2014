@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="conventions.pjdcp"
+         name="conventions.pjdcp"
+         point="pa.iscde.team">
+      <member
+            name="Pedro Cananão"
+            user="pjdcp">
+      </member>
+   </extension>
+   <extension
+         point="pa.iscde.packagediagram.colorSelector">
+      <colorSelector
+            class="pa.iscde.conventions.pjdcp.ChangePackageColor">
+      </colorSelector>
+   </extension>
+
+</plugin>
