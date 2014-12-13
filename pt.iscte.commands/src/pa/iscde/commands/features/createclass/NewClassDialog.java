@@ -140,7 +140,7 @@ final class NewClassDialog extends TitleAreaDialog {
 	@Override
 	protected void okPressed() {
 
-		if (validClassName() && validatePackageName()) {
+		if (validClassName() && validatePackageName() && !fileExists()) {
 			try {
 				createClass();
 				services.runTool(
@@ -153,35 +153,46 @@ final class NewClassDialog extends TitleAreaDialog {
 		}
 	}
 
+	private boolean fileExists() {
+		if (GetFile().exists()) {
+			setMessage(Labels.FILEEXISTS_LBL, IMessageProvider.ERROR);
+			return true;
+		}
+		return false;
+	}
+
 	private void createClass() throws IOException {
 
 		BufferedWriter bw = null;
 		try {
 
-			String folders = Joiner.on("/").join(
-					Splitter.on(".").split(packageName.getText()));
-
-			String workspace = ResourcesPlugin.getWorkspace().getRoot()
-					.getLocation().toString();
-
-			File file = new File(workspace + "/" + folders + "/"
-					+ className.getText() + ".java");
+			File file = GetFile();
 
 			if (!file.exists()) {
 				file.getParentFile().mkdirs();
 				file.createNewFile();
+				FileWriter fw = new FileWriter(file.getAbsoluteFile());
+				bw = new BufferedWriter(fw);
+				bw.write(createClassString().toString());
 			}
-
-			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			bw = new BufferedWriter(fw);
-			bw.write(createClassString().toString());
-
 		} finally {
 			if (bw != null) {
 				bw.close();
 			}
 		}
 
+	}
+
+	private File GetFile() {
+		String folders = Joiner.on("/").join(
+				Splitter.on(".").split(packageName.getText()));
+
+		String workspace = ResourcesPlugin.getWorkspace().getRoot()
+				.getLocation().toString();
+
+		File file = new File(workspace + "/" + folders + "/"
+				+ className.getText() + ".java");
+		return file;
 	}
 
 	private StringBuilder createClassString() {
