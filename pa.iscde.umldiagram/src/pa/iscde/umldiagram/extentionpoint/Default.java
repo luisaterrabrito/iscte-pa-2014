@@ -21,7 +21,7 @@ public class Default implements UmlTheme{
 
 	@Override
 	public Color getTypeColor(ClassType classType) {
-		Color c = new Color(null, 0, 0, 5);
+		Color c = new Color(null, 0, 255, 5);
 		return c;
 	}
 

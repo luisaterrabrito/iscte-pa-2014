@@ -38,6 +38,7 @@
       </theme>
    </extension>
    <extension
+         name="Example"
          point="pa.iscde.umldiagram.clickoption">
       <coption
             class="pa.iscde.umldiagram.extentionpoint.Example">

@@ -1,35 +1,44 @@
 package pa.iscde.umldiagram.extentionpoint;
 
 
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 
-import pa.iscde.umldiagram.CkickOption;
 
-public class Example implements CkickOption{
+
+import org.eclipse.draw2d.MouseEvent;
+import org.eclipse.draw2d.MouseListener;
+import org.eclipse.swt.graphics.Color;
+
+import pa.iscde.umldiagram.ClickOption;
+import pa.iscde.umldiagram.UMLClassFigure;
+
+public class Example implements ClickOption{
 
 	@Override
 	public MouseListener getAction() {
-		MouseListener m = new MouseListener(){
-
+		MouseListener m;
+		m = new MouseListener() {
+			
 			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				System.out.println("cu");
-				
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseUp(MouseEvent e) {
+			public void mouseReleased(MouseEvent me) {
 				// TODO Auto-generated method stub
 				
 			}
 			
+			@Override
+			public void mousePressed(MouseEvent me) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseDoubleClicked(MouseEvent me) {
+				try{
+				UMLClassFigure f = (UMLClassFigure) me.getSource();
+				f.getNode().setBackgroundColor(new Color(null, 0, 255, 255));
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
 		};
 		return m;
 	}
