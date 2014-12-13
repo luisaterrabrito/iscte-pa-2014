@@ -31,11 +31,5 @@
    <extension
          point="pa.iscde.conventions.filterbymodifier">
    </extension>
-   <extension
-         point="pa.iscde.packagediagram.colorSelector">
-      <colorSelector
-            class="pa.iscde.conventions.integrationpoints.IntegrationPointPackageDiagram">
-      </colorSelector>
-   </extension>
 
 </plugin>
