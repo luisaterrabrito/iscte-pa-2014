@@ -6,105 +6,102 @@ import java.util.SortedSet;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
+import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 
 public class MetricsVisitor extends ASTVisitor {
-	private int method_counter, line_counter, staticmethod_counter,
-			package_counter, interface_counter, class_counter = 0;
+	private int methodCounter, physicalLineCounter, logicalLineCounter, staticMethodCounter,
+			packageCounter, interfaceCounter, classCounter, attributeCounter;
+	private CompilationUnit compilationUnit;
 
-
-	@Override
 	public boolean visit(MethodDeclaration node) {
+			methodCounter++;
 
-			method_counter++;
-
-		// lineNumber = compilationUnit.getLineNumber(node.getStartPosition()) -
-		// 1;
+		this.physicalLineCounter = compilationUnit.getLineNumber(node
+				.getStartPosition()) - 1;
 
 		if (Modifier.isStatic(node.getModifiers()))
-			staticmethod_counter++;
+			staticMethodCounter++;
 
-		return false;
+		return true;
 	};
 
-	public boolean visit(CompilationUnit cu) {
-
-		List classTypes = cu.types();
-		for (Object object : classTypes) {
-
-			switch (((AbstractTypeDeclaration)object).getNodeType()) {
-			case ASTNode.ANONYMOUS_CLASS_DECLARATION:
-				interface_counter++;
-				break;
-
-			case ASTNode.TYPE_DECLARATION:
-				class_counter++;
-				break;
-			}
+	public boolean visit(TypeDeclaration node) {
+		if(node.isInterface())
+			interfaceCounter++;
+		else {
+			classCounter++;
 		}
-
-		// cu.getLineNumber(cu.getStartPosition()-1);
-		// line_counter++;
-		// System.out.print(line_counter + ": ");
-		// System.out.println(cu);
-
-		 String[] lines = cu.toString().split("\n");
-		 line_counter = lines.length;
-//		 System.out.println("Lines: " + nrlines);
-//		 for (int i = 0; i < lines.length; i++) {
-//		 System.out.println(i+": "+lines[i]);
-//		 }
-
-
 		return true;
 	}
 	
-	public boolean visit(PackageDeclaration node) {
-
-		package_counter++;
-
-		return false;
-	};
-
-
-	public int getMethodCounter() {
-		return method_counter;
+	public boolean visit(FieldDeclaration node){
+		System.out.println("attributes" );
+		attributeCounter++;
+		return true;
 	}
 
-	public int getLineCounter() {
-		return line_counter;
+	public boolean visit(CompilationUnit cu) {
+		this.compilationUnit = cu;
+		physicalLineCounter = cu.getLineNumber(cu.getLength()-1);
+		logicalLineCounter = cu.toString().split("\n").length;
+		return true;
+	}
+
+	public boolean visit(PackageDeclaration node) {
+		System.out.println("package");
+		packageCounter++;
+
+		return true;
+	};
+
+	public int getMethodCounter() {
+		return methodCounter;
+	}
+
+	public int getPhysicalLineCounter() {
+		return physicalLineCounter;
 	}
 
 	public int getStaticMethods() {
-		return staticmethod_counter;
+		return staticMethodCounter;
 	}
-
 
 	public int getPackageCounter() {
-		return package_counter;
-	}
-	
-	public int getInterfaceCounter() {
-		return interface_counter;
-	}
-	
-	public int getClassCounter() {
-		return class_counter;
+		return packageCounter;
 	}
 
-	public void visit(PackageElement root) {
-		SortedSet<SourceElement> c = root.getChildren();
-		for (SourceElement sourceElement : c) {
-//			System.out.println(sourceElement.getClass());
-		}
+	public int getInterfaceCounter() {
+		return interfaceCounter;
 	}
+
+	public int getClassCounter() {
+		return classCounter;
+	}
+
+	public int getLogicalLineCounter() {
+		return logicalLineCounter;
+	}
+
+	public int getAttributeCounter() {
+		return attributeCounter;
+	}
+
+	// public void visit(PackageElement root) {
+	// SortedSet<SourceElement> c = root.getChildren();
+	// for (SourceElement sourceElement : c) {
+	// // System.out.println(sourceElement.getClass());
+	// }
+	// }
 
 }
