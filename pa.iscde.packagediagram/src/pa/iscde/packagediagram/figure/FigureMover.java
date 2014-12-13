@@ -42,10 +42,10 @@ public class FigureMover implements MouseListener, MouseMotionListener {
 			figure_select = figure;
 		}
 		location = event.getLocation();
-		
-		if (event.button != 1) {
+		if (event.button != 1 && event.getSource() instanceof DrawFigure) {
 
-			PackageDiagramView.getInstance().loadActionMenu();
+			DrawFigure drawFigure = (DrawFigure) event.getSource();
+			PackageDiagramView.getInstance().loadActionMenu(drawFigure.getName());
 			
 		}
 		event.consume();

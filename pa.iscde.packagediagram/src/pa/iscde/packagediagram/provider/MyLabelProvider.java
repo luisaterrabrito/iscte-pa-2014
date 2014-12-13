@@ -75,7 +75,7 @@ public class MyLabelProvider extends LabelProvider implements IFigureProvider,
 	}
 
 	@Override
-	public int getConnectionStyle(Object arg0, Object arg1) {
+	public int getConnectionStyle(Object source, Object destination) {
 
 		return ZestStyles.CONNECTIONS_DIRECTED | ZestStyles.CONNECTIONS_DASH;
 	}

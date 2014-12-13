@@ -5,7 +5,11 @@ import org.eclipse.draw2d.geometry.*;
 
 
 public class DrawFigure extends PolygonShape {
+	
+	private String name;
+	
 	public DrawFigure(String name) {
+		this.name = name;
 		final GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginHeight = 10 + NodeBorder.HEIGHT;
 		gridLayout.marginWidth = 10;
@@ -29,11 +33,11 @@ public class DrawFigure extends PolygonShape {
 
 		setBorder(new NodeBorder());
 
-
-		
-
-		
 		new FigureMover(this);
+	}
+
+	public String getName() {
+		return name;
 	}
 	
 
