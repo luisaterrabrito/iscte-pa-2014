@@ -41,10 +41,11 @@ public class CommandDefinition {
 	
 	@Override
 	public boolean equals(Object o){
-		CommandDefinition cmdDef = (CommandDefinition) o;
 		
-		if(o == null)
+		if((o instanceof CommandDefinition) == false)
 			return false;
+		
+		CommandDefinition cmdDef = (CommandDefinition) o;
 		
 		if(this == o)
 			return true;
