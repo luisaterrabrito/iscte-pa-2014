@@ -107,11 +107,11 @@ public class PackageDiagramView implements PidescoView {
 
 	}
 
-	public void refreshActions(String key) {
+	public void refreshActions(String key, String packageName) {
 
 		if (actionsMap.containsKey(key)) {
 			ChangeAction changeAction = actionsMap.get(key);
-			changeAction.run();
+			changeAction.run(packageName);
 		}
 
 	}
@@ -132,10 +132,8 @@ public class PackageDiagramView implements PidescoView {
 
 					MenuItem menuItem = (MenuItem) e.getSource();
 
-					PackageDiagramView.getInstance()
-							.refreshColors(menuItem.getText());
-
-					System.out.println();
+					PackageDiagramView.getInstance().refreshColors(
+							menuItem.getText());
 
 				}
 
@@ -151,10 +149,10 @@ public class PackageDiagramView implements PidescoView {
 
 	}
 
-	public void loadActionMenu() {
+	public void loadActionMenu(final String packageName) {
 
 		System.out.println("entrei no loadActionMenu");
-		
+
 		Menu menu = new Menu(viewArea.getShell(), SWT.POP_UP);
 		String s;
 		MenuItem option;
@@ -168,9 +166,8 @@ public class PackageDiagramView implements PidescoView {
 
 					MenuItem menuItem = (MenuItem) e.getSource();
 
-					
-					
-
+					PackageDiagramView.getInstance().refreshActions(
+							menuItem.getText(), packageName);
 
 				}
 
@@ -184,11 +181,6 @@ public class PackageDiagramView implements PidescoView {
 
 		menu.setVisible(true);
 	}
-	
-	
-	
-	
-	
 
 	private Map<String, ChangeColor> colorsMap = new HashMap<String, ChangeColor>();
 	private Map<String, ChangeAction> actionsMap = new HashMap<String, ChangeAction>();
@@ -251,7 +243,7 @@ public class PackageDiagramView implements PidescoView {
 		}
 	}
 
-	//escolher a ação
+	// escolher a ação
 	public static class ChangeAction {
 		private PackageDiagramActionExtension tempPcae;
 
@@ -259,8 +251,8 @@ public class PackageDiagramView implements PidescoView {
 			tempPcae = pcae;
 		}
 
-		public void run (){
-			tempPcae.run();
+		public void run(String packageName) {
+			tempPcae.run(packageName);
 		}
 
 	}
