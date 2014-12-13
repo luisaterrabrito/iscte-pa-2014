@@ -1,4 +1,4 @@
-package pa.iscde.metrics;
+package pa.iscde.metrics.internal;
 import pt.iscte.pidesco.extensibility.PidescoTool;
 
 

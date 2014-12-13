@@ -1,4 +1,4 @@
-package pa.iscde.metrics;
+package pa.iscde.metrics.internal;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -7,6 +7,8 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+
+import pa.iscde.metrics.extensibility.Metricable;
 
 public class MetricsVisitor extends ASTVisitor {
 	private int methodCounter, physicalLineCounter, logicalLineCounter, staticMethodCounter,
@@ -23,15 +25,19 @@ public class MetricsVisitor extends ASTVisitor {
 
 		return true;
 	};
+	
 	//class or interface
 	public boolean visit(TypeDeclaration node) {
 		if(node.isInterface())
 			interfaceCounter++;
+	
 		else {
 			classCounter++;
 		}
+		
 		return true;
 	}
+	
 	//attributes
 	public boolean visit(FieldDeclaration node){
 		attributeCounter++;
@@ -41,8 +47,8 @@ public class MetricsVisitor extends ASTVisitor {
 	//lines of code
 	public boolean visit(CompilationUnit cu) {
 		this.compilationUnit = cu;
-		physicalLineCounter = cu.getLineNumber(cu.getLength()-1);
-		logicalLineCounter = cu.toString().split("\n").length;
+		physicalLineCounter += cu.getLineNumber(cu.getLength()-1);
+		logicalLineCounter += cu.toString().split("\n").length;
 		return true;
 	}
 

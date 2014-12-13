@@ -1,4 +1,4 @@
-package pa.iscde.metrics;
+package pa.iscde.metrics.extensibility;
 
 public interface Metricable {
 

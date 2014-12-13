@@ -1,4 +1,4 @@
-package pa.iscde.metrics;
+package pa.iscde.metrics.internal;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
