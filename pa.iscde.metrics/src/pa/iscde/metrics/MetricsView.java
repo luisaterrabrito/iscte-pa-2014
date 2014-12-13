@@ -89,13 +89,13 @@ public class MetricsView implements PidescoView {
 				.getServiceReference(JavaEditorServices.class);
 		javaServices = context.getService(reference);
 
-	//	javaServices.parseFile(javaServices.getOpenedFile(), visitor);
+		javaServices.parseFile(javaServices.getOpenedFile(), visitor);
 		
 		
-		browserServices = context.getService(context
-				.getServiceReference(ProjectBrowserServices.class));
-		PackageElement root = browserServices.getRootPackage();//parseFile(browser., visitor);
-		visitor.visit(root);
+//		browserServices = context.getService(context
+//				.getServiceReference(ProjectBrowserServices.class));
+//		PackageElement root = browserServices.getRootPackage();//parseFile(browser., visitor);
+//		visitor.visit(root);
 		
 		TableItem tableItem = new TableItem(table, SWT.NONE);
 		tableItem.setText(0, "Number of declared methods");
@@ -106,16 +106,20 @@ public class MetricsView implements PidescoView {
 		tableItem2.setText(1, "" + visitor.getStaticMethods());
 
 		TableItem tableItem3= new TableItem(table, SWT.NONE);
-		tableItem3.setText(0,"Total lines of code");
-		tableItem3.setText(1,"" + visitor.getLineCounter());
+		tableItem3.setText(0,"Physical lines of code");
+		tableItem3.setText(1,"" + visitor.getPhysicalLineCounter());
 
+		TableItem tableItem9= new TableItem(table, SWT.NONE);
+		tableItem9.setText(0,"Logical lines of code");
+		tableItem9.setText(1,"" + visitor.getLogicalLineCounter());
+		
 		TableItem tableItem4 = new TableItem(table, SWT.NONE);
 		tableItem4.setText(0, "Number of classes");
 		tableItem4.setText(1, "" + visitor.getClassCounter());
 
 		TableItem tableItem5 = new TableItem(table, SWT.NONE);
 		tableItem5.setText(0, "Number of attributes");
-		tableItem5.setText(1, "" + visitor.getStaticMethods());
+		tableItem5.setText(1, "" + visitor.getAttributeCounter());
 
 		TableItem tableItem6 = new TableItem(table, SWT.NONE);
 		tableItem6.setText(0, "Number of packages");
