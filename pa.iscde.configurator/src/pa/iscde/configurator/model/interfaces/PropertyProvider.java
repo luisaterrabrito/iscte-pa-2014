@@ -1,6 +1,6 @@
 /*
- * Interface used to extend pa.iscde.configurator.propertyProvider extension Point
- * @author Jo�o Diogo Medeiros & Lu�s Dias
+ * Interface used to extend pa.iscde.configurator.propertyprovider extension Point
+ * @author Joao Diogo Medeiros & Luis Dias
  * 
  */
 package pa.iscde.configurator.model.interfaces;

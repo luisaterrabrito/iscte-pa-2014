@@ -1,26 +1,29 @@
 package pa.iscde.configurator.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
 
-import pa.iscde.configurator.EnumExtensionPoint;
 import pa.iscde.configurator.model.Component;
 import pa.iscde.configurator.model.Dependency;
-import pa.iscde.configurator.model.interfaces.PropertyProvider;
-
+/*
+ * This class creates the model classes that represent the components and dependencies to paint
+ * 
+ * This class is created by the controller and uses a class Platform to get the information
+ * (components, dependencies and their attributes) from.
+ */
 public class Constructor {
-
+	
+	/*
+	 * This method creates all the components related to pt.iscte.pidesco that 
+	 * have a view and are running
+	 * 
+	 * @return the list of components created 
+	 */
 	public LinkedList<Component> createComponents() {
 		// TODO Auto-generated method stub
 		LinkedList<Component> componentList = new LinkedList<Component>();
@@ -48,24 +51,19 @@ public class Constructor {
 
 	}
 
+	/*
+	 * This method creates all the dependencies related to the components passed by parameter 
+	 * Only creates dependencies if the main component or the dependent exist on the list.
+	 * 
+	 * @param List with all the components which matter to create dependencies
+	 * 
+	 * @return the list of dependencies created 
+	 */
 	public LinkedList<Dependency> createDependencies(
 			LinkedList<Component> components) {
 		// TODO Auto-generated method stub
 		LinkedList<Dependency> dependenciesList = new LinkedList<Dependency>();
-		// IExtensionRegistry reg = Platform.getExtensionRegistry();
-		// IExtensionPoint extensionPoint = reg
-		// .getExtensionPoint("pt.iscte.pidesco.view");
-		// IContributor mainContributor = extensionPoint.getContributor();
-		// IExtension[] extensions = extensionPoint.getExtensions();
-		// for (IExtension ext : extensions) {
-		// IContributor contributor = ext.getContributor();
-		//
-		// dependenciesList.add(new Dependency(getComponentByName(
-		// components, mainContributor.getName()),
-		// getComponentByName(components,
-		// contributor.getName()),extensionPoint.getUniqueIdentifier()));
-		//
-
+		
 		IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
 		IExtensionPoint[] extensionPoints = extensionRegistry
 				.getExtensionPoints();
@@ -85,30 +83,6 @@ public class Constructor {
 			}
 		}
 
-		// if(contributor.getName().equals("pa.iscde.configurator")){
-		// IExtensionPoint otherCompExtPoints = reg
-		// .getExtensionPoint("pa.iscde.configurator.dependencystyle");
-		// System.out.println("Nome do contributor " + contributor.getName());
-		//
-		// if (otherCompExtPoints != null) {
-		// System.out.println("Nome do extension point " +
-		// otherCompExtPoints.getUniqueIdentifier());
-		// IExtension[] otherCompExtensions = otherCompExtPoints
-		// .getExtensions();
-		// for (IExtension iExtension : otherCompExtensions) {
-		// IContributor otherContributors = iExtension
-		// .getContributor();
-		// dependenciesList.add(new Dependency(getComponentByName(
-		// components, contributor.getName()),
-		// getComponentByName(components,
-		// otherContributors.getName()),otherCompExtPoints.getUniqueIdentifier()));
-		//
-		//
-		//
-		// }
-		// }
-		// }
-		// }
 
 		return dependenciesList;
 	}
