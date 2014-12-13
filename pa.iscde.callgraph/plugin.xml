@@ -8,24 +8,25 @@
          name="callgraph"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.callgraph.MyView">
+            class="pa.iscde.callgraph.CallGraphView">
       </view>
    </extension>
    <extension
          id="pa.iscde.callgraph"
-         name="callgraph"
+         name="CallGraph"
          point="pa.iscde.team">
-      <member
-            name="João Alves, Pedro Neves"
-            quote="swag"
-            user="callgraph">
+            <member
+            name="Pedro Neves"
+            photo="pedroneves.jpg"
+            quote="Swag."
+            user="pfnsa">
       </member>
-   </extension>
-   <extension
-         point="pa.iscde.dropcode.dropbutton">
-      <dropbutton
-            class="pa.iscde.callgraph.dropcodeextension.dropcodeExtension">
-      </dropbutton>
+      <member
+            name="João Alves"
+            photo="joaoalves.jpg"
+            quote="Lida."
+            user="jppas">
+      </member>
    </extension>
 
 </plugin>
