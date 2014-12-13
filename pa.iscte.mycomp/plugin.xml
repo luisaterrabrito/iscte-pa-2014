@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="id1"
+         name="name"
+         point="pa.iscde.team">
+   </extension>
+   <extension
+         id="id2"
+         name="name"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscte.mycomp.MyView">
+      </view>
+   </extension>
+   <extension
+         point="pa.iscde.configurator.dependencystyle">
+      <styler
+            class="pa.iscte.mycomp.DTeste">
+      </styler>
+   </extension>
+   <extension
+         point="pa.iscde.configurator.propertyprovider">
+      <provider
+            class="pa.iscte.mycomp.ITeste">
+         <view
+               id="pa.iscte.configurator">
+         </view>
+      </provider>
+   </extension>
+
+</plugin>
