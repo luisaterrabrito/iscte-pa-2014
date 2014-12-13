@@ -25,6 +25,8 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import activator.SnippetsActivator;
+
 public class SnippetsExplorer extends Composite {
 	private static SnippetsExplorer instance = null;
 	private GridData gridData;
@@ -146,13 +148,27 @@ public class SnippetsExplorer extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				hideUnhide();
-				SnippetsView.getInstance().createSnippetCode();
+				SnippetsView.getInstance().createSnippetCode("");
 			}
 		});
 		addNewButton.setFont(SWTResourceManager.getFont("Segoe UI", 10,
 				SWT.NORMAL));
 
-		addNewButton.setText("Add New Snippet");
+		addNewButton.setText("New Snippet");
+
+		Button newFromSelected = new Button(addComposite, SWT.NONE);
+		newFromSelected.setFont(SWTResourceManager.getFont("Segoe UI", 10,
+				SWT.NORMAL));
+		newFromSelected.setText("New From Selected Text");
+		newFromSelected.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				hideUnhide();
+				SnippetsView.getInstance().createSnippetCode(
+						SnippetsActivator.getInstance().getSelectedText());
+			}
+		});
 
 		addDisposeListener(new DisposeListener() {
 
@@ -227,10 +243,13 @@ public class SnippetsExplorer extends Composite {
 			}
 			refreshSnippetsList();
 		}
+		if(!searchText.getText().trim().equals("")){
+			search();
+		}
 	}
 
 	private void search() {
-		if (!searchText.getText().equals("")) {
+		if (!searchText.getText().trim().equals("")) {
 			HashMap<String, File> found = new HashMap<>();
 			for (String name : filteredSnippets.keySet()) {
 				if (name.toLowerCase().contains(
@@ -246,8 +265,8 @@ public class SnippetsExplorer extends Composite {
 		gridData.exclude = !gridData.exclude;
 		setVisible(!gridData.exclude);
 	}
-	
-	public void setFilterToJava(){
+
+	public void setFilterToJava() {
 		languagesCombo.select(languagesCombo.indexOf("Java"));
 		filterByLanguage();
 		search();

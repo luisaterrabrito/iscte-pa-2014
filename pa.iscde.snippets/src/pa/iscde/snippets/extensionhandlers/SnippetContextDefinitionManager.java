@@ -3,6 +3,7 @@ package pa.iscde.snippets.extensionhandlers;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.eclipse.core.runtime.CoreException;
@@ -15,15 +16,15 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import pa.iscde.snippets.external.ContextDefinitionInterface;
-import pa.iscde.snippets.external.CursorContext;
 import pa.iscde.snippets.external.ContextDefinitionInterface.ValidateMessage;
+import pa.iscde.snippets.external.CursorContext;
 import pa.iscde.snippets.fileoperations.FileOperations;
 import activator.SnippetsActivator;
 
 public class SnippetContextDefinitionManager {
 	private static SnippetContextDefinitionManager instance;
 	public static final String EXT_POINT_ID = "pa.iscde.snippets.contextdefinition";
-	private HashMap<String, ContextDefinitionInterface> definitions = new HashMap<>();
+	private HashMap<String, ArrayList<ContextDefinitionInterface>> definitions = new HashMap<>();
 	private FileOperations fileOP;
 
 	public static SnippetContextDefinitionManager getInstance() {
@@ -36,11 +37,21 @@ public class SnippetContextDefinitionManager {
 	}
 
 	public void addDefinition(ContextDefinitionInterface c) {
-		definitions.put(c.getTargetSnippet().toLowerCase(), c);
+		if (definitions.containsKey(c.getTargetSnippet().toLowerCase())) {
+			ArrayList<ContextDefinitionInterface> a = definitions.get(c
+					.getTargetSnippet().toLowerCase());
+			a.add(c);
+		} else {
+			ArrayList<ContextDefinitionInterface> a = new ArrayList<>();
+			a.add(c);
+			definitions.put(c.getTargetSnippet().toLowerCase(), a);
+		}
 	}
 
 	public void removeDefinition(ContextDefinitionInterface c) {
-		definitions.remove(c.getTargetSnippet().toLowerCase());
+		ArrayList<ContextDefinitionInterface> a = definitions.get(c
+				.getTargetSnippet());
+		a.remove(c);
 	}
 
 	public void loadDefinitions() throws CoreException {
@@ -60,8 +71,23 @@ public class SnippetContextDefinitionManager {
 		File openFile = SnippetsActivator.getInstance().getOpenFile();
 		if (definitions.containsKey(fileOP.getFileName().toLowerCase())
 				&& openFile != null) {
-			return definitions.get(fileOP.getFileName().toLowerCase())
-					.validateContext(createContext(createVisitor(openFile)));
+			String message = "";
+			boolean isValid = true;
+			ArrayList<ContextDefinitionInterface> a = definitions.get(fileOP
+					.getFileName().toLowerCase());
+			CursorContext context = createContext(createVisitor(openFile));
+			for (int i = 0; i < a.size(); i++) {
+				ContextDefinitionInterface definition = a.get(i);
+				ValidateMessage validate = definition.validateContext(context);
+				if (!validate.isValid()) {
+					if (i > 0)
+						message.concat(System.lineSeparator());
+					message = message.concat(definition.getIdentifier()
+							+ System.lineSeparator() + validate.getMessage());
+					isValid = false;
+				}
+			}
+			return new ValidateMessage(message, isValid);
 		} else {
 			if (openFile != null)
 				return new ValidateMessage("", true);

@@ -61,8 +61,8 @@ public class SnippetsView implements PidescoView {
 	}
 
 	// Without file
-	protected void createSnippetCode() {
-		new SnippetCode(viewArea, SWT.NONE);
+	protected void createSnippetCode(String selectedText) {
+		new SnippetCode(viewArea, SWT.NONE, selectedText);
 		viewArea.layout();
 	}
 	
