@@ -1,0 +1,15 @@
+public static long fibonacci(int i)
+{
+ 
+  if(i<1)
+  {
+    return 0;
+  }
+  if(i<3)
+  {
+    return 1;
+  }
+  long mth_result = fibonacci(i-1) + fibonacci(i-2);
+ 
+  return mth_result;
+}

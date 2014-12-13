@@ -6,7 +6,9 @@
          <meta.schema plugin="pa.iscde.snippets" id="contextdefinition" name="Context Definition"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         With this extension point, we can define contexts where a certain snippet should not be used.
+
+The context is given by the cursor position, and it contains a lot of information such as: if the cursor is inside a method, the visibility of the method, if the cursor is inside the top class, the visibility of the inner/static class if the cursor is inside it, if the cursor is inside a try or a catch block, etc.
       </documentation>
    </annotation>
 
@@ -30,14 +32,14 @@
          <attribute name="id" type="string">
             <annotation>
                <documentation>
-                  
+                  The id of the extension.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="name" type="string">
             <annotation>
                <documentation>
-                  
+                  The name of the extension.
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
@@ -52,7 +54,13 @@
          <attribute name="definition" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  This interface has 3 methods:
+
+The first, getIdentifier(), it&apos;s a method with a return type string. This string should help identify the context and what it does, however it is not mandatoty (it can be an empty String), and it doesn&apos;t have to be unique among all the context definitions.
+
+The second, getTargetSnippet(), it&apos;s a method that has to return the name of the snippet whose context will be defined. The name is not case sensitive.
+
+The third, validateContext(CursorContext? e), is a method that receives a cursor Context, which is a data object that contains a lot of information about the context of the cursor. This will be the method that defines the context. To do that the interface implementation can define the need for some boolean (or all of them) attributes of the context to be false, or true, the need for the visibility to be private, etc. The method must return a ValidateMessage?, which is an object that has a boolean valid that says if the snippet is valid in that context or not, and a error message to display to the user in case the context is not valid. So, as long as the return type is respected, the implementation has a lot of freedom to define the context.
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":pa.iscde.snippets.external.ContextDefinitionInterface"/>
