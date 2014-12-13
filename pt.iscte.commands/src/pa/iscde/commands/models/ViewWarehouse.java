@@ -20,7 +20,7 @@ import pt.iscte.pidesco.extensibility.PidescoServices;
 
 final public class ViewWarehouse {
 
-	private Set<String> viewsWarehouse;
+	private Set<ViewDef> viewsWarehouse;
 	private static ViewWarehouse instance;
 
 	public static ViewWarehouse getInstance() {
@@ -31,15 +31,24 @@ final public class ViewWarehouse {
 	}
 
 	private ViewWarehouse() {
-		viewsWarehouse = new HashSet<String>();
+		viewsWarehouse = new HashSet<ViewDef>();
 	}
 
-	public boolean containsKey(String id) {
+	public boolean containsKey(ViewDef id) {
 		return viewsWarehouse.contains(id);
 	}
 
-	public Set<String> getViewsWarehouse() {
+	public Set<ViewDef> getViewsWarehouse() {
 		return viewsWarehouse;
+	}
+	
+	public ViewDef getViewDefFromUniqueIdentifier(String uniqueIdentifier){
+		
+		for(ViewDef v : viewsWarehouse){
+			if(v.getUniqueIdentifier().equals(uniqueIdentifier))
+				return v;
+		}
+		return null;
 	}
 
 	// This Method can only be when there are already WorkbenchPages and stuff
@@ -65,6 +74,11 @@ final public class ViewWarehouse {
 		handler.setExtensionHandler(ExtensionPointsIDS.VIEW_ID.getID(),
 				new ViewExtensionHandler(viewsWarehouse));
 		handler.startProcessExtension();
+		
+		//adiciona ainda a View do JavaEditor que não é nenhuma PidescoView
+		viewsWarehouse.add(new ViewDef("pt.iscte.pidesco.javaeditor", "javafile.gif", "pt.iscte.pidesco.javaeditor"));
+		
+		
 	}
 
 	public static String getActiveView() {
@@ -81,5 +95,8 @@ final public class ViewWarehouse {
 	public static void eraseModel() {
 		instance = null;
 	}
+	
+	
+
 
 }

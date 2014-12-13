@@ -24,6 +24,7 @@ import pa.iscde.commands.external.services.CommandViewTree;
 import pa.iscde.commands.models.CommandDefinition;
 import pa.iscde.commands.models.CommandKey;
 import pa.iscde.commands.models.CommandWarehouse;
+import pa.iscde.commands.models.ViewDef;
 import pa.iscde.commands.models.ViewWarehouse;
 import pa.iscde.commands.utils.Labels;
 
@@ -69,14 +70,17 @@ class NewCommandDialog extends Dialog {
 			@Override
 			protected void addDataToTreeTable() {
 				super.addDataToTreeTable();
-				Set<String> views = ViewWarehouse.getInstance()
+				Set<ViewDef> views = ViewWarehouse.getInstance()
 						.getViewsWarehouse();
-				for (String string : views) {
-					if (!containView(commandTree.getItems(), string)) {
+				for (ViewDef viewDef : views) {
+					
+					String viewIdentifier = viewDef.getUniqueIdentifier();
+					
+					if (!containView(commandTree.getItems(), viewIdentifier)) {
 						TreeItem item = new TreeItem(commandTree, SWT.NONE);
 						item.setBackground(new Color(null, 240, 240, 240));
-						item.setText(string);
-						item.setData(string);
+						item.setText(viewIdentifier);
+						item.setData(viewIdentifier);
 					}
 
 				}
