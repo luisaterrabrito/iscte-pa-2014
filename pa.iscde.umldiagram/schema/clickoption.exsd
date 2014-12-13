@@ -55,7 +55,7 @@
                   A class that implements
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":pa.iscde.umldiagram.CkickOption"/>
+                  <meta.attribute kind="java" basedOn=":pa.iscde.umldiagram.ClickOption"/>
                </appinfo>
             </annotation>
          </attribute>

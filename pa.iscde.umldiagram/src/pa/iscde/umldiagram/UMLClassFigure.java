@@ -13,8 +13,11 @@ import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.zest.core.widgets.CGraphNode;
 
 public class UMLClassFigure extends Figure {
+	
+	private final String name;
 
 	class CompartmentFigure extends Figure {
 
@@ -40,18 +43,20 @@ public class UMLClassFigure extends Figure {
 		
 
 	private CompartmentFigure methodsCompartment;
+	private CGraphNode node;
 
 	
 	
 
-	protected UMLClassFigure(String name) {
+	protected UMLClassFigure(String n) {
+		name=n;
 		ToolbarLayout layout = new ToolbarLayout();
 		setLayoutManager(layout);
 		setBackgroundColor(WHITE);
 		setBorder(new LineBorder(ColorConstants.black, 1));
 		setOpaque(true);
 
-		addNameLabel(name);
+		addNameLabel(n);
 
 		methodsCompartment = new CompartmentFigure();
 		add(methodsCompartment);
@@ -60,6 +65,12 @@ public class UMLClassFigure extends Figure {
 
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+
+
 	public static final Color GRAY = new Color(null, 230, 230, 230);
 	public static Color WHITE = new Color(null, 255, 255, 255);
 	
@@ -102,5 +113,16 @@ public class UMLClassFigure extends Figure {
 		methodsCompartment = new CompartmentFigure();
 		add(methodsCompartment);
 	}
+
+	public void setNode(CGraphNode node) {
+		this.node=node;
+		
+	}
+
+	public CGraphNode getNode() {
+		return node;
+	}
+	
+	
 
 }

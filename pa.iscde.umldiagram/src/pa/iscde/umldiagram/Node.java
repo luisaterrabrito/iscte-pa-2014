@@ -16,6 +16,7 @@ public class Node {
 	private String superC= new String(" ");
 	private ArrayList<String> implementClasses = new ArrayList<String>();
 	private ClassType type;
+	private UMLClassFigure figure;
 	
 	public ArrayList<String> getClassInstances() {
 		return classInstances;
@@ -25,12 +26,17 @@ public class Node {
 		return type;
 	}
 
-	public Node(GraphNode node, String name, SourceElement sourceElement) {
+	public Node(GraphNode node, String name, SourceElement sourceElement, UMLClassFigure figure) {
 		this.node = node;
 		this.name = name;
+		this.figure=figure;
 		this.sourceElement = sourceElement;
 	}
 	
+	public UMLClassFigure getFigure() {
+		return figure;
+	}
+
 	public GraphNode getNode() {
 		return node;
 	}
