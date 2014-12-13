@@ -1,0 +1,20 @@
+#summary pa.iscde.packagediagram.actionSelector
+
+= Introduction =
+
+Interface: PackageDiagramActionExtension
+
+Executes an action based in Packages
+
+
+= Details =
+<code>
+
+package pa.iscde.packagediagram.extensibility;
+
+public interface PackageDiagramActionExtension {
+
+	public void run(String packageName);
+
+}
+}</code>
