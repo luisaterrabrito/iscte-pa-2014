@@ -1,4 +1,4 @@
-package pa.iscde.formulas.util;
+package pa.iscde.formulas.draw;
 
 import java.io.File;
 import java.io.FileNotFoundException;
