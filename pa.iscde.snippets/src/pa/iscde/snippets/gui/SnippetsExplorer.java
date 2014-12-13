@@ -246,4 +246,10 @@ public class SnippetsExplorer extends Composite {
 		gridData.exclude = !gridData.exclude;
 		setVisible(!gridData.exclude);
 	}
+	
+	public void setFilterToJava(){
+		languagesCombo.select(languagesCombo.indexOf("Java"));
+		filterByLanguage();
+		search();
+	}
 }
