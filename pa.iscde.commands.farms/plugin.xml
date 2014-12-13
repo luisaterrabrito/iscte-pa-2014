@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="pa.iscde.conventions.conventionservice">
+      <conventionservice
+            ConventionName="Start with CONST word"
+            Type="CONSTANT"
+            class="pa.iscde.commands.farms.StartWithConstWord">
+      </conventionservice>
+   </extension>
+
+</plugin>
