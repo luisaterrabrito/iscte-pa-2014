@@ -1,17 +1,21 @@
 package pa.iscde.packagediagram.internal;
 
-
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.layouts.LayoutAlgorithm;
 import org.eclipse.zest.layouts.LayoutStyles;
@@ -21,26 +25,21 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+
 import pa.iscde.packagediagram.extensibility.PackageDiagramColorExtension;
-import pa.iscde.packagediagram.extensibility.PackageDiagramFilterExtension;
 import pa.iscde.packagediagram.model.NodeModelContent;
-import pa.iscde.packagediagram.provider.MyLabelProvider;
 import pa.iscde.packagediagram.provider.ContentProvider;
+import pa.iscde.packagediagram.provider.MyLabelProvider;
 import pt.iscte.pidesco.extensibility.PidescoView;
-
-
-
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 public class PackageDiagramView implements PidescoView {
 
-	//public static final String ID = "de.vogella.zest.first.view";
 	private GraphViewer graph;
 
-//	private Map<String, GraphNode> example = new HashMap<String, GraphNode>();
-
 	private static final String EXT_POINT_COLOR = "pa.iscde.packagediagram.colorSelector";
+	private static final String EXT_POINT_ACTION = "pa.iscde.packagediagram.actionSelector";
 
 	private static PackageDiagramView instance;
 
@@ -48,54 +47,48 @@ public class PackageDiagramView implements PidescoView {
 		return instance;
 	}
 
-//	private JavaEditorServices javaServices;
-
 	private ProjectBrowserServices browserServices;
+
+	private Composite viewArea;
 
 	public PackageDiagramView() {
 
 		Bundle bundle = FrameworkUtil.getBundle(PackageDiagramView.class);
 		BundleContext context = bundle.getBundleContext();
 
-
-		ServiceReference<ProjectBrowserServices> ref2 = context
+		ServiceReference<ProjectBrowserServices> ref = context
 				.getServiceReference(ProjectBrowserServices.class);
-		browserServices = context.getService(ref2);
+		browserServices = context.getService(ref);
 
 		loadChangeColor();
-	
+
 	}
 
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		instance = this;
-
-		
+		this.viewArea = viewArea;
 		graph = new GraphViewer(viewArea, SWT.NONE);
 
+		// Create a root figure and simple layout to contain
+		// all other figures
+
 		PackageElement root = browserServices.getRootPackage();
-		
-		/**
-		 * for(SourceElement e : root.getChildren()) if(e.isPackage()) {
-		 * GraphNode node = new GraphNode(graph, SWT.NONE, e.getName());
-		 * searchPackage((PackageElement) e,node); }
-		 **/
 
-
-		graph.setLabelProvider(new MyLabelProvider(colorsMap));
+		// vai determinar o que vai ser mostrado para cada nó
+		graph.setLabelProvider(new MyLabelProvider(new ChangeColor(
+				new PackageDiagramColorExtensionImpl())));
+		// vai lidar com o conteúdo
 		graph.setContentProvider(new ContentProvider());
 
 		NodeModelContent model = new NodeModelContent(root);
 		graph.setInput(model.getNodes());
 
-
 		LayoutAlgorithm layout = setLayout();
 		graph.setLayoutAlgorithm(layout, true);
 		graph.applyLayout();
-		
-		
-	}
 
+	}
 
 	private LayoutAlgorithm setLayout() {
 		LayoutAlgorithm layout;
@@ -105,112 +98,116 @@ public class PackageDiagramView implements PidescoView {
 
 	}
 
-	public void refresh() {
+	public void refreshColors(String key) {
 
-PackageElement root = browserServices.getRootPackage();
-		
-		/**
-		 * for(SourceElement e : root.getChildren()) if(e.isPackage()) {
-		 * GraphNode node = new GraphNode(graph, SWT.NONE, e.getName());
-		 * searchPackage((PackageElement) e,node); }
-		 **/
-
-
-//		graph.setLabelProvider(new MyLabelProvider(colorsMap));
-//		graph.setContentProvider(new ContentProvider());
-//
-//		NodeModelContent model = new NodeModelContent(root);
-//		graph.setInput(model.getNodes());
-//
-//
-//		LayoutAlgorithm layout = setLayout();
-//		graph.setLayoutAlgorithm(layout, true);
-//		graph.applyLayout();
-		
-		
-		
-
-		System.out.println("refrescante");
-	}
-	
-
-	private Map<String, ChangeFilter> filterMap = new HashMap<String, ChangeFilter>();
-	
-	// Carrega todas as extensões
-	public void loadChangeFilter() {
-		IExtensionRegistry reg = Platform.getExtensionRegistry();
-		for(IExtension ext : reg.getExtensionPoint(EXT_POINT_COLOR).getExtensions()) {
-			
-			PackageDiagramFilterExtension pdfe = null;
-			try {
-				pdfe = (PackageDiagramFilterExtension) ext.getConfigurationElements()[0].createExecutableExtension("class");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			if(pdfe != null) {
-				filterMap.put(ext.getUniqueIdentifier(), new ChangeFilter(pdfe));
-			}
+		if (colorsMap.containsKey(key)) {
+			ChangeColor changeColor = colorsMap.get(key);
+			graph.setLabelProvider(new MyLabelProvider(changeColor));
 		}
+
 	}
+
+
+
 	
+
+	public void loadColorMenu() {
+
+		Menu menu = new Menu(viewArea.getShell(), SWT.POP_UP);
+		String s;
+
+		MenuItem option;
+		for (Entry<String, ChangeColor> entry : colorsMap.entrySet()) {
+			option = new MenuItem(menu, SWT.NONE);
+			s = entry.getKey();
+			option.setText(s);
+			option.addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+
+					MenuItem menuItem = (MenuItem) e.getSource();
+
+					PackageDiagramView.getInstance()
+							.refreshColors(menuItem.getText());
+
+					System.out.println();
+
+				}
+
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+		}
+
+		menu.setVisible(true);
+
+	}
+
+	
+	
+	
+	
+	
+	
+
 	private Map<String, ChangeColor> colorsMap = new HashMap<String, ChangeColor>();
-	
-	// Carrega todas as extensões
+
+
+	// Carrega todas as extensões color
 	public void loadChangeColor() {
+
+		String label;
+
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
-		for(IExtension ext : reg.getExtensionPoint(EXT_POINT_COLOR).getExtensions()) {
-			
+		for (IExtension ext : reg.getExtensionPoint(EXT_POINT_COLOR)
+				.getExtensions()) {
+
 			PackageDiagramColorExtension pcce = null;
 			try {
-				pcce = (PackageDiagramColorExtension) ext.getConfigurationElements()[0].createExecutableExtension("class");
+				pcce = (PackageDiagramColorExtension) ext
+						.getConfigurationElements()[0]
+						.createExecutableExtension("class");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			if(pcce != null) {
-				colorsMap.put(ext.getUniqueIdentifier(), new ChangeColor(pcce));
+			if (pcce != null) {
+				for (IConfigurationElement extension : ext
+						.getConfigurationElements()) {
+					label = ext.getNamespaceIdentifier() + " : "
+							+ extension.getAttribute("Name");
+					System.out.println(label);
+					colorsMap.put(label, new ChangeColor(pcce));
+				}
 			}
 		}
 	}
-	
-	
-	
-	// a classe que tem o método implementado nas extensões para usar mais adiante
-	public static class ChangeColor{
 
-		
+
+
+
+	
+
+	// a classe que tem o método implementado nas extensões para usar mais
+	// adiante
+	public static class ChangeColor {
+
 		private PackageDiagramColorExtension tempPcce;
-		
+
 		public ChangeColor(PackageDiagramColorExtension pcce) {
-			tempPcce = pcce;		
+			tempPcce = pcce;
 		}
-		
+
 		public Color getForeground(String packageName) {
 			return tempPcce.changeColorLetter(packageName);
 		}
-		
+
 		public Color getBackground(String packageName) {
 			return tempPcce.changeColorBackground(packageName);
 		}
-	
+
 	};
-	
-	
-	public static class ChangeFilter {
-		
-		private PackageDiagramFilterExtension tempPdfe;
-		
-		public ChangeFilter (PackageDiagramFilterExtension pdfe){
-			tempPdfe = pdfe;
-		}
-		
-		// ficamos aqui
-		
-		
-	};
-	
-	
-	
-	
-	
 
 }

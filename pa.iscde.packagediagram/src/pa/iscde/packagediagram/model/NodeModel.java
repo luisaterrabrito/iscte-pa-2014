@@ -14,8 +14,6 @@ import java.util.List;
 	    this.connections = new ArrayList<NodeModel>();
 	  }
 
-
-
 	  public String getName() {
 	    return name;
 	  }

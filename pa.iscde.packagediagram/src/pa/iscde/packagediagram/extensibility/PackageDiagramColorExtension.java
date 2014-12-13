@@ -48,10 +48,5 @@ public interface PackageDiagramColorExtension {
 	 */
 	Color changeColorBackground (String packageName);
 	
-	/**
-	 * add cor fundo, cor letras - especie de esquema de cores, devolve cor
-	 * 
-	 * 
-	 * Próxima extensão: Tecla do lado direito em cima da package, popup com várias coisas que podem fazer
-	 */
+	
 }
