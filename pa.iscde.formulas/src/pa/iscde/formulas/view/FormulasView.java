@@ -34,11 +34,11 @@ import org.osgi.framework.ServiceReference;
 
 import pa.iscde.formulas.Formula;
 import pa.iscde.formulas.NewFormula;
+import pa.iscde.formulas.draw.DrawEquationUtil;
+import pa.iscde.formulas.draw.EquationFinder;
+import pa.iscde.formulas.draw.FormulaAnnotation;
 import pa.iscde.formulas.extensibility.CreateCategoryProvider;
 import pa.iscde.formulas.listeners.CodeEjectorListener;
-import pa.iscde.formulas.util.DrawEquationUtil;
-import pa.iscde.formulas.util.EquationFinder;
-import pa.iscde.formulas.util.FormulaAnnotation;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.AnnotationType;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
