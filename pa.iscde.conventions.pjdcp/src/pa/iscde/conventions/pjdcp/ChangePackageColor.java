@@ -17,6 +17,7 @@ import pa.iscde.packagediagram.extensibility.PackageDiagramColorExtension;
 
 public class ChangePackageColor implements PackageDiagramColorExtension {
 
+
 	String name = "impl";
 	
 	@Override
@@ -36,5 +37,4 @@ public class ChangePackageColor implements PackageDiagramColorExtension {
 			return ColorConstants.orange;
 		}
 	}
-	
 }

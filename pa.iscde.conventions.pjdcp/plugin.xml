@@ -13,6 +13,7 @@
    <extension
          point="pa.iscde.packagediagram.colorSelector">
       <colorSelector
+            Name="ChangePackageColor"
             class="pa.iscde.conventions.pjdcp.ChangePackageColor">
       </colorSelector>
    </extension>
