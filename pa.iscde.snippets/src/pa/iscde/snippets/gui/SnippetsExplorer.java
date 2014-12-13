@@ -46,7 +46,6 @@ public class SnippetsExplorer extends Composite {
 
 	public SnippetsExplorer(final Composite parent, int style) {
 		super(parent, style);
-
 		instance = this;
 
 		setLayout(new GridLayout(1, false));
