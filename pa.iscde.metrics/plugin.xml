@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="pa.iscde.metrics.createMetric" name="Create Metric" schema="schema/pa.iscde.metrics.createMetric.exsd"/>
+   <extension-point id="createMetric" name="CreateMetric" schema="schema/pa.iscde.metrics.createMetric.exsd"/>
    <extension
          id="metrics"
          name="metrics"
@@ -16,7 +16,7 @@
          name="Metrics"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.metrics.MetricsView">
+            class="pa.iscde.metrics.internal.MetricsView">
       </view>
    </extension>
    <extension
@@ -24,12 +24,25 @@
          name="Refresh"
          point="pt.iscte.pidesco.tool">
       <tool
-            class="pa.iscde.metrics.RefreshTool"
+            class="pa.iscde.metrics.internal.RefreshTool"
             description="Refreshes the table"
             hasState="false"
             icon="refresh.gif"
             view="pa.iscde.metrics">
       </tool>
+   </extension>
+   <extension
+         id="defaultMetrics"
+         name="Default Metrics"
+         point="pa.iscde.metrics.createMetric">
+      <metric
+            implementation="pa.iscde.metrics.internal.metrics.MethodMetric"
+            name="Number of methods">
+      </metric>
+      <metric
+            implementation="pa.iscde.metrics.internal.metrics.StaticMethodsMetric"
+            name="Number of static methods">
+      </metric>
    </extension>
 
 </plugin>

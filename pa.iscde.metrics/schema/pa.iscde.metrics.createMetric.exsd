@@ -17,6 +17,9 @@
          </appinfo>
       </annotation>
       <complexType>
+         <choice minOccurs="1" maxOccurs="unbounded">
+            <element ref="metric"/>
+         </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
@@ -59,7 +62,7 @@
                   Your implementation of Metricable indicating how your metrics is calculated
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":pa.iscde.metrics.Metricable"/>
+                  <meta.attribute kind="java" basedOn=":pa.iscde.metrics.extensibility.Metricable"/>
                </appinfo>
             </annotation>
          </attribute>
