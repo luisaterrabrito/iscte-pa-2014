@@ -17,14 +17,24 @@ import pa.iscde.configurator.model.Component;
 import pa.iscde.configurator.model.Dependency;
 import pa.iscde.configurator.model.interfaces.DependencyStyle;
 import pa.iscde.configurator.model.interfaces.PropertyProvider;
-
+/*
+ * This class is used as an intermediary between the view and the data classes
+ * 
+ * Represents the Controller on MVC architecture
+ * 
+ * It is created when the view is opened and gives the view the classes of data to represent. 
+ */
 public class Controller {
 	Constructor constructor;
 	LinkedList<Component> components;
 	LinkedList<Dependency> dependencies;
 	HashMap<PropertyProvider, List<String>> properties;
 	HashMap<DependencyStyle, String> styles;
-
+	/*
+	 * Constructor of the class Controller
+	 * when created, it starts the Constructor and get the data from him.
+	 * It also gets all the classes that are extending pa.iscde.configurator extension points
+	 */
 	public Controller() {
 		constructor = new Constructor();
 		components = constructor.createComponents();
@@ -34,7 +44,12 @@ public class Controller {
 
 		
 	}
-
+	/*
+	 * This method is called by the view and is used to get all the running components to paint
+	 * It asks Constructor for them
+	 * 
+	 * @return a list with all the components to paint
+	 */
 	public LinkedList<Component> getRunningComponents() {
 		// TODO Auto-generated method stub
 		LinkedList<Component> running = new LinkedList<Component>();
@@ -46,6 +61,15 @@ public class Controller {
 		return running;
 	}
 
+	/*
+	 * This method is called by the view and is used to get all the dependencies, associated with
+	 * the running components, to paint
+	 * It asks Constructor for them
+	 * 
+	 * @param a list of all the components that dependencies must be associated with 
+	 * 
+	 * @return a list with all the dependencies to paint
+	 */
 	public LinkedList<Dependency> getDependencies(
 			LinkedList<Component> runningComponents) {
 		// TODO Auto-generated method stub
@@ -62,12 +86,25 @@ public class Controller {
 		return relatedDependencies;
 	
 	}
-	
+
+	/*
+	 * This method is used to get the hashmap with the classes that were used to extend the
+	 * extension point pa.iscde.configurator.dependencystyle
+	 * 
+	 * @return a hashmap with the styles
+	 */
 	public HashMap<DependencyStyle, String> getStyles()
 	{
 		return styles;
 	}
-	
+	/*
+	 * This method is used to get the hashmap with the properties and values to insert 
+	 * on the table of the given component
+	 * 
+	 * @param a String with the name of the selected component to get the information for
+	 * 
+	 * @return a hashmap with the properties and their values
+	 */
 	public HashMap<String,String> getProperties(String selectedComponent)
 	{
 		HashMap<String,String> properties = new HashMap<String,String>();
@@ -96,15 +133,6 @@ public class Controller {
 		return false;
 	}
 
-	public LinkedList<String> getNotRunningComponents() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public LinkedList<Dependency> getAllDependencies() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	private HashMap<PropertyProvider, List<String>> loadProperties()
 	{
@@ -135,7 +163,12 @@ public class Controller {
 		}
 		return ppiComponents;
 	}
-	
+	/*
+	 * This method is used to check what classes are being used to extend the extension point
+	 * pa.iscde.configurator.dependencystyle and creat an hashmap with that information
+	 * 
+	 * @return a hashmap with the classes that are implementing DependencyStyle and the name to appear on the combo box (ConfiguratorView)
+	 */
 	public HashMap<DependencyStyle,String> loadStyles()
 	{
 		HashMap<DependencyStyle,String> styles = new HashMap<DependencyStyle,String>();

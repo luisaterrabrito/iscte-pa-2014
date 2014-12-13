@@ -51,7 +51,15 @@ import pa.iscde.configurator.model.interfaces.PropertyProvider;
 import pa.iscde.configurator.model.interfaces.PropertyProviderImpl;
 import pt.iscte.pidesco.extensibility.PidescoExtensionPoint;
 import pt.iscte.pidesco.extensibility.PidescoView;
-
+/*
+ * This class is used to represent the view of the bundle pa.iscde.configurator
+ * 
+ * When ConfiguratorView starts, it creates the controller to get information from him
+ * about running components and dependencies between them. Next the view paints them.
+ * 
+ * It show a graph of all components and dependencies, and shows information about the components.
+ * 
+ */
 public class ConfiguratorView implements PidescoView {
 	private Controller controller;
 	private LinkedList<Component> runningComponents;
@@ -67,7 +75,10 @@ public class ConfiguratorView implements PidescoView {
 	private Composite comp;
 	private Combo combo;
 
-
+	/*
+	 * (non-Javadoc)
+	 * @see pt.iscte.pidesco.extensibility.PidescoView#createContents(org.eclipse.swt.widgets.Composite, java.util.Map)
+	 */
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		Display display = viewArea.getDisplay();
