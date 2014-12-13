@@ -17,4 +17,13 @@ public interface PackageDiagramActionExtension {
 	public void run(String packageName);
 
 }
-}</code>
+</code>
+
+
+Example:
+<code>
+@override
+public void(String packageName) {
+	system.out.println(packageName);
+	 } 
+</code>
