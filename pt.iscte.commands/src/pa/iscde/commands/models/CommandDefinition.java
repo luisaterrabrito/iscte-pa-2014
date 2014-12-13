@@ -57,9 +57,10 @@ public class CommandDefinition {
 	}
 	
 	@Override
-	public String toString(){
-		return commandKey.toString() + " ("+view+") "+description+" - " + command;
-	}
+    public String toString(){
+        return commandKey.getCommandName() + " ["+description+"] - Binding = " 
+                    + commandKey.toString() + " - View = " + commandKey.getContext();
+    }
 
 	public void updateKey(CommandKey key) {
 		this.commandKey = key;
