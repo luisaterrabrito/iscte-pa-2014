@@ -1,0 +1,13 @@
+public double VALCalculation(int n, double []cashflows, double ratePercentage) {
+		double rate = (ratePercentage/100);
+		double aux =0;
+		for (int i = 0; i < n; i++) {
+			aux += auxiliarFunction(i,cashFlows[i], rate); 
+		}
+		return aux;
+		}
+		
+		private double auxiliarFunction(int i, double cfi,double rate) {
+		double operation = Math.pow((1+rate),i);
+		return (cfi/operation);
+	}
