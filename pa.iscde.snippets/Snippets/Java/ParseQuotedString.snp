@@ -1,0 +1,19 @@
+public class ScannerEx {
+
+private java.util.Scanner sc;
+
+public ScannerEx (java.util.Scanner sc) {
+   this.sc = sc; }
+
+public boolean hasNextQuotedString() {
+   return sc.hasNext("\\\".*"); }
+
+public String nextQuotedString() {
+   if (!sc.hasNext()) throw new java.util.NoSuchElementException();
+   if (!hasNextQuotedString()) throw new java.util.InputMismatchException();
+      // This is necessary because findInLine would skip over other tokens.
+   String %s:String = sc.findInLine("\\\".*?\\\"");
+   if (s == null) throw new java.util.InputMismatchException();
+   return s.substring(1,s.length()-1); }
+
+}

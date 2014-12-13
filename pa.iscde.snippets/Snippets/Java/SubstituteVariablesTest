@@ -1,0 +1,18 @@
+This is a test for the variable substitution in the snippets component
+
+$var1:String
+
+$var2:int	$var4:double	$var5:Scanner
+
+		$var6:char
+		
+					$var7
+					
+					
+					$var8
+					
+					
+					$var9
+					
+					
+						$var10:long

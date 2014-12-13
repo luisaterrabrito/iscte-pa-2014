@@ -6,8 +6,8 @@ public class OracleJdbcTest
      
     public void init(FileInputStream fs) throws ClassNotFoundException, SQLException, FileNotFoundException, IOException
     {
-        Properties props = new Properties();
-        props.load(fs);
+        Properties $properties:Properties = new Properties();
+        props.load(%fs:FileInputStream);
         String url = props.getProperty("db.url");
         String userName = props.getProperty("db.user");
         String password = props.getProperty("db.password");
