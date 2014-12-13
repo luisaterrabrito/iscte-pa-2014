@@ -3,17 +3,9 @@ package pa.iscde.configurator.view;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 import java.util.Map.Entry;
-
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.InvalidRegistryObjectException;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -23,13 +15,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -40,16 +28,10 @@ import org.eclipse.zest.core.widgets.GraphNode;
 import org.eclipse.zest.core.widgets.ZestStyles;
 import org.eclipse.zest.layouts.LayoutStyles;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
-import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
-
-import pa.iscde.configurator.EnumExtensionPoint;
 import pa.iscde.configurator.controller.Controller;
 import pa.iscde.configurator.model.Component;
 import pa.iscde.configurator.model.Dependency;
 import pa.iscde.configurator.model.interfaces.DependencyStyle;
-import pa.iscde.configurator.model.interfaces.PropertyProvider;
-import pa.iscde.configurator.model.interfaces.PropertyProviderImpl;
-import pt.iscte.pidesco.extensibility.PidescoExtensionPoint;
 import pt.iscte.pidesco.extensibility.PidescoView;
 /*
  * This class is used to represent the view of the bundle pa.iscde.configurator
@@ -64,7 +46,6 @@ public class ConfiguratorView implements PidescoView {
 	private Controller controller;
 	private LinkedList<Component> runningComponents;
 	private LinkedList<Dependency> dependencies;
-	private LinkedList<String> notRunningComponents;
 	private HashMap<Component, GraphNode> componentNode;
 	private HashMap<Dependency, GraphConnection> dependencyConnection;
 	private HashMap<String, String> propertyTable;
