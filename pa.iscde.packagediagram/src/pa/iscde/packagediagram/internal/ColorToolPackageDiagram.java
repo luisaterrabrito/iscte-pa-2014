@@ -25,6 +25,28 @@ public class ColorToolPackageDiagram implements PidescoTool {
 		 
 		 PackageDiagramView.getInstance().loadColorMenu();
 		
+//		 Menu menu = new Menu(PackageDiagramView.getInstance().getShell(), SWT.POP_UP);
+//	      MenuItem exit = new MenuItem(menu, SWT.NONE);
+//	      exit.setText("Hello! This is ");
+//	      exit = new MenuItem(menu, SWT.NONE);
+//	      exit.setText("Menu");
+//	      exit = new MenuItem(menu, SWT.NONE);
+//	      exit.setText("Cool");
+//	      exit.addSelectionListener(new SelectionListener() {
+//			
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				// TODO Auto-generated method stub
+//				System.out.println("Coool");
+//			}
+//			
+//			@Override
+//			public void widgetDefaultSelected(SelectionEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
+//	      menu.setVisible(true);
 	}
 
 }

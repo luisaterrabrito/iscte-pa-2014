@@ -25,7 +25,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-
+import pa.iscde.packagediagram.extensibility.PackageDiagramActionExtension;
 import pa.iscde.packagediagram.extensibility.PackageDiagramColorExtension;
 import pa.iscde.packagediagram.model.NodeModelContent;
 import pa.iscde.packagediagram.provider.ContentProvider;
@@ -61,7 +61,7 @@ public class PackageDiagramView implements PidescoView {
 		browserServices = context.getService(ref);
 
 		loadChangeColor();
-
+		loadActionColor();
 	}
 
 	@Override
@@ -107,9 +107,14 @@ public class PackageDiagramView implements PidescoView {
 
 	}
 
+	public void refreshActions(String key) {
 
+		if (actionsMap.containsKey(key)) {
+			ChangeAction changeAction = actionsMap.get(key);
+			changeAction.run();
+		}
 
-	
+	}
 
 	public void loadColorMenu() {
 
@@ -146,7 +151,39 @@ public class PackageDiagramView implements PidescoView {
 
 	}
 
-	
+	public void loadActionMenu() {
+
+		System.out.println("entrei no loadActionMenu");
+		
+		Menu menu = new Menu(viewArea.getShell(), SWT.POP_UP);
+		String s;
+		MenuItem option;
+		for (Entry<String, ChangeAction> entry : actionsMap.entrySet()) {
+			option = new MenuItem(menu, SWT.NONE);
+			s = entry.getKey();
+			option.setText(s);
+			option.addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+
+					MenuItem menuItem = (MenuItem) e.getSource();
+
+					
+					
+
+
+				}
+
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+		}
+
+		menu.setVisible(true);
+	}
 	
 	
 	
@@ -154,7 +191,7 @@ public class PackageDiagramView implements PidescoView {
 	
 
 	private Map<String, ChangeColor> colorsMap = new HashMap<String, ChangeColor>();
-
+	private Map<String, ChangeAction> actionsMap = new HashMap<String, ChangeAction>();
 
 	// Carrega todas as extensões color
 	public void loadChangeColor() {
@@ -185,10 +222,48 @@ public class PackageDiagramView implements PidescoView {
 		}
 	}
 
+	// Carrega todas as extensões action
+	public void loadActionColor() {
 
+		String label;
 
+		IExtensionRegistry reg = Platform.getExtensionRegistry();
+		for (IExtension ext : reg.getExtensionPoint(EXT_POINT_ACTION)
+				.getExtensions()) {
 
-	
+			PackageDiagramActionExtension pcae = null;
+			try {
+				pcae = (PackageDiagramActionExtension) ext
+						.getConfigurationElements()[0]
+						.createExecutableExtension("class");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if (pcae != null) {
+				for (IConfigurationElement extension : ext
+						.getConfigurationElements()) {
+					label = ext.getNamespaceIdentifier() + " : "
+							+ extension.getAttribute("Name");
+					System.out.println(label);
+					actionsMap.put(label, new ChangeAction(pcae));
+				}
+			}
+		}
+	}
+
+	//escolher a ação
+	public static class ChangeAction {
+		private PackageDiagramActionExtension tempPcae;
+
+		public ChangeAction(PackageDiagramActionExtension pcae) {
+			tempPcae = pcae;
+		}
+
+		public void run (){
+			tempPcae.run();
+		}
+
+	}
 
 	// a classe que tem o método implementado nas extensões para usar mais
 	// adiante
