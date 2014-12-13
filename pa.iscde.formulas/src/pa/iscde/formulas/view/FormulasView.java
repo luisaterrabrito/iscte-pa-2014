@@ -136,9 +136,10 @@ public class FormulasView implements PidescoView {
 			}
 		}
 		loadFormulas();
-
-		
-		
+	}
+	
+	public boolean getWindowState(){
+		return viewArea.isDisposed();
 	}
 	
 	
@@ -339,6 +340,7 @@ public class FormulasView implements PidescoView {
 	 * @throws IOException
 	 */
 	public  void setDrawEquationMode(EquationFinder eq) throws IOException {
+		boolean annotations = true;
 		clearFormulasBoard();
 		drawFormulas = true;
 		buttons.clear();
@@ -346,6 +348,8 @@ public class FormulasView implements PidescoView {
 		formulasBoard = new HashMap<Label,Text>();
 		if(eq==null)
 			 eq = new EquationFinder(fileTarget);
+		else
+			annotations = false;
 		for (String equation : eq.getEquations().keySet()) {
 			DrawEquationUtil formulaImage = new DrawEquationUtil(viewArea,equation); 
 			Text text = new Text(viewArea, SWT.NONE);
@@ -364,9 +368,10 @@ public class FormulasView implements PidescoView {
 			formulasBoard.put(label,text);
 		}
 		
-		for (FormulaAnnotation formula : eq.getAnnotations()) {
-			javaeditor.addAnnotation(javaeditor.getOpenedFile(), AnnotationType.INFO, formula.getFormula(), formula.getOffset(), formula.getLenght());
-		}
+		if(annotations)
+			for (FormulaAnnotation formula : eq.getAnnotations()) {
+				javaeditor.addAnnotation(javaeditor.getOpenedFile(), AnnotationType.INFO, formula.getFormula(), formula.getOffset(), formula.getLenght());
+			}
 		viewArea.pack();
 	}
 
