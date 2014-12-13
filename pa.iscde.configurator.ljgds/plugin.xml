@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="pa.iscde.configurator.ljgds.formularesolvente"
+         name="FormulaResolvente"
+         point="pa.iscde.packagediagram.colorSelector">
+   </extension>
+
+</plugin>
