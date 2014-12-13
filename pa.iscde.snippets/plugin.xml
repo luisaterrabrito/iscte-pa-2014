@@ -44,9 +44,11 @@
       </member>
    </extension>
    <extension
+         id="snippetssearch"
+         name="Snippets Search"
          point="pa.iscde.filtersearch.SearchProvider">
       <SearchProvider
-            SearchProvider="pa.iscde.snippets.extensions.SearchProviderSnippets"
+            SearchProvider="pa.iscde.snippets.extensions.SnippetsSearchProvider"
             className="pa.iscde.snippets.SearchProvider1"
             iconName="pa.iscde.snippets.SearchProvider1">
       </SearchProvider>
@@ -55,7 +57,7 @@
          point="pa.iscde.commands.command">
       <command_editor
             alt_key="true"
-            command_implementation="pa.iscde.snippets.Command1"
+            command_implementation="pa.iscde.snippets.extensions.Command1"
             ctrl_key="true"
             description="pa.iscde.snippets.command_editor1"
             key="u"

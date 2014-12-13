@@ -11,19 +11,21 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Image;
 
+import activator.SnippetsActivator;
 import pa.iscde.filtersearch.providers.SearchProvider;
+import pa.iscde.snippets.gui.SnippetsView;
 
-public class SearchProviderSnippets implements SearchProvider {
+public class SnippetsSearchProvider implements SearchProvider {
 	private static File snippetsRootFolder;
 	private HashMap<String, File> snippets;
 
-	public SearchProviderSnippets() {
-		loadSnippets();
+	public SnippetsSearchProvider() {
 		URL fileURL;
 		try {
 			fileURL = new URL("platform:/plugin/pa.iscde.snippets/Snippets");
 			snippetsRootFolder = new File(FileLocator.resolve(fileURL)
 					.getPath());
+			loadSnippets();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -32,16 +34,17 @@ public class SearchProviderSnippets implements SearchProvider {
 	@Override
 	public List<Object> getResults(String text) {
 		ArrayList<Object> result = new ArrayList<Object>();
-		if (!text.equals("")) {
+		if (!text.trim().equals("")) {
 			for (String name : snippets.keySet()) {
 				if (name.toLowerCase().contains(text.toLowerCase()))
 					result.add(name);
 			}
+		} else {
+			for (String name : snippets.keySet()) {
+				result.add(name);
+			}
 		}
 		return result;
-		// TODO procurar se os snippets contem algo do texto ou se o texto
-		// TODO for o nome completo sem case de uma linguagem devolver os
-		// snippets da linguagem
 	}
 
 	private void loadSnippets() {
@@ -71,8 +74,10 @@ public class SearchProviderSnippets implements SearchProvider {
 
 	@Override
 	public void doubleClickAction(TreeViewer tree, Object object) {
-		// TODO Auto-generated method stub
-
+		String selected = (String) object;
+		File selectedSnippet = snippets.get(selected);
+		SnippetsActivator.getInstance().openSnippetsView();
+		SnippetsView.getInstance().snippetCodeFromSearch(selectedSnippet);
 	}
 
 }

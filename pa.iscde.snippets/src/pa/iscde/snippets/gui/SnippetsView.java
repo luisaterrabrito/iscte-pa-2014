@@ -65,4 +65,10 @@ public class SnippetsView implements PidescoView {
 		new SnippetCode(viewArea, SWT.NONE);
 		viewArea.layout();
 	}
+	
+	public void snippetCodeFromSearch(File snp) {
+		SnippetsExplorer.getInstance().hideUnhide();
+		new SnippetCode(snp, viewArea, SWT.NONE);
+		viewArea.layout();
+	}
 }
