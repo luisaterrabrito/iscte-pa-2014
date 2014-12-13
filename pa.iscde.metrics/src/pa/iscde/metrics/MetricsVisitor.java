@@ -1,23 +1,12 @@
 package pa.iscde.metrics;
 
-import java.util.List;
-import java.util.SortedSet;
-
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
-import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
-import org.eclipse.jdt.core.dom.IBinding;
-import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-
-import pt.iscte.pidesco.projectbrowser.model.PackageElement;
-import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 
 public class MetricsVisitor extends ASTVisitor {
 	private int methodCounter, physicalLineCounter, logicalLineCounter, staticMethodCounter,
@@ -25,17 +14,16 @@ public class MetricsVisitor extends ASTVisitor {
 	private CompilationUnit compilationUnit;
 
 	public boolean visit(MethodDeclaration node) {
+	//methods
 			methodCounter++;
-
-		this.physicalLineCounter = compilationUnit.getLineNumber(node
-				.getStartPosition()) - 1;
-
+		
+	//static
 		if (Modifier.isStatic(node.getModifiers()))
 			staticMethodCounter++;
 
 		return true;
 	};
-
+	//class or interface
 	public boolean visit(TypeDeclaration node) {
 		if(node.isInterface())
 			interfaceCounter++;
@@ -44,13 +32,13 @@ public class MetricsVisitor extends ASTVisitor {
 		}
 		return true;
 	}
-	
+	//attributes
 	public boolean visit(FieldDeclaration node){
-		System.out.println("attributes" );
 		attributeCounter++;
 		return true;
 	}
-
+	
+	//lines of code
 	public boolean visit(CompilationUnit cu) {
 		this.compilationUnit = cu;
 		physicalLineCounter = cu.getLineNumber(cu.getLength()-1);
@@ -58,8 +46,8 @@ public class MetricsVisitor extends ASTVisitor {
 		return true;
 	}
 
+	//packages
 	public boolean visit(PackageDeclaration node) {
-		System.out.println("package");
 		packageCounter++;
 
 		return true;
