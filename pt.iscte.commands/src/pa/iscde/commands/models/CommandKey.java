@@ -96,7 +96,7 @@ final public class CommandKey {
 	@Override
 	public boolean equals(Object o){
 		
-		if(o == null)
+		if((o instanceof CommandKey) == false)
 			return false;
 		
 		if(this == o )
