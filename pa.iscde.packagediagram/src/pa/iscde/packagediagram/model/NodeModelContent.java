@@ -5,10 +5,6 @@ import java.util.List;
 
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
-import org.eclipse.swt.SWT;
-import org.eclipse.zest.core.widgets.GraphConnection;
-import org.eclipse.zest.core.widgets.GraphNode;
-import org.eclipse.zest.core.widgets.ZestStyles;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -23,7 +19,6 @@ import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 public class NodeModelContent {
 
 	private List <NodeModel> nodes;
-	private List <ConnectionModel> connections;
 	private JavaEditorServices javaServices;
 	
 	public NodeModelContent(PackageElement root){
@@ -34,13 +29,18 @@ public class NodeModelContent {
 		javaServices = context.getService(ref);
 
 	    nodes = new ArrayList<NodeModel>();
-	    connections = new ArrayList<ConnectionModel>();
+	    new ArrayList<ConnectionModel>();
 	    
 	    searchClass(root);
 		
 	}
 
-	//pesquisa as classes/nós
+
+	/**
+	 * Search all packages/nodes
+	 * 
+	 * @param root
+	 */
 	private void searchClass(PackageElement root) {
 		for (SourceElement e : root.getChildren()) {
 			if (e.isPackage()) {
@@ -113,7 +113,10 @@ public class NodeModelContent {
 		}
 
 	}
-	
+	/**
+	 * 
+	 * @return nodes
+	 */
 	 public List<NodeModel> getNodes() {
 		    return nodes;
 		  }

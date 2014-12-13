@@ -1,16 +1,8 @@
 package pa.iscde.packagediagram.provider;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.zest.core.viewers.EntityConnectionData;
 import org.eclipse.zest.core.viewers.IEntityConnectionStyleProvider;
 import org.eclipse.zest.core.viewers.IFigureProvider;
@@ -29,21 +21,25 @@ public class MyLabelProvider extends LabelProvider implements IFigureProvider,
 	public MyLabelProvider(ChangeColor colorsMap) {
 		this.colorsMap = colorsMap;
 	}
-
-	// recebe o objeto e retorna os textos que aparecem no view
+	
+	/**
+	 * Get the text: nodeModel, connectionModel
+	 * 
+	 * @param element
+	 * @return text of the view
+	 */
 	public String getText(Object element) {
 		if (element instanceof NodeModel) {
 			NodeModel NodeModel = (NodeModel) element;
 			return NodeModel.getName();
 		}
-		// Not called with the IGraphEntityContentProvider
+
 		if (element instanceof ConnectionModel) {
 			ConnectionModel ConnectionModel = (ConnectionModel) element;
 			return ConnectionModel.getLabel();
 		}
 
 		if (element instanceof EntityConnectionData) {
-			//EntityConnectionData label = (EntityConnectionData) element;
 			return "<<import>>";
 		}
 		throw new RuntimeException("Wrong type: "
@@ -70,7 +66,7 @@ public class MyLabelProvider extends LabelProvider implements IFigureProvider,
 
 	@Override
 	public Color getColor(Object arg0, Object arg1) {
-		// TODO Auto-generated method stub
+	
 		return null;
 	}
 
@@ -82,14 +78,14 @@ public class MyLabelProvider extends LabelProvider implements IFigureProvider,
 
 	@Override
 	public Color getHighlightColor(Object arg0, Object arg1) {
-		// TODO Auto-generated method stub
+	
 		return null;
 	}
 
 	@Override
 	public int getLineWidth(Object arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		return 10;
+	
+		return 5;
 	}
 
 	@Override

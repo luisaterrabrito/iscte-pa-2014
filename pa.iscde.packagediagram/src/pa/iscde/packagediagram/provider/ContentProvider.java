@@ -8,7 +8,7 @@ import pa.iscde.packagediagram.model.NodeModel;
 public class ContentProvider extends ArrayContentProvider  implements IGraphEntityContentProvider{
 
 
-	// os nós que aparecem no view
+	// ligações entre nós
 	@Override
 	public Object[] getConnectedTo(Object entity) {
 	    if (entity instanceof NodeModel) {

@@ -10,11 +10,12 @@ import org.eclipse.draw2d.UpdateManager;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 
 import pa.iscde.packagediagram.internal.PackageDiagramView;
+
+/**
+ * Actions figure
+ */
 
 public class FigureMover implements MouseListener, MouseMotionListener {
 

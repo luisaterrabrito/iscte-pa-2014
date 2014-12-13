@@ -34,6 +34,12 @@ import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
+/**
+ * 
+ * Implements pidescoView
+ *
+ */
+
 public class PackageDiagramView implements PidescoView {
 
 	private GraphViewer graph;
@@ -78,6 +84,7 @@ public class PackageDiagramView implements PidescoView {
 		// vai determinar o que vai ser mostrado para cada nó
 		graph.setLabelProvider(new MyLabelProvider(new ChangeColor(
 				new PackageDiagramColorExtensionImpl())));
+		
 		// vai lidar com o conteúdo
 		graph.setContentProvider(new ContentProvider());
 
@@ -98,6 +105,10 @@ public class PackageDiagramView implements PidescoView {
 
 	}
 
+	/**
+	 * Refresh the new colors from tool
+	 * @param key
+	 */
 	public void refreshColors(String key) {
 
 		if (colorsMap.containsKey(key)) {
@@ -107,6 +118,12 @@ public class PackageDiagramView implements PidescoView {
 
 	}
 
+	/**
+	 * Refresh the new actions from right click mouse
+	 * 
+	 * @param key
+	 * @param packageName
+	 */
 	public void refreshActions(String key, String packageName) {
 
 		if (actionsMap.containsKey(key)) {
@@ -116,6 +133,9 @@ public class PackageDiagramView implements PidescoView {
 
 	}
 
+	/**
+	 * Create MenuItem and load values - Refresh Colors
+	 */
 	public void loadColorMenu() {
 
 		Menu menu = new Menu(viewArea.getShell(), SWT.POP_UP);
@@ -149,9 +169,14 @@ public class PackageDiagramView implements PidescoView {
 
 	}
 
+	/**
+	 * Create MenuItem and load values - Refresh Actions
+	 * 
+	 * @param packageName
+	 */
+	
 	public void loadActionMenu(final String packageName) {
 
-		System.out.println("entrei no loadActionMenu");
 
 		Menu menu = new Menu(viewArea.getShell(), SWT.POP_UP);
 		String s;
@@ -185,7 +210,9 @@ public class PackageDiagramView implements PidescoView {
 	private Map<String, ChangeColor> colorsMap = new HashMap<String, ChangeColor>();
 	private Map<String, ChangeAction> actionsMap = new HashMap<String, ChangeAction>();
 
-	// Carrega todas as extensões color
+	/**
+	 * Loads all color extensions
+	 */
 	public void loadChangeColor() {
 
 		String label;
@@ -207,14 +234,16 @@ public class PackageDiagramView implements PidescoView {
 						.getConfigurationElements()) {
 					label = ext.getNamespaceIdentifier() + " : "
 							+ extension.getAttribute("Name");
-					System.out.println(label);
+
 					colorsMap.put(label, new ChangeColor(pcce));
 				}
 			}
 		}
 	}
 
-	// Carrega todas as extensões action
+	/**
+	 * Loads all action extensions
+	 */
 	public void loadActionColor() {
 
 		String label;
@@ -236,14 +265,16 @@ public class PackageDiagramView implements PidescoView {
 						.getConfigurationElements()) {
 					label = ext.getNamespaceIdentifier() + " : "
 							+ extension.getAttribute("Name");
-					System.out.println(label);
+
 					actionsMap.put(label, new ChangeAction(pcae));
 				}
 			}
 		}
 	}
 
-	// escolher a ação
+	/**
+	 * Choose the action
+	 */
 	public static class ChangeAction {
 		private PackageDiagramActionExtension tempPcae;
 
@@ -257,8 +288,9 @@ public class PackageDiagramView implements PidescoView {
 
 	}
 
-	// a classe que tem o método implementado nas extensões para usar mais
-	// adiante
+	/**
+	 * Choose the color
+	 */
 	public static class ChangeColor {
 
 		private PackageDiagramColorExtension tempPcce;
