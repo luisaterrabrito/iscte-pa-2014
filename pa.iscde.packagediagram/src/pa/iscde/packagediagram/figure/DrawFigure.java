@@ -3,6 +3,9 @@ package pa.iscde.packagediagram.figure;
 import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.*;
 
+/**
+ * Draw box, text and location nodes
+ */
 
 public class DrawFigure extends PolygonShape {
 	

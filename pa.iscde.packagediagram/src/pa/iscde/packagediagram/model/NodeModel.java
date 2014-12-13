@@ -4,6 +4,11 @@ package pa.iscde.packagediagram.model;
 	import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents the node model
+ *
+ */
+
 	public class NodeModel {
 	  private final String name;
 	  private List<NodeModel> connections;

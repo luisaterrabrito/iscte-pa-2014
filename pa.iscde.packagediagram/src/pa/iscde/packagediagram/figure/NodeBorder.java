@@ -2,7 +2,10 @@ package pa.iscde.packagediagram.figure;
 
 import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.*;
-import org.eclipse.swt.SWT;
+
+/**
+ * Draw and paint nodes
+ */
 
 public class NodeBorder extends AbstractBorder {
 	public static final int HEIGHT = 10;

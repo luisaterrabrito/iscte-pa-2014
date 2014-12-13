@@ -1,9 +1,6 @@
 package pa.iscde.packagediagram.extensibility;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.graphics.Color;
-
-import pt.iscte.pidesco.projectbrowser.model.PackageElement;
 
 public interface PackageDiagramColorExtension {
 	

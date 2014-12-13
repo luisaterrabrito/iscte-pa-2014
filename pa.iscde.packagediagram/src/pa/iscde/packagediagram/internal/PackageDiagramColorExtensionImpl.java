@@ -4,6 +4,10 @@ import org.eclipse.swt.graphics.Color;
 
 import pa.iscde.packagediagram.extensibility.PackageDiagramColorExtension;
 
+/**
+ *Default color
+ */
+
 public class PackageDiagramColorExtensionImpl implements PackageDiagramColorExtension{
 
 	@Override
