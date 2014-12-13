@@ -12,6 +12,7 @@ import org.osgi.framework.ServiceReference;
 
 import pa.iscde.commands.models.CommandDefinition;
 import pa.iscde.commands.models.CommandWarehouse;
+import pa.iscde.commands.models.ViewDef;
 import pa.iscde.commands.models.ViewWarehouse;
 import pa.iscde.filtersearch.providers.SearchProvider;
 import pt.iscte.pidesco.extensibility.PidescoServices;
@@ -38,8 +39,12 @@ public class CommandsSearch implements SearchProvider {
 		BundleContext context = FrameworkUtil.getBundle(CommandWarehouse.class).getBundleContext();
 		ServiceReference<PidescoServices> serviceReference_pidesco = context.getServiceReference(PidescoServices.class);
 		PidescoServices pidescoServices = context.getService(serviceReference_pidesco);
+		ViewDef v = ViewWarehouse.getInstance().getViewDefFromUniqueIdentifier(o.getContext());
 		
-		return pidescoServices.getImageFromPlugin(ViewWarehouse.getInstance().getViewDefFromUniqueIdentifier(o.getContext()).getPluginContributor(), ViewWarehouse.getInstance().getViewDefFromUniqueIdentifier(o.getContext()).getImageIdentifier());
+		if(v.getImageIdentifier() == null)
+			return null;
+		
+		return pidescoServices.getImageFromPlugin(v.getPluginContributor(), v.getImageIdentifier());
 	}
 
 	@Override
