@@ -5,9 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Image;
-
-import pa.iscde.commands.models.CommandWarehouse;
 import pa.iscde.filtersearch.providers.SearchProvider;
+
 
 public class CommandsSearch implements SearchProvider {
 
