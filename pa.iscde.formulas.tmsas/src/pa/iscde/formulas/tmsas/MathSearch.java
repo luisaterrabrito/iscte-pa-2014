@@ -14,7 +14,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import pa.iscde.filtersearch.providers.SearchProvider;
-import pa.iscde.formulas.util.EquationFinder;
+import pa.iscde.formulas.draw.EquationFinder;
 import pa.iscde.formulas.util.FileReadUtil;
 import pa.iscde.formulas.view.FormulasView;
 import pt.iscte.pidesco.extensibility.PidescoServices;
