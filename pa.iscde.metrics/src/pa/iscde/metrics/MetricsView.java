@@ -1,8 +1,10 @@
 package pa.iscde.metrics;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 
-import org.eclipse.jdt.internal.core.ProjectReferenceChange;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -18,6 +20,7 @@ import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
+import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 public class MetricsView implements PidescoView {
@@ -48,7 +51,7 @@ public class MetricsView implements PidescoView {
 		Table table = new Table(viewArea, SWT.NONE);
 		TableColumn metricName = new TableColumn(table, SWT.NONE);
 		TableColumn metricValue = new TableColumn(table, SWT.NONE);
-		
+
 		metricName.setText("Metric name");
 		metricName.setWidth(200);
 		metricValue.setText("Value");
@@ -56,31 +59,35 @@ public class MetricsView implements PidescoView {
 
 		table.setHeaderVisible(true);
 
-//		 Combo c = new Combo(table, SWT.READ_ONLY);
-//		    c.setBounds(50, 50, 150, 65);
-//		    String items[] = { "Package", "Class"};
-//		    c.setItems(items);
-		    
-//		    combo.addSelectionListener(new SelectionListener() {
-//		        public void widgetSelected(SelectionEvent e) {
-//		          System.out.println("Selected index: " + combo.getSelectionIndex() + ", selected item: " + combo.getItem(combo.getSelectionIndex()) + ", text content in the text field: " + combo.getText());
-//		        }
-//
-//		        public void widgetDefaultSelected(SelectionEvent e) {
-//		          System.out.println("Default selected index: " + combo.getSelectionIndex() + ", selected item: " + (combo.getSelectionIndex() == -1 ? "<null>" : combo.getItem(combo.getSelectionIndex())) + ", text content in the text field: " + combo.getText());
-//		          String text = combo.getText();
-//		          if(combo.indexOf(text) < 0) { // Not in the list yet. 
-//		            combo.add(text);
-//		            // Re-sort
-//		            String[] items = combo.getItems();
-//		            Arrays.sort(items);
-//		            combo.setItems(items);
-//		          }
-//		        }
-//		      });
-		    
-		    
-		
+		// Combo c = new Combo(table, SWT.READ_ONLY);
+		// c.setBounds(50, 50, 150, 65);
+		// String items[] = { "Package", "Class"};
+		// c.setItems(items);
+
+		// combo.addSelectionListener(new SelectionListener() {
+		// public void widgetSelected(SelectionEvent e) {
+		// System.out.println("Selected index: " + combo.getSelectionIndex() +
+		// ", selected item: " + combo.getItem(combo.getSelectionIndex()) +
+		// ", text content in the text field: " + combo.getText());
+		// }
+		//
+		// public void widgetDefaultSelected(SelectionEvent e) {
+		// System.out.println("Default selected index: " +
+		// combo.getSelectionIndex() + ", selected item: " +
+		// (combo.getSelectionIndex() == -1 ? "<null>" :
+		// combo.getItem(combo.getSelectionIndex())) +
+		// ", text content in the text field: " + combo.getText());
+		// String text = combo.getText();
+		// if(combo.indexOf(text) < 0) { // Not in the list yet.
+		// combo.add(text);
+		// // Re-sort
+		// String[] items = combo.getItems();
+		// Arrays.sort(items);
+		// combo.setItems(items);
+		// }
+		// }
+		// });
+
 		MetricsVisitor visitor = new MetricsVisitor();
 
 		Bundle bundle = FrameworkUtil.getBundle(MetricsView.class);
@@ -90,13 +97,13 @@ public class MetricsView implements PidescoView {
 		javaServices = context.getService(reference);
 
 		javaServices.parseFile(javaServices.getOpenedFile(), visitor);
-		
-		
-//		browserServices = context.getService(context
-//				.getServiceReference(ProjectBrowserServices.class));
-//		PackageElement root = browserServices.getRootPackage();//parseFile(browser., visitor);
-//		visitor.visit(root);
-		
+
+	//vai buscar o project browser services que disponibiliza o root package
+		browserServices = context.getService(context
+				.getServiceReference(ProjectBrowserServices.class));
+		PackageElement root = browserServices.getRootPackage();
+
+
 		TableItem tableItem = new TableItem(table, SWT.NONE);
 		tableItem.setText(0, "Number of declared methods");
 		tableItem.setText(1, "" + visitor.getMethodCounter());
@@ -105,14 +112,14 @@ public class MetricsView implements PidescoView {
 		tableItem2.setText(0, "Number of static methods");
 		tableItem2.setText(1, "" + visitor.getStaticMethods());
 
-		TableItem tableItem3= new TableItem(table, SWT.NONE);
-		tableItem3.setText(0,"Physical lines of code");
-		tableItem3.setText(1,"" + visitor.getPhysicalLineCounter());
+		TableItem tableItem3 = new TableItem(table, SWT.NONE);
+		tableItem3.setText(0, "Physical lines of code");
+		tableItem3.setText(1, "" + visitor.getPhysicalLineCounter());
 
-		TableItem tableItem9= new TableItem(table, SWT.NONE);
-		tableItem9.setText(0,"Logical lines of code");
-		tableItem9.setText(1,"" + visitor.getLogicalLineCounter());
-		
+		TableItem tableItem9 = new TableItem(table, SWT.NONE);
+		tableItem9.setText(0, "Logical lines of code");
+		tableItem9.setText(1, "" + visitor.getLogicalLineCounter());
+
 		TableItem tableItem4 = new TableItem(table, SWT.NONE);
 		tableItem4.setText(0, "Number of classes");
 		tableItem4.setText(1, "" + visitor.getClassCounter());
@@ -132,7 +139,18 @@ public class MetricsView implements PidescoView {
 		TableItem tableItem8 = new TableItem(table, SWT.NONE);
 		tableItem8.setText(0, "Depht of inheritance tree");
 		tableItem8.setText(1, "" + visitor.getStaticMethods());
+	}
 
+	//metodo recursivo para vierificar se os filhos da root são packages ou classes e guarda-os numa lista
+	public List<SourceElement> listElements(PackageElement root) {
+		List<SourceElement> elements = new ArrayList<SourceElement>();
+		SortedSet<SourceElement> rootChildren = root.getChildren();
+		for (SourceElement i : rootChildren) {
+			if (i.isPackage())
+				elements.addAll(listElements((PackageElement) i));
+			elements.add(i);
+		}
+		return elements;
 	}
 
 	public static MetricsView getInstance() {
