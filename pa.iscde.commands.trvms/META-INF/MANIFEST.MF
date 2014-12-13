@@ -4,5 +4,6 @@ Bundle-Name: Trvms
 Bundle-SymbolicName: pa.iscde.commands.trvms;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Export-Package: pa.iscde.commands.trvms
-Require-Bundle: pa.iscde.filtersearch;bundle-version="1.0.0"
+Require-Bundle: pa.iscde.filtersearch;bundle-version="1.0.0",
+ pa.iscde.commands;bundle-version="1.0.0"
 Import-Package: pa.iscde.commands.models

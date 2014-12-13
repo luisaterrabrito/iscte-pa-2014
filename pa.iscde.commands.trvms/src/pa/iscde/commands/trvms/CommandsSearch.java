@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Image;
+import pa.iscde.commands.*;
 
 import pa.iscde.filtersearch.providers.SearchProvider;
 
