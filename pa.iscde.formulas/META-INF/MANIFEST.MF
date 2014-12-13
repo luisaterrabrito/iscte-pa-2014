@@ -22,5 +22,6 @@ Require-Bundle: pa.iscde;bundle-version="0.1.0",
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: pa.iscde.formulas.activator.FormulasActivator
 Export-Package: pa.iscde.formulas,
+ pa.iscde.formulas.draw,
  pa.iscde.formulas.util,
  pa.iscde.formulas.view

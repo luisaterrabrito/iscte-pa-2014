@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
 import pa.iscde.formulas.extensibility.DrawEquationsProvider;
+import pa.iscde.formulas.util.ConstantsUtil;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -53,6 +54,34 @@ public class EquationFinder {
 		}
 		analyseFile(file);
 	}
+	
+	
+	private void equationAnalyse(File file) throws FileNotFoundException{
+		int lines = 1;
+		Scanner s = new Scanner(file);
+		while(s.hasNext()){
+			String line = s.nextLine();
+			for (JavaToLatexFormat javaToLatexFormat : newLatexOperations) {
+				if(line.contains(javaToLatexFormat.getJavaOperation())){
+					String line_without_java = removeJavaPrefixs(line);
+					System.out.println(line_without_java);
+					equations.put(line_without_java,lines);
+				}
+			}
+			lines++;
+		}
+	}
+	
+	
+
+	private String removeJavaPrefixs(String line) {
+		String aux ="";
+		for (String javaprefix : ConstantsUtil.getJavaPrefixs()) {
+			aux = line.replace(javaprefix, "");
+		}
+		return aux;
+	}
+
 
 	private void analyseFile(File file) throws FileNotFoundException {
 		int lines = 1;
@@ -67,10 +96,14 @@ public class EquationFinder {
 					i++;
 				}
 			}
-			if(line.contains("/") || line.contains("Math.sqrt") || line.contains("Math.pow") || line.contains("*")){
-				equations.put(delimitateLine(removeA(frac(line))),lines);
-				annotations.add(new FormulaAnnotation("Formula "+i,offset,line.length()));
-			}
+			
+			
+//			if(line.contains("/") || line.contains("Math.sqrt") || line.contains("Math.pow") || line.contains("*")){
+//				equations.put(delimitateLine(removeA(frac(line))),lines);
+//				annotations.add(new FormulaAnnotation("Formula "+i,offset,line.length()));
+//			}
+			
+			
 			offset+=(line.length()+1);
 			lines++;
 		}
