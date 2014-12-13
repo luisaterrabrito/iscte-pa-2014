@@ -32,7 +32,23 @@ public class FigureMover implements MouseListener, MouseMotionListener {
 	@Override
 	public void mousePressed(MouseEvent event) {
 
+		if(figure_select == null) {
+			figure_select = figure;
+			figure.setBackgroundColor(ColorConstants.white);
+		}
+		else if (figure_select != figure) {
+			figure_select.setBackgroundColor(figure.getBackgroundColor());
+			figure.setBackgroundColor(ColorConstants.white);
+			figure_select = figure;
+		}
+		location = event.getLocation();
+		
+		if (event.button != 1) {
 
+			PackageDiagramView.getInstance().loadActionMenu();
+			
+		}
+		event.consume();
 	}
 
 	@Override

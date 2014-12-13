@@ -49,24 +49,6 @@
             view="pa.iscde.packagediagram.umlpackages">
       </tool>
    </extension>
-   <extension
-         id="id1"
-         name="name"
-         point="pt.iscte.pidesco.tool">
-      <tool
-            class="pa.iscde.packagediagram.PidescoTool_test"
-            hasState="false"
-            icon="refresh.gif"
-            view="pa.iscde.packagediagram.umlpackages">
-      </tool>
-   </extension>
-   <extension
-         point="pa.iscde.packagediagram.colorSelector">
-      <colorSelector
-            Name="pa.iscde.packagediagram.colorSelector1"
-            class="pa.iscde.packagediagram.Lol">
-      </colorSelector>
-   </extension>
 
 
 
