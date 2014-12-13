@@ -22,4 +22,5 @@ Import-Package: org.eclipse.jdt.core.compiler,
  pt.iscte.pidesco.projectbrowser.service
 Bundle-Activator: pa.iscde.callgraph.Activator
 Bundle-ActivationPolicy: lazy
-Export-Package: pa.iscde.callgraph.extensibility
+Export-Package: pa.iscde.callgraph.extensibility,
+ pa.iscde.callgraph.services

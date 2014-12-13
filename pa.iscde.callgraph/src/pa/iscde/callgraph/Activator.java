@@ -20,7 +20,7 @@ public class Activator implements BundleActivator {
 
 	private static Activator INSTANCE;
 	private BundleContext context;
-	private MyView view;
+	private CallGraphView view;
 	
 	/**
 	 * 
@@ -59,11 +59,11 @@ public class Activator implements BundleActivator {
 		javaServices.addListener(new JavaEditorListener.Adapter() {
 			@Override
 			public void selectionChanged(File file, String text, int offset, int length){
-				view = MyView.getInstance();
+				view = CallGraphView.getInstance();
 				view.newFile(file);
 			}
 			public void fileOpened(File file) {
-				view = MyView.getInstance();
+				view = CallGraphView.getInstance();
 				view.setCurrentFile(file);
 			}
 		});

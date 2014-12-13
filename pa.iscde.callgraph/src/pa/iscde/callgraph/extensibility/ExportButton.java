@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Display;
  * 
  * This is the interface to be implemented for adding custom exports of CallGraph diagrams
  * 
- * @author João Alves, Pedro Neves
+ * @author João Alves
  *
  */
 public interface ExportButton {
@@ -31,3 +31,4 @@ public interface ExportButton {
 			ArrayList<MethodInvocation> belowMethods, Display display);
 	
 }
+	
