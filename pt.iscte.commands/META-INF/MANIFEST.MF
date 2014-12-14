@@ -19,5 +19,4 @@ Require-Bundle: pa.iscde;bundle-version="0.1.0",
  com.google.guava;bundle-version="18.0.0",
  org.eclipse.jface,
  org.eclipse.core.resources
-Export-Package: pa.iscde.commands.controllers,
- pa.iscde.commands.services;uses:="pa.iscde.commands.models"
+Export-Package: pa.iscde.commands.services;uses:="pa.iscde.commands.models"
