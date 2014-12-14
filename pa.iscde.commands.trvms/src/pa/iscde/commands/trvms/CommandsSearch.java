@@ -69,7 +69,11 @@ public class CommandsSearch implements SearchProvider {
 			boolean result = commandsService.requestBindingEdition((CommandDefinition) object);
 			if(result != true)
 				System.out.println("Error: there was a problem changing the binding "
-						+ "of the command definition you clicked");;
+						+ "of the command definition you clicked");
+			
+			if(result)
+				tree.refresh();
+						
 		}else{
 			System.err.println("Error: changing command definition binding, the method "
 					+ "'doubleClickAction of interface SearchProvider is giving a bad instance of the object'");
