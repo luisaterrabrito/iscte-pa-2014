@@ -29,6 +29,7 @@ import activator.SnippetsActivator;
 
 public class SnippetsExplorer extends Composite {
 	private static SnippetsExplorer instance = null;
+	private static final String PLACEHOLDERSEARCH = "Search Snippets...";
 	private GridData gridData;
 	private Text searchText;
 	private HashMap<File, ArrayList<File>> loadedSnippets;
@@ -67,7 +68,7 @@ public class SnippetsExplorer extends Composite {
 				SWT.ITALIC));
 		searchText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false, 1, 1));
-		searchText.setText("Search Snippets...");
+		searchText.setText(PLACEHOLDERSEARCH);
 		searchText.addModifyListener(new ModifyListener() {
 
 			@Override
@@ -243,7 +244,8 @@ public class SnippetsExplorer extends Composite {
 			}
 			refreshSnippetsList();
 		}
-		if(!searchText.getText().trim().equals("")){
+		if (!searchText.getText().trim().equals("")
+				&& !searchText.getText().equals(PLACEHOLDERSEARCH)) {
 			search();
 		}
 	}
