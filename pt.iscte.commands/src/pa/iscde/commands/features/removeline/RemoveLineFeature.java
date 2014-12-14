@@ -29,9 +29,9 @@ public class RemoveLineFeature implements Command {
 			int inicioDalinha = n.substring(0, cursorPosition).lastIndexOf("\r\n")+4;
 			int fimDaLinha = n.substring(cursorPosition, n.length()).indexOf("\r\n");
 	
-			String p = n.substring(0, inicioDalinha) + n.substring((inicioDalinha + (cursorPosition - inicioDalinha) + fimDaLinha), n.length()) ;
+			String p = n.substring(0, inicioDalinha-3) + n.substring((inicioDalinha + (cursorPosition - inicioDalinha) + fimDaLinha), n.length()) ;
 			editor.setText(f, p);
-			editor.selectText(f,inicioDalinha-2, 4);
+			editor.selectText(f,inicioDalinha-3, 2);
 			editor.saveFile(f);
 			
 		} catch (IOException e) {
