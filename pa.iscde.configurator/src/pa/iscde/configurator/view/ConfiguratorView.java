@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -28,6 +29,7 @@ import org.eclipse.zest.core.widgets.GraphNode;
 import org.eclipse.zest.core.widgets.ZestStyles;
 import org.eclipse.zest.layouts.LayoutStyles;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
+
 import pa.iscde.configurator.controller.Controller;
 import pa.iscde.configurator.model.Component;
 import pa.iscde.configurator.model.Dependency;
@@ -80,7 +82,7 @@ public class ConfiguratorView implements PidescoView {
 		runningComponents = controller.getRunningComponents();
 		styles = controller.getStyles();
 		graph = new Graph(comp, SWT.NONE);
-		graph.setLayoutData(new GridData(750, 500));
+		graph.setLayoutData(new GridData(GridData.FILL_HORIZONTAL,500));
 		
 		
 		createTable();
@@ -107,6 +109,7 @@ public class ConfiguratorView implements PidescoView {
 		table = new Table(comp, SWT.BORDER | SWT.V_SCROLL
 				| SWT.H_SCROLL);
 		table.setHeaderVisible(true);
+		table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL,300));
 		String[] titles = { "Propriedades", "Descrição" };
 
 		for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
@@ -119,7 +122,6 @@ public class ConfiguratorView implements PidescoView {
 		}
 
 		table.setBounds(25, 25, 220, 200);
-		table.pack();
 		
 		graph.addSelectionListener(new SelectionAdapter() {
 
@@ -136,7 +138,6 @@ public class ConfiguratorView implements PidescoView {
 				else
 				{
 					table.removeAll();
-					table.pack();
 				}
 			}
 		});
@@ -148,7 +149,9 @@ public class ConfiguratorView implements PidescoView {
 	    combo.setBounds(50, 50, 150, 65);
 	    String items[] = styles.values().toArray(new String[styles.size()]);
 	    combo.setItems(items);
-	    combo.setLayoutData(new GridData(100, 500));
+	    GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+	    gridData.verticalSpan = 10;
+	    combo.setLayoutData(gridData);
 	    combo.addSelectionListener(new SelectionAdapter() {
 	        public void widgetSelected(SelectionEvent e) {
 	        	for(Entry<DependencyStyle, String> entry : styles.entrySet()) {
@@ -191,7 +194,6 @@ public class ConfiguratorView implements PidescoView {
 				item.setText(0, entry.getKey());
 				item.setText(1, entry.getValue());
 			}
-		table.pack();
 		
 	}
 
