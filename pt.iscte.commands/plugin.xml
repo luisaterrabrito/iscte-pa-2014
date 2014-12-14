@@ -95,5 +95,16 @@
             name="Remove Line">
       </command_editor>
    </extension>
+   <extension
+         point="pa.iscde.commands.command">
+      <command_editor
+            alt_key="false"
+            command_implementation="pa.iscde.commands.features.comments.CommentFeature"
+            ctrl_key="true"
+            description="Comment the line at cursor position"
+            key="K"
+            name="Comment">
+      </command_editor>
+   </extension>
 
 </plugin>
