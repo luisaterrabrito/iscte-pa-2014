@@ -274,6 +274,8 @@ public class ConventionsView implements PidescoView {
 
 				FilterByModifier m = (FilterByModifier) ext.createExecutableExtension("filterbymodifier");
 				listModifier.add(m);
+				System.out.println("Lista Modifier: ");
+				System.out.println(listModifier);
 
 			} catch (CoreException e1) {
 				e1.printStackTrace();
