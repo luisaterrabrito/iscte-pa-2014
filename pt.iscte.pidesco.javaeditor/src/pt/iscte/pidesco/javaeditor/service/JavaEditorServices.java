@@ -22,6 +22,25 @@ public interface JavaEditorServices {
 	 * @return
 	 */
 	void openFile(File file);
+	
+	
+	/**
+	 * Saves the state of the current file
+	 * @param file (non-null) file to open
+	 * @return
+	 */
+	
+	void saveFile(File file);
+	
+	
+	/**
+	 * Sets the text of a file in the editor.
+	 * @param file (non-null) file to open
+	 * @param text to insert on file
+	 * @return
+	 */
+	
+	void setText(File file, String text);
 
 	/**
 	 * Selects text in the editor.

@@ -8,6 +8,8 @@ import java.util.Scanner;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.AST;
@@ -123,11 +125,33 @@ public class JavaEditorServicesImpl implements JavaEditorServices {
 		ITextEditor editor = openEditor(file);
 		IDocumentProvider dp = editor.getDocumentProvider();
 		IDocument doc = dp.getDocument(editor.getEditorInput());
+			
 		try {
 			doc.replace(offset, length, text);
 		} catch (BadLocationException e) {
 			throw new RuntimeException("invalid offset/length: " + offset + "/" + length + " (max offset = " + doc.getLength() + ")");
 		}
+	}
+	
+	@Override
+	public void setText(File file, String text) {
+		Assert.isNotNull(file, "file cannot be null");
+		Assert.isNotNull(text, "text cannot be null");
+
+		ITextEditor editor = openEditor(file);
+		IDocumentProvider dp = editor.getDocumentProvider();
+		IDocument doc = dp.getDocument(editor.getEditorInput());
+	    
+		doc.set(text);
+	}
+	
+	
+	@Override
+	public void saveFile(File file){
+		Assert.isNotNull(file, "file cannot be null");
+		
+		ITextEditor editor = openEditor(file);
+		editor.doSave(new NullProgressMonitor());
 	}
 
 

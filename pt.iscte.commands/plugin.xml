@@ -88,11 +88,11 @@
          point="pa.iscde.commands.command">
       <command_editor
             alt_key="true"
-            command_implementation="pa.iscde.commands.features.comments.CommentFeature"
+            command_implementation="pa.iscde.commands.features.removeline.RemoveLineFeature"
             ctrl_key="true"
-            description="comentar a linha"
-            key="K"
-            name="comment">
+            description="Remove a Line from the Java Editor"
+            key="R"
+            name="Remove Line">
       </command_editor>
    </extension>
 
