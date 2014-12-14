@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Feature
-Bundle-SymbolicName: pa.iscde.snippets.feature;singleton:=true
+Bundle-SymbolicName: pa.iscde.snippets.dbipo;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: pt.iscte.pidesco;bundle-version="0.1.0",
