@@ -1,6 +1,5 @@
 package pa.iscde.commands.external.services;
 
-
 import java.util.Map;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -17,10 +16,21 @@ import pt.iscte.pidesco.extensibility.PidescoView;
  * */
 final public class CommandView implements PidescoView {
 
+	public static CommandView instance;
+
+	public static CommandView getInstance() {
+		return instance;
+	}
+
 	private CommandViewTree commandTree;
 	private Composite actionsArea;
 
 	public static Composite viewArea;
+
+	public CommandView() {
+		// Single tone created inside a class creation
+		CommandView.instance = this;
+	}
 
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
@@ -43,6 +53,10 @@ final public class CommandView implements PidescoView {
 				new ActionHandler(actionsArea, commandTree));
 		handler.startProcessExtension();
 
+	}
+
+	public CommandViewTree getCommandTree() {
+		return commandTree;
 	}
 
 }

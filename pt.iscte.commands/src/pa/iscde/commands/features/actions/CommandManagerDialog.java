@@ -19,25 +19,35 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TreeItem;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
+import pa.iscde.commands.controllers.CommandsController;
 import pa.iscde.commands.external.services.CommandViewTree;
 import pa.iscde.commands.models.CommandDefinition;
 import pa.iscde.commands.models.CommandKey;
 import pa.iscde.commands.models.CommandWarehouse;
 import pa.iscde.commands.models.ViewDef;
 import pa.iscde.commands.models.ViewWarehouse;
+import pa.iscde.commands.utils.ExtensionPointsIDS;
 import pa.iscde.commands.utils.Labels;
+import pt.iscte.pidesco.extensibility.PidescoServices;
 
-class NewCommandDialog extends Dialog {
+class CommandManagerDialog extends Dialog {
 
 	private CommandsList list;
 	private Button rightToLeft;
 	private Button leftToRight;
 
 	private CommandViewTree commandsAndViews;
+	private PidescoServices services;
 
-	protected NewCommandDialog(Shell parentShell) {
+	protected CommandManagerDialog(Shell parentShell) {
 		super(parentShell);
+		BundleContext context = CommandsController.getContext();
+		ServiceReference<PidescoServices> ref = context
+				.getServiceReference(PidescoServices.class);
+		services = context.getService(ref);
 	}
 
 	@Override
@@ -138,7 +148,8 @@ class NewCommandDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		// refresh commands view
+		services.runTool(
+				ExtensionPointsIDS.REFRESH_COMMANDS_VEIW_ID.getID(), false);
 		super.okPressed();
 	}
 
@@ -151,7 +162,7 @@ class NewCommandDialog extends Dialog {
 
 		private CommandViewTree commandsAndViews;
 
-		public LeftToRightClick(NewCommandDialog newCommandDialog) {
+		public LeftToRightClick(CommandManagerDialog newCommandDialog) {
 			this.commandsAndViews = newCommandDialog.getCommandsAndViews();
 
 		}
@@ -182,9 +193,9 @@ class NewCommandDialog extends Dialog {
 
 	private final class RightToLeftClick implements Listener {
 
-		private NewCommandDialog newCommandDialog;
+		private CommandManagerDialog newCommandDialog;
 
-		public RightToLeftClick(NewCommandDialog newCommandDialog) {
+		public RightToLeftClick(CommandManagerDialog newCommandDialog) {
 			this.newCommandDialog = newCommandDialog;
 		}
 
