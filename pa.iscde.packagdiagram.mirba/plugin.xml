@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="pa.iscde.conventions.conventionservice">
+      <conventionservice
+            ConventionName="Teste1"
+            Type="METHOD"
+            class="pa.iscde.packagdiagram.mirba.Test">
+      </conventionservice>
+   </extension>
+
+</plugin>
