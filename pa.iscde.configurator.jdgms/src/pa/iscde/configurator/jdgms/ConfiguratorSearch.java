@@ -1,21 +1,15 @@
 package pa.iscde.configurator.jdgms;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
@@ -25,34 +19,23 @@ import org.osgi.framework.ServiceReference;
 
 import pa.iscde.filtersearch.providers.ProjectBrowserSearchProvider;
 import pa.iscde.filtersearch.providers.SearchProvider;
-import pa.iscde.filtersearch.view.SearchCategory;
 import pt.iscte.pidesco.extensibility.PidescoServices;
-import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
-import pt.iscte.pidesco.projectbrowser.model.ClassElement;
-import pt.iscte.pidesco.projectbrowser.model.PackageElement;
-import pt.iscte.pidesco.projectbrowser.model.SourceElement;
-import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 public class ConfiguratorSearch implements SearchProvider {
-	private JavaEditorServices editorServices;
 	private PidescoServices pidescoServices;
 	private HashMap<IContributor, List<IExtensionPoint>> components;
-	private HashMap<IExtensionPoint, String> classes;
 	
 	public ConfiguratorSearch()
 	{
 		
 		
 		components = new HashMap<IContributor, List<IExtensionPoint>>();
-		classes = new HashMap<IExtensionPoint, String>();
 		this.setComponents();
 		
 		
 		Bundle bundle = FrameworkUtil.getBundle(ProjectBrowserSearchProvider.class);
 		BundleContext context  = bundle.getBundleContext();
 		
-		ServiceReference<JavaEditorServices> serviceReference_javaEditor = context.getServiceReference(JavaEditorServices.class);
-		editorServices = context.getService(serviceReference_javaEditor);
 		
 		ServiceReference<PidescoServices> serviceReference_pidesco = context.getServiceReference(PidescoServices.class);
 		pidescoServices = context.getService(serviceReference_pidesco);
@@ -63,12 +46,16 @@ public class ConfiguratorSearch implements SearchProvider {
 		LinkedList<Object> hits = new LinkedList<Object>();
 		for (Entry<IContributor, List<IExtensionPoint>> entry : components.entrySet())
 		{
-			hits.add(entry.getKey().getName());
+			if (entry.getKey().getName().contains(text))
+			{
+				hits.add(entry.getKey().getName());
+			}
 			for (IExtensionPoint ext : entry.getValue())
 			{
-				hits.add(ext.getUniqueIdentifier());
-				if (this.getClasses(ext)!=null)
-				hits.add(this.getClasses(ext));
+				if (ext.getUniqueIdentifier().contains(text))
+				{
+					hits.add(ext.getUniqueIdentifier());
+				}
 			}
 		}
 		
@@ -93,22 +80,12 @@ public class ConfiguratorSearch implements SearchProvider {
 					}
 			}
 			}
-			
-			for (Entry<IExtensionPoint, String> entry : classes.entrySet())
-			{
-				if (entry.getValue().equals(object))
-				{
-					return pidescoServices.getImageFromPlugin("pa.iscde.configurator.jdgms", "classes.gif");
-				}
-			}
 		return null;
 	}
 
 	@Override
 	public void doubleClickAction(TreeViewer tree, Object object) {
-		SourceElement element = (SourceElement) object;
-		File f = element.getFile();
-		editorServices.openFile(f);
+		
 	}
 	
 	private void setComponents()
@@ -139,16 +116,6 @@ public class ConfiguratorSearch implements SearchProvider {
 				}
 				}
 			components.put(contributor, list);
-	}
-	
-	private String getClasses(IExtensionPoint ext)
-	{
-		if (ext.getConfigurationElements()[0].getAttribute("class")!=null)
-		{
-			classes.put(ext, ext.getConfigurationElements()[0].getAttribute("class"));
-			return ext.getConfigurationElements()[0].getAttribute("class");
-		}
-	return null;
 	}
 	
 	
