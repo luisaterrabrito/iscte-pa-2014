@@ -10,7 +10,7 @@ import org.eclipse.core.runtime.Platform;
 
 import pa.iscde.configurator.model.Component;
 import pa.iscde.configurator.model.Dependency;
-/*
+/**
  * This class creates the model classes that represent the components and dependencies to paint
  * 
  * This class is created by the controller and uses a class Platform to get the information
@@ -18,7 +18,7 @@ import pa.iscde.configurator.model.Dependency;
  */
 public class Constructor {
 	
-	/*
+	/**
 	 * This method creates all the components related to pt.iscte.pidesco that 
 	 * have a view and are running
 	 * 
@@ -51,7 +51,7 @@ public class Constructor {
 
 	}
 
-	/*
+	/**
 	 * This method creates all the dependencies related to the components passed by parameter 
 	 * Only creates dependencies if the main component or the dependent exist on the list.
 	 * 

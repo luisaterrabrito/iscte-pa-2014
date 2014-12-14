@@ -1,5 +1,5 @@
 package pa.iscde.configurator.model;
-/*
+/**
  * This class represents a dependency between to components(bundles), associated to some extension point
  * that exists on the mainComponent
  * 
@@ -11,7 +11,7 @@ public class Dependency {
 	private Component mainComponent;
 	private Component dependantComponent;
 	private String extensionPointId;
-	/*
+	/**
 	 * Class constructor
 	 * Creates a dependency between two components specifying the mainComponent(component that
 	 * has the extension Point), the dependantComponent(component that creates an extension to 
@@ -24,7 +24,7 @@ public class Dependency {
 		this.dependantComponent=dependantComponent;
 		this.extensionPointId=extensionPointId;
 	}
-	/*
+	/**
 	 * Get the main component
 	 * @return an object of the class Component that represents the main component
 	 */
@@ -32,7 +32,7 @@ public class Dependency {
 		return mainComponent;
 	}
 
-	/*
+	/**
 	 * Get the dependant component
 	 * @return an object of the class Component that represents the dependant component
 	 */
@@ -40,7 +40,7 @@ public class Dependency {
 		return dependantComponent;
 	}
 
-	/*
+	/**
 	 * Get the id of the extension point that this dependency is about.
 	 * @return a String with the extension point id
 	 */

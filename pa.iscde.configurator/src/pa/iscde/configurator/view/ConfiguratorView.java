@@ -33,7 +33,7 @@ import pa.iscde.configurator.model.Component;
 import pa.iscde.configurator.model.Dependency;
 import pa.iscde.configurator.model.interfaces.DependencyStyle;
 import pt.iscte.pidesco.extensibility.PidescoView;
-/*
+/**
  * This class is used to represent the view of the bundle pa.iscde.configurator
  * 
  * When ConfiguratorView starts, it creates the controller to get information from him
