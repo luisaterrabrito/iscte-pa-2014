@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="pa.iscde.filtersearch.SearchProvider">
+      <SearchProvider
+            SearchProvider="pa.iscde.snippets.rnnma.extension.SnippetsSearchProvider"
+            iconName="pa.iscde.snippets.rnnma.SearchProvider1">
+      </SearchProvider>
+   </extension>
+
+</plugin>
