@@ -1,4 +1,4 @@
-#summary pa.iscde.filtersearch.createPrespective
+#summary pa.iscde.perpective.createPrespective
 
 = Introduction =
 
