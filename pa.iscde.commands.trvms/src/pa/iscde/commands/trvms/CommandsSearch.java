@@ -21,7 +21,7 @@ public class CommandsSearch implements SearchProvider {
 
 	@Override
 	public List<Object> getResults(String text) {
-		return new LinkedList<Object>(Arrays.asList(CommandWarehouse.getInstance().getAllCommandDefinitions().toArray()));
+		return new LinkedList<Object>(Arrays.asList(CommandWarehouse.getInstance().getFilteredCommandsDefinitions(text).toArray()));
 	}
 
 	@Override
