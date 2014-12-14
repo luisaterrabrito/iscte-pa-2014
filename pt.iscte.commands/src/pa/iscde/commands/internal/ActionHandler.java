@@ -1,4 +1,4 @@
-package pa.iscde.commands.external.services;
+package pa.iscde.commands.internal;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -11,8 +11,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 
 import pa.iscde.commands.controllers.ExtensionHandler.Handler;
-import pa.iscde.commands.internal.services.Action;
 import pa.iscde.commands.models.CommandDataAdaptor;
+import pa.iscde.commands.services.Action;
 
 final class ActionHandler implements Handler {
 

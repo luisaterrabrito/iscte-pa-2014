@@ -1,6 +1,5 @@
-package pa.iscde.commands.models;
+package pa.iscde.commands.services;
 
-import pa.iscde.commands.internal.services.Command;
 
 public class CommandDefinition {
 	

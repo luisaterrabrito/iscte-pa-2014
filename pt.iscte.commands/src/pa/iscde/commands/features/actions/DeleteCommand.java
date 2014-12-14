@@ -1,8 +1,8 @@
 package pa.iscde.commands.features.actions;
 
-import pa.iscde.commands.internal.services.Action;
 import pa.iscde.commands.models.CommandDataAdaptor;
-import pa.iscde.commands.models.CommandDefinition;
+import pa.iscde.commands.services.Action;
+import pa.iscde.commands.services.CommandDefinition;
 
 public class DeleteCommand implements Action {
 

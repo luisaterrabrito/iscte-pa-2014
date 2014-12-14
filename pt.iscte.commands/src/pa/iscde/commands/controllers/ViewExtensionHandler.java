@@ -6,7 +6,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 
 import pa.iscde.commands.controllers.ExtensionHandler.Handler;
-import pa.iscde.commands.models.ViewDef;
+import pa.iscde.commands.services.ViewDef;
 
 
 public class ViewExtensionHandler implements Handler {

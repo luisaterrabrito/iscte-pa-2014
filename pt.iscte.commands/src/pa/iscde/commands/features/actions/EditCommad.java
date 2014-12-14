@@ -2,11 +2,10 @@ package pa.iscde.commands.features.actions;
 
 import org.eclipse.swt.widgets.Display;
 
-import pa.iscde.commands.internal.services.Action;
 import pa.iscde.commands.models.CommandDataAdaptor;
-import pa.iscde.commands.models.CommandDefinition;
-import pa.iscde.commands.models.CommandKey;
-import pa.iscde.commands.models.CommandWarehouse;
+import pa.iscde.commands.services.Action;
+import pa.iscde.commands.services.CommandDefinition;
+import pa.iscde.commands.services.CommandKey;
 
 public class EditCommad implements Action {
 
@@ -25,7 +24,7 @@ public class EditCommad implements Action {
 			CommandKey newKey = inputDialog.getKey();
 
 			if (newKey != null) {
-				data.editCommandLine(cmdDefBefore, newKey);
+				data.editCommand(cmdDefBefore, newKey);
 			} else {
 				System.err.println("The input dialog didn't returned any new valid key to update the commands system");
 			}

@@ -1,4 +1,4 @@
-package pa.iscde.commands.external.services;
+package pa.iscde.commands.internal;
 
 import pt.iscte.pidesco.extensibility.PidescoTool;
 

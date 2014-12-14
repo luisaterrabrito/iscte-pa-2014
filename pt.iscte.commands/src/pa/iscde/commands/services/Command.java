@@ -1,4 +1,4 @@
-package pa.iscde.commands.internal.services;
+package pa.iscde.commands.services;
 
 public interface Command {
 	

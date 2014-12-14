@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import org.osgi.framework.ServiceReference;
+
 import pa.iscde.commands.controllers.CommandsController;
-import pa.iscde.commands.internal.services.Command;
+import pa.iscde.commands.services.Command;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class RemoveLineFeature implements Command {

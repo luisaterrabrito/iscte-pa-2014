@@ -1,4 +1,4 @@
-package pa.iscde.commands.external.services;
+package pa.iscde.commands.internal;
 
 import java.util.List;
 import java.util.Set;
@@ -17,8 +17,8 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 
-import pa.iscde.commands.models.CommandDefinition;
 import pa.iscde.commands.models.CommandWarehouse;
+import pa.iscde.commands.services.CommandDefinition;
 import pa.iscde.commands.utils.Labels;
 
 public class CommandViewTree {

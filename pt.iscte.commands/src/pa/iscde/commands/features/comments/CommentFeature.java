@@ -12,7 +12,7 @@ import org.eclipse.jface.text.ITextSelection;
 import org.osgi.framework.ServiceReference;
 
 import pa.iscde.commands.controllers.CommandsController;
-import pa.iscde.commands.internal.services.Command;
+import pa.iscde.commands.services.Command;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class CommentFeature implements Command {

@@ -23,12 +23,12 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 import pa.iscde.commands.controllers.CommandsController;
-import pa.iscde.commands.external.services.CommandViewTree;
-import pa.iscde.commands.models.CommandDefinition;
-import pa.iscde.commands.models.CommandKey;
+import pa.iscde.commands.internal.CommandViewTree;
 import pa.iscde.commands.models.CommandWarehouse;
-import pa.iscde.commands.models.ViewDef;
 import pa.iscde.commands.models.ViewWarehouse;
+import pa.iscde.commands.services.CommandDefinition;
+import pa.iscde.commands.services.CommandKey;
+import pa.iscde.commands.services.ViewDef;
 import pa.iscde.commands.utils.ExtensionPointsIDS;
 import pa.iscde.commands.utils.Labels;
 import pt.iscte.pidesco.extensibility.PidescoServices;
