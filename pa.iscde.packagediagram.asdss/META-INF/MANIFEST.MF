@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Teste
+Bundle-SymbolicName: pa.iscde.packagediagram.asdss;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: pa.iscde.conventions.extensability
+Require-Bundle: pt.iscte.pidesco;bundle-version="0.1.0",
+ pa.iscde;bundle-version="0.1.0",
+ org.eclipse.swt;bundle-version="3.103.1"
