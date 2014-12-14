@@ -150,6 +150,11 @@ public class ConventionsView implements PidescoView {
 		checkBoxMethodMod.setSize(10, 20);
 
 
+		
+		handleConventionExtension(viewArea);
+		handleFilterByModExtension();
+		
+		
 		if(listModifier.isEmpty()){
 			checkBoxMethodMod.setText("Filtrar Método por Modifier igual a : ");
 
@@ -200,8 +205,8 @@ public class ConventionsView implements PidescoView {
 
 
 		
-		handleConventionExtension(viewArea);
-		handleFilterByModExtension();
+//		handleConventionExtension(viewArea);
+//		handleFilterByModExtension();
 
 
 

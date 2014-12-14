@@ -31,5 +31,8 @@
    <extension
          point="pa.iscde.conventions.filterbymodifier">
    </extension>
+   <extension
+         point="pa.iscde.conventions.filterbymodifier">
+   </extension>
 
 </plugin>
