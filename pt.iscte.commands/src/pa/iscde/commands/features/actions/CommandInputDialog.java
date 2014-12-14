@@ -16,11 +16,10 @@ import org.eclipse.swt.widgets.Shell;
 
 import pa.iscde.commands.controllers.KeyPressDetector;
 import pa.iscde.commands.controllers.KeyPressDetector.KeyUpListener;
-import pa.iscde.commands.models.CommandDefinition;
-import pa.iscde.commands.models.CommandKey;
+import pa.iscde.commands.services.CommandKey;
 import pa.iscde.commands.utils.Labels;
 
-class CommandInputDialog extends Dialog {
+public class CommandInputDialog extends Dialog {
 
 	private Label keyInput;
 	private Label inputLabel;

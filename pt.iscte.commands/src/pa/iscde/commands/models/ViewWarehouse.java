@@ -15,6 +15,7 @@ import org.osgi.framework.ServiceReference;
 import pa.iscde.commands.controllers.CommandsController;
 import pa.iscde.commands.controllers.ExtensionHandler;
 import pa.iscde.commands.controllers.ViewExtensionHandler;
+import pa.iscde.commands.services.ViewDef;
 import pa.iscde.commands.utils.ExtensionPointsIDS;
 import pt.iscte.pidesco.extensibility.PidescoServices;
 

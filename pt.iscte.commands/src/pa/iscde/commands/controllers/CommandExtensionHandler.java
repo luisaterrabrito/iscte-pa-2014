@@ -4,10 +4,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 
 import pa.iscde.commands.controllers.ExtensionHandler.Handler;
-import pa.iscde.commands.internal.services.Command;
-import pa.iscde.commands.models.CommandDefinition;
-import pa.iscde.commands.models.CommandKey;
 import pa.iscde.commands.models.CommandWarehouse;
+import pa.iscde.commands.services.Command;
+import pa.iscde.commands.services.CommandDefinition;
+import pa.iscde.commands.services.CommandKey;
 
 public class CommandExtensionHandler implements Handler {
 

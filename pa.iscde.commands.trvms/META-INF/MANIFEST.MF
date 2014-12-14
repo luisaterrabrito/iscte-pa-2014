@@ -4,8 +4,9 @@ Bundle-Name: Trvms
 Bundle-SymbolicName: pa.iscde.commands.trvms;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Require-Bundle: pa.iscde.commands;bundle-version="1.0.0",
- pa.iscde.filtersearch;bundle-version="1.0.0",
+Require-Bundle: pa.iscde.filtersearch;bundle-version="1.0.0",
  pt.iscte.pidesco,
  org.eclipse.osgi
-Import-Package: pa.iscde.commands.models
+Import-Package: pa.iscde.commands.services
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: pa.iscde.commands.trvms.Activator

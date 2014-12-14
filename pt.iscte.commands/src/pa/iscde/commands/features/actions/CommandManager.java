@@ -1,8 +1,9 @@
 package pa.iscde.commands.features.actions;
 
 import org.eclipse.swt.widgets.Display;
-import pa.iscde.commands.internal.services.Action;
+
 import pa.iscde.commands.models.CommandDataAdaptor;
+import pa.iscde.commands.services.Action;
 
 
 public class CommandManager implements Action {

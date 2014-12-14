@@ -1,4 +1,4 @@
-package pa.iscde.commands.models;
+package pa.iscde.commands.services;
 
 public class ViewDef {
 	

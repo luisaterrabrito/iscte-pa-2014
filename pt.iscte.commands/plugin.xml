@@ -21,7 +21,7 @@
          name="Commands"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.commands.external.services.CommandView"
+            class="pa.iscde.commands.internal.CommandView"
             icon="keygroups_obj.gif">
       </view>
    </extension>
@@ -111,7 +111,7 @@
          name="Refresh Commands View"
          point="pt.iscte.pidesco.tool">
       <tool
-            class="pa.iscde.commands.external.services.RefreshCommandsView"
+            class="pa.iscde.commands.internal.RefreshCommandsView"
             description="Refresh the commands view"
             hasState="false"
             icon="refresh.gif"

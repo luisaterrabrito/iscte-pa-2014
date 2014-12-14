@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import pa.iscde.commands.services.CommandDefinition;
+import pa.iscde.commands.services.CommandKey;
+
 import com.google.common.collect.LinkedListMultimap;
 
 public final class CommandWarehouse {

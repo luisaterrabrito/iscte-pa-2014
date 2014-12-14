@@ -9,6 +9,9 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
+import pa.iscde.commands.services.CommandDefinition;
+import pa.iscde.commands.services.CommandKey;
+
 /**
  * This class uses the decorator pattern to provides the methods for handling
  * data in the extension point pa.iscde.commands.action
@@ -105,10 +108,10 @@ final public class CommandDataAdaptor {
 
 		int i = findContextInTree(cmdDef.getContext());
 		if (i != -1) {
-			CommandDefinition insertResult = CommandWarehouse.getInstance()
-					.insertCommandDefinition(cmdDef.getCommandKey(), cmdDef);
-
-			if (insertResult == null
+			
+			boolean insertResult = insertCommand(cmdDef); 
+			
+			if (insertResult
 					&& CommandWarehouse.getInstance().containsKey(
 							cmdDef.getCommandKey())) {
 
@@ -156,6 +159,20 @@ final public class CommandDataAdaptor {
 
 		return Collections.unmodifiableList(kyes);
 	}
+	
+	
+	/**
+	 * This method returns all the commands in the list filtered by a specific string  
+	 * 
+	 * @return {@link List} A unmodifiable list list with the commands
+	 * */
+	public List<CommandDefinition> getFilteredCommands(String text) {
+		return CommandWarehouse.getInstance().getFilteredCommandsDefinitions(text);
+	}
+	
+	
+	
+	
 
 	
 	/**
@@ -167,15 +184,27 @@ final public class CommandDataAdaptor {
 	 * 
 	 * @return True - if the edit was successfully, False otherwise 
 	 */
-	public boolean editCommandLine(CommandDefinition cmdDefBefore,
+	public boolean editCommand(CommandDefinition cmdDefBefore,
 			CommandKey newKey) {
 
-		boolean removalResult = CommandWarehouse.getInstance().removeCommandKey(cmdDefBefore.getCommandKey());
+		boolean removeResult = removeCommand(cmdDefBefore);
+		
 		cmdDefBefore.getCommandKey().setAltKey(newKey.usesAlt());
 		cmdDefBefore.getCommandKey().setCtrlKey(newKey.usesCtrl());
 		cmdDefBefore.getCommandKey().setKey(newKey.usesKey());
-		CommandDefinition changeDefResult = CommandWarehouse.getInstance().insertCommandDefinition(cmdDefBefore.getCommandKey(), cmdDefBefore);
-		return removalResult == true && changeDefResult == null;
+		
+		boolean insertResult = insertCommand(cmdDefBefore);
+		
+		return removeResult && insertResult;
+	}
+
+	public boolean insertCommand(CommandDefinition c) {
+		CommandDefinition insertResult = CommandWarehouse.getInstance().insertCommandDefinition(c.getCommandKey(), c );
+		return insertResult == null;
+	}
+
+	public boolean removeCommand(CommandDefinition c) {
+		return CommandWarehouse.getInstance().removeCommandKey(c.getCommandKey());
 	}
 
 }

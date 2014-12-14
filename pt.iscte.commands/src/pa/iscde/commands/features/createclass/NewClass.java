@@ -2,7 +2,7 @@ package pa.iscde.commands.features.createclass;
 
 import org.eclipse.swt.widgets.Display;
 
-import pa.iscde.commands.internal.services.Command;
+import pa.iscde.commands.services.Command;
 
 final public class NewClass implements Command {
 

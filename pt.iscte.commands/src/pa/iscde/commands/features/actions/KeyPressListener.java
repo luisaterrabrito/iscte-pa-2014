@@ -7,9 +7,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import pa.iscde.commands.controllers.CommandKeyListener;
-import pa.iscde.commands.models.CommandDefinition;
-import pa.iscde.commands.models.CommandKey;
 import pa.iscde.commands.models.CommandWarehouse;
+import pa.iscde.commands.services.CommandDefinition;
+import pa.iscde.commands.services.CommandKey;
 
 class KeyPressListener extends CommandKeyListener {
 

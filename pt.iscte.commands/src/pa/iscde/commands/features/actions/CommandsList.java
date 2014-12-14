@@ -6,9 +6,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TreeItem;
 
-import pa.iscde.commands.external.services.CommandViewTree;
-import pa.iscde.commands.models.CommandDefinition;
+import pa.iscde.commands.internal.CommandViewTree;
 import pa.iscde.commands.models.CommandWarehouse;
+import pa.iscde.commands.services.CommandDefinition;
 
 public class CommandsList extends CommandViewTree {
 

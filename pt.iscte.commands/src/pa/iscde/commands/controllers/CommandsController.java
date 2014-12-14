@@ -5,11 +5,15 @@ import org.eclipse.swt.widgets.Event;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-import pa.iscde.commands.models.CommandDefinition;
-import pa.iscde.commands.models.CommandKey;
+import pa.iscde.commands.models.CommandDataAdaptor;
+import pa.iscde.commands.models.CommandServicesImpl;
 import pa.iscde.commands.models.CommandWarehouse;
 import pa.iscde.commands.models.ViewWarehouse;
+import pa.iscde.commands.services.CommandDefinition;
+import pa.iscde.commands.services.CommandKey;
+import pa.iscde.commands.services.CommandServices;
 import pa.iscde.commands.utils.ExtensionPointsIDS;
+import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class CommandsController implements BundleActivator {
 
@@ -64,6 +68,11 @@ public class CommandsController implements BundleActivator {
 		handler.startProcessExtension();
 
 		KeyPressDetector.getInstance().addKeyPressListener(commandKeylistener);
+		
+		CommandServices commandServices = new CommandServicesImpl(new CommandDataAdaptor(null));
+		context.registerService(CommandServices.class, commandServices, null);
+		
+		
 
 	}
 

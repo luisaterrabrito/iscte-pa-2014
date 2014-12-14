@@ -3,7 +3,7 @@ package pa.iscde.commands.features.search;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Display;
 
-import pa.iscde.commands.internal.services.Command;
+import pa.iscde.commands.services.Command;
 
 final public class SearchWord implements Command {
 
