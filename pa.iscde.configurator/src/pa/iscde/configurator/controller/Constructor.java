@@ -69,15 +69,17 @@ public class Constructor {
 				.getExtensionPoints();
 		for (Component c : components) {
 			for (IExtensionPoint ep : extensionPoints) {
-				if (ep.getUniqueIdentifier().contains(c.getName())) {
+				if (ep.getUniqueIdentifier().contains(c.getName() + "." + ep.getSimpleIdentifier())) {
 					IExtension[] exts = ep.getExtensions();
 					for (IExtension iExtension : exts) {
 						IContributor cont = iExtension.getContributor();
 						if (getComponentByName(components, cont.getName()) != null)
+						{
 							dependenciesList.add(new Dependency(c,
 									getComponentByName(components,
 											cont.getName()), ep
 											.getUniqueIdentifier()));
+						}
 					}
 				}
 			}
