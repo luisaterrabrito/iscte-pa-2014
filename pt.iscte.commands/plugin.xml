@@ -84,5 +84,16 @@
             name="Search">
       </command_editor>
    </extension>
+   <extension
+         point="pa.iscde.commands.command">
+      <command_editor
+            alt_key="true"
+            command_implementation="pa.iscde.commands.features.comments.CommentFeature"
+            ctrl_key="true"
+            description="comentar a linha"
+            key="K"
+            name="comment">
+      </command_editor>
+   </extension>
 
 </plugin>
