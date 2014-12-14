@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.BlockComment;
@@ -40,6 +42,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import pa.iscde.tasklist.extensibility.Category;
+import pa.iscde.tasklist.extensibility.CategoryAction;
 import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
@@ -48,12 +51,15 @@ import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 public class TaskView implements PidescoView {
 	
+	/**
+	 * enum available with the several task types
+	 */
 	public enum TaskType {
 		PROJECT, PACKAGE, FILE;
 	}
 	
 	public static final String EXT_POINT_ID_1 = "pa.iscde.tasklist.category";
-	public static final String EXT_POINT_ID_2 = "pa.iscde.tasklist.categoryAction";
+	public static final String EXT_POINT_ID_2 = "pa.iscde.tasklist.category_action";
 	
 	private Table table;
 	private Combo combo;
@@ -67,8 +73,11 @@ public class TaskView implements PidescoView {
 	private String[] views = {"Project", "Package", "Open File"};
 	private File currentFile;
 	private ArrayList<Category> catList;
+	private ASTVisitor visitor;
 	
-	//Constructor for class
+	/**
+	 * the constructor for this class, where the several ServiceReferences are instantiated
+	 */
 	public TaskView() {
 		
 		this.type = TaskType.PROJECT;
@@ -119,8 +128,12 @@ public class TaskView implements PidescoView {
 		files = new ArrayList<File>();
 		currentFile = null;
 	}
-
-	//Create the task view table
+	
+	/**
+	 * creates the view for this class
+	 * also saves the categories available to an array
+	 * finally reads the comments to fill the table
+	 */
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		viewArea.setLayout(new FillLayout(1));
@@ -136,7 +149,7 @@ public class TaskView implements PidescoView {
 		}
 	}
 	
-	//Reads the comments and alters the table
+	//Reads the comments and refreshes the table, accordingly to the TaskType selected at the moment
 	private void commentReader() throws IOException {
 		
 		files.clear();
@@ -160,7 +173,7 @@ public class TaskView implements PidescoView {
 		}
 		
 		//Visitor
-		ASTVisitor v = new ASTVisitor() {
+		visitor = new ASTVisitor() {
 			
 			TableItem item = null;
 			
@@ -188,7 +201,7 @@ public class TaskView implements PidescoView {
 						item.setText(0, currentFile.getParentFile().getName());
 						item.setText(1, currentFile.getName().substring(0, currentFile.getName().indexOf(".")));
 						item.setText(3, tmp.substring(splitSpace[0].length() + 1));
-						item.setText(4, c.getName());
+						item.setText(4, c.getTag());
 						if(c.getIcon() != null)
 							item.setImage(5, c.getIcon());
 						else
@@ -223,11 +236,11 @@ public class TaskView implements PidescoView {
 		for(File f: files){
 			currentFile = f;
 			fileText = readFile(f);
-			javaServices.parseFile(f, v);
+			javaServices.parseFile(f, visitor);
 		}
 	}
 	
-	//Function to read the file to a String
+	//Reads the file given as parameter to a String
 	private String readFile(File file) throws IOException{
 		StringBuilder sb = new StringBuilder();
 		
@@ -246,10 +259,12 @@ public class TaskView implements PidescoView {
 	    return sb.toString();
 	}
 
-	/*Gets the files from the project to read the comments
-	If open file -> give javaServices.getOpenedFile
-	If package -> give project root
-	If all files for the project -> check everything*/
+	/*
+	 * Gets the files from the project to read the comments
+	 * If "FILE" -> give javaServices.getOpenedFile
+	 * If "PACKAGE" -> give project root
+	 * If "PROJECT" -> check everything
+	 */
 	private ArrayList<File> getFiles(File root){
 		
 		for(File f: root.listFiles()){
@@ -341,37 +356,56 @@ public class TaskView implements PidescoView {
 			
 			@Override
 			public void mouseDown(MouseEvent e) {
-				ArrayList<File> tmp = getFiles(browserServices.getRootPackage().getFile());
-				int selected = table.getSelectionIndex();
-				for(int i = 0; i < tmp.size(); i++){
-					if(tmp.get(i).getName().equals(table.getItem(selected).getText(1) + ".java")){
-						javaServices.openFile(tmp.get(i));
-						table.select(selected);
-					}
-				}
 			}
 			
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				
+				final int selected = table.getSelectionIndex();
+				for(File f: getFiles(browserServices.getRootPackage().getFile())){
+					if(f.getName().equals(table.getItem(selected).getText(1) + ".java"))
+						currentFile = f;
+				}
+				
 				Menu popup = new Menu(table);
-				MenuItem item = new MenuItem(popup, SWT.NONE);
+				final MenuItem item = new MenuItem(popup, SWT.NONE);
 				
-//				IExtensionRegistry reg = Platform.getExtensionRegistry();
-//				for(IExtension ext : reg.getExtensionPoint(EXT_POINT_ID_2).getExtensions()){
-//					
-//					for(IConfigurationElement member : ext.getConfigurationElements()){
-//						String tag = member.getAttribute("tag");
-//						
-//						item.setText("Popup shown");
-//						popup.setDefaultItem(item);
-//					}
-//					
-//				}
-				
-				item.setText(table.getItem(table.getSelectionIndex()).getText(1));
-				popup.setDefaultItem(item);
-				
+				IExtensionRegistry reg = Platform.getExtensionRegistry();
+				for(IExtension ext : reg.getExtensionPoint(EXT_POINT_ID_2).getExtensions()){
+					
+					for(IConfigurationElement member : ext.getConfigurationElements()){
+						
+						try {
+							CategoryAction action = (CategoryAction) member.createExecutableExtension("actionClass");
+							String categories = member.getAttribute("categories");
+							for(String s: categories.split(",")){
+								if(s.equals(table.getItem(selected).getText(4))){
+									item.setText("Action " + s + ": " + member.getAttribute("name").toLowerCase());
+									item.setData(action);
+									popup.setDefaultItem(item);
+								}
+							}
+						} catch (InvalidRegistryObjectException | CoreException e1) {
+							e1.printStackTrace();
+						}
+					}
+					
+				}
+				item.addSelectionListener(new SelectionListener() {
+					
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						if(item.getData() instanceof CategoryAction){
+							CategoryAction a = (CategoryAction) item.getData();
+							a.executeAction(currentFile, javaServices);
+							table.setSelection(selected);
+						}
+					}
+					
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+					}
+				});
 				popup.setVisible(true);
 				
 				table.select(table.getSelectionIndex());
