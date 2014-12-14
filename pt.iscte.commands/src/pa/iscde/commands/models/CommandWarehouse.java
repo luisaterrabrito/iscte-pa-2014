@@ -3,6 +3,7 @@ package pa.iscde.commands.models;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,6 +41,17 @@ public final class CommandWarehouse {
 		
 		commandsByViewWarehouse.put(key.getContext(), definition);
 		return commandsWarehouse.put(key, definition);
+	}
+	
+	public List<CommandDefinition> getFilteredCommandsDefinitions(String text){
+		List<CommandDefinition> lista = new LinkedList<CommandDefinition>();
+		for(CommandKey ck : commandsWarehouse.keySet()){
+			CommandDefinition def = commandsWarehouse.get(ck);
+			if(def.toString().contains(text))
+				lista.add(def);
+		}
+		
+		return lista;
 	}
 
 	public Set<String> getCommandsContext() {
