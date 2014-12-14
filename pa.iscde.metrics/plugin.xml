@@ -43,6 +43,30 @@
             implementation="pa.iscde.metrics.internal.metrics.StaticMethodsMetric"
             name="Number of static methods">
       </metric>
+      <metric
+            implementation="pa.iscde.metrics.internal.metrics.PhysicalLinesMetric"
+            name="Physical lines of code">
+      </metric>
+      <metric
+            implementation="pa.iscde.metrics.internal.metrics.LogicalLinesMetric"
+            name="Logical lines of code">
+      </metric>
+      <metric
+            implementation="pa.iscde.metrics.internal.metrics.ClassesMetric"
+            name="Number of classes">
+      </metric>
+      <metric
+            implementation="pa.iscde.metrics.internal.metrics.AttributesMetric"
+            name="Number of attributes">
+      </metric>
+      <metric
+            implementation="pa.iscde.metrics.internal.metrics.PackagesMetric"
+            name="Number of packages">
+      </metric>
+      <metric
+            implementation="pa.iscde.metrics.internal.metrics.InterfaceMetric"
+            name="Number of interfaces">
+      </metric>
    </extension>
 
 </plugin>

@@ -137,34 +137,7 @@ public class MetricsView implements PidescoView {
 			}
 			
 		}
-//		TableItem tableItem2 = new TableItem(table, SWT.NONE);
-//		tableItem2.setText(0, "Number of static methods");
-//		tableItem2.setText(1, "" + visitor.getStaticMethods());
-//
-//		TableItem tableItem3 = new TableItem(table, SWT.NONE);
-//		tableItem3.setText(0, "Physical lines of code");
-//		tableItem3.setText(1, "" + visitor.getPhysicalLineCounter());
-//
-//		TableItem tableItem9 = new TableItem(table, SWT.NONE);
-//		tableItem9.setText(0, "Logical lines of code");
-//		tableItem9.setText(1, "" + visitor.getLogicalLineCounter());
-//
-//		TableItem tableItem4 = new TableItem(table, SWT.NONE);
-//		tableItem4.setText(0, "Number of classes");
-//		tableItem4.setText(1, "" + visitor.getClassCounter());
-//
-//		TableItem tableItem5 = new TableItem(table, SWT.NONE);
-//		tableItem5.setText(0, "Number of attributes");
-//		tableItem5.setText(1, "" + visitor.getAttributeCounter());
-//
-//		TableItem tableItem6 = new TableItem(table, SWT.NONE);
-//		tableItem6.setText(0, "Number of packages");
-//		tableItem6.setText(1, "" + visitor.getPackageCounter());
-//
-//		TableItem tableItem7 = new TableItem(table, SWT.NONE);
-//		tableItem7.setText(0, "Number of interfaces");
-//		tableItem7.setText(1, "" + visitor.getInterfaceCounter());
-//
+
 //		TableItem tableItem8 = new TableItem(table, SWT.NONE);
 //		tableItem8.setText(0, "Depht of inheritance tree");
 //		tableItem8.setText(1, "" + visitor.getStaticMethods());

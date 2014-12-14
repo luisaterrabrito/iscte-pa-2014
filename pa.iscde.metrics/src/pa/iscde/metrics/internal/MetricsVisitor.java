@@ -56,6 +56,13 @@ public class MetricsVisitor extends ASTVisitor {
 	public boolean visit(PackageDeclaration node) {
 		packageCounter++;
 
+		// public void visit(PackageElement root) {
+		// SortedSet<SourceElement> c = root.getChildren();
+		// for (SourceElement sourceElement : c) {
+		// // System.out.println(sourceElement.getClass());
+		// }
+		// }
+		
 		return true;
 	};
 
@@ -91,11 +98,5 @@ public class MetricsVisitor extends ASTVisitor {
 		return attributeCounter;
 	}
 
-	// public void visit(PackageElement root) {
-	// SortedSet<SourceElement> c = root.getChildren();
-	// for (SourceElement sourceElement : c) {
-	// // System.out.println(sourceElement.getClass());
-	// }
-	// }
 
 }
