@@ -9,9 +9,7 @@ This extension point offers other plugins the ability to create and set a new ac
 {{{
 public interface CategoryAction {
 	
-	/**
-	 * @param ...
-	 * 
+	/*
 	 * The method used to implement the desired action.
 	 */
 	public void executeAction(File file, JavaEditorServices javaServices);
