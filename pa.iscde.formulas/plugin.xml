@@ -153,6 +153,24 @@
             addformula="pa.iscde.formulas.basics.TrigonometricFormula"
             formula_method="formulas/Trignometric.txt">
       </NewFormula>
+   </extension>
+   <extension
+         point="pa.iscde.formulas.newEquationToDraw">
+      <newOperation
+            newOperation="pa.iscde.formulas.draw.types.MathSqrt">
+      </newOperation>
+      <newOperation
+            newOperation="pa.iscde.formulas.draw.types.MathPow">
+      </newOperation>
+      <newOperation
+            newOperation="pa.iscde.formulas.draw.types.MathMultiplication">
+      </newOperation>
+      <newOperation
+            newOperation="pa.iscde.formulas.draw.types.MathFrac">
+      </newOperation>
+      <newOperation
+            newOperation="pa.iscde.formulas.draw.types.MathLog">
+      </newOperation>
    </extension> 
 
 </plugin>

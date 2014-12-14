@@ -15,10 +15,10 @@ public interface DrawEquationsProvider {
 	public String setJavaOperation();
 	
 	/**
-	 * Insert the string in the latex format
+	 * Replaces the java formath for the latext format in the line
 	 * Example : \\sqrt
 	 * @return latexType
 	 */
-	public String setOperationLatexFormat();
+	public String setOperationLatexFormat(String line);
 
 }
