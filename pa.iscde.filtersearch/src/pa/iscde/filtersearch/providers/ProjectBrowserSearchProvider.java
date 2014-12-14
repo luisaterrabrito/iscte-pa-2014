@@ -24,7 +24,7 @@ public class ProjectBrowserSearchProvider implements SearchProvider {
 	private ProjectBrowserServices browserServices;
 	private JavaEditorServices editorServices;
 	private PidescoServices pidescoServices;
-	
+
 
 	public ProjectBrowserSearchProvider() {
 
@@ -35,7 +35,7 @@ public class ProjectBrowserSearchProvider implements SearchProvider {
 
 		ServiceReference<JavaEditorServices> serviceReference_javaEditor = context.getServiceReference(JavaEditorServices.class);
 		editorServices = context.getService(serviceReference_javaEditor);
-		
+
 		ServiceReference<PidescoServices> serviceReference_pidesco = context.getServiceReference(PidescoServices.class);
 		pidescoServices = context.getService(serviceReference_pidesco);
 	}
@@ -44,7 +44,7 @@ public class ProjectBrowserSearchProvider implements SearchProvider {
 	public List<Object> getResults(String text) {
 		List<Object> hits = new ArrayList<>();
 		PackageElement root = browserServices.getRootPackage();
-		
+
 		scan(root,hits,text);
 		return hits;
 	}
