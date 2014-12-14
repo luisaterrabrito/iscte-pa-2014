@@ -1,0 +1,9 @@
+#summary pa.iscde.filtersearch.createPrespective
+
+= Introduction =
+
+This extensions allows other plugins to add new perpective(s) to the perpective manager plugin. A perpective must own a *name* (short readable String), a *icon* and, of course, the *layout*.
+
+= Details =
+
+Not Available Yet
