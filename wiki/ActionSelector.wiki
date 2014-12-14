@@ -23,7 +23,7 @@ public interface PackageDiagramActionExtension {
 Example:
 <code>
 @override
-public void(String packageName) {
+public void run(String packageName) {
 	system.out.println(packageName);
 	 } 
 </code>
