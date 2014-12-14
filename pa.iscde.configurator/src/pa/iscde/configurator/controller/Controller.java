@@ -16,7 +16,7 @@ import pa.iscde.configurator.model.Component;
 import pa.iscde.configurator.model.Dependency;
 import pa.iscde.configurator.model.interfaces.DependencyStyle;
 import pa.iscde.configurator.model.interfaces.PropertyProvider;
-/*
+/**
  * This class is used as an intermediary between the view and the data classes
  * 
  * Represents the Controller on MVC architecture
@@ -29,7 +29,7 @@ public class Controller {
 	LinkedList<Dependency> dependencies;
 	HashMap<PropertyProvider, List<String>> properties;
 	HashMap<DependencyStyle, String> styles;
-	/*
+	/**
 	 * Constructor of the class Controller
 	 * when created, it starts the Constructor and get the data from him.
 	 * It also gets all the classes that are extending pa.iscde.configurator extension points
@@ -43,7 +43,7 @@ public class Controller {
 
 		
 	}
-	/*
+	/**
 	 * This method is called by the view and is used to get all the running components to paint
 	 * It asks Constructor for them
 	 * 
@@ -60,7 +60,7 @@ public class Controller {
 		return running;
 	}
 
-	/*
+	/**
 	 * This method is called by the view and is used to get all the dependencies, associated with
 	 * the running components, to paint
 	 * It asks Constructor for them
@@ -86,7 +86,7 @@ public class Controller {
 	
 	}
 
-	/*
+	/**
 	 * This method is used to get the hashmap with the classes that were used to extend the
 	 * extension point pa.iscde.configurator.dependencystyle
 	 * 
@@ -96,7 +96,7 @@ public class Controller {
 	{
 		return styles;
 	}
-	/*
+	/**
 	 * This method is used to get the hashmap with the properties and values to insert 
 	 * on the table of the given component
 	 * 
@@ -162,7 +162,7 @@ public class Controller {
 		}
 		return ppiComponents;
 	}
-	/*
+	/**
 	 * This method is used to check what classes are being used to extend the extension point
 	 * pa.iscde.configurator.dependencystyle and creat an hashmap with that information
 	 * 
@@ -175,9 +175,6 @@ public class Controller {
 				.getExtensions()) {
 			
 			
-			/*String pluginId = viewExtension.getContributor().getName();
-			String viewId = viewExtension.getUniqueIdentifier();
-			String viewTitle = viewExtension.getLabel();*/
 			try {
 				DependencyStyle ds = (DependencyStyle)viewExtension.getConfigurationElements()[0].createExecutableExtension("class");
 				
