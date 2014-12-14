@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="pa.iscde.conventions.filterbymodifier">
+      <filterbymodifier
+            filterbymodifier="pa.iscde.packagediagram.asdss.internal.teste">
+      </filterbymodifier>
+   </extension>
+
+</plugin>
