@@ -2,15 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         id="snippetssearch"
-         name="Snippets Search"
-         point="pa.iscde.filtersearch.SearchProvider">
-      <SearchProvider
-            SearchProvider="pa.iscde.snippets.extensions.SnippetsSearchProvider"
-            iconName="lemon.png">
-      </SearchProvider>
-   </extension>
-   <extension
          point="pa.iscde.commands.command">
       <command_view
             alt_key="false"
