@@ -30,7 +30,7 @@
          name="ActionNewCommand"
          point="pa.iscde.commands.action">
       <action
-            class="pa.iscde.commands.features.actions.NewCommand"
+            class="pa.iscde.commands.features.actions.CommandManager"
             label="Commands Manager ">
       </action>
    </extension>
@@ -105,6 +105,18 @@
             key="K"
             name="Comment">
       </command_editor>
+   </extension>
+   <extension
+         id="pa.iscde.commands.refreshCommands"
+         name="Refresh Commands View"
+         point="pt.iscte.pidesco.tool">
+      <tool
+            class="pa.iscde.commands.external.services.RefreshCommandsView"
+            description="Refresh the commands view"
+            hasState="false"
+            icon="refresh.gif"
+            view="pa.iscde.commands.CommandsView">
+      </tool>
    </extension>
 
 </plugin>
