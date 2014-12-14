@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="category" name="Task Category" schema="schema/category.exsd"/>
+   <extension-point id="category_action" name="Category Action" schema="schema/category_action.exsd"/>
    <extension
          id="taskList"
          name="TL"
@@ -30,6 +31,14 @@
             name="Todo"
             tag="TODO">
       </category>
+   </extension>
+   <extension
+         point="pa.iscde.tasklist.category_action">
+      <category_action
+            actionClass="pa.iscde.tasklist.extensibility.OpenFile"
+            categories="TODO"
+            name="Open File">
+      </category_action>
    </extension>
 
 </plugin>
