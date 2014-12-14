@@ -147,6 +147,18 @@ public class JavaEditorServicesImpl implements JavaEditorServices {
 	
 	
 	@Override
+	public ITextSelection getTextSelected(File file){
+		Assert.isNotNull(file, "file cannot be null");
+
+		ITextEditor editor = openEditor(file);
+		IDocumentProvider dp = editor.getDocumentProvider();
+		IDocument doc = dp.getDocument(editor.getEditorInput());
+		
+		return ((ITextSelection) editor.getSelectionProvider().getSelection());
+	}
+	
+	
+	@Override
 	public void saveFile(File file){
 		Assert.isNotNull(file, "file cannot be null");
 		

@@ -19,10 +19,6 @@ import pt.iscte.pidesco.extensibility.PidescoServices;
 
 public class CommandsSearch implements SearchProvider {
 
-	public CommandsSearch() {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public List<Object> getResults(String text) {
 		return new LinkedList<Object>(Arrays.asList(CommandWarehouse.getInstance().getAllCommandDefinitions().toArray()));

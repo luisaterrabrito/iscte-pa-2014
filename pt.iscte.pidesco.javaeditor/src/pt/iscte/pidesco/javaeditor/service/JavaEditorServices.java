@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jface.text.ITextSelection;
 
 /**
  * Services offered by the Java Editor component.
@@ -41,6 +42,15 @@ public interface JavaEditorServices {
 	 */
 	
 	void setText(File file, String text);
+	
+	/**
+	 * Get the selected text of a file in the editor.
+	 * @param file (non-null) file to open
+	 * @return an instance of ITextSelection
+	 */
+	
+	ITextSelection getTextSelected(File file);
+	
 
 	/**
 	 * Selects text in the editor.
