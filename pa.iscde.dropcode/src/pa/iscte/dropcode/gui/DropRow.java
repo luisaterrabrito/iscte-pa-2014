@@ -59,7 +59,11 @@ public class DropRow extends Composite {
 		for (DropButton dropButton : dropbuttons) {
 			final DropButton db = dropButton;
 			Button b = new Button(this, SWT.None);
-			b.setText(db.getText());
+			if (db.getIcon() != null)
+				b.setImage(db.getIcon());
+			if (db.getText() != null)
+				b.setText(db.getText());
+
 			b.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseUp(MouseEvent e) {
