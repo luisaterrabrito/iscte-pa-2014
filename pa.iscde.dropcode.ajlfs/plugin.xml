@@ -4,7 +4,7 @@
    <extension
          point="pa.iscde.snippets.contextdefinition">
       <member
-            definition="pa.iscde.dropcode.ajlfs.ContextDefinitionInterface1">
+            definition="pa.iscde.dropcode.contextdefinition.ConditionalExpression">
       </member>
    </extension>
 
