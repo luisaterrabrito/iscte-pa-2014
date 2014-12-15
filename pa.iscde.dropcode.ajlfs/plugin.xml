@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="pa.iscde.snippets.contextdefinition">
+      <member
+            definition="pa.iscde.dropcode.ajlfs.ContextDefinitionInterface1">
+      </member>
+   </extension>
+
+</plugin>
