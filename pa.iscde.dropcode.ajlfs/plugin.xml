@@ -4,8 +4,14 @@
    <extension
          point="pa.iscde.snippets.contextdefinition">
       <member
-            definition="pa.iscde.dropcode.ajlfs.ContextDefinitionInterface4">
+            definition="pa.iscde.dropcode.ajlfs.ConditionalExpression">
       </member>
+   </extension>
+   <extension
+         point="pa.iscde.dropcode.dropbutton">
+      <dropbutton
+            class="pa.iscde.dropcode.ajlfs.ShowSnippet">
+      </dropbutton>
    </extension>
 
 </plugin>
