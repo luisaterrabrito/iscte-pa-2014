@@ -51,7 +51,8 @@ public class MathSearch implements SearchProvider {
 		if(file.isDirectory()){
 			File[] listOfFiles = file.listFiles();
 			for (File file2 : listOfFiles) {
-				t.add(file2);
+				if(file2.getName().contains(text))
+					t.add(file2);
 			}
 		}
 		return t;
