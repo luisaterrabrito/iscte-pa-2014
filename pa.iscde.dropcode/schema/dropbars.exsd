@@ -3,10 +3,10 @@
 <schema targetNamespace="pa.iscde.dropcode" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="pa.iscde.dropcode" id="dropbars" name="dropbars"/>
+         <meta.schema plugin="pa.iscde.dropcode" id="dropbars" name="Drop Bars"/>
       </appinfo>
       <documentation>
-         The dropbars extension point is an interface that creates a new bar on the DropCode view with the specified name and content.
+         The Drop Bars extension point is an interface that creates a new bar on the DropCode view with the specified name and content.
       </documentation>
    </annotation>
 
@@ -76,7 +76,16 @@
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         Create a new dropbar with 
+         &lt;p&gt;To create a new dropbar you need to follow these steps:&lt;/p&gt;
+
+&lt;p&gt;1 - Create a new class that implements the DropBar;&lt;/p&gt;
+&lt;p&gt;2 - Implement the methods provided by the interface;&lt;/p&gt;
+&lt;p&gt;&amp;nbsp&amp;nbsp2.1 - getName() - returns the name of the DropBar;&lt;/p&gt;
+&lt;p&gt;&amp;nbsp&amp;nbsp2.2 - createContents(Composite parent) - create your gui using the provided parent, to add your elements to the view.&lt;/p&gt;
+ 
+&lt;p&gt;Thank you for using our extension point.&lt;/p&gt;
+
+&lt;p&gt;If you have any doubts, please contact us.&lt;/p&gt;
       </documentation>
    </annotation>
 
@@ -85,7 +94,7 @@
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         [Enter API information here.] 
+         [Enter API information here.]
       </documentation>
    </annotation>
 
