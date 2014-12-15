@@ -232,20 +232,7 @@ public class SnippetCode extends Composite {
 			public void handleEvent(Event event) {
 				switch (event.type) {
 				case SWT.Selection:
-					HashMap<String, Variable> variables = getVariables();
-					if (!variables.isEmpty()) {
-						ValueInsertionDialog dialog = new ValueInsertionDialog(
-								viewArea.getShell(),
-								"Value Insertion",
-								"Please fill the boxes with the appropriate values",
-								variables);
-						dialog.create();
-						if (dialog.open() == Window.OK) {
-							insertSnippet(variables);
-						}
-					} else {
-						insertSnippet();
-					}
+					useButtonFunction();
 					break;
 				}
 			}
@@ -259,27 +246,7 @@ public class SnippetCode extends Composite {
 			public void handleEvent(Event event) {
 				switch (event.type) {
 				case SWT.Selection:
-					if (snippetNameTextBox.getText().replaceAll("\\s", "")
-							.length() == 0) {
-						MessageDialog
-								.openWarning(viewArea.getShell(), "Warning",
-										"Name field must not be empty. Please change it.");
-						snippetNameTextBox.setText("");
-					} else if (fileOperations
-							.checkIfNameAlreadyExists(snippetNameTextBox
-									.getText())) {
-						MessageDialog
-								.openWarning(
-										viewArea.getShell(),
-										"Warning",
-										"The name you choose is already attributed to another snippet. Please change it.");
-					} else {
-						fileOperations.save(snippetNameTextBox.getText(),
-								snippetCodeText.getText(),
-								languagesCombo.getText());
-						MessageDialog.openInformation(viewArea.getShell(),
-								"Info", "File succesfully saved.");
-					}
+					saveButtonFunction();
 					break;
 				}
 			}
@@ -320,17 +287,11 @@ public class SnippetCode extends Composite {
 			public void handleEvent(Event event) {
 				switch (event.type) {
 				case SWT.Selection:
-					boolean aux = MessageDialog
-							.openConfirm(viewArea.getShell(), "Discard",
-									"Changes you may have made will be discarded. Do you wish to exit?");
-					if (aux) {
-						dispose();
-						SnippetsView.getInstance().createExplorer();
-						System.out.println("Button pressed");
-					}
+					discardButtonFunction();
 					break;
 				}
 			}
+
 		};
 	}
 
@@ -448,5 +409,56 @@ public class SnippetCode extends Composite {
 		else
 			MessageDialog.openError(viewArea.getShell(),
 					"Invalid Snippet Context", message.getMessage());
+	}
+
+	protected void saveButtonFunction() {
+		if (snippetNameTextBox.getText().replaceAll("\\s", "").length() == 0) {
+			MessageDialog.openWarning(viewArea.getShell(), "Warning",
+					"Name field must not be empty. Please change it.");
+			snippetNameTextBox.setText("");
+		} else if (fileOperations.checkIfNameAlreadyExists(snippetNameTextBox
+				.getText())) {
+			MessageDialog
+					.openWarning(
+							viewArea.getShell(),
+							"Warning",
+							"The name you choose is already attributed to another snippet. Please change it.");
+		} else {
+			fileOperations.save(snippetNameTextBox.getText(),
+					snippetCodeText.getText(), languagesCombo.getText());
+			MessageDialog.openInformation(viewArea.getShell(), "Info",
+					"File succesfully saved.");
+		}
+	}
+
+	protected void discardButtonFunction() {
+		boolean aux = MessageDialog
+				.openConfirm(viewArea.getShell(), "Discard",
+						"Changes you may have made will be discarded. Do you wish to exit?");
+		if (aux) {
+			dispose();
+			SnippetsView.getInstance().createExplorer();
+		}
+	}
+
+	protected void useButtonFunction() {
+		HashMap<String, Variable> variables = getVariables();
+		if (!variables.isEmpty()) {
+			ValueInsertionDialog dialog = new ValueInsertionDialog(
+					viewArea.getShell(),
+					"Value Insertion",
+					"Please fill the boxes with the appropriate values",
+					variables);
+			dialog.create();
+			if (dialog.open() == Window.OK) {
+				insertSnippet(variables);
+			}
+		} else {
+			insertSnippet();
+		}
+	}
+
+	protected void setLanguageToJava() {
+				languagesCombo.select(languagesCombo.indexOf("Java"));
 	}
 }
