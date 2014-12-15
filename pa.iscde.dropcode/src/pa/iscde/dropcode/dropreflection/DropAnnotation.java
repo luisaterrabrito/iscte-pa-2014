@@ -4,8 +4,8 @@ import org.eclipse.jdt.core.dom.ASTNode;
 
 public class DropAnnotation extends DropAble {
 
-	public DropAnnotation(ASTNode node, String name) {
-		super(node, name);
+	public DropAnnotation(ASTNode node, String name, String type) {
+		super(node, name, "");
 	}
 
 }
