@@ -1,7 +1,7 @@
 #summary pa.iscde.metrics.createMetric
 = Introduction =
 
-This extension point offers other plugins the ability to add new metrics to the metrics table that I provide. The extention point requires a class that implements the interface Metricable. This interface establishes that the class provided must have the name of the metric and how it is calculated.
+This extension point offers other plugins the ability to add new metrics to the metrics table that I provide. The extention point requires a class that implements the interface Metricable. This interface establishes that the class provided must have the name of the metric and how it is calculated. In order to create a new metric as a extension for this extension point, must be taken in account that to access the code to be analyzed, the javaServices and browserServices must be used. 
 
 = Details =
 {{{
