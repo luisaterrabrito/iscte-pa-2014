@@ -44,7 +44,6 @@ import pa.iscde.formulas.draw.EquationFinder;
 import pa.iscde.formulas.extensibility.CreateCategoryProvider;
 import pa.iscde.formulas.listeners.CodeEjectorListener;
 import pt.iscte.pidesco.extensibility.PidescoView;
-import pt.iscte.pidesco.javaeditor.service.AnnotationType;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 /**
@@ -56,7 +55,6 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
  */
 public class FormulasView implements PidescoView {
 
-	public static final String PLUGIN_ID = "pa.iscde.formulas";
 	private HashMap<String,LinkedList<Formula>> allFormulas = new HashMap<String, LinkedList<Formula>>();
 	private HashMap<Button,Formula> buttons = new HashMap<Button,Formula>();
 	private HashMap<Formula,String> tips = new HashMap<Formula,String>();

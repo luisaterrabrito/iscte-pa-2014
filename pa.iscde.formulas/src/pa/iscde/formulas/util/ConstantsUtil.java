@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class ConstantsUtil {
 	
+	public static final String PLUGIN_ID = "pa.iscde.formulas";
+	
 	public static ArrayList<String> getJavaPrefixs(){
 		ArrayList<String> javaprefixs = new ArrayList<String>();
 		javaprefixs.add("return");
