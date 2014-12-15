@@ -1,0 +1,28 @@
+#summary pa.iscde.conventions.conventionservice
+
+= Introduction =
+
+This extension point uses the convention given by the team to verify if it is correctly implemented/written.
+
+To use this extension point you will need to return a Cobect (Convention Object) that requires a Warning and a Boolean condition.
+
+Trough the typeof you can choose if it is for a class, method, constant ou enum.
+With the name you can manipulate and create your own convention.
+
+When you create the extension point don't forget to give a name and the type.
+
+= Details =
+
+Example:
+{{{
+@Override
+public Cobject verifyConvention(String name, TypeOf typeof) {
+	return new Cobject("Método contém underscore",typeof.equals(TypeOf.METHOD) && name.contains("_"));
+}
+}}}
+
+==FAQ:==
+
+*How to use the extension point:*
+
+When you run your view choose the checkBox refering to your convention.
