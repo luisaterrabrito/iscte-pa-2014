@@ -25,11 +25,6 @@ public class OutlineVisitor extends ASTVisitor {
 		this.isAtRoot = true;
 	}
 
-	@Override
-	public void preVisit(ASTNode node) {
-		super.preVisit(node);
-	}
-
 	public List<String> getNames() {
 		return names;
 	}
@@ -47,12 +42,12 @@ public class OutlineVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(TypeDeclaration node) {
 		if(!isAtRoot){
-			this.currentTreeItem = new TreeItem(this.currentTreeItem, SWT.NONE);
+			currentTreeItem = new TreeItem(currentTreeItem, SWT.NONE);
 		} else {
 			isAtRoot = false;
 		}
 		
-		this.currentTreeItem.setText("Class: " + node.getName().toString());
+		currentTreeItem.setText("Class: " + node.getName().toString());
 
 		return super.visit(node);
 	}
@@ -62,7 +57,7 @@ public class OutlineVisitor extends ASTVisitor {
 	 */
 	@Override
 	public void endVisit(TypeDeclaration node) {
-		this.currentTreeItem = this.currentTreeItem.getParentItem();
+		currentTreeItem = currentTreeItem.getParentItem();
 
 		super.endVisit(node);
 	}
@@ -83,7 +78,7 @@ public class OutlineVisitor extends ASTVisitor {
 	 * @param name to set as the TreeNode's text
 	 */
 	private void addTreeNode(String name) {
-		TreeItem aux = new TreeItem(this.currentTreeItem, SWT.NONE);
+		TreeItem aux = new TreeItem(currentTreeItem, SWT.NONE);
 		aux.setText(name);
 	}
 }
