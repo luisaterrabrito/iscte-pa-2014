@@ -21,11 +21,6 @@ public class DropMetric implements Metricable{
 		numberOfAnnotations = 0;
 	}
 	
-	//TODO @Override
-	public String metricName(){
-		return "Number of Annotations";
-	}
-	
 	@Override
 	public double calculateMetric() {
 		
