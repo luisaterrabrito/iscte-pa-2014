@@ -173,7 +173,6 @@ public class FileOperations {
 		while (checkIfNameAlreadyExists("New Snippet(" + aux + ")")) {
 			aux += 1;
 		}
-		System.out.println(aux);
 		return aux;
 	}
 }
