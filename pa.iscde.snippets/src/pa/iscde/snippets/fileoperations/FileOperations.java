@@ -170,9 +170,10 @@ public class FileOperations {
 	// Checks the lowest snippet number available
 	public int numberOfNewSnippet() {
 		int aux = 1;
-		while (checkIfNameAlreadyExists("New Snippet (" + aux + ").snp")) {
+		while (checkIfNameAlreadyExists("New Snippet(" + aux + ")")) {
 			aux += 1;
 		}
+		System.out.println(aux);
 		return aux;
 	}
 }

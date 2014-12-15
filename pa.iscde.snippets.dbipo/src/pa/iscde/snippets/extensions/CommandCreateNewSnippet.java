@@ -8,7 +8,6 @@ public class CommandCreateNewSnippet implements Command{
 
 	@Override
 	public void action() {
-		// TODO Auto-generated method stub
 			SnippetsView.getInstance().createNewSnippetCommand(SnippetsActivator.getInstance().getSelectedText());
 	}
 

@@ -268,9 +268,9 @@ public class SnippetsExplorer extends Composite {
 		setVisible(!gridData.exclude);
 	}
 
-	protected void setLanguageToJava() {
-		if (this.isVisible()) {
-			languagesCombo.select(languagesCombo.indexOf("Java"));
+	protected void setLanguage(String language) {
+		if (this.isVisible() && languagesCombo.indexOf(language) != -1) {
+			languagesCombo.select(languagesCombo.indexOf(language));
 			filterByLanguage();
 		}
 	}
