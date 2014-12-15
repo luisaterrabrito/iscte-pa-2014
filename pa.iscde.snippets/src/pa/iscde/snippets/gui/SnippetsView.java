@@ -96,11 +96,11 @@ public class SnippetsView implements PidescoView {
 			snippetCodeView.useButtonFunction();
 	}
 
-	public void setFilterToJava() {
+	public void setFilterToLanguage(String language) {
 		if(snippetCodeView != null)
-			snippetCodeView.setLanguage("Java");
+			snippetCodeView.setLanguage(language);
 		else if(SnippetsExplorer.getInstance().isVisible()){
-			SnippetsExplorer.getInstance().setLanguage("Java");
+			SnippetsExplorer.getInstance().setLanguage(language);
 		}
 	}
 }
