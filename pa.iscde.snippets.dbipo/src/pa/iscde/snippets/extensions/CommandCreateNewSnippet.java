@@ -1,6 +1,6 @@
 package pa.iscde.snippets.extensions;
 
-import pa.iscde.commands.internal.services.Command;
+import pa.iscde.commands.services.Command;
 import pa.iscde.snippets.gui.SnippetsView;
 import activator.SnippetsActivator;
 
