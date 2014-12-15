@@ -1,6 +1,7 @@
 package pa.iscde.conventions.vhssa;
 
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -28,8 +29,12 @@ public class DeleteButton implements DropButton{
 	
 	@Override
 	public Image getIcon() {
+		imageMap = new HashMap<String, Image>();
 		image = imageMap.get("remove.gif");
+		if(image != null){
 		return image;
+		}
+		return null;
 	}
 
 	@Override
@@ -39,7 +44,6 @@ public class DeleteButton implements DropButton{
 
 	@Override
 	public void clicked(ASTNode node) {
-		
 		Bundle bundle = FrameworkUtil.getBundle(DropCodeView.class);
 		BundleContext context  = bundle.getBundleContext();
 		JavaEditorServices javaServices;
