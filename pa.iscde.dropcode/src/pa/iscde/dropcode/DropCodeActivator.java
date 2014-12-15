@@ -14,7 +14,7 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 public class DropCodeActivator implements BundleActivator {
 
 	private static DropClass dropClass;
-	private JavaEditorServices javaEditor;
+	private static JavaEditorServices javaEditor;
 
 	public static DropClass getDropClass() {
 		return dropClass;
@@ -87,5 +87,9 @@ public class DropCodeActivator implements BundleActivator {
 		dropClass = new DropClass(javaEditor);
 		DropCodeView.getInstance().updateContent();
 		System.out.println("fileOpened()");
+	}
+	
+	public static JavaEditorServices getJavaEditor() {
+		return javaEditor;
 	}
 }

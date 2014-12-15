@@ -5,13 +5,18 @@ import java.util.LinkedList;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.MenuDetectEvent;
+import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import pa.iscde.dropcode.DropCodeActivator;
 import pa.iscde.dropcode.dropreflection.DropAble;
 import pa.iscde.dropcode.dropreflection.DropField;
 import pa.iscde.dropcode.dropreflection.DropMethod;
@@ -20,6 +25,7 @@ import pa.iscde.dropcode.dropreflection.DropModifier.DM_Visibility;
 import pa.iscde.dropcode.dropreflection.DropType;
 import pa.iscde.dropcode.services.DropButton;
 import pa.iscte.dropcode.gui.ClosableLabel.ClosableLabelEvent;
+import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class DropRow extends Composite {
 
@@ -61,10 +67,10 @@ public class DropRow extends Composite {
 
 	}
 
-	private void addCombo_visibility_modifier(DropAble dropable) {
+	private void addCombo_visibility_modifier(final DropAble dropable) {
 		DM_Visibility[] vm = DM_Visibility.values();
 
-		CCombo combo = new CCombo(this, SWT.NONE);
+		final CCombo combo = new CCombo(this, SWT.NONE);
 		int select = 0;
 		for (int i = 0; i != vm.length; i++) {
 			combo.add(vm[i].name().toLowerCase());
@@ -73,6 +79,28 @@ public class DropRow extends Composite {
 		}
 		combo.select(select);
 		combo.setEditable(false);
+		
+		combo.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				DropCodeView.getInstance().save();
+				
+				String item = combo.getItem(combo.getSelectionIndex());
+				JavaEditorServices service = DropCodeActivator.getJavaEditor();
+				
+				int visibilityModifierLength = dropable.getVisibilityModifier().name().length();
+				System.out.println("Visibiliy Modifier Lenght" + visibilityModifierLength);
+				service.insertText(service.getOpenedFile(), item, node.getStartPosition(), visibilityModifierLength);
+
+				DropCodeView.getInstance().save();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+		
 	}
 
 	private void addCombo_other_modifiers(final DropAble dropable) {
