@@ -22,7 +22,7 @@ public interface ConventionService {
 		return new Cobject("Método contém underscore" ,typeof.equals(TypeOf.METHOD) && name.contains("_"));
 		}
 	 */
-	public Cobject verificarConvencao(String name, TypeOf typeof);
+	public Cobject verifyConvention(String name, TypeOf typeof);
 	
 	
 }

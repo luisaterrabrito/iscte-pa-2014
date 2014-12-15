@@ -47,8 +47,8 @@ public class ConventionVisitor {
 			public boolean visit(TypeDeclaration node) {
 				String id = node.getName().getFullyQualifiedName();
 
-					if(lista.get(identifier).verificarConvencao(id, TypeOf.CLASS).getCondition()){
-						javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verificarConvencao(id, TypeOf.CLASS).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
+					if(lista.get(identifier).verifyConvention(id, TypeOf.CLASS).getCondition()){
+						javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verifyConvention(id, TypeOf.CLASS).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
 					}
 				
 
@@ -71,12 +71,12 @@ public class ConventionVisitor {
 					String id = node.getName().getFullyQualifiedName();
 
 	
-						if(lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getCondition()){
-							javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
+						if(lista.get(identifier).verifyConvention(id, TypeOf.METHOD).getCondition()){
+							javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verifyConvention(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
 						}
 
-						if(lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getCondition()){
-							javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(),  node.getName().getLength());
+						if(lista.get(identifier).verifyConvention(id, TypeOf.METHOD).getCondition()){
+							javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verifyConvention(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(),  node.getName().getLength());
 						}
 					
 				}
@@ -102,16 +102,16 @@ public class ConventionVisitor {
 				String id = node.getName().getFullyQualifiedName();
 
 			
-					if(lista.get(identifier).verificarConvencao(id, TypeOf.CONSTANTS).getCondition()){ //checkVariableLowerCase
-						javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verificarConvencao(id, TypeOf.CONSTANTS).getWarning(),
+					if(lista.get(identifier).verifyConvention(id, TypeOf.CONSTANTS).getCondition()){ //checkVariableLowerCase
+						javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verifyConvention(id, TypeOf.CONSTANTS).getWarning(),
 								node.getName().getStartPosition(), node.getName().getLength());
 					}
-					if(lista.get(identifier).verificarConvencao(id, TypeOf.CONSTANTS).getCondition()){ // checkVariableDollar
-						javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verificarConvencao(id, TypeOf.CONSTANTS).getWarning(),
+					if(lista.get(identifier).verifyConvention(id, TypeOf.CONSTANTS).getCondition()){ // checkVariableDollar
+						javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verifyConvention(id, TypeOf.CONSTANTS).getWarning(),
 								node.getName().getStartPosition(), node.getName().getLength());
 					}
-					if(lista.get(identifier).verificarConvencao(id, TypeOf.CONSTANTS).getCondition()){ //checkVariableUnderScore
-						javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verificarConvencao(id, TypeOf.CONSTANTS).getWarning(),
+					if(lista.get(identifier).verifyConvention(id, TypeOf.CONSTANTS).getCondition()){ //checkVariableUnderScore
+						javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verifyConvention(id, TypeOf.CONSTANTS).getWarning(),
 								node.getName().getStartPosition(), node.getName().getLength());
 					}
 
@@ -137,8 +137,8 @@ public class ConventionVisitor {
 
 				String id = node.getName().getFullyQualifiedName();
 
-					if(lista.get(identifier).verificarConvencao(id, TypeOf.ENUM).getCondition()){
-						javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verificarConvencao(id, TypeOf.ENUM).getWarning(),
+					if(lista.get(identifier).verifyConvention(id, TypeOf.ENUM).getCondition()){
+						javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verifyConvention(id, TypeOf.ENUM).getWarning(),
 								node.getName().getStartPosition(), node.getName().getLength());
 					}
 				
@@ -174,12 +174,12 @@ public class ConventionVisitor {
 							if(node.getModifiers()==mod.verificarModificadorMetodo()){
 								
 
-									if(lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getCondition()){
-										javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
+									if(lista.get(identifier).verifyConvention(id, TypeOf.METHOD).getCondition()){
+										javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verifyConvention(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
 									}
 
-									if(lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getCondition()){
-										javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(),  node.getName().getLength());
+									if(lista.get(identifier).verifyConvention(id, TypeOf.METHOD).getCondition()){
+										javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verifyConvention(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(),  node.getName().getLength());
 									}
 													
 							}
@@ -208,12 +208,12 @@ public class ConventionVisitor {
 
 						if(node.getModifiers()==m){
 			
-								if(lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getCondition()){
-									javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
+								if(lista.get(identifier).verifyConvention(id, TypeOf.METHOD).getCondition()){
+									javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verifyConvention(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(), node.getName().getLength());
 								}
 
-								if(lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getCondition()){
-									javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verificarConvencao(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(),  node.getName().getLength());
+								if(lista.get(identifier).verifyConvention(id, TypeOf.METHOD).getCondition()){
+									javaServices.addAnnotation(f, AnnotationType.WARNING, lista.get(identifier).verifyConvention(id, TypeOf.METHOD).getWarning(), node.getName().getStartPosition(),  node.getName().getLength());
 								}
 												
 						}
