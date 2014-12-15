@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Mgpft
+Bundle-SymbolicName: pa.iscde.dropcode.mgpft;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: pa.iscde.metrics;bundle-version="1.0.0",
+ pa.iscde.metrics,
+ pt.iscte.pidesco.javaeditor,
+ org.eclipse.osgi,
+ pt.iscte.pidesco,
+ org.eclipse.jdt.core
