@@ -5,12 +5,14 @@ import java.util.LinkedList;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.events.MenuDetectEvent;
-import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -29,11 +31,12 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class DropRow extends Composite {
 
+	private final static int ENTER_KEY = 13;
 	private DropRow me;
 	private ASTNode node;
 
-	public DropRow(ASTNode node, Composite parent, int style, DropAble dropable,
-			LinkedList<DropButton> dropbuttons) {
+	public DropRow(ASTNode node, Composite parent, int style,
+			DropAble dropable, LinkedList<DropButton> dropbuttons) {
 		super(parent, style);
 		me = this;
 		this.node = node;
@@ -79,28 +82,30 @@ public class DropRow extends Composite {
 		}
 		combo.select(select);
 		combo.setEditable(false);
-		
-		combo.addSelectionListener(new SelectionListener() {
-			
+
+		combo.addSelectionListener(new SelectionAdapter() {
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				DropCodeView.getInstance().save();
-				
+
 				String item = combo.getItem(combo.getSelectionIndex());
 				JavaEditorServices service = DropCodeActivator.getJavaEditor();
-				
-				int visibilityModifierLength = dropable.getVisibilityModifier().name().length();
-				System.out.println("Visibiliy Modifier Lenght" + visibilityModifierLength);
-				service.insertText(service.getOpenedFile(), item, node.getStartPosition(), visibilityModifierLength);
+
+				int visibilityModifierLength = dropable.getVisibilityModifier()
+						.name().length();
+				service.insertText(
+						service.getOpenedFile(),
+						item,
+						node.getStartPosition()
+								+ node.toString().indexOf(item.toLowerCase())
+								+ 1, visibilityModifierLength);
 
 				DropCodeView.getInstance().save();
 			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
+
 		});
-		
+
 	}
 
 	private void addCombo_other_modifiers(final DropAble dropable) {
@@ -117,18 +122,35 @@ public class DropRow extends Composite {
 					@Override
 					public void clicked() {
 						cl.dispose();
+
+						DropCodeView.getInstance().save();
+
+						JavaEditorServices service = DropCodeActivator
+								.getJavaEditor();
+
+						int otherModifierLength = dm.name().length();
+						service.insertText(
+								service.getOpenedFile(),
+								"",
+								node.getStartPosition()
+										+ node.toString().indexOf(
+												dm.name().toLowerCase()),
+								otherModifierLength + 1);
+
 						dropable.removeModifier(dm);
 						me.layout();
+
+						DropCodeView.getInstance().save();
 					}
 				});
 			}
 		}
 	}
 
-	private void addCombo_type(DropAble dropable) {
+	private void addCombo_type(final DropAble dropable) {
 		DropType[] types = DropType.values();
 
-		CCombo combo = new CCombo(this, SWT.NONE);
+		final CCombo combo = new CCombo(this, SWT.NONE);
 		for (int i = 0; i != types.length; i++) {
 			combo.add(types[i].name().toLowerCase());
 			// if (types[i].toString().toLowerCase().equals(dropable.getType()))
@@ -140,6 +162,55 @@ public class DropRow extends Composite {
 		System.out.println(type);
 		combo.setText(type == null ? "Object" : type);
 		combo.setEditable(true);
+
+		// combo.addModifyListener(new ModifyListener() {
+		//
+		// @Override
+		// public void modifyText(ModifyEvent e) {
+		// me.modifyText(combo, dropable);
+		// }
+		// });
+
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				modifyText(combo, dropable);
+			}
+		});
+
+		combo.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.keyCode == ENTER_KEY) {
+					me.setFocus();
+				}
+			}
+		});
+
+		combo.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				modifyText(combo, dropable);
+			}
+		});
+	}
+
+	private void modifyText(CCombo combo, DropAble dropable) {
+		DropCodeView.getInstance().save();
+
+		String item = combo.getText();
+		JavaEditorServices service = DropCodeActivator.getJavaEditor();
+
+		int typeLength = dropable.getType().length();
+		service.insertText(
+				service.getOpenedFile(),
+				item,
+				node.getStartPosition()
+						+ node.toString().indexOf(dropable.getType()),
+				typeLength);
+
+		DropCodeView.getInstance().save();
 	}
 
 	private void addTextfield_name(DropAble dropable) {

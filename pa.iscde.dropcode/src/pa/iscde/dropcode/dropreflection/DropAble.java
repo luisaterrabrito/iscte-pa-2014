@@ -16,9 +16,11 @@ public class DropAble {
 	private HashMap<String, DropAnnotation> annotations;
 	private HashSet<DM_Others> modifiers;
 	private DM_Visibility visibility_modifier;
+	private String type;
 
-	public DropAble(ASTNode node, String name) {
+	public DropAble(ASTNode node, String name, String type) {
 		this.name = name;
+		this.type = type;
 		modifiers = new HashSet<>();
 		annotations = new HashMap<>();
 		this.node = node;
@@ -62,5 +64,13 @@ public class DropAble {
 
 	public ASTNode getNode() {
 		return node;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getType() {
+		return type;
 	}
 }

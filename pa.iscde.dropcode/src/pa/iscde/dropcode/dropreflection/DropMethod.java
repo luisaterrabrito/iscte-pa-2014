@@ -9,8 +9,9 @@ public class DropMethod extends DropAble {
 	private HashMap<String, String> params;
 	private boolean isConstructor;
 
-	public DropMethod(ASTNode node, String name, boolean isConstructor) {
-		super(node, name);
+	public DropMethod(ASTNode node, String name, String returnType,
+			boolean isConstructor) {
+		super(node, name, returnType);
 		this.isConstructor = isConstructor;
 		params = new HashMap<>();
 	}

@@ -46,7 +46,10 @@ public class DropClass {
 			@Override
 			public boolean visit(MethodDeclaration method) {
 				DropMethod newMethod = new DropMethod(method, method.getName()
-						.getFullyQualifiedName(), method.isConstructor());
+						.getFullyQualifiedName(),
+						method.getReturnType2() == null ? "void" : method
+								.getReturnType2().toString(),
+						method.isConstructor());
 
 				// MODS
 				newMethod.setModifiers(method.getModifiers());
