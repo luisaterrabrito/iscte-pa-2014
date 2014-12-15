@@ -1,11 +1,9 @@
 package pa.iscde.conventions.vhssa;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -24,17 +22,16 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class DeleteButton implements DropButton{
 
-	Map<String, Image> imageMap;
 	Image image;
 	
 	@Override
 	public Image getIcon() {
-		imageMap = new HashMap<String, Image>();
-		image = imageMap.get("remove.gif");
+		image = new Image(Display.getCurrent(), "C:/Users/user/Desktop/ISCTE/Mestrado/Segundo Ano/PA/pa.iscde.conventions.vhssa/images/remove.gif");
 		if(image != null){
 		return image;
+		}else{
+			return null;
 		}
-		return null;
 	}
 
 	@Override
