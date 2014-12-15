@@ -6,7 +6,7 @@
          <meta.schema plugin="pa.iscde.dropcode" id="dropbutton" name="Drop Button"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         The Drop Button extension point is an interface that creates a new button with the specified text, image and action.
       </documentation>
    </annotation>
 
@@ -67,7 +67,7 @@
          <meta.section type="since"/>
       </appinfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         December 9, 2014
       </documentation>
    </annotation>
 
