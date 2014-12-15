@@ -6,7 +6,7 @@
          <meta.schema plugin="pa.iscde.dropcode" id="dropbars" name="dropbars"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         The dropbars extension point is an interface that creates a new bar on the DropCode view with the specified name and content.
       </documentation>
    </annotation>
 
@@ -67,7 +67,7 @@
          <meta.section type="since"/>
       </appinfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         December 9, 2014
       </documentation>
    </annotation>
 
@@ -76,7 +76,7 @@
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         [Enter extension point usage example here.]
+         Create a new dropbar with 
       </documentation>
    </annotation>
 
@@ -85,7 +85,7 @@
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         [Enter API information here.]
+         [Enter API information here.] 
       </documentation>
    </annotation>
 
