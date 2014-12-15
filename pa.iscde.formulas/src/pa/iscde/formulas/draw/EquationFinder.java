@@ -2,6 +2,7 @@ package pa.iscde.formulas.draw;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -28,7 +29,6 @@ import com.google.common.collect.Multimap;
 public class EquationFinder {
 	
 	private Multimap<String,Integer> equations = ArrayListMultimap.create();
-	private ArrayList<FormulaAnnotation> annotations = new ArrayList<FormulaAnnotation>();
 	private ArrayList<DrawEquationsProvider> providers = new ArrayList<DrawEquationsProvider>();
 	
 	/**
@@ -64,21 +64,21 @@ public class EquationFinder {
 			for (DrawEquationsProvider provider : providers) {
 				JavaToLatexFormat javaToLatexFormat = new JavaToLatexFormat(provider.setJavaOperation(), provider.setOperationLatexFormat(remove_standard_chars));
 				if(remove_standard_chars.contains(javaToLatexFormat.getJavaOperation())){
-					System.out.println("JAVA:"+remove_standard_chars);
 					latexFormat = javaToLatexFormat.getOperationLatexFormat();
 					remove_standard_chars = latexFormat;
-					System.out.println("LATEX:"+remove_standard_chars +" | "+javaToLatexFormat.getJavaOperation());
 					
 				}
 			}
-			if(latexFormat!=null)
+			
+			if(latexFormat!=null){
 				equations.put(latexFormat,lines); 
+			}
 			lines++;
 		}
 //		if(line.contains("/") || line.contains("Math.sqrt") || line.contains("Math.pow") || line.contains("*")){
-//		equations.put(delimitateLine(removeA(frac(line))),lines);
-//		annotations.add(new FormulaAnnotation("Formula "+i,offset,line.length()));
-//	}
+//			equations.put(delimitateLine(removeA(frac(line))),lines);
+//			annotations.add(new FormulaAnnotation("Formula "+i,offset,line.length()));
+//		}
 	
 	}
 	
@@ -126,12 +126,6 @@ public class EquationFinder {
 			}
 		}
 		return finalStr;
-	}
-
-
-	
-	public ArrayList<FormulaAnnotation> getAnnotations(){
-		return annotations;
 	}
 
 	public Multimap<String,Integer> getEquations(){

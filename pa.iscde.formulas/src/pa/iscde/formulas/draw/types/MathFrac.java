@@ -64,7 +64,6 @@ public class MathFrac implements DrawEquationsProvider{
     	int indexBeginFrac = -1;
 
     	for (int i = indexOfDiv; i > 0; i--) {
-    		System.out.println(line.charAt(i));
     		if(line.charAt(i) == '}'){
     			counter++;
     			foundParenteses = true;

@@ -32,6 +32,7 @@ public class CodeEjectorListener implements SelectionListener {
 	
 	@Override
 	public void widgetSelected(SelectionEvent e) {
+		if(javaeditor!=null)
 		javaeditor.insertTextAtCursor(formula.methodCode());
 	}
 
