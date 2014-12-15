@@ -12,14 +12,23 @@
             key="J"
             name="Filter Java Classes">
       </command_view>
-            <command_view
+            <command_editor
             alt_key="true"
             command_implementation="pa.iscde.snippets.extensions.CommandCreateNewSnippet"
             context_view="pa.iscde.snippets.snippets"
             ctrl_key="true"
-            description="Access the New Snippet View With Currently Selected Text to Create a New Snippet"
+            description="Access the New Snippet View With Currently Selected Text to Create a New Snippet, only works from editor"
             key="N"
-            name="Create New Snippet">
+            name="Create New Snippet In Editor">
+      </command_editor>
+             <command_view
+            alt_key="true"
+            command_implementation="pa.iscde.snippets.extensions.CommandCreateNewSnippet"
+            context_view="pa.iscde.snippets.snippets"
+            ctrl_key="true"
+            description="Access the New Snippet View With Currently Selected Text to Create a New Snippet, only works from Snippet Explorer View"
+            key="N"
+            name="Create New Snippet In Snippet View">
       </command_view>
       <command_view
             alt_key="false"
@@ -40,13 +49,31 @@
             name="Discard Current Snippet">
       </command_view>
        <command_view
-            alt_key="false"
+            alt_key="true"
             command_implementation="pa.iscde.snippets.extensions.CommandUseCurrentSnippet"
             context_view="pa.iscde.snippets.snippets"
             ctrl_key="true"
-            description="Use the current snippet"
-            key="u"
+            description="Use the current snippet, only works on the &quot;Snippet Code&quot; view"
+            key="e"
             name="Use Current Snippet">
+      </command_view>
+            <command_view
+            alt_key="false"
+            command_implementation="pa.iscde.snippets.extensions.CommandFilterToUnknown"
+            context_view="pa.iscde.snippets.snippets"
+            ctrl_key="true"
+            description="Filter Snippets by Unknown language, only works if &quot;Java&quot; directory exists within the Snippets folder"
+            key="U"
+            name="Filter Unknown Classes">
+      </command_view>
+      <command_view
+            alt_key="false"
+            command_implementation="pa.iscde.snippets.extensions.CommandFilterToAll"
+            context_view="pa.iscde.snippets.snippets"
+            ctrl_key="true"
+            description="Filter Snippets by All languages, only works on the Snippet Explorer View"
+            key="A"
+            name="Filter All Classes">
       </command_view>
    </extension>
 </plugin>
