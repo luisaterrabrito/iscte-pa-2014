@@ -1,4 +1,4 @@
-package pa.iscde.umldiagram;
+package pa.iscde.umldiagram.nbcot;
 
 import org.eclipse.swt.graphics.Color;
 
