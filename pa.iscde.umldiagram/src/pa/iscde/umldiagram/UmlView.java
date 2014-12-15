@@ -15,18 +15,21 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.draw2d.Clickable;
-import org.eclipse.draw2d.MouseListener;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.swt.SWT;
+
+
+
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.zest.core.widgets.CGraphNode;
@@ -88,7 +91,7 @@ public class UmlView implements PidescoView {
 	@Override
 	public void createContents(Composite umlArea, Map<String, Image> imageMap) {
 		umlGraph = new Graph(umlArea, SWT.NONE);
-		
+
 		loadColorThemeExtensions();
 		loadClickOptionExtensions();
 		Menu menu = new Menu(umlGraph);
@@ -135,15 +138,14 @@ public class UmlView implements PidescoView {
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
 		for(IExtension ext : reg.getExtensionPoint("pa.iscde.umldiagram.clickoption").getExtensions()) {
 			String name = ext.getLabel();
-			System.out.println(name);
 			if(ext.getConfigurationElements().length>0){
 				IConfigurationElement element = ext.getConfigurationElements()[0];
 				try {
-					System.out.println("OK");
+
 					ClickOption op=(ClickOption)element.createExecutableExtension("class");
 					if(op.getAction()!=null)
 						opListener = (MouseListener)op.getAction();
-					
+						umlGraph.addMouseListener(opListener);
 					
 				} catch (CoreException e) {
 					// TODO Auto-generated catch block
@@ -162,7 +164,7 @@ public class UmlView implements PidescoView {
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
 		for(IExtension ext : reg.getExtensionPoint("pa.iscde.umldiagram.colortheme").getExtensions()) {
 			String name = ext.getLabel();
-			System.out.println(name);
+			//System.out.println(name);
 			if(ext.getConfigurationElements().length>0){
 				IConfigurationElement element = ext.getConfigurationElements()[0];
 				try {
@@ -250,7 +252,9 @@ public class UmlView implements PidescoView {
 	private void paintClass(SourceElement classes, UmlVisitor visitor) {
 		String prefix = "";
 		String cName = classes.getName().replace(".java", "");
-		System.out.println(":"+cName);
+
+		//System.out.println(":"+cName);
+
 		if(visitor.isInterface()) {
 			prefix = "<interface> ";
 		}
@@ -260,7 +264,17 @@ public class UmlView implements PidescoView {
 			}
 		}
 		UMLClassFigure figure = new UMLClassFigure(prefix+cName);
+
+		
 		CGraphNode node = new CGraphNode(umlGraph, SWT.NONE, figure);
+		if(prefix.equals("")){
+			node.setText("<class>" + cName);
+		}else{
+			node.setText(prefix + cName);
+		}
+		MouseListener p;
+		
+
 		figure.setNode(node);
 		//GraphNode node = new GraphNode(umlGraph, SWT.NONE);
 		//node.setText("Class "+classes.getName().replace(".java", "")+"\n");
@@ -315,16 +329,13 @@ public class UmlView implements PidescoView {
 		n.setClassInstances(visitor.getClassInstances());
 		n.setSuperClass(visitor.getSuperClass());
 		n.setImplementClasses(visitor.getImplementClasses());
-		figure.addMouseListener(opListener);
+
+		
+
 	}
 
-	private void setListener() {
-		for (int i = 0; i < nodes.size(); i++) {
-			System.out.println(nodes.get(i).getName());
-			nodes.get(i).getFigure().addMouseListener(opListener);
-		}
-		
-	}
+
+	
 
 	public synchronized void clearGraph() {
 		nodes.clear();
