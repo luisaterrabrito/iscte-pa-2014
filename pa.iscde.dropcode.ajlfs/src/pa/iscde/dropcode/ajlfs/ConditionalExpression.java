@@ -1,5 +1,6 @@
 package pa.iscde.dropcode.ajlfs;
 
+import pa.iscde.dropcode.services.DropBar;
 import pa.iscde.snippets.external.ContextDefinitionInterface;
 import pa.iscde.snippets.external.CursorContext;
 import pa.iscde.snippets.external.ContextDefinitionInterface.ValidateMessage;
