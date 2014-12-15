@@ -76,7 +76,20 @@
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         [Enter extension point usage example here.]
+         &lt;p&gt;To create a new DropButton you need to follow these steps:&lt;/p&gt;
+
+&lt;p&gt;1 - Create a new class that implements the DropButton;&lt;/p&gt;
+&lt;p&gt;2 - Implement the methods provided by the interface;&lt;/p&gt;
+&lt;p&gt;&amp;nbsp&amp;nbsp2.1 - getIcon() - returns the image that will be used in the button;&lt;/p&gt;
+&lt;p&gt;&amp;nbsp&amp;nbsp&amp;nbsp&amp;nbspexample: return new Image(Display.getCurrent(), &quot;../icon.png&quot;);&lt;/p&gt;
+&lt;p&gt;&amp;nbsp&amp;nbsp2.2 - getText() - returns the text that will be used in the button;&lt;/p&gt;
+&lt;p&gt;&amp;nbsp&amp;nbsp&amp;nbsp&amp;nbspexample: return &quot;Button&quot;;&lt;/p&gt;
+&lt;p&gt;&amp;nbsp&amp;nbsp2.3 - clicked(ASTNode node) - method that defines the action that will be performed by the button;&lt;/p&gt;
+&lt;p&gt;&amp;nbsp&amp;nbsp&amp;nbsp&amp;nbspexample: System.out.println(&quot;DropButtonTest.clicked()&quot;);&lt;/p&gt;
+ 
+&lt;p&gt;Thank you for using our extension point.&lt;/p&gt;
+
+&lt;p&gt;If you have any doubts, please contact us.&lt;/p&gt;
       </documentation>
    </annotation>
 
