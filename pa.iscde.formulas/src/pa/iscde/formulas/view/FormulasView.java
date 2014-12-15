@@ -19,7 +19,12 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -51,31 +56,32 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
  *
  */
 public class FormulasView implements PidescoView {
-	
+
 	public static final String PLUGIN_ID = "pa.iscde.formulas";
 	private HashMap<String,LinkedList<Formula>> allFormulas = new HashMap<String, LinkedList<Formula>>();
 	private HashMap<Button,Formula> buttons = new HashMap<Button,Formula>();
 	private HashMap<Formula,String> tips = new HashMap<Formula,String>();
-	
+
 	private LinkedList<Formula> basic_formulas = new LinkedList<Formula>();
 	private LinkedList<Formula> engineering_formulas = new LinkedList<Formula>();
 	private LinkedList<Formula> finance_formulas = new LinkedList<Formula>();
 	private LinkedList<Formula> statistics_formulas = new LinkedList<Formula>();
-	
-	
+
+
 	private HashMap<String,LinkedList<Formula>> categories = new HashMap<String,LinkedList<Formula>>();
-	
+
 	private Composite viewArea;
 	private TabFolder tabFolder;
 	private boolean drawFormulas = false;
 	private HashMap<Label,Text> formulasBoard;
-	
+	private ScrolledComposite scrollComposite;
+
 	private static FormulasView formulasView;
 	private JavaEditorServices javaeditor;
 	private File fileTarget;
 	private Map<String, Image> images;
-	
-	
+
+
 	/**
 	 * Constructor 
 	 * @throws CoreException 
@@ -85,13 +91,13 @@ public class FormulasView implements PidescoView {
 		BundleContext context = bundle.getBundleContext();
 		ServiceReference<JavaEditorServices> ref = context.getServiceReference(JavaEditorServices.class);
 		JavaEditorServices javaeditor = context.getService(ref);
-		
+
 		this.javaeditor=javaeditor;
 		allFormulas.put("Basic",basic_formulas);
 		allFormulas.put("Engineering",engineering_formulas);
 		allFormulas.put("Finance",finance_formulas);
 		allFormulas.put("Statistics",statistics_formulas);
-		
+
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
 		for(IExtension ext : reg.getExtensionPoint("pa.iscde.formulas.createcategory").getExtensions()) {
 			for(IConfigurationElement category : ext.getConfigurationElements()) {
@@ -108,41 +114,41 @@ public class FormulasView implements PidescoView {
 		}
 		for(IExtension ext : reg.getExtensionPoint("pa.iscde.formulas.createformula").getExtensions()) {
 			for(IConfigurationElement formula : ext.getConfigurationElements()) {
-				
+
 				final String category = formula.getAttribute("Category");
 				final Formula addFormula = (Formula) formula.createExecutableExtension("addformula");
 				final String method_file = formula.getAttribute("formula_method");
-				
+
 				addFormula.setPluginID(ext.getContributor().getName());
 				addFormula.setFile(method_file);
 				tips.put(addFormula, "Contributor: "+ext.getContributor().getName());
 				switch(category){
 				case "Basics":
 					basic_formulas.add(addFormula);
-				break;
+					break;
 				case "Engineering":
 					engineering_formulas.add(addFormula);
-				break;
+					break;
 				case "Finance":
 					finance_formulas.add(addFormula);
-				break;
+					break;
 				case "Statistic":
 					statistics_formulas.add(addFormula);
-				break;
+					break;
 				default:
 					categories.get(category).add(addFormula);
 				}
-				
+
 			}
 		}
 		loadFormulas();
 	}
-	
+
 	public boolean getWindowState(){
 		return viewArea.isDisposed();
 	}
-	
-	
+
+
 	private void loadFormulas() {
 		String aux = readFile();
 		if(aux!=null){
@@ -151,43 +157,43 @@ public class FormulasView implements PidescoView {
 			}
 		}
 	}
-	
-	
+
+
 	private String readFile(){
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();
 		IPath location = root.getLocation();
 		IPath append = location.append("formulas");
-		
+
 		if(!root.getFolder(append).exists()){
 			File directory = append.toFile();
 			directory.mkdir();
 		}
-		
+
 		File dir = append.toFile();
 		File[] listFiles = dir.listFiles();
 		String allFormulas = "";
-		
+
 		if(listFiles.length!=0){
-		for (int i = 0; i < listFiles.length; i++) {
-			Scanner s;
-			try {
-				s = new Scanner(listFiles[i]);
-				while(s.hasNext()){
-					allFormulas+=s.nextLine()+System.lineSeparator();
+			for (int i = 0; i < listFiles.length; i++) {
+				Scanner s;
+				try {
+					s = new Scanner(listFiles[i]);
+					while(s.hasNext()){
+						allFormulas+=s.nextLine()+System.lineSeparator();
+					}
+					allFormulas+="END";
+					s.close();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
 				}
-				allFormulas+="END";
-				s.close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
 			}
-		}
 		}else
 			return null;
 		return allFormulas;
 	}
-		
-	
+
+
 	private void createFormula(String string) {
 		String[] lines1 = string.split("222");
 		String[] lines2  = lines1[1].split("333");
@@ -217,7 +223,7 @@ public class FormulasView implements PidescoView {
 		case "Finance":
 			finance_formulas.add(new NewFormula(formulaName, inputs, line_2.replace("#",""), line_3.replace("#", "")));
 			break;
-			
+
 		default:
 			categories.get(categoryString).add(new NewFormula(formulaName, inputs, line_2.replace("#",""), line_3.replace("#", "")));
 			break;
@@ -232,7 +238,7 @@ public class FormulasView implements PidescoView {
 	public static FormulasView getInstance(){
 		return formulasView;
 	}
-	
+
 	/**
 	 * Set the JavaEditor target where the changes going to happen
 	 * 
@@ -243,8 +249,8 @@ public class FormulasView implements PidescoView {
 		this.javaeditor = javaeditor;
 		this.fileTarget = file;
 	}
-	
-	
+
+
 	@Override
 	public void createContents(final Composite viewArea, Map<String, Image> imageMap) {
 		formulasView=this;
@@ -253,8 +259,8 @@ public class FormulasView implements PidescoView {
 		viewArea.setLayout(new GridLayout(2,false));
 		createTabs();
 	}
-	
-	
+
+
 	private void createTabs() {
 		tabFolder = new TabFolder(viewArea, SWT.FILL);  
 		for (String area : allFormulas.keySet()) {
@@ -262,23 +268,23 @@ public class FormulasView implements PidescoView {
 			tab.setText(area);
 			tab.setControl(createTabContent(tabFolder,allFormulas.get(area)));
 		}	
-        viewArea.pack();
+		viewArea.pack();
 	}
 
 	private Composite createTabContent(Composite parent, LinkedList<Formula> formulas ) {
-	    Composite c = new Composite( parent, SWT.NONE );
-	    c.setLayout( new GridLayout( formulas.size(), false ));
-	    for( Formula formula : formulas ) {
-	    	Button button = new Button(c, SWT.PUSH);
-	    	button.setToolTipText(tips.get(formula));
-	    	button.setText(formula.name());
-	    	CodeEjectorListener codeejector = (CodeEjectorListener) formula.getCodeEjectorListener();
-    		codeejector.setTarget(javaeditor);
-	    	button.addSelectionListener(codeejector);
-	    	buttons.put(button,formula);
-	    }
-	 
-	    return c;
+		Composite c = new Composite( parent, SWT.NONE );
+		c.setLayout( new GridLayout( formulas.size(), false ));
+		for( Formula formula : formulas ) {
+			Button button = new Button(c, SWT.PUSH);
+			button.setToolTipText(tips.get(formula));
+			button.setText(formula.name());
+			CodeEjectorListener codeejector = (CodeEjectorListener) formula.getCodeEjectorListener();
+			codeejector.setTarget(javaeditor);
+			button.addSelectionListener(codeejector);
+			buttons.put(button,formula);
+		}
+
+		return c;
 	}
 
 
@@ -294,7 +300,7 @@ public class FormulasView implements PidescoView {
 		for (Button button : buttons.keySet()) {
 			if(buttons.get(button).getCurrentListener()!=null)
 				button.removeSelectionListener(buttons.get(button).getCurrentListener());
-			
+
 			CodeEjectorListener codeEjectorListener = (CodeEjectorListener) buttons.get(button).getCodeEjectorListener();
 			codeEjectorListener.setTarget(javaeditor);
 			button.addSelectionListener(codeEjectorListener);
@@ -311,10 +317,10 @@ public class FormulasView implements PidescoView {
 				text.dispose();
 			}
 			formulasBoard.clear();
+			scrollComposite.dispose();
 		}
 		viewArea.pack();
 	}
-
 
 	/**
 	 * Set the mode for Calculator mode
@@ -332,7 +338,6 @@ public class FormulasView implements PidescoView {
 		}
 	}
 
-	
 
 	/**
 	 * 
@@ -347,31 +352,47 @@ public class FormulasView implements PidescoView {
 		tabFolder.dispose();
 		formulasBoard = new HashMap<Label,Text>();
 		if(eq==null)
-			 eq = new EquationFinder(fileTarget);
+			eq = new EquationFinder(fileTarget);
 		else
 			annotations = false;
+		viewArea.setLayout(new FillLayout());
+		scrollComposite = new ScrolledComposite(viewArea,
+				SWT.V_SCROLL | SWT.BORDER);
+		final Composite parent = new Composite(scrollComposite, SWT.NONE);
+		parent.setLayout(new GridLayout(2,false));
 		for (String equation : eq.getEquations().keySet()) {
-			DrawEquationUtil formulaImage = new DrawEquationUtil(viewArea,equation); 
-			Text text = new Text(viewArea, SWT.NONE);
+			DrawEquationUtil formulaImage = new DrawEquationUtil(parent,equation); 
+			Text text = new Text(parent, SWT.NONE);
 			String lines = "";
 			int aux = 0;
-				for (Integer line : eq.getEquations().get(equation)) {
-					aux ++;
-					if(eq.getEquations().get(equation).size()>1 && aux!= eq.getEquations().get(equation).size())
-						lines +=line+",";
-					else
-						lines +=line;
-				}
+			for (Integer line : eq.getEquations().get(equation)) {
+				aux ++;
+				if(eq.getEquations().get(equation).size()>1 && aux!= eq.getEquations().get(equation).size())
+					lines +=line+",";
+				else
+					lines +=line;
+			}
 			text.setText("Line: "+ lines);
-			Label label = new Label(viewArea,SWT.NONE);
+			Label label = new Label(parent,SWT.NONE);
 			label.setImage(formulaImage.getImage());
 			formulasBoard.put(label,text);
 		}
-		
+		scrollComposite.setContent(parent);
+		scrollComposite.setExpandVertical(true);
+		scrollComposite.setExpandHorizontal(true);
+		scrollComposite.addControlListener(new ControlAdapter() {
+			public void controlResized(ControlEvent e) {
+				Rectangle r = scrollComposite.getClientArea();
+				scrollComposite.setMinSize(parent.computeSize(r.width,
+						SWT.DEFAULT));
+			}
+		});
+
 		if(annotations)
 			for (FormulaAnnotation formula : eq.getAnnotations()) {
 				javaeditor.addAnnotation(javaeditor.getOpenedFile(), AnnotationType.INFO, formula.getFormula(), formula.getOffset(), formula.getLenght());
 			}
+		parent.pack();
 		viewArea.pack();
 	}
 
@@ -399,6 +420,6 @@ public class FormulasView implements PidescoView {
 	public Map<String, Image> getImages() {
 		return images;
 	}
-	
+
 
 }
