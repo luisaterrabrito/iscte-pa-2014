@@ -15,6 +15,11 @@
          <appinfo>
             <meta.element />
          </appinfo>
+         <documentation>
+            This extension point offers other plugins the ability to create and change the theme of the UML Diagram that we provied.
+
+Requirements: a class that implements our interface
+         </documentation>
       </annotation>
       <complexType>
          <sequence>
@@ -48,11 +53,49 @@
    </element>
 
    <element name="theme">
+      <annotation>
+         <documentation>
+            This extension point offers other plugins the ability to create and change the theme of the UML Diagram that we provied.
+
+Requirements: a class that implements our interface
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Example:
+
+public class Default implements UmlTheme{
+
+	private String className=&quot;ObjetoJogo&quot;;
+	
+	@Override
+	public Color getColor(String className) {
+		Color c = new Color(null, 0, 0, 255);
+		return c;
+	}
+
+	@Override
+	public String getClassName() {
+		return className;
+	}
+
+	@Override
+	public Color getTypeColor(ClassType classType) {
+		Color c = new Color(null, 0, 255, 5);
+		return c;
+	}
+
+	@Override
+	public ClassType getClassType() {
+		return ClassType.ENUM;
+	}
+
+
+	
+	
+}
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":pa.iscde.umldiagram.UmlTheme"/>

@@ -2,6 +2,13 @@ package pa.iscde.umldiagram;
 
 import org.eclipse.swt.graphics.Color;
 
+/**
+ * This extension point offers other plugins the ability to create and change the theme of the UML Diagram that we provied.
+   Requirements: a class that implements our interface
+ * 
+ * @author Nuno e Diogo
+ *
+ */
 public interface UmlTheme {
 	/**
 	 * enum avaible to set classType

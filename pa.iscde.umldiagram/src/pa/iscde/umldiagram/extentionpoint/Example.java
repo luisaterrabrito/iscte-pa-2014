@@ -10,9 +10,6 @@ import pa.iscde.umldiagram.ClickOption;
 
 
 
-
-
-
 public class Example implements ClickOption{
 
 
@@ -65,12 +62,8 @@ public class Example implements ClickOption{
 				// TODO Auto-generated method stub
 				
 			}
-
-		};	
+			
+		};
 		return m;
 	}
-
-
-	
-
 }
