@@ -8,7 +8,7 @@
             command_implementation="pa.iscde.snippets.extensions.CommandFilterToJava"
             context_view="pa.iscde.snippets.snippets"
             ctrl_key="true"
-            description="Filter Snippets by Java language"
+            description="Filter Snippets by Java language, only works if &quot;Java&quot; directory exists within the Snippets folder"
             key="J"
             name="Filter Java Classes">
       </command_view>
@@ -17,7 +17,7 @@
             command_implementation="pa.iscde.snippets.extensions.CommandCreateNewSnippet"
             context_view="pa.iscde.snippets.snippets"
             ctrl_key="true"
-            description="Access the New Snippet View"
+            description="Access the New Snippet View With Currently Selected Text to Create a New Snippet"
             key="N"
             name="Create New Snippet">
       </command_view>

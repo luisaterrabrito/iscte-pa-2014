@@ -458,7 +458,8 @@ public class SnippetCode extends Composite {
 		}
 	}
 
-	protected void setLanguageToJava() {
-				languagesCombo.select(languagesCombo.indexOf("Java"));
+	protected void setLanguage(String language) {
+		if(languagesCombo.indexOf(language) != -1) 
+				languagesCombo.select(languagesCombo.indexOf(language));
 	}
 }
