@@ -8,7 +8,7 @@ public class Test implements ConventionService {
 
 
 	@Override
-	public Cobject verificarConvencao(String name, TypeOf typeof) {
+	public Cobject verifyConvention(String name, TypeOf typeof) {
 		return new Cobject("Get method",typeof.equals(TypeOf.METHOD) && name.contains("get"));
 	}
 
