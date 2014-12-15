@@ -1,5 +1,5 @@
 
-package pa.iscde.umldiagram;
+package pa.iscde.umldiagram.drbps;
 
 
 import org.eclipse.draw2d.AbstractBorder;

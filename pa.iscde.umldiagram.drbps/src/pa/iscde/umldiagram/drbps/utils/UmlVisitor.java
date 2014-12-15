@@ -1,4 +1,4 @@
-package pa.iscde.umldiagram.utils;
+package pa.iscde.umldiagram.drbps.utils;
 import java.util.ArrayList;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
