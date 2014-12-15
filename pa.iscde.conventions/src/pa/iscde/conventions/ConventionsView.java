@@ -61,7 +61,7 @@ public class ConventionsView implements PidescoView {
 		
 		ConventionService cs = new ConventionService() {
 			@Override
-			public Cobject verificarConvencao(String name, TypeOf to) {
+			public Cobject verifyConvention(String name, TypeOf to) {
 				switch (to) {
 				case CLASS:{
 
