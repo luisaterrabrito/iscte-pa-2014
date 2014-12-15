@@ -99,24 +99,7 @@ public class MetricsView implements PidescoView {
 		// }
 		// });
 
-		visitor = new MetricsVisitor();
-
-		Bundle bundle = FrameworkUtil.getBundle(MetricsView.class);
-		BundleContext context = bundle.getBundleContext();
-		ServiceReference<JavaEditorServices> reference = context
-				.getServiceReference(JavaEditorServices.class);
-		javaServices = context.getService(reference);
-
-		//vai buscar o project browser services que disponibiliza o root package
-		browserServices = context.getService(context
-				.getServiceReference(ProjectBrowserServices.class));
-		PackageElement root = browserServices.getRootPackage();
-
-		List <SourceElement> elements = listElements(root);
-		for (SourceElement i : elements) {
-			if(i.isClass())
-				javaServices.parseFile(i.getFile(), visitor);
-		}
+		
 		
 		refresh();
 	}
@@ -149,9 +132,27 @@ public class MetricsView implements PidescoView {
 	}
 
 	public void refresh() {
-//		table.clearAll();
-//		table.update();
 		table.removeAll();
+		
+		visitor = new MetricsVisitor();
+
+		Bundle bundle = FrameworkUtil.getBundle(MetricsView.class);
+		BundleContext context = bundle.getBundleContext();
+		ServiceReference<JavaEditorServices> reference = context
+				.getServiceReference(JavaEditorServices.class);
+		javaServices = context.getService(reference);
+
+		//vai buscar o project browser services que disponibiliza o root package
+		browserServices = context.getService(context
+				.getServiceReference(ProjectBrowserServices.class));
+		PackageElement root = browserServices.getRootPackage();
+
+		List <SourceElement> elements = listElements(root);
+		for (SourceElement i : elements) {
+			if(i.isClass())
+				javaServices.parseFile(i.getFile(), visitor);
+		}
+		
 		//vai buscar o registo de todas as extensões
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
 		//vai buscar as extensoes para o meu extension point
