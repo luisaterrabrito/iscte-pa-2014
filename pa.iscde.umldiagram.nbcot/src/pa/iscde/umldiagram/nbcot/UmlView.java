@@ -1,4 +1,4 @@
-package pa.iscde.umldiagram;
+package pa.iscde.umldiagram.nbcot;
 
 
 	
@@ -39,9 +39,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-import pa.iscde.umldiagram.UmlTheme.ClassType;
-import pa.iscde.umldiagram.ClickOption;
-import pa.iscde.umldiagram.utils.UmlVisitor;
+import pa.iscde.umldiagram.nbcot.ClickOption;
+import pa.iscde.umldiagram.nbcot.UmlTheme.ClassType;
+import pa.iscde.umldiagram.nbcot.utils.UmlVisitor;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;

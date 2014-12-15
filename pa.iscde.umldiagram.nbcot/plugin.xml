@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="umldiagram_nbcot"
+         name="umldiagram_nbcot"
+         point="pa.iscde.team">
+      <member
+            name="nuno"
+            photo="nuno.gif"
+            quote="54378"
+            user="nbcot">
+      </member>
+      <member
+            name="diogo"
+            photo="peres.gif"
+            quote="54411"
+            user="drbps">
+      </member>
+   </extension>
+   <extension
+         id="umlview_nbcot"
+         name="UML View - Nuno Coelho"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.umldiagram.nbcot.UmlView"
+            icon="icon.gif">
+      </view>
+   </extension>
+
+</plugin>
