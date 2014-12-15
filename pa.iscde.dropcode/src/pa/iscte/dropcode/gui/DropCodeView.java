@@ -177,9 +177,10 @@ public class DropCodeView implements PidescoView {
 				}
 			}
 	}
-	//TODO
+
+	// TODO
 	public void save() {
-		System.out
-		.println("DropRow.addCombo_visibility_modifier(...).new MenuDetectListener() {...}.menuDetected()");
+		DropCodeActivator.getJavaEditor().saveFile(
+				DropCodeActivator.getJavaEditor().getOpenedFile());
 	}
 }
