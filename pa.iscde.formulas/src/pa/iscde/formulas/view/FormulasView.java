@@ -41,7 +41,6 @@ import pa.iscde.formulas.Formula;
 import pa.iscde.formulas.NewFormula;
 import pa.iscde.formulas.draw.DrawEquationUtil;
 import pa.iscde.formulas.draw.EquationFinder;
-import pa.iscde.formulas.draw.FormulaAnnotation;
 import pa.iscde.formulas.extensibility.CreateCategoryProvider;
 import pa.iscde.formulas.listeners.CodeEjectorListener;
 import pt.iscte.pidesco.extensibility.PidescoView;
@@ -345,7 +344,6 @@ public class FormulasView implements PidescoView {
 	 * @throws IOException
 	 */
 	public  void setDrawEquationMode(EquationFinder eq) throws IOException {
-		boolean annotations = true;
 		clearFormulasBoard();
 		drawFormulas = true;
 		buttons.clear();
@@ -353,9 +351,8 @@ public class FormulasView implements PidescoView {
 		formulasBoard = new HashMap<Label,Text>();
 		if(eq==null)
 			eq = new EquationFinder(fileTarget);
-		else
-			annotations = false;
 		viewArea.setLayout(new FillLayout());
+		viewArea.pack();
 		scrollComposite = new ScrolledComposite(viewArea,
 				SWT.V_SCROLL | SWT.BORDER);
 		final Composite parent = new Composite(scrollComposite, SWT.NONE);
@@ -387,11 +384,6 @@ public class FormulasView implements PidescoView {
 						SWT.DEFAULT));
 			}
 		});
-
-		if(annotations)
-			for (FormulaAnnotation formula : eq.getAnnotations()) {
-				javaeditor.addAnnotation(javaeditor.getOpenedFile(), AnnotationType.INFO, formula.getFormula(), formula.getOffset(), formula.getLenght());
-			}
 		parent.pack();
 		viewArea.pack();
 	}
