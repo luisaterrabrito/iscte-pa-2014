@@ -2,7 +2,9 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="pa.iscde.metrics.createMetric">
+         point="pa.iscde.metrics.createMetric"
+         name="Number of Annotations"
+         id="annotation_metrics">
    </extension>
 
 </plugin>
