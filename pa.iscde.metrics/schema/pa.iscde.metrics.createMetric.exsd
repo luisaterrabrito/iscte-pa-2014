@@ -15,6 +15,9 @@
          <appinfo>
             <meta.element />
          </appinfo>
+         <documentation>
+            This extension point is to create new metrics.
+         </documentation>
       </annotation>
       <complexType>
          <choice minOccurs="1" maxOccurs="unbounded">

@@ -22,6 +22,8 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import pa.iscde.metrics.extensibility.Metricable;
+import pa.iscde.metrics.internal.metrics.AttributesMetric;
+import pa.iscde.metrics.internal.metrics.ClassesMetric;
 import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
@@ -41,6 +43,8 @@ public class MetricsView implements PidescoView {
 	private JavaEditorServices javaServices;
 	private ProjectBrowserServices browserServices;
 	private MetricsVisitor visitor ;
+	private Table table;
+
 	// Quando a classe é compilada pela primeira vez o bloco static é executado
 	static {
 		Bundle bundle = FrameworkUtil.getBundle(MetricsView.class);
@@ -55,7 +59,7 @@ public class MetricsView implements PidescoView {
 		// Definir a instancia da classe MetricsView como a instancia da view
 		// que esta a ser criada
 		instance = this;
-		Table table = new Table(viewArea, SWT.NONE);
+		table = new Table(viewArea, SWT.NONE);
 		TableColumn metricName = new TableColumn(table, SWT.NONE);
 		TableColumn metricValue = new TableColumn(table, SWT.NONE);
 
@@ -103,9 +107,7 @@ public class MetricsView implements PidescoView {
 				.getServiceReference(JavaEditorServices.class);
 		javaServices = context.getService(reference);
 
-//		javaServices.parseFile(javaServices.getOpenedFile(), visitor);
-
-	//vai buscar o project browser services que disponibiliza o root package
+		//vai buscar o project browser services que disponibiliza o root package
 		browserServices = context.getService(context
 				.getServiceReference(ProjectBrowserServices.class));
 		PackageElement root = browserServices.getRootPackage();
@@ -116,31 +118,7 @@ public class MetricsView implements PidescoView {
 				javaServices.parseFile(i.getFile(), visitor);
 		}
 		
-	//vai buscar o registo de todas as extensões
-		IExtensionRegistry reg = Platform.getExtensionRegistry();
-	//vai buscar as extensoes para o meu extension point
-		for(IExtension ext : reg.getExtensionPoint(EXT_POINT_ID).getExtensions()) {
-
-			for(IConfigurationElement member : ext.getConfigurationElements()) {
-				try {
-	//cria um objecto da classe indicada no atributo 'implementation'(ex.CalculateMetric) 
-	//que implementa a interface Metricable
-					Metricable m = (Metricable)  member.createExecutableExtension("implementation");
-					TableItem tableItem = new TableItem(table, SWT.NONE);
-					tableItem.setText(0, member.getAttribute("name"));
-					tableItem.setText(1, "" +  m.calculateMetric());
-
-				} catch (CoreException e) {
-					e.printStackTrace();
-				}
-				
-			}
-			
-		}
-
-//		TableItem tableItem8 = new TableItem(table, SWT.NONE);
-//		tableItem8.setText(0, "Depht of inheritance tree");
-//		tableItem8.setText(1, "" + visitor.getStaticMethods());
+		refresh();
 	}
 
 	//metodo recursivo para vierificar se os filhos da root são packages ou classes e guarda-os numa lista
@@ -154,18 +132,45 @@ public class MetricsView implements PidescoView {
 		}
 		return elements;
 	}
-	
+
 	//vai buscar instancia do objecto metrics view
 	public static MetricsView getInstance() {
 		if (instance == null)
 			services.openView(VIEW_ID);
 		return instance;
 	}
+	
 	public MetricsVisitor getVisitor(){
 		return visitor;
 	}
+	
+	public ProjectBrowserServices getBrowserServices() {
+		return browserServices;
+	}
 
 	public void refresh() {
+//		table.clearAll();
+//		table.update();
+		table.removeAll();
+		//vai buscar o registo de todas as extensões
+		IExtensionRegistry reg = Platform.getExtensionRegistry();
+		//vai buscar as extensoes para o meu extension point
+		for(IExtension ext : reg.getExtensionPoint(EXT_POINT_ID).getExtensions()) {
+
+			for(IConfigurationElement member : ext.getConfigurationElements()) {
+				try {
+					//cria um objecto da classe indicada no atributo 'implementation'(ex.CalculateMetric) 
+					//que implementa a interface Metricable
+					Metricable m = (Metricable)  member.createExecutableExtension("implementation");
+					TableItem tableItem = new TableItem(table, SWT.NONE);
+					tableItem.setText(0, member.getAttribute("name"));
+					tableItem.setText(1, "" +  m.calculateMetric());
+
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		System.out.println("REFRESH!!!");
 	}
 
