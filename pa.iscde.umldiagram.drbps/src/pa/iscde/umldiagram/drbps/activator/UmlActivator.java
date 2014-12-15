@@ -1,4 +1,4 @@
-package pa.iscde.umldiagram.activator;
+package pa.iscde.umldiagram.drbps.activator;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -7,7 +7,7 @@ import org.osgi.framework.ServiceReference;
 import java.io.File;
 import java.util.Collection;
 
-import pa.iscde.umldiagram.UmlView;
+import pa.iscde.umldiagram.drbps.UmlView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;

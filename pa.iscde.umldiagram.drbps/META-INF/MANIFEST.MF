@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: UmlDiagram
-Bundle-SymbolicName: pa.iscde.umldiagram;singleton:=true
+Bundle-Name: UmlDiagram-diogoperes
+Bundle-SymbolicName: pa.iscde.umldiagram.drbps;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: pa.iscde;bundle-version="0.1.0",
@@ -17,4 +17,4 @@ Import-Package: org.eclipse.swt.graphics,
  org.eclipse.swt.widgets,
  pt.iscte.pidesco.extensibility
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: pa.iscde.umldiagram.activator.UmlActivator
+Bundle-Activator: pa.iscde.umldiagram.drbps.activator.UmlActivator

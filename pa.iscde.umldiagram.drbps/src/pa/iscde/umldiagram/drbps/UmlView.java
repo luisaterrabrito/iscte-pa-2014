@@ -1,4 +1,4 @@
-package pa.iscde.umldiagram;
+package pa.iscde.umldiagram.drbps;
 
 
 	
@@ -15,18 +15,18 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.draw2d.Clickable;
-import org.eclipse.draw2d.MouseListener;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.zest.core.widgets.CGraphNode;
@@ -39,9 +39,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-import pa.iscde.umldiagram.UmlTheme.ClassType;
-import pa.iscde.umldiagram.ClickOption;
-import pa.iscde.umldiagram.utils.UmlVisitor;
+import pa.iscde.umldiagram.drbps.ClickOption;
+import pa.iscde.umldiagram.drbps.UmlTheme.ClassType;
+import pa.iscde.umldiagram.drbps.utils.UmlVisitor;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
@@ -88,95 +88,16 @@ public class UmlView implements PidescoView {
 	@Override
 	public void createContents(Composite umlArea, Map<String, Image> imageMap) {
 		umlGraph = new Graph(umlArea, SWT.NONE);
+
 		
-		loadColorThemeExtensions();
-		loadClickOptionExtensions();
-		Menu menu = new Menu(umlGraph);
-		Iterator it = themes.entrySet().iterator();
-		MenuItem item=null;
-	    while (it.hasNext()) {
-	        Map.Entry name = (Map.Entry)it.next();
-	        item = new MenuItem(menu, SWT.PUSH);
-			item.setText(name.getKey().toString());
-	        item.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					MenuItem aux = (MenuItem)e.getSource();
-					ChangeTheme cTheme = themes.get(aux.getText());
-						if(cTheme!=null){
-							for (Node n : nodes) {
-								if(cTheme.getTheme().getClassName()!=null){
-									if(n.getName().equals(cTheme.getTheme().getClassName())){
-										Color color = cTheme.getColor(cTheme.getTheme().getClassName());
-										if(color!=null){
-											n.getNode().setBackgroundColor(color);
-										}
-									}
-								}
-								if(cTheme.getTheme().getClassType()!=null){
-									if(n.getType() == cTheme.getTheme().getClassType()){
-										Color color = cTheme.getTheme().getTypeColor(cTheme.getTheme().getClassType());
-										if(color!=null){
-											n.getNode().setBackgroundColor(color);
-										}
-									}
-									
-								}
-							}
-					}
-				}
-			});
-	    }
-		
-		umlGraph.setMenu(menu);
 	}
 
-	private void loadClickOptionExtensions() {
-		IExtensionRegistry reg = Platform.getExtensionRegistry();
-		for(IExtension ext : reg.getExtensionPoint("pa.iscde.umldiagram.clickoption").getExtensions()) {
-			String name = ext.getLabel();
-			System.out.println(name);
-			if(ext.getConfigurationElements().length>0){
-				IConfigurationElement element = ext.getConfigurationElements()[0];
-				try {
-					System.out.println("OK");
-					ClickOption op=(ClickOption)element.createExecutableExtension("class");
-					if(op.getAction()!=null)
-						opListener = (MouseListener)op.getAction();
-					
-					
-				} catch (CoreException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		
-	}
+	
 
 	public static UmlView getInstance() {
 		return umlView;
 	}
 
-	private void loadColorThemeExtensions() {
-		IExtensionRegistry reg = Platform.getExtensionRegistry();
-		for(IExtension ext : reg.getExtensionPoint("pa.iscde.umldiagram.colortheme").getExtensions()) {
-			String name = ext.getLabel();
-			System.out.println(name);
-			if(ext.getConfigurationElements().length>0){
-				IConfigurationElement element = ext.getConfigurationElements()[0];
-				try {
-					UmlTheme t = (UmlTheme) element.createExecutableExtension("class");
-					themes.put(name, new ChangeTheme(t));
-				} catch (CoreException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		
-	}
 	
 	
 	/**
@@ -250,7 +171,9 @@ public class UmlView implements PidescoView {
 	private void paintClass(SourceElement classes, UmlVisitor visitor) {
 		String prefix = "";
 		String cName = classes.getName().replace(".java", "");
-		System.out.println(":"+cName);
+
+		//System.out.println(":"+cName);
+
 		if(visitor.isInterface()) {
 			prefix = "<interface> ";
 		}
@@ -260,7 +183,17 @@ public class UmlView implements PidescoView {
 			}
 		}
 		UMLClassFigure figure = new UMLClassFigure(prefix+cName);
+
+		
 		CGraphNode node = new CGraphNode(umlGraph, SWT.NONE, figure);
+
+		if(prefix.equals("")){
+			node.setText("<class>" + cName);
+		}else{
+			node.setText(prefix + cName);
+		}
+		MouseListener p;
+		
 		figure.setNode(node);
 		//GraphNode node = new GraphNode(umlGraph, SWT.NONE);
 		//node.setText("Class "+classes.getName().replace(".java", "")+"\n");
@@ -315,16 +248,13 @@ public class UmlView implements PidescoView {
 		n.setClassInstances(visitor.getClassInstances());
 		n.setSuperClass(visitor.getSuperClass());
 		n.setImplementClasses(visitor.getImplementClasses());
-		figure.addMouseListener(opListener);
+
+		
+
 	}
 
-	private void setListener() {
-		for (int i = 0; i < nodes.size(); i++) {
-			System.out.println(nodes.get(i).getName());
-			nodes.get(i).getFigure().addMouseListener(opListener);
-		}
-		
-	}
+
+	
 
 	public synchronized void clearGraph() {
 		nodes.clear();

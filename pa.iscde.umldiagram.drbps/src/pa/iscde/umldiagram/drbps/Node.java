@@ -1,10 +1,10 @@
-package pa.iscde.umldiagram;
+package pa.iscde.umldiagram.drbps;
 
 import java.util.ArrayList;
 
 import org.eclipse.zest.core.widgets.GraphNode;
 
-import pa.iscde.umldiagram.UmlTheme.ClassType;
+import pa.iscde.umldiagram.drbps.UmlTheme.ClassType;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 
 public class Node {

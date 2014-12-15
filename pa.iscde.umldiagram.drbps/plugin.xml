@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="colortheme" name="Color Theme" schema="schema/colortheme.exsd"/>
-   <extension-point id="clickoption" name="Click Option" schema="schema/clickoption.exsd"/>
    <extension
-         id="umldiagram"
-         name="umldiagram"
+         id="umldiagram_drbps"
+         name="umldiagram - Diogo Peres"
          point="pa.iscde.team">
       <member
             name="nuno"
@@ -21,28 +19,13 @@
       </member>
    </extension>
    <extension
-         id="umlview"
-         name="UML View"
+         id="umlview_drbps"
+         name="UML View - Diogo Peres"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.umldiagram.UmlView"
+            class="pa.iscde.umldiagram.drbps.UmlView"
             icon="icon.gif">
       </view>
-   </extension>
-   <extension
-         name="Default"
-         point="pa.iscde.umldiagram.colortheme">
-      <theme
-            class="pa.iscde.umldiagram.extentionpoint.Default"
-            className="UmlTheme">
-      </theme>
-   </extension>
-   <extension
-         name="Example"
-         point="pa.iscde.umldiagram.clickoption">
-      <coption
-            class="pa.iscde.umldiagram.extentionpoint.Example">
-      </coption>
    </extension>
 
 </plugin>
