@@ -4,11 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.TreeEvent;
-import org.eclipse.swt.events.TreeListener;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -20,11 +16,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-import extensibility.ButtonFilterProvider;
 import pa.iscde.outline.utility.OutlineVisitor;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
+import extensibility.ButtonFilterProvider;
 
 public class OutlineView implements PidescoView {
 
@@ -100,7 +96,7 @@ public class OutlineView implements PidescoView {
 		Tree t = new Tree(viewArea, SWT.SINGLE | SWT.BORDER);
 		TreeItem rootItem = new TreeItem(t, SWT.NONE, 0);
 
-		OutlineVisitor visitor = new OutlineVisitor(rootItem, getActiveButtonFilters()/*,  getCustomIconsSetters */);
+		OutlineVisitor visitor = new OutlineVisitor(rootItem, this.imageMap, getActiveButtonFilters()/*,  getCustomIconsSetters */);
 
 		javaServices.parseFile(file, visitor);
 	}
@@ -124,7 +120,7 @@ public class OutlineView implements PidescoView {
 		Tree t = new Tree(viewArea, SWT.SINGLE | SWT.BORDER);
 		TreeItem rootItem = new TreeItem(t, SWT.NONE, 0);
 
-		OutlineVisitor visitor = new OutlineVisitor(rootItem, getActiveButtonFilters()/*,  getCustomIconsSetters */);
+		OutlineVisitor visitor = new OutlineVisitor(rootItem, this.imageMap, getActiveButtonFilters()/*,  getCustomIconsSetters */);
 
 		javaServices.parseFile(file, visitor);
 		
@@ -230,13 +226,36 @@ public class OutlineView implements PidescoView {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Get all the active button filters
+	 * @return all the filters that are enabled at the IDE
 	 */
 	private ArrayList<ButtonFilterProvider> getActiveButtonFilters() {
 		ArrayList<ButtonFilterProvider> _activeFilters = new ArrayList<ButtonFilterProvider>();
 		//TODO all the added filters should be here. Upon clicking a button filter, 
 		//the filter should be added to this list to be passed to the OutlineVisitor
+		
+		//TODO delete SAMPLE filter that doesn't shows void methods
+//		_activeFilters.add(new ButtonFilterProvider() {
+//			
+//			@Override
+//			public Image getButtonIcon() {
+//				// TODO Auto-generated method stub
+//				return null;
+//			}
+//			
+//			@Override
+//			public boolean filterTree(ASTNode node) {
+//				if(node.getClass() == MethodDeclaration.class){
+//					//if not null, the method return type isn't void
+//					if(((MethodDeclaration)node).getReturnType2() != null){
+//						return false;
+//					}
+//				}
+//				return true;
+//			}
+//		});
+		
+		
 		return _activeFilters;
 	}
 
