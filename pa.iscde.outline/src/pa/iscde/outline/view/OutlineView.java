@@ -107,20 +107,6 @@ public class OutlineView implements PidescoView {
 			}
 		});
 
-
-
-
-		//		    ToolItem toolItem2 = new ToolItem(toolbar, SWT.PUSH);
-		//		    toolItem2.setText("Save As");
-		//		    ToolItem toolItem3 = new ToolItem(toolbar, SWT.PUSH);
-		//		    toolItem3.setText("Print");
-		//		    ToolItem toolItem4 = new ToolItem(toolbar, SWT.PUSH);
-		//		    toolItem4.setText("Run");
-		//		    ToolItem toolItem5 = new ToolItem(toolbar, SWT.PUSH);
-		//		    toolItem5.setText("Help");
-
-
-
 		drawOutlineView(javaServices.getOpenedFile());
 	}
 
@@ -131,7 +117,7 @@ public class OutlineView implements PidescoView {
 		ToolBar toolbar = new ToolBar(viewArea, SWT.BAR | SWT.FLAT);
 		toolbar.setBounds(0, 0, 200, 70);
 		ToolItem toolItem1 = new ToolItem(toolbar, SWT.PUSH);
-		toolItem1.setText("Save");
+		toolItem1.setText("Item1");
 		for (ButtonFilterProvider filter : getActiveButtonFilters()){
 			ToolItem aux = new ToolItem(toolbar, SWT.PUSH);
 			aux.setImage(filter.getButtonIcon());
