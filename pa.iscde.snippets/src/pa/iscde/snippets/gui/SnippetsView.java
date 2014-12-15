@@ -70,37 +70,11 @@ public class SnippetsView implements PidescoView {
 	
 	public void snippetCodeFromSearch(File snp) {
 		SnippetsExplorer.getInstance().hideUnhide();
-		new SnippetCode(snp, viewArea, SWT.NONE);
+		snippetCodeView = new SnippetCode(snp, viewArea, SWT.NONE);
 		viewArea.layout();
 	}
 	
-	public void createNewSnippetCommand(String s){
-		if(SnippetsExplorer.getInstance().isVisible()){
-			SnippetsExplorer.getInstance().hideUnhide();
-			createSnippetCode(s);
-		}
-	}
-	
-	public void savedSnippetCommand(){
-		if(snippetCodeView != null)
-			snippetCodeView.saveButtonFunction();
-	}
-	
-	public void discardSnippetCommand(){
-		if(snippetCodeView != null)
-			snippetCodeView.discardButtonFunction();
-	}
-
-	public void useCommandSnippet() {
-		if(snippetCodeView != null)
-			snippetCodeView.useButtonFunction();
-	}
-
-	public void setFilterToLanguage(String language) {
-		if(snippetCodeView != null)
-			snippetCodeView.setLanguage(language);
-		else if(SnippetsExplorer.getInstance().isVisible()){
-			SnippetsExplorer.getInstance().setLanguage(language);
-		}
+	protected SnippetCode getSnippetCode(){
+		return snippetCodeView;
 	}
 }
