@@ -103,7 +103,7 @@ public class OutlineVisitor extends ASTVisitor {
 	private boolean addTreeNode(String name, ASTNode node) {
 		if(verifyFilters(node)){
 			//TODO method to obtain the image, now it is NULL
-			Image image = getImage(node);
+			//Image image = getImage(node);
 			TreeItem aux = new TreeItem(currentTreeItem, SWT.NONE);
 			aux.setText(name);
 			
@@ -128,7 +128,7 @@ public class OutlineVisitor extends ASTVisitor {
 		return true;
 	}
 	
-	private Image getImage(ASTNode node){
-		return null; //return image for ????
-	}
+//	private Image getImage(ASTNode node){
+//		return null; //return image for ????
+//	}
 }
