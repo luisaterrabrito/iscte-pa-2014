@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Dbipo
+Bundle-SymbolicName: pa.iscde.snippets.dbipo;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: pa.iscde;bundle-version="0.1.0",
+ pa.iscde.commands;bundle-version="1.0.0",
+ pa.iscde.snippets;bundle-version="1.0.0"

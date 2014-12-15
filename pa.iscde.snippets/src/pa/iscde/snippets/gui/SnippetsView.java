@@ -15,6 +15,7 @@ import pt.iscte.pidesco.extensibility.PidescoView;
 
 public class SnippetsView implements PidescoView {
 	private Composite viewArea;
+	private SnippetCode snippetCodeView;
 	private static SnippetsView instance;
 	private static File snippetsRootFolder;
 
@@ -51,18 +52,19 @@ public class SnippetsView implements PidescoView {
 			new SnippetsExplorer(viewArea, SWT.NONE);
 		else
 			SnippetsExplorer.getInstance().hideUnhide();
+		snippetCodeView = null;
 		viewArea.layout();
 	}
 
 	// With file
 	protected void createSnippetCode(File snp) {
-		new SnippetCode(snp, viewArea, SWT.NONE);
+		snippetCodeView = new SnippetCode(snp, viewArea, SWT.NONE);
 		viewArea.layout();
 	}
 
 	// Without file
 	protected void createSnippetCode(String selectedText) {
-		new SnippetCode(viewArea, SWT.NONE, selectedText);
+		snippetCodeView = new SnippetCode(viewArea, SWT.NONE, selectedText);
 		viewArea.layout();
 	}
 	
@@ -70,5 +72,35 @@ public class SnippetsView implements PidescoView {
 		SnippetsExplorer.getInstance().hideUnhide();
 		new SnippetCode(snp, viewArea, SWT.NONE);
 		viewArea.layout();
+	}
+	
+	public void createNewSnippetCommand(String s){
+		if(SnippetsExplorer.getInstance().isVisible()){
+			SnippetsExplorer.getInstance().hideUnhide();
+			createSnippetCode(s);
+		}
+	}
+	
+	public void savedSnippetCommand(){
+		if(snippetCodeView != null)
+			snippetCodeView.saveButtonFunction();
+	}
+	
+	public void discardSnippetCommand(){
+		if(snippetCodeView != null)
+			snippetCodeView.discardButtonFunction();
+	}
+
+	public void useCommandSnippet() {
+		if(snippetCodeView != null)
+			snippetCodeView.useButtonFunction();
+	}
+
+	public void setFilterToJava() {
+		if(snippetCodeView != null)
+			snippetCodeView.setLanguageToJava();
+		else if(SnippetsExplorer.getInstance().isVisible()){
+			SnippetsExplorer.getInstance().setLanguageToJava();
+		}
 	}
 }

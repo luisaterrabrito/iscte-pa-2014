@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="pa.iscde.commands.command">
+      <command_view
+            alt_key="false"
+            command_implementation="pa.iscde.snippets.extensions.CommandFilterToJava"
+            context_view="pa.iscde.snippets.snippets"
+            ctrl_key="true"
+            description="Filter Snippets by Java language"
+            key="J"
+            name="Filter Java Classes">
+      </command_view>
+            <command_view
+            alt_key="true"
+            command_implementation="pa.iscde.snippets.extensions.CommandCreateNewSnippet"
+            context_view="pa.iscde.snippets.snippets"
+            ctrl_key="true"
+            description="Access the New Snippet View"
+            key="N"
+            name="Create New Snippet">
+      </command_view>
+      <command_view
+            alt_key="false"
+            command_implementation="pa.iscde.snippets.extensions.CommandSaveCurrentSnippet"
+            context_view="pa.iscde.snippets.snippets"
+            ctrl_key="true"
+            description="Save the current snippet"
+            key="S"
+            name="Save Current Snippet">
+      </command_view>
+      <command_view
+            alt_key="false"
+            command_implementation="pa.iscde.snippets.extensions.CommandDiscardSnippet"
+            context_view="pa.iscde.snippets.snippets"
+            ctrl_key="true"
+            description="Discard the current snippet"
+            key="d"
+            name="Discard Current Snippet">
+      </command_view>
+       <command_view
+            alt_key="false"
+            command_implementation="pa.iscde.snippets.extensions.CommandUseCurrentSnippet"
+            context_view="pa.iscde.snippets.snippets"
+            ctrl_key="true"
+            description="Use the current snippet"
+            key="u"
+            name="Use Current Snippet">
+      </command_view>
+   </extension>
+</plugin>
