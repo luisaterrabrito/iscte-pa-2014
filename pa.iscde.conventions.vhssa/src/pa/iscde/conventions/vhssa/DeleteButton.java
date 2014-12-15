@@ -8,7 +8,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
-
 import pa.iscde.dropcode.services.DropButton;
 import pa.iscte.dropcode.gui.DropCodeView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
@@ -36,7 +35,11 @@ public class DeleteButton implements DropButton{
 
 	@Override
 	public String getText() {
+		if(image == null){
 		return "Delete";
+		}else{
+			return "";
+		}
 	}
 
 	@Override
