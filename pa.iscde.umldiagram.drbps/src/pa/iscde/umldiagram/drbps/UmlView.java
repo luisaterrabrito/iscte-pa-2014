@@ -39,6 +39,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import pa.iscde.packagediagram.extensibility.PackageDiagramActionExtension;
 import pa.iscde.umldiagram.drbps.ClickOption;
 import pa.iscde.umldiagram.drbps.UmlTheme.ClassType;
 import pa.iscde.umldiagram.drbps.utils.UmlVisitor;
@@ -46,17 +47,22 @@ import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
+import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserListener;
+import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 /**
  * @author Nuno e Diogo
  */
-public class UmlView implements PidescoView {
+public class UmlView implements PidescoView, PackageDiagramActionExtension {
 	private static UmlView umlView;
 	private Graph umlGraph;
 	private Bundle bundle = FrameworkUtil.getBundle(UmlView.class);
 	private BundleContext context  = bundle.getBundleContext();
 	private ServiceReference<JavaEditorServices> ref = context.getServiceReference(JavaEditorServices.class);
 	private JavaEditorServices javaServices = context.getService(ref);
+	private ServiceReference<ProjectBrowserServices> serviceReference = context.getServiceReference(ProjectBrowserServices.class);
+	
+	private ProjectBrowserServices browserServices = context.getService(serviceReference);
 	private ArrayList<Node> nodes = new ArrayList<Node>();
 	private HashMap<String, ChangeTheme> themes = new HashMap<String, ChangeTheme>();
 	private MouseListener opListener;
@@ -105,6 +111,7 @@ public class UmlView implements PidescoView {
 	 * @param selection = element selected on the project browser
 	 */
 	public void paintUml(Collection<SourceElement> selection) {
+		int aux = 0;
 		for(SourceElement e : selection){
 			PackageElement p = null;
 			//gets the next element
@@ -112,6 +119,10 @@ public class UmlView implements PidescoView {
 			if(e.isPackage()){
 				p = (PackageElement)e;
 				//loop all java classes
+				if(p != null && aux == 0) {
+					run(p.getName());
+					aux++;
+				}
 				for(SourceElement classes : p.getChildren()){
 					if(classes.isClass()){
 						//this method is responsable for representing the javaclass on UML graph
@@ -266,5 +277,13 @@ public class UmlView implements PidescoView {
 		for(GraphNode n : nodes){
 		  n.dispose();
 		}
+	}
+
+
+
+	@Override
+	public void run(String packageName) {
+		GraphNode g = new GraphNode(umlGraph, SWT.NONE);
+		g.setText("Package "+packageName+"");
 	}
 }
