@@ -1,5 +1,9 @@
 package pa.iscde.metrics.internal;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedSet;
+
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
@@ -9,41 +13,40 @@ import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import pa.iscde.metrics.extensibility.Metricable;
+import pt.iscte.pidesco.projectbrowser.model.PackageElement;
+import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 
 public class MetricsVisitor extends ASTVisitor {
 	private int methodCounter, physicalLineCounter, logicalLineCounter, staticMethodCounter,
-			packageCounter, interfaceCounter, classCounter, attributeCounter;
+	packageCounter, interfaceCounter, classCounter, attributeCounter;
 	private CompilationUnit compilationUnit;
 
 	public boolean visit(MethodDeclaration node) {
-	//methods
-			methodCounter++;
-		
-	//static
+		//methods
+		methodCounter++;
+
+		//static
 		if (Modifier.isStatic(node.getModifiers()))
 			staticMethodCounter++;
-
 		return true;
 	};
-	
+
 	//class or interface
 	public boolean visit(TypeDeclaration node) {
 		if(node.isInterface())
 			interfaceCounter++;
-	
 		else {
 			classCounter++;
 		}
-		
 		return true;
 	}
-	
+
 	//attributes
 	public boolean visit(FieldDeclaration node){
 		attributeCounter++;
 		return true;
 	}
-	
+
 	//lines of code
 	public boolean visit(CompilationUnit cu) {
 		this.compilationUnit = cu;
@@ -51,20 +54,6 @@ public class MetricsVisitor extends ASTVisitor {
 		logicalLineCounter += cu.toString().split("\n").length;
 		return true;
 	}
-
-	//packages
-	public boolean visit(PackageDeclaration node) {
-		packageCounter++;
-
-		// public void visit(PackageElement root) {
-		// SortedSet<SourceElement> c = root.getChildren();
-		// for (SourceElement sourceElement : c) {
-		// // System.out.println(sourceElement.getClass());
-		// }
-		// }
-		
-		return true;
-	};
 
 	public int getMethodCounter() {
 		return methodCounter;
@@ -76,10 +65,6 @@ public class MetricsVisitor extends ASTVisitor {
 
 	public int getStaticMethods() {
 		return staticMethodCounter;
-	}
-
-	public int getPackageCounter() {
-		return packageCounter;
 	}
 
 	public int getInterfaceCounter() {
@@ -97,6 +82,4 @@ public class MetricsVisitor extends ASTVisitor {
 	public int getAttributeCounter() {
 		return attributeCounter;
 	}
-
-
 }
