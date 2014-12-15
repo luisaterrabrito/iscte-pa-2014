@@ -1,4 +1,3 @@
-
 package pa.iscde.umldiagram;
 
 
@@ -122,7 +121,5 @@ public class UMLClassFigure extends Figure {
 	public CGraphNode getNode() {
 		return node;
 	}
-	
-	
 
 }

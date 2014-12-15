@@ -1,3 +1,4 @@
+
 package pa.iscde.umldiagram;
 
 import org.eclipse.swt.events.MouseListener;
@@ -8,21 +9,25 @@ import org.eclipse.swt.events.MouseListener;
 
 
 
+/**
+ * This extension point offers other plugins the ability to define the action performed when clicking a class in the diagram.
 
+   Requirements: a class that implements our interface
+
+ * @author Nuno & Diogo
+ *
+ */
 public interface ClickOption {
-	String s="";
 	/**
 	 * choose what happens in double click option to each graph node
-	 * ATENTION:
 	 * @return org.eclipse.swt.events.MouseListener()
-	 * see example below
 	 */
 	public MouseListener getAction();
 	
 	
 	/**---------------------------------------------------------------------------------------
 	 * EXAMPLE:
-	 * @Override
+	 * 
 			public void mouseDoubleClick(MouseEvent e) {
 				try{
 					Graph g = (Graph)e.getSource();

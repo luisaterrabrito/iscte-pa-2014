@@ -15,6 +15,11 @@
          <appinfo>
             <meta.element />
          </appinfo>
+         <documentation>
+            This extension point offers other plugins the ability to define the action performed when clicking a class in the diagram.
+
+Requirements: a class that implements our interface
+         </documentation>
       </annotation>
       <complexType>
          <sequence>
@@ -48,11 +53,51 @@
    </element>
 
    <element name="coption">
+      <annotation>
+         <documentation>
+            This extension point offers other plugins the ability to define the action performed when clicking a class in the diagram.
+
+Requirements: a class that implements our interface
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  A class that implements
+                  This extension point offers other plugins the ability to define the action performed when clicking a class in the diagram.
+
+Requirements: a class that implements our interface. Example:
+public void mouseDoubleClick(MouseEvent e) {
+                                try{
+                                        Graph g = (Graph)e.getSource();
+                                        for (int i = 0; i &lt; g.getNodes().size(); i++) {
+                                                CGraphNode n = (CGraphNode)g.getNodes().get(i);
+                                                Point p = n.getLocation();
+                                                Point p2 = new Point(p.x+n.getSize().width, p.y + n.getSize().height);
+                                                if(e.x &gt;= p.x &amp;&amp; e.x &lt;= p2.x &amp;&amp; e.y &gt;= p.y &amp;&amp; e.y &lt;= p2.y){
+                                                        
+                                                        if(n.getText().contains(&quot;&lt;class&gt;&quot;)){
+                                                                
+                                                                // TODO fazer a acção desejada para a classe do tipo interface
+                                                                
+                                                                 //* exemplos:
+                                                                // * &lt;enum&gt;
+                                                                 //* &lt;class&gt;
+                                                                 //* &lt;interface&gt;
+                                                                 
+                                                        }
+                                                        
+                                                }
+                                                        
+                                        }
+                                //CGraphNode f = (CGraphNode)e.getSource();
+                                
+                                }catch(Exception ex){
+                                        System.out.println(&quot;Erro ao extender a interface clickOption&quot;);
+                                }
+                                
+                        }
+         */
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":pa.iscde.umldiagram.ClickOption"/>

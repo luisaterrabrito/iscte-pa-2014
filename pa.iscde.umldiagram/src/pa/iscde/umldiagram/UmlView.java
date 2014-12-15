@@ -20,9 +20,6 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.swt.SWT;
-
-
-
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -267,6 +264,7 @@ public class UmlView implements PidescoView {
 
 		
 		CGraphNode node = new CGraphNode(umlGraph, SWT.NONE, figure);
+
 		if(prefix.equals("")){
 			node.setText("<class>" + cName);
 		}else{
@@ -274,7 +272,6 @@ public class UmlView implements PidescoView {
 		}
 		MouseListener p;
 		
-
 		figure.setNode(node);
 		//GraphNode node = new GraphNode(umlGraph, SWT.NONE);
 		//node.setText("Class "+classes.getName().replace(".java", "")+"\n");
