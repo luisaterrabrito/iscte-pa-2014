@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="indent"
+         name="indent"
+         point="pa.iscde.team">
+      <member
+            name="Samuel"
+            user="sjsrp">
+      </member>
+   </extension>
+   <extension
+         id="IndentView"
+         name="Indent tools"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.indent.IndentView"
+            icon="code.png">
+      </view>
+   </extension>
+
+</plugin>
