@@ -8,10 +8,9 @@ import pa.iscde.conventions.extensability.TypeOf;
 public class StartWithConstWord implements ConventionService {
 
 	@Override
-	public Cobject verificarConvencao(String name, TypeOf typeof) {
+	public Cobject verifyConvention(String name, TypeOf typeof) {
 		return new Cobject(Labels.CONSTANTSSTARTWORD,
 				typeof.equals(TypeOf.CONSTANTS) && !name.contains("CONST_"));
-
 	}
 
 }
