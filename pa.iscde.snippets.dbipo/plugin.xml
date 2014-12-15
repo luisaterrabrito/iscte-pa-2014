@@ -2,6 +2,8 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
+         id="snippets"
+         name="Snippets"
          point="pa.iscde.commands.command">
       <command_view
             alt_key="false"
