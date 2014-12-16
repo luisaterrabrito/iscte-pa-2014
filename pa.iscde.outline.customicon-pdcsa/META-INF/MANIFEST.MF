@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Customicon-pdcsa
+Bundle-SymbolicName: pa.iscde.outline.customicon-pdcsa
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: pa.iscde.customicon_pdcsa.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
