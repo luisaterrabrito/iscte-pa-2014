@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="metricsRefreshCommand"
+         name="Metrics Refresh Command"
+         point="pa.iscde.commands.command">
+      <command_view
+            alt_key="false"
+            command_implementation="pa.iscde.metrics.mlcst.RefreshCommand"
+            context_view="pa.iscde.commands.CommandsView"
+            ctrl_key="true"
+            description="command to refresh the table"
+            key="R"
+            name="pa.iscde.metrics.mlcst.refreshcommand">
+      </command_view>
+   </extension>
+
+</plugin>
