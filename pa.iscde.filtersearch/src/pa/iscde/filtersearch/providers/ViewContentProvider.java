@@ -6,7 +6,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import pa.iscde.filtersearch.view.SearchCategory;
+import pa.iscde.filtersearch.view.ProviderCategory;
 
 /**
 	 * Classe onde são definidos os elementos que vão aparecer nos resultados
@@ -17,7 +17,7 @@ import pa.iscde.filtersearch.view.SearchCategory;
 
 		@SuppressWarnings("unchecked")
 		public Object[] getElements(Object input) {
-			List<SearchCategory> categories = (List<SearchCategory>) input;
+			List<ProviderCategory> categories = (List<ProviderCategory>) input;
 			return categories.toArray();
 
 		}
@@ -28,15 +28,15 @@ import pa.iscde.filtersearch.view.SearchCategory;
 		}
 
 		public Object[] getChildren(Object parent) {
-			SearchCategory cat = (SearchCategory) parent;
+			ProviderCategory cat = (ProviderCategory) parent;
 			return cat.getHits().toArray();
 		}
 
 		public boolean hasChildren(Object parent) {
-			if(!(parent instanceof SearchCategory))
+			if(!(parent instanceof ProviderCategory))
 				return false;
 
-			SearchCategory cat = (SearchCategory) parent;
+			ProviderCategory cat = (ProviderCategory) parent;
 			return !cat.getHits().isEmpty();
 		}
 
