@@ -134,7 +134,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":pa.iscde.commands.internal.services.Command"/>
+                  <meta.attribute kind="java" basedOn=":pa.iscde.commands.services.Command"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -184,7 +184,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":pa.iscde.commands.internal.services.Command"/>
+                  <meta.attribute kind="java" basedOn=":pa.iscde.commands.services.Command"/>
                </appinfo>
             </annotation>
          </attribute>
