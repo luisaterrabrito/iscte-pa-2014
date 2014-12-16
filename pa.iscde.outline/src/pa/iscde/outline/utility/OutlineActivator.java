@@ -1,9 +1,14 @@
 package pa.iscde.outline.utility;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+
+import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 
 
 public class OutlineActivator implements BundleActivator{
@@ -43,6 +48,11 @@ public class OutlineActivator implements BundleActivator{
 		context.registerService(OutlineServices.class, services, null);
 	}
 
+	public void notifySelectedNode(ASTNode node) {
+		for(OutlineListener l : listeners)
+			l.itemSelected(node);
+	}
+	
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		instance = null;
