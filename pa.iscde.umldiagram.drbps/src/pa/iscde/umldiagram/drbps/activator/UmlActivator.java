@@ -36,6 +36,7 @@ public class UmlActivator implements BundleActivator {
 				UmlView umlview = UmlView.getInstance();
 				umlview.clearGraph();
 				umlview.paintUml(selection);
+				umlview.runActionSelection(selection);
 			}
 		});
 			

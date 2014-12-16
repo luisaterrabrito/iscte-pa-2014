@@ -6,29 +6,16 @@ package pa.iscde.umldiagram.drbps;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.zest.core.widgets.CGraphNode;
 import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.core.widgets.GraphConnection;
@@ -39,21 +26,18 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-import pa.iscde.packagediagram.extensibility.PackageDiagramActionExtension;
-import pa.iscde.umldiagram.drbps.ClickOption;
 import pa.iscde.umldiagram.drbps.UmlTheme.ClassType;
 import pa.iscde.umldiagram.drbps.utils.UmlVisitor;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
-import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserListener;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 /**
  * @author Nuno e Diogo
  */
-public class UmlView implements PidescoView, PackageDiagramActionExtension {
+public class UmlView implements PidescoView {
 	private static UmlView umlView;
 	private Graph umlGraph;
 	private Bundle bundle = FrameworkUtil.getBundle(UmlView.class);
@@ -68,6 +52,12 @@ public class UmlView implements PidescoView, PackageDiagramActionExtension {
 	private MouseListener opListener;
 
 	 
+	public Graph getUmlGraph() {
+		return umlGraph;
+	}
+
+
+
 	public UmlView() {
 		umlView = this;
 	}
@@ -111,7 +101,6 @@ public class UmlView implements PidescoView, PackageDiagramActionExtension {
 	 * @param selection = element selected on the project browser
 	 */
 	public void paintUml(Collection<SourceElement> selection) {
-		int aux = 0;
 		for(SourceElement e : selection){
 			PackageElement p = null;
 			//gets the next element
@@ -119,10 +108,7 @@ public class UmlView implements PidescoView, PackageDiagramActionExtension {
 			if(e.isPackage()){
 				p = (PackageElement)e;
 				//loop all java classes
-				if(p != null && aux == 0) {
-					run(p.getName());
-					aux++;
-				}
+				
 				for(SourceElement classes : p.getChildren()){
 					if(classes.isClass()){
 						//this method is responsable for representing the javaclass on UML graph
@@ -142,6 +128,7 @@ public class UmlView implements PidescoView, PackageDiagramActionExtension {
 		
 		umlGraph.applyLayout();
 		connectUml();
+		
 		}
 	}
 
@@ -281,9 +268,24 @@ public class UmlView implements PidescoView, PackageDiagramActionExtension {
 
 
 
-	@Override
+	public void runActionSelection(Collection<SourceElement> selection) {
+		for(SourceElement e : selection){
+			if(e.isPackage()){
+				PackageElement p = (PackageElement)e;
+				new UmlActionSelection().run(p.getName());
+				break;
+			}
+		}
+		
+		
+		
+	}
+
+	
+
+	/*@Override
 	public void run(String packageName) {
 		GraphNode g = new GraphNode(umlGraph, SWT.NONE);
 		g.setText("Package "+packageName+"");
-	}
+	}*/
 }
