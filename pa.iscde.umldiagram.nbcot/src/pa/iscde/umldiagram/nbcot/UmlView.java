@@ -58,8 +58,6 @@ public class UmlView implements PidescoView {
 	private ServiceReference<JavaEditorServices> ref = context.getServiceReference(JavaEditorServices.class);
 	private JavaEditorServices javaServices = context.getService(ref);
 	private ArrayList<Node> nodes = new ArrayList<Node>();
-	private HashMap<String, ChangeTheme> themes = new HashMap<String, ChangeTheme>();
-	private MouseListener opListener;
 
 	 
 	public UmlView() {
@@ -88,94 +86,13 @@ public class UmlView implements PidescoView {
 	@Override
 	public void createContents(Composite umlArea, Map<String, Image> imageMap) {
 		umlGraph = new Graph(umlArea, SWT.NONE);
-
-		loadColorThemeExtensions();
-		loadClickOptionExtensions();
-		Menu menu = new Menu(umlGraph);
-		Iterator it = themes.entrySet().iterator();
-		MenuItem item=null;
-	    while (it.hasNext()) {
-	        Map.Entry name = (Map.Entry)it.next();
-	        item = new MenuItem(menu, SWT.PUSH);
-			item.setText(name.getKey().toString());
-	        item.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					MenuItem aux = (MenuItem)e.getSource();
-					ChangeTheme cTheme = themes.get(aux.getText());
-						if(cTheme!=null){
-							for (Node n : nodes) {
-								if(cTheme.getTheme().getClassName()!=null){
-									if(n.getName().equals(cTheme.getTheme().getClassName())){
-										Color color = cTheme.getColor(cTheme.getTheme().getClassName());
-										if(color!=null){
-											n.getNode().setBackgroundColor(color);
-										}
-									}
-								}
-								if(cTheme.getTheme().getClassType()!=null){
-									if(n.getType() == cTheme.getTheme().getClassType()){
-										Color color = cTheme.getTheme().getTypeColor(cTheme.getTheme().getClassType());
-										if(color!=null){
-											n.getNode().setBackgroundColor(color);
-										}
-									}
-									
-								}
-							}
-					}
-				}
-			});
-	    }
-		
-		umlGraph.setMenu(menu);
-	}
-
-	private void loadClickOptionExtensions() {
-		IExtensionRegistry reg = Platform.getExtensionRegistry();
-		for(IExtension ext : reg.getExtensionPoint("pa.iscde.umldiagram.clickoption").getExtensions()) {
-			String name = ext.getLabel();
-			if(ext.getConfigurationElements().length>0){
-				IConfigurationElement element = ext.getConfigurationElements()[0];
-				try {
-
-					ClickOption op=(ClickOption)element.createExecutableExtension("class");
-					if(op.getAction()!=null)
-						opListener = (MouseListener)op.getAction();
-						umlGraph.addMouseListener(opListener);
-					
-				} catch (CoreException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		
 	}
 
 	public static UmlView getInstance() {
 		return umlView;
 	}
 
-	private void loadColorThemeExtensions() {
-		IExtensionRegistry reg = Platform.getExtensionRegistry();
-		for(IExtension ext : reg.getExtensionPoint("pa.iscde.umldiagram.colortheme").getExtensions()) {
-			String name = ext.getLabel();
-			//System.out.println(name);
-			if(ext.getConfigurationElements().length>0){
-				IConfigurationElement element = ext.getConfigurationElements()[0];
-				try {
-					UmlTheme t = (UmlTheme) element.createExecutableExtension("class");
-					themes.put(name, new ChangeTheme(t));
-				} catch (CoreException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		
-	}
+	
 	
 	
 	/**
@@ -270,7 +187,6 @@ public class UmlView implements PidescoView {
 		}else{
 			node.setText(prefix + cName);
 		}
-		MouseListener p;
 		
 		figure.setNode(node);
 		//GraphNode node = new GraphNode(umlGraph, SWT.NONE);
