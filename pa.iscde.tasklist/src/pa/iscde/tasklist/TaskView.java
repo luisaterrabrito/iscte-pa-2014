@@ -252,7 +252,8 @@ public class TaskView implements PidescoView {
 	        String line = br.readLine();
 	        while (line != null) {
 	            sb.append(line);
-	            sb.append(System.lineSeparator());
+//	            sb.append(System.lineSeparator());
+	            sb.append("\n");
 	            line = br.readLine();
 	        }
 	    } finally {
