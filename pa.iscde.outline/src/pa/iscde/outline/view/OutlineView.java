@@ -118,23 +118,23 @@ public class OutlineView implements PidescoView {
 		toolbar.setBounds(0, 0, 200, 70);
 		ToolItem toolItem1 = new ToolItem(toolbar, SWT.PUSH);
 		toolItem1.setText("Item1");
-		for (ButtonFilterProvider filter : getActiveButtonFilters()){
-			ToolItem aux = new ToolItem(toolbar, SWT.PUSH);
-			aux.setImage(filter.getButtonIcon());
-			aux.addSelectionListener(new SelectionListener() {
-
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					//applyfilter(filter.filterTree(node));
-				}
-
-				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-		}
+//		for (ButtonFilterProvider filter : ){
+//			ToolItem aux = new ToolItem(toolbar, SWT.PUSH);
+//			aux.setImage(filter.getButtonIcon());
+//			aux.addSelectionListener(new SelectionListener() {
+//
+//				@Override
+//				public void widgetSelected(SelectionEvent e) {
+//					applyfilter(filter.filterTree(node));
+//				}
+//
+//				@Override
+//				public void widgetDefaultSelected(SelectionEvent e) {
+//					// TODO Auto-generated method stub
+//
+//				}
+//			});
+//		}
 		
 		t = new Tree(viewArea, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		t.setLayoutData(new RowData(500,500));
