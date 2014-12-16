@@ -73,7 +73,7 @@ public class TaskView implements PidescoView {
 	private String[] views = {"Project", "Package", "Open File"};
 	private File currentFile;
 	private ArrayList<Category> catList;
-	private ASTVisitor visitor;
+//	private ASTVisitor visitor;
 	
 	/**
 	 * the constructor for this class, where the several ServiceReferences are instantiated
@@ -173,7 +173,7 @@ public class TaskView implements PidescoView {
 		}
 		
 		//Visitor
-		visitor = new ASTVisitor() {
+		ASTVisitor visitor = new ASTVisitor() {
 			
 			TableItem item = null;
 			
@@ -192,6 +192,9 @@ public class TaskView implements PidescoView {
 				
 				String tmp = fileText.substring(node.getStartPosition(), node.getStartPosition() + node.getLength());
 				String[] splitSpace = tmp.split(" ");
+				
+				System.out.println(tmp);
+				System.out.println("--------------------------");
 				
 				for(Category c: catList){
 					if(splitSpace[0].substring(2).equals(c.getTag())){
