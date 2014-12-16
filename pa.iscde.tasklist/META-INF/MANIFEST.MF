@@ -17,6 +17,7 @@ Import-Package: org.eclipse.zest.core.widgets,
  org.osgi.framework;version="1.8.0",
  pt.iscte.pidesco.extensibility,
  pt.iscte.pidesco.javaeditor.service
-Export-Package: pa.iscde.tasklist
+Export-Package: pa.iscde.tasklist,
+ pa.iscde.tasklist.extensibility
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: pa.iscde.tasklist.TaskActivator
