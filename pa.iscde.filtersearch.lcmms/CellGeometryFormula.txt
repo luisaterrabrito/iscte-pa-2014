@@ -1,0 +1,4 @@
+private double result(double g, double i_own, double i_others, double pn){
+	double result = (i_own / (i_others + pn))*g; 
+	return result;
+}
