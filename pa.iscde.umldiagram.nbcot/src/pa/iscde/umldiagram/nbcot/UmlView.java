@@ -5,31 +5,16 @@ package pa.iscde.umldiagram.nbcot;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.zest.core.widgets.CGraphNode;
 import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.core.widgets.GraphConnection;
@@ -39,7 +24,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
-import pa.iscde.umldiagram.nbcot.ClickOption;
+
 import pa.iscde.umldiagram.nbcot.UmlTheme.ClassType;
 import pa.iscde.umldiagram.nbcot.utils.UmlVisitor;
 import pt.iscte.pidesco.extensibility.PidescoView;
@@ -58,7 +43,7 @@ public class UmlView implements PidescoView {
 	private ServiceReference<JavaEditorServices> ref = context.getServiceReference(JavaEditorServices.class);
 	private JavaEditorServices javaServices = context.getService(ref);
 	private ArrayList<Node> nodes = new ArrayList<Node>();
-	private Vector<String> ret;
+	private String properties = "UmlView umlView (singleton), Graph umlGraph, Bundle bundle, ServiceReference<JavaEditorServices> ref, JavaEditorServices javaServices, ArrayList<Node> nodes";
 
 	 
 	public Graph getUmlGraph() {
@@ -131,7 +116,6 @@ public class UmlView implements PidescoView {
 		
 		umlGraph.applyLayout();
 		connectUml();
-		new Teste();
 		}
 	}
 
@@ -268,6 +252,10 @@ public class UmlView implements PidescoView {
 			  n.dispose();
 			}
 		}
+	}
+
+	public String getProperties() {
+		return properties;
 	}
 
 }
