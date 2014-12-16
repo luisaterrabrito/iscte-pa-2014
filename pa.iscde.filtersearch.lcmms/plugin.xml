@@ -5,6 +5,11 @@
          id="GeometryEquationID"
          name="Cell Geometry"
          point="pa.iscde.formulas.createformula">
+      <NewFormula
+            Category="Engineering"
+            addformula="pa.iscde.filtersearch.lcmms.CellGeometry"
+            formula_method="CellGeometryFormula.txt">
+      </NewFormula>
    </extension>
 
 </plugin>
