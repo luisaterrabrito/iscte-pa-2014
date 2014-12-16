@@ -27,5 +27,14 @@
             icon="icon.gif">
       </view>
    </extension>
+   <extension
+         id="pa.iscde.umldiagram.drbps"
+         name="pa.iscde.umldiagram.drbps"
+         point="pa.iscde.packagediagram.actionSelector">
+      <actionSelector
+            Name="pa.iscde.umldiagram.drbps.UmlActionSelection"
+            class="pa.iscde.umldiagram.drbps.UmlActionSelection">
+      </actionSelector>
+   </extension>
 
 </plugin>
