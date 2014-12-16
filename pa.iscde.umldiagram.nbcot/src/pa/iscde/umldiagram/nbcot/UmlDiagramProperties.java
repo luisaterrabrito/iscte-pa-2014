@@ -8,7 +8,7 @@ import org.eclipse.zest.core.widgets.Graph;
 import pa.iscde.configurator.model.interfaces.PropertyProvider;
 
 /**
- * 
+ * this class implements PropertyProvider from configurator setting the umldiagram plugin properties
  * @author Nuno Coelho e Diogo Peres
  *
  */
