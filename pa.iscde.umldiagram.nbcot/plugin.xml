@@ -32,9 +32,9 @@
          name="pa.iscde.umldiagram.nbcot"
          point="pa.iscde.configurator.propertyprovider">
       <provider
-            class="pa.iscde.umldiagram.nbcot.Teste">
+            class="pa.iscde.umldiagram.nbcot.UmlDiagramProperties">
          <view
-               id="pa.iscde.umldiagram.nbcot.view2">
+               id="pa.iscde.umldiagram.nbcot">
          </view>
       </provider>
    </extension>
