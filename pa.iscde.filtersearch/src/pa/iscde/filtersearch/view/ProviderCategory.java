@@ -11,12 +11,12 @@ import org.eclipse.swt.graphics.Image;
  * @authors LuisMurilhas & DavidAlmas
  */
 
-public class SearchCategory {
+public class ProviderCategory {
 	String name;
 	Image icon;
 	List<Object> hits = new ArrayList<>();
 
-	SearchCategory(String name, Image icon) {
+	ProviderCategory(String name, Image icon) {
 		this.name = name;
 		this.icon = icon;
 	}

@@ -11,7 +11,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-import pa.iscde.filtersearch.view.SearchCategory;
+import pa.iscde.filtersearch.view.ProviderCategory;
 import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.ClassElement;
@@ -77,7 +77,7 @@ public class ProjectBrowserSearchProvider implements SearchProvider {
 	 */
 	@Override
 	public Image setImage(Object object) {
-		if(object instanceof SearchCategory)
+		if(object instanceof ProviderCategory)
 			return pidescoServices.getImageFromPlugin("pa.iscde.filtersearch", "searchtool.gif");
 		else if(object instanceof PackageElement)
 			return pidescoServices.getImageFromPlugin("pa.iscde.filtersearch", "package_obj.gif");

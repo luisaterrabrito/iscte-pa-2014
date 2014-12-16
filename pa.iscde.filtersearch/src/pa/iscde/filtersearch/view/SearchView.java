@@ -48,29 +48,23 @@ public class SearchView implements PidescoView {
 
 	private final static String NO_RESULTS_FOUND = "No results found.";
 
-	private List<SearchProvider> providers = new ArrayList<>();
-	private List<SearchCategory> categories = new ArrayList<>();
+	private List<ProviderCategory> providersCategories = new ArrayList<>();
 	private Map<SearchProvider, ExternalImage> providerAndImageMap = new HashMap<SearchProvider, ExternalImage>();
-	private Map<Object, SearchProvider> provideAndObjectMap = new HashMap<Object, SearchProvider>();
+	private Map<Object, SearchProvider> providerAndObjectMap = new HashMap<Object, SearchProvider>();
 
+	private PidescoServices pidescoServices;
+	
 	private TreeViewer tree;	
 	private Text searchText;
 
-	private PidescoServices pidescoServices;
 
-
-	/**
-	 * Construtor da classe
-	 */
 	public SearchView() {
-
 		Bundle bundle = FrameworkUtil.getBundle(ProjectBrowserSearchProvider.class);
 		BundleContext context  = bundle.getBundleContext();
 		ServiceReference<PidescoServices> serviceReference_pidesco = context.getServiceReference(PidescoServices.class);
 		pidescoServices = context.getService(serviceReference_pidesco);
-		
-		getProviders();
 
+		getProviders();
 	}
 
 
@@ -84,7 +78,7 @@ public class SearchView implements PidescoView {
 
 		SearchProvider p = null;
 		String iconName = null;
-		
+
 		for(IExtension ext : extensions){
 			for(IConfigurationElement configurationElement : ext.getConfigurationElements()){
 				try {
@@ -93,7 +87,6 @@ public class SearchView implements PidescoView {
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
-				providers.add(p);
 				providerAndImageMap.put(p, new ExternalImage(iconName,ext.getContributor().getName()));
 			}
 		}
@@ -114,7 +107,7 @@ public class SearchView implements PidescoView {
 	}
 
 	/**
-	 * Cria a componente gráfico correspondente ao campo de pesquisa
+	 * Cria a componente gráfica correspondente ao campo de pesquisa
 	 * 
 	 * @param viewArea
 	 */
@@ -127,17 +120,14 @@ public class SearchView implements PidescoView {
 
 		searchText = new Text(viewArea, SWT.SINGLE | SWT.BORDER);
 		searchText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
 		searchText.addListener(SWT.Modify, new Listener() {
 
 			@Override
 			public void handleEvent(Event event) {
-
 				if(event.type == SWT.Modify){
 					Text text = (Text)event.widget;
 					loadCategories(text.getText());
 				}
-
 			}
 		});
 	}
@@ -152,7 +142,6 @@ public class SearchView implements PidescoView {
 	private void clearButtonLabel(Composite viewArea, Map<String, Image> images) {
 		Button clearButton = new Button(viewArea, SWT.RIGHT | SWT.NO_BACKGROUND);
 		clearButton.setImage(images.get("clear.gif"));
-
 		clearButton.addListener(SWT.Selection, new Listener() {
 
 			@Override
@@ -165,7 +154,7 @@ public class SearchView implements PidescoView {
 	}
 
 	/**
-	 * Cria a compoente gráfica corresponde à arvore de resultados
+	 * Cria a componente gráfica corresponde à arvore de resultados
 	 * 
 	 * @param viewArea
 	 */
@@ -177,9 +166,9 @@ public class SearchView implements PidescoView {
 		tree.expandAll();
 
 		GridData gridData = new GridData(GridData.FILL_BOTH | SWT.H_SCROLL | SWT.V_SCROLL);
-		tree.getTree().setLayoutData(gridData);
 		gridData.horizontalSpan =2;
-
+		tree.getTree().setLayoutData(gridData);
+		
 		tree.addDoubleClickListener(new IDoubleClickListener() {
 
 			@Override
@@ -187,13 +176,14 @@ public class SearchView implements PidescoView {
 				IStructuredSelection s = (IStructuredSelection) tree.getSelection();
 				if(s.size() == 1) {
 					Object element = s.getFirstElement();
-					SearchProvider provider = provideAndObjectMap.get(element);
+					SearchProvider provider = providerAndObjectMap.get(element);
 					provider.doubleClickAction(tree, element);
 				}
 			}
 		});
 	}
 
+	
 	/**
 	 * Carrega todas as categorias (nome do projecto) que utilizaram o ponto de extensão "SearchProvider".
 	 * Além disso, para cada objecto presente na lista de resultados de cada categoria, atribuí o provider correspondente e faz
@@ -201,43 +191,29 @@ public class SearchView implements PidescoView {
 	 * @param text
 	 */
 
-	private void loadCategories(String text) {
+	private void loadCategories(String text){
 
-		categories.clear();
+		providersCategories.clear();
 
 		for(Map.Entry<SearchProvider, ExternalImage> entry : providerAndImageMap.entrySet()){
-			
-			
-			SearchCategory category = new SearchCategory(entry.getKey().getClass().getSimpleName(), pidescoServices.getImageFromPlugin(entry.getValue().getPlugin(), entry.getValue().getImageName()));
-			
-			System.out.println("--------");
-			System.out.println(entry.getKey().getClass().getSimpleName());
-			System.out.println(entry.getValue().getImageName());
-			
+
+			ProviderCategory category = new ProviderCategory(entry.getKey().getClass().getSimpleName(), pidescoServices.getImageFromPlugin(entry.getValue().getPlugin(), entry.getValue().getImageName()));
 			category.hits = entry.getKey().getResults(text);
+
 			for(Object o : category.hits){
-				provideAndObjectMap.put(o, entry.getKey());
+				providerAndObjectMap.put(o, entry.getKey());
 			}
 			if(!category.hits.isEmpty())
-				categories.add(category);
+				providersCategories.add(category);
 		}
-		if(categories.isEmpty())
-			categories.add(new SearchCategory(NO_RESULTS_FOUND, null));
 
-		tree.setInput(categories);
+		if(providersCategories.isEmpty())
+			providersCategories.add(new ProviderCategory(NO_RESULTS_FOUND, null));
+
+		tree.setInput(providersCategories);
 		tree.expandAll();
 	}
 
-	
-	
-	
-	
-
-	/**
-	 *  ##########################################
-	 * 				OUTRAS CLASSES
-	 *  ##########################################
-	 */
 
 
 	/**
@@ -246,7 +222,7 @@ public class SearchView implements PidescoView {
 	 * 
 	 * @authors LuisMurilhas & DavidAlmas
 	 */
-	public class ViewLabelProvider implements DelegatingStyledCellLabelProvider.IStyledLabelProvider{
+	private class ViewLabelProvider implements DelegatingStyledCellLabelProvider.IStyledLabelProvider{
 
 
 		/**
@@ -266,7 +242,6 @@ public class SearchView implements PidescoView {
 				if(i < values.length - 1 || (values.length == 1 && element.toString().contains(searchText.getText())))
 					text.append(searchText.getText(),new StylerHighlighter());
 			}
-
 			return text;
 		}
 
@@ -276,19 +251,18 @@ public class SearchView implements PidescoView {
 		 */
 		public Image getImage(Object object) {
 
-			if(object instanceof SearchCategory) {
-				for(SearchCategory category : categories){
+			if(object instanceof ProviderCategory) {
+				for(ProviderCategory category : providersCategories){
 					if(object.equals(category))
 						return category.getIcon();
 				}
 			}
 			else {
-				for(Map.Entry<Object, SearchProvider> entry : provideAndObjectMap.entrySet()){
+				for(Map.Entry<Object, SearchProvider> entry : providerAndObjectMap.entrySet()){
 					if(entry.getKey().equals(object))
 						return entry.getValue().setImage(object);
 				}
 			}
-
 			return null;
 		}
 
@@ -316,7 +290,7 @@ public class SearchView implements PidescoView {
 	 * @authors LuisMurilhas & DavidAlmas
 	 *
 	 */
-	class StylerHighlighter extends Styler{
+	private class StylerHighlighter extends Styler{
 		public void applyStyles(TextStyle textStyle) {
 			textStyle.background = Display.getDefault().getSystemColor(SWT.COLOR_YELLOW);
 		}
