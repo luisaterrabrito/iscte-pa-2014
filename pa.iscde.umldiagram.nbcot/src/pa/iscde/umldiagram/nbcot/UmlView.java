@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -38,7 +39,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
-
 import pa.iscde.umldiagram.nbcot.ClickOption;
 import pa.iscde.umldiagram.nbcot.UmlTheme.ClassType;
 import pa.iscde.umldiagram.nbcot.utils.UmlVisitor;
@@ -58,8 +58,13 @@ public class UmlView implements PidescoView {
 	private ServiceReference<JavaEditorServices> ref = context.getServiceReference(JavaEditorServices.class);
 	private JavaEditorServices javaServices = context.getService(ref);
 	private ArrayList<Node> nodes = new ArrayList<Node>();
+	private Vector<String> ret;
 
 	 
+	public Graph getUmlGraph() {
+		return umlGraph;
+	}
+
 	public UmlView() {
 		umlView = this;
 	}
@@ -126,6 +131,7 @@ public class UmlView implements PidescoView {
 		
 		umlGraph.applyLayout();
 		connectUml();
+		new Teste();
 		}
 	}
 
@@ -252,13 +258,16 @@ public class UmlView implements PidescoView {
 
 	public synchronized void clearGraph() {
 		nodes.clear();
-		List<GraphConnection> connections = new ArrayList<GraphConnection>(umlGraph.getConnections());
-		for(GraphConnection c : connections){
-		  c.dispose();
-		}
-		List<GraphNode> nodes = new ArrayList<GraphNode>(umlGraph.getNodes());
-		for(GraphNode n : nodes){
-		  n.dispose();
+		if(umlGraph != null){
+			List<GraphConnection> connections = new ArrayList<GraphConnection>(umlGraph.getConnections());
+			for(GraphConnection c : connections){
+			  c.dispose();
+			}
+			List<GraphNode> nodes = new ArrayList<GraphNode>(umlGraph.getNodes());
+			for(GraphNode n : nodes){
+			  n.dispose();
+			}
 		}
 	}
+
 }

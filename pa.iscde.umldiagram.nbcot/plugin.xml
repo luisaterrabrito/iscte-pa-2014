@@ -27,5 +27,16 @@
             icon="icon.gif">
       </view>
    </extension>
+   <extension
+         id="pa.iscde.umldiagram.nbcot"
+         name="pa.iscde.umldiagram.nbcot"
+         point="pa.iscde.configurator.propertyprovider">
+      <provider
+            class="pa.iscde.umldiagram.nbcot.Teste">
+         <view
+               id="pa.iscde.umldiagram.nbcot.view2">
+         </view>
+      </provider>
+   </extension>
 
 </plugin>
