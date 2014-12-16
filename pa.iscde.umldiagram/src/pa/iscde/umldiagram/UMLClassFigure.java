@@ -14,6 +14,11 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.zest.core.widgets.CGraphNode;
 
+/**
+ * this class represents the java class in the uml diagram
+ * @author Nuno e Diogo
+ *
+ */
 public class UMLClassFigure extends Figure {
 	
 	private final String name;

@@ -7,6 +7,11 @@ import org.eclipse.zest.core.widgets.GraphNode;
 import pa.iscde.umldiagram.UmlTheme.ClassType;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 
+/**
+ * represents the object Node of the uml diagram
+ * @author Nuno e Diogo
+ *
+ */
 public class Node {
 	private GraphNode node;
 	private String name="";

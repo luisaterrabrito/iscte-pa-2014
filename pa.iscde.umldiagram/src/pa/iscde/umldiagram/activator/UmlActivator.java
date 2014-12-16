@@ -16,7 +16,7 @@ import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserListener;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 /**
- * 
+ * responsable to activate the umldiagram extension
  * @author Nuno e Diogo
  *
  */

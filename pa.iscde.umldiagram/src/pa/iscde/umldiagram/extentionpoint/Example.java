@@ -9,7 +9,11 @@ import org.eclipse.zest.core.widgets.Graph;
 import pa.iscde.umldiagram.ClickOption;
 
 
-
+/**
+ * Example of the implementation of the interface ClickOption
+ * @author Nuno e Diogo
+ *
+ */
 public class Example implements ClickOption{
 
 
