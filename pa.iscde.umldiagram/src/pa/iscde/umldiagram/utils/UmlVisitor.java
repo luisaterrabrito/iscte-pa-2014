@@ -17,6 +17,12 @@ import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
+
+/**
+ * this class is responsable to get the class info, using the ASTVisitor 
+ * @author Nuno e Diogo
+ *
+ */
 public class UmlVisitor extends ASTVisitor{
 
 	private ArrayList<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();

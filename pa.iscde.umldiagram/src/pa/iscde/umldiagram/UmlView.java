@@ -48,6 +48,9 @@ import pt.iscte.pidesco.projectbrowser.model.PackageElement;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 
 /**
+ * this class handles all the actions of umldiagram, this means:
+ * its responsable to find and run all the umldiagram extension points;
+ * its responsable to implement the main funcionality: paint the uml diagram and draw the connections
  * @author Nuno e Diogo
  */
 public class UmlView implements PidescoView {
@@ -145,7 +148,6 @@ public class UmlView implements PidescoView {
 						umlGraph.addMouseListener(opListener);
 					
 				} catch (CoreException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -161,14 +163,12 @@ public class UmlView implements PidescoView {
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
 		for(IExtension ext : reg.getExtensionPoint("pa.iscde.umldiagram.colortheme").getExtensions()) {
 			String name = ext.getLabel();
-			//System.out.println(name);
 			if(ext.getConfigurationElements().length>0){
 				IConfigurationElement element = ext.getConfigurationElements()[0];
 				try {
 					UmlTheme t = (UmlTheme) element.createExecutableExtension("class");
 					themes.put(name, new ChangeTheme(t));
 				} catch (CoreException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -242,16 +242,12 @@ public class UmlView implements PidescoView {
 		UmlVisitor visitor = new UmlVisitor();
 		javaServices.parseFile(classes.getFile(), visitor);
 		paintClass(classes, visitor);
-		//setListener();
 		
 	}
 	
 	private void paintClass(SourceElement classes, UmlVisitor visitor) {
 		String prefix = "";
 		String cName = classes.getName().replace(".java", "");
-
-		//System.out.println(":"+cName);
-
 		if(visitor.isInterface()) {
 			prefix = "<interface> ";
 		}
@@ -273,10 +269,8 @@ public class UmlView implements PidescoView {
 		MouseListener p;
 		
 		figure.setNode(node);
-		//GraphNode node = new GraphNode(umlGraph, SWT.NONE);
-		//node.setText("Class "+classes.getName().replace(".java", "")+"\n");
 		Node n = new Node(node, cName, classes, figure);
-		//if(themes.containsValue(null)){
+		
 		if(prefix.contains("<enum>")){
 			n.setType(ClassType.ENUM);
 		}else{
@@ -287,32 +281,23 @@ public class UmlView implements PidescoView {
 			}
 		}
 		
-			//figure.setBackgroundColor(themes.get(null).getColor(cName.getClass()));
-		//}
 		
 		nodes.add(n);
-		//node.setText(node.getText()+"---------------------------"+"\n");
-		//for(ClassInstanceCreation ins : )
 		for (int i = 0; i < visitor.getFields().size(); i++) {
 			Object field = visitor.getFields().get(i).fragments().get(0);
 			String fieldName = ((VariableDeclarationFragment) field).getName().toString();
-			//node.setText(node.getText()+fieldName+" :"+visitor.getFields().get(i).getType()+"\n");
 			n.addField(visitor.getFields().get(i).getType().toString());
 			figure.addNameField(fieldName+" :"+visitor.getFields().get(i).getType());
 			if(i==visitor.getFields().size()-1)
 				figure.drawLine();
 		}
 		
-		//figure.addNameField("______________________________________________");
-		//node.setText(node.getText()+"___________________________"+"\n");
 		for (int i = 0; i < visitor.getMethods().size(); i++) {
 			if(!visitor.getMethods().get(i).isConstructor()){
 				if(visitor.getMethods().get(i).getReturnType2()!=null){
 					figure.addNameMethod(visitor.getMethods().get(i).getName()+" :"+visitor.getMethods().get(i).getReturnType2().toString());;
-					//node.setText(node.getText()+"- "+visitor.getMethods().get(i).getName()+" :"+visitor.getMethods().get(i).getReturnType2().toString()+"\n");
 				}else{
 					figure.addNameMethod(visitor.getMethods().get(i).getName()+" : Void");
-					//node.setText(node.getText()+"- "+visitor.getMethods().get(i).getName()+" : Void"+"\n");
 				}
 			}
 		}
@@ -327,12 +312,8 @@ public class UmlView implements PidescoView {
 		n.setSuperClass(visitor.getSuperClass());
 		n.setImplementClasses(visitor.getImplementClasses());
 
-		
-
 	}
 
-
-	
 
 	public synchronized void clearGraph() {
 		nodes.clear();

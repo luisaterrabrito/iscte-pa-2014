@@ -4,6 +4,11 @@ import org.eclipse.swt.graphics.Color;
 
 import pa.iscde.umldiagram.UmlTheme;
 
+/**
+ * Example of the implementation of the interface UmlTheme
+ * @author Nuno e Diogo
+ *
+ */
 public class Default implements UmlTheme{
 
 	private String className="ObjetoJogo";
