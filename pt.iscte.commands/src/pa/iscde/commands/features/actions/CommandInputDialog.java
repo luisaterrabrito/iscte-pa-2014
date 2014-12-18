@@ -1,7 +1,5 @@
 package pa.iscde.commands.features.actions;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -13,7 +11,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-
 import pa.iscde.commands.controllers.KeyPressDetector;
 import pa.iscde.commands.controllers.KeyPressDetector.KeyUpListener;
 import pa.iscde.commands.services.CommandKey;
