@@ -14,16 +14,21 @@ public interface UmlTheme {
 	 * enum avaible to set classType
 	 */
 	public enum ClassType{
-		CLASS, ENUM, INTERFACE;
+		CLASS, ENUM, INTERFACE, ALL, NONE;
 	}
+
 	/**
-	 * 
-	 * @param className - simple class name
+	 * If you want to give a certain class a color, just set the classType NONE or NULL.
+	 * If you want to give a certain type of class a color, just set the classname empty or null and the classtype you want.
+	 * If you want to give a class name and type, this will only work if the class name and class type is correct.
+	 * If you want to give all classes a color, the classtype must be "ALL".
+	 * @param className- simple class name
 	 * example: class "MyClass.java" , className="MyClass"
-	 * className must be available in getter getClassName()
+	 * @param type - must be available in getter getClassType()
+	 * example: classType=interface
 	 * @return swt.color
 	 */
-	public Color getColor(String className);
+	public Color getColor(String className, ClassType type);
 	
 	/**
 	 * 
@@ -31,13 +36,7 @@ public interface UmlTheme {
 	 */
 	public String getClassName();
 	
-	/**
-	 * 
-	 * @param classType must be available in getter getClassType()
-	 * example: classType=interface
-	 * @return
-	 */
-	public Color getTypeColor(ClassType classType);
+	
 	
 	/**
 	 * 
