@@ -12,11 +12,12 @@ import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
+import pa.iscde.metrics.extensibility.DefaultVisitor;
 import pa.iscde.metrics.extensibility.Metricable;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 
-public class MetricsVisitor extends ASTVisitor {
+public class MetricsVisitor extends ASTVisitor implements DefaultVisitor{
 	private int methodCounter, physicalLineCounter, logicalLineCounter, staticMethodCounter,
 	packageCounter, interfaceCounter, classCounter, attributeCounter;
 	private CompilationUnit compilationUnit;
