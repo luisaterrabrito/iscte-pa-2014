@@ -2,6 +2,6 @@ package pa.iscde.metrics.extensibility;
 
 public interface Metricable {
 
-	public double calculateMetric();
+	public double calculateMetric(DefaultVisitor dv);
 	
 }

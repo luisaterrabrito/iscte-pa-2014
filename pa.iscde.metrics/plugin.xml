@@ -67,6 +67,10 @@
             implementation="pa.iscde.metrics.internal.metrics.InterfaceMetric"
             name="Number of interfaces">
       </metric>
+      <metric
+            implementation="pa.iscde.metrics.internal.metrics.LineTypeRatio"
+            name="Line Types Ratio">
+      </metric>
    </extension>
 
 </plugin>

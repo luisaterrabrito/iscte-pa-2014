@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import pa.iscde.metrics.extensibility.DefaultVisitor;
 import pa.iscde.metrics.extensibility.Metricable;
 import pa.iscde.metrics.internal.MetricsView;
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
@@ -15,7 +16,7 @@ public class PackagesMetric implements Metricable {
 	private PackageElement root = MetricsView.getInstance().getBrowserServices().getRootPackage();
 	double packageCounter;
 		
-	public double calculateMetric() {
+	public double calculateMetric(DefaultVisitor dv) {
 		
 		List<SourceElement> elements = new ArrayList<SourceElement>();
 		elements = MetricsView.getInstance().listElements(root);

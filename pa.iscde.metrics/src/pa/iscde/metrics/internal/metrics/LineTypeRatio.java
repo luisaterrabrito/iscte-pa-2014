@@ -2,12 +2,11 @@ package pa.iscde.metrics.internal.metrics;
 
 import pa.iscde.metrics.extensibility.DefaultVisitor;
 import pa.iscde.metrics.extensibility.Metricable;
-import pa.iscde.metrics.internal.MetricsView;
 
-public class ClassesMetric implements Metricable {
+public class LineTypeRatio implements Metricable {
 
 	public double calculateMetric(DefaultVisitor dv) {
-		return MetricsView.getInstance().getVisitor().getClassCounter();
+		return (double)dv.getLogicalLineCounter()/dv.getPhysicalLineCounter();
 	}
 
 }

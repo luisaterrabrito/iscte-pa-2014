@@ -21,6 +21,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import pa.iscde.metrics.extensibility.DefaultVisitor;
 import pa.iscde.metrics.extensibility.Metricable;
 import pa.iscde.metrics.internal.metrics.AttributesMetric;
 import pa.iscde.metrics.internal.metrics.ClassesMetric;
@@ -70,37 +71,6 @@ public class MetricsView implements PidescoView {
 
 		table.setHeaderVisible(true);
 
-		// Combo c = new Combo(table, SWT.READ_ONLY);
-		// c.setBounds(50, 50, 150, 65);
-		// String items[] = { "Package", "Class"};
-		// c.setItems(items);
-
-		// combo.addSelectionListener(new SelectionListener() {
-		// public void widgetSelected(SelectionEvent e) {
-		// System.out.println("Selected index: " + combo.getSelectionIndex() +
-		// ", selected item: " + combo.getItem(combo.getSelectionIndex()) +
-		// ", text content in the text field: " + combo.getText());
-		// }
-		//
-		// public void widgetDefaultSelected(SelectionEvent e) {
-		// System.out.println("Default selected index: " +
-		// combo.getSelectionIndex() + ", selected item: " +
-		// (combo.getSelectionIndex() == -1 ? "<null>" :
-		// combo.getItem(combo.getSelectionIndex())) +
-		// ", text content in the text field: " + combo.getText());
-		// String text = combo.getText();
-		// if(combo.indexOf(text) < 0) { // Not in the list yet.
-		// combo.add(text);
-		// // Re-sort
-		// String[] items = combo.getItems();
-		// Arrays.sort(items);
-		// combo.setItems(items);
-		// }
-		// }
-		// });
-
-		
-		
 		refresh();
 	}
 
@@ -165,14 +135,13 @@ public class MetricsView implements PidescoView {
 					Metricable m = (Metricable)  member.createExecutableExtension("implementation");
 					TableItem tableItem = new TableItem(table, SWT.NONE);
 					tableItem.setText(0, member.getAttribute("name"));
-					tableItem.setText(1, "" +  m.calculateMetric());
+					tableItem.setText(1, "" +  m.calculateMetric(visitor));
 
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		System.out.println("REFRESH!!!");
 	}
 
 }
