@@ -19,8 +19,10 @@ public class ProgrammaticSnippets{
 			for (IConfigurationElement snippet : ext.getConfigurationElements()) {
 				String name = snippet.getAttribute("name");
 				String newVersion = snippet.getAttribute("new");
-				if(name.equals("") || (f.checkIfNameAlreadyExists(name) && !newVersion.equals("true")))
+				if(name.equals("") || (f.checkIfNameAlreadyExists(name) && !newVersion.equals("true"))){
+					System.err.println("Snippet with name " + name + " already exists and new flag is not set to true, either change the name or set the flag to true.");
 					return;
+				}
 				String code = snippet.getAttribute("code");
 				String language = snippet.getAttribute("language");
 				if(language == null || language.replaceAll("\\s", "").equals(""))
