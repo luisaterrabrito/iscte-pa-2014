@@ -74,7 +74,37 @@ public class SnippetsView implements PidescoView {
 		viewArea.layout();
 	}
 	
-	protected SnippetCode getSnippetCode(){
+	public SnippetCode getSnippetCode(){
 		return snippetCodeView;
+	}
+	
+	public void saveButtonFunction(){
+		if (snippetCodeView != null)
+		snippetCodeView.saveButtonFunction();
+	}
+	
+	public void discardButtonFunction(){
+		if (snippetCodeView != null)
+		snippetCodeView.discardButtonFunction();
+	}
+	
+	public void useButtonFunction(){
+		if (snippetCodeView != null)
+		snippetCodeView.useButtonFunction();
+	}
+	
+	public void setFilterLanguage(String language){
+		if (snippetCodeView != null)
+			snippetCodeView.setLanguage(language);
+		else if (SnippetsExplorer.getInstance().isVisible()) {
+			SnippetsExplorer.getInstance().setLanguage(language);
+		}
+	}
+	
+	public void createNewSnippetCommand(String selectedText){
+		if (SnippetsExplorer.getInstance().isVisible()) {
+			SnippetsExplorer.getInstance().hideUnhide();
+			SnippetsView.getInstance().createSnippetCode(selectedText);
+		}
 	}
 }
