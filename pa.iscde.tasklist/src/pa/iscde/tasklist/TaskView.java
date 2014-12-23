@@ -27,6 +27,8 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -73,7 +75,6 @@ public class TaskView implements PidescoView {
 	private String[] views = {"Project", "Package", "Open File"};
 	private File currentFile;
 	private ArrayList<Category> catList;
-//	private ASTVisitor visitor;
 	
 	/**
 	 * the constructor for this class, where the several ServiceReferences are instantiated
@@ -131,12 +132,14 @@ public class TaskView implements PidescoView {
 	
 	/**
 	 * creates the view for this class
-	 * also saves the categories available to an array
+	 * also saves the categories available to an
+	private Category category; array
 	 * finally reads the comments to fill the table
 	 */
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
-		viewArea.setLayout(new FillLayout(1));
+		//viewArea.setLayout(new FillLayout(1));
+		viewArea.setLayout(new GridLayout(1, false));
 		
 		createComboBox(viewArea);
 		createTable(viewArea);
@@ -193,9 +196,6 @@ public class TaskView implements PidescoView {
 				String tmp = fileText.substring(node.getStartPosition(), node.getStartPosition() + node.getLength());
 				String[] splitSpace = tmp.split(" ");
 				
-				System.out.println(tmp);
-				System.out.println("--------------------------");
-				
 				for(Category c: catList){
 					if(splitSpace[0].substring(2).equals(c.getTag())){
 						
@@ -218,7 +218,7 @@ public class TaskView implements PidescoView {
 							item.setText(0, currentFile.getParentFile().getName());
 							item.setText(1, currentFile.getName().substring(0, currentFile.getName().indexOf(".")));
 							item.setText(3, tmp.substring(splitSpace[0].length() + splitSpace[1].length() + 2));
-							item.setText(4, c.getName());
+							item.setText(4, c.getTag());
 							if(c.getIcon() != null)
 								item.setImage(5, c.getIcon());
 							else
@@ -252,7 +252,6 @@ public class TaskView implements PidescoView {
 	        String line = br.readLine();
 	        while (line != null) {
 	            sb.append(line);
-//	            sb.append(System.lineSeparator());
 	            sb.append("\n");
 	            line = br.readLine();
 	        }
@@ -284,14 +283,14 @@ public class TaskView implements PidescoView {
 	
 	//Creates the combo box
 	private void createComboBox(Composite viewArea){
-			
+		
 		Composite c = new Composite(viewArea, SWT.NONE);
 		c.setLayout(new RowLayout());
 		
-		Label label = new Label(c, SWT.NONE | SWT.HORIZONTAL);
+		Label label = new Label(c, SWT.NONE | SWT.HORIZONTAL | SWT.CENTER);
 		label.setText("View Type: ");
 		
-		combo = new Combo(c, SWT.BORDER | SWT.DROP_DOWN | SWT.HORIZONTAL);
+		combo = new Combo(c, SWT.BORDER | SWT.DROP_DOWN | SWT.HORIZONTAL | SWT.CENTER);
 		for(String s: views)
 			combo.add(s);
 		combo.setText("Project");
@@ -329,6 +328,12 @@ public class TaskView implements PidescoView {
 	//Creates the table
 	private void createTable(Composite viewArea){
 		
+		GridData gridData = new GridData();
+		gridData.horizontalAlignment = SWT.FILL;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.verticalAlignment = SWT.FILL;
+		gridData.grabExcessVerticalSpace = true;
+		
 		table = new Table(viewArea, SWT.NONE);
 		
 		TableColumn packageCol = new TableColumn(table, SWT.NONE, 0);
@@ -351,6 +356,8 @@ public class TaskView implements PidescoView {
 		iconCol.setWidth(90);
 		
 		table.setHeaderVisible(true);
+		
+		table.setLayoutData(gridData);
 		
 		table.addMouseListener(new MouseListener() {
 			
