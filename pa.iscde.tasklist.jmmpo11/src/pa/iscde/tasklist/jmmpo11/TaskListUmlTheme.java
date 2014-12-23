@@ -13,7 +13,7 @@ public class TaskListUmlTheme implements UmlTheme{
 
 	@Override
 	public ClassType getClassType() {
-		return ClassType.CLASS;
+		return ClassType.INTERFACE;
 	}
 
 	@Override
