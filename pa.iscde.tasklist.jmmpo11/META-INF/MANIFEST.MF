@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Jmmpo11
+Bundle-SymbolicName: pa.iscde.tasklist.jmmpo11;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: pa.iscde.tasklist;bundle-version="1.0.0",
+ pa.iscde.umldiagram;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: org.eclipse.core.internal.resources,
+ org.eclipse.core.runtime;version="3.4.0",
+ org.eclipse.swt.graphics,
+ org.osgi.framework;version="1.8.0",
+ pt.iscte.pidesco.projectbrowser.model,
+ pt.iscte.pidesco.projectbrowser.service
