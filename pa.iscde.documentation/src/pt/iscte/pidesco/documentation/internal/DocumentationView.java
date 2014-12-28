@@ -1,8 +1,16 @@
 package pt.iscte.pidesco.documentation.internal;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Javadoc;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -19,18 +27,21 @@ import org.osgi.framework.ServiceReference;
 
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
-import pt.iscte.pidesco.documentation.internal.TagCommentImpl;
-import pt.iscte.pidesco.documentation.service.ITagComment;
+import pt.iscte.pidesco.documentation.service.ITagContentProvider;
 
 public class DocumentationView implements PidescoView {
 
+	private static final String TAGS_EXT_POINT_ID = "pa.iscde.documentation.tags";
+	
 	private static DocumentationView instance;
 
 	private JavaEditorServices javaServices;
 	//private ProjectBrowserServices browserServices;
 
 	private Browser browser;
-	private ClassDoc classDoc;
+	private ObjectDoc classDoc;
+	private Map<String, ITagContentProvider> activeTags = new HashMap<String, ITagContentProvider>();
+
 	
 	public DocumentationView() {
 		Bundle bundle = FrameworkUtil.getBundle(DocumentationView.class);
@@ -45,78 +56,18 @@ public class DocumentationView implements PidescoView {
 		instance = this;
 
 		browser = new Browser(viewArea, SWT.NONE);
-		browser.setText("<b>ola</b>");
 		
-		if (javaServices.getOpenedFile() != null){
-			this.fillView();
-		}
+		//if (javaServices.getOpenedFile() != null){
+		//	this.fillView();
+		//}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void fillView() {
 		this.cleanView();
 
-		classDoc = new ClassDoc();
+		classDoc = new ObjectDoc();
 
-		ASTVisitor visitor = new ASTVisitor() {
-
-			// TODO: Don't let doc except class and interfaces
-			
-			/**
-			 * Método que apanha os comentários
-			 */
-			@Override
-			public boolean visit(Javadoc node) {
-				// Condition to get properties of the class
-				if (node.getParent() instanceof TypeDeclaration) {
-					classDoc.setClassFullName(((TypeDeclaration) node.getParent()).getName().getFullyQualifiedName());
-
-					for (TagElement tag : (List<TagElement>) node.tags()) {
-						// get tag class description
-						for (Object fragment : tag.fragments()) {
-							if (tag.getTagName() == null)
-								classDoc.setComment(fragment.toString());
-							else {
-								// get all existing tags from class
-								ITagComment tagDefinition = new TagCommentImpl(tag.getTagName(), fragment.toString());
-								classDoc.getTags().add(tagDefinition);
-							}
-						}
-					}
-				}
-				
-				// Condition to get properties of the construtor TODO
-
-				
-				// Condition to get properties of the method
-				if (node.getParent() instanceof MethodDeclaration) {
-					MethodDoc methodDoc = new MethodDoc();
-					methodDoc.setMethodName(((MethodDeclaration) node.getParent()).getName().getFullyQualifiedName());
-
-					// get signiture TODO
-					
-					for (TagElement tag : (List<TagElement>) node.tags()) {
-						// get tag method description
-						for (Object fragment : tag.fragments()) {
-							if (tag.getTagName() == null)
-								methodDoc.setComment(fragment.toString());
-							else {
-								// get all existing tags from method
-								ITagComment tagDefinition = new TagCommentImpl(tag.getTagName(), fragment.toString());
-								methodDoc.getTags().add(tagDefinition);
-							}
-						}
-					}
-					
-					// Add Method to Class
-					classDoc.getListMethods().add(methodDoc);
-				}
-				
-				//browser.setText("<b>" + classDoc.toString() + "</b>");
-				return false;
-			}
-
-		};
+		ASTVisitor visitor = findDocumentation();
 		
 		if(javaServices.getOpenedFile() != null){
 			javaServices.parseFile(javaServices.getOpenedFile(), visitor);
@@ -125,11 +76,22 @@ public class DocumentationView implements PidescoView {
 		// Apanha e escreve todas as tags
 		// mas se apanhar uma tag de ponto de extensão, utiliza essa!!!
 
-		// Coloca Texto no Browser
+		IExtensionRegistry reg = Platform.getExtensionRegistry();
+		for (IExtension ext : reg.getExtensionPoint(TAGS_EXT_POINT_ID).getExtensions()) {
+			for (IConfigurationElement member : ext.getConfigurationElements()) {
+				try {
+					String tagName = member.getAttribute("name");
+					ITagContentProvider provider = (ITagContentProvider) member.createExecutableExtension("provider");
+
+					activeTags.put(tagName, provider);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		
 		
-		//browser.setText("<b>Teste</b>");
-		browser.setText(classDoc.toHTML().toString());
+		browser.setText(toHTML());
 	}
 	
 	public void cleanView() {
@@ -142,4 +104,113 @@ public class DocumentationView implements PidescoView {
 		return instance;
 	}
 
+	/**
+	 * Method responsable to visit every node to get the comments and tags
+	 * @return ASTVisitor
+	 */
+	private ASTVisitor findDocumentation() {
+		ASTVisitor visitor = new ASTVisitor() {
+
+			/**
+			 * Method that visit every node of Javadoc
+			 * @return
+			 */
+			@Override
+			@SuppressWarnings("unchecked")
+			public boolean visit(Javadoc node) {
+				// Condition to get properties of the class or interface
+				if (node.getParent() instanceof TypeDeclaration) {
+					classDoc.setFullName(((TypeDeclaration) node.getParent()).getName().getFullyQualifiedName());
+
+					for (TagElement tag : (List<TagElement>) node.tags()) {
+						String str = "";
+						for (Object fragment : tag.fragments())
+							str += fragment.toString() + " ";
+						
+						// get tag class description
+						if (tag.getTagName() == null)
+							classDoc.setComment(str);
+						else {
+							// get all existing tags from class
+							classDoc.getTags().put(tag.getTagName(), str);
+						}
+					}
+				}
+				
+				// Condition to get properties of the construtor TODO
+				
+				// Condition to get properties of a method
+				if (node.getParent() instanceof MethodDeclaration) {
+					MethodDoc methodDoc = new MethodDoc();
+					methodDoc.setName(((MethodDeclaration) node.getParent()).getName().getFullyQualifiedName());
+
+					// signature TODO
+					//methodDoc.setSignature(((MethodDeclaration) node.getParent()).getName().getIdentifier());
+					
+					for (TagElement tag : (List<TagElement>) node.tags()) {
+						String str = "";
+						for (Object fragment : tag.fragments())
+							str += fragment.toString() + " ";
+						
+						// get tag method description
+						if (tag.getTagName() == null)
+							methodDoc.setComment(str);
+						else {
+							// get all existing tags from method
+							methodDoc.getTags().put(tag.getTagName(), str);
+						}
+					}
+					
+					// Add Method to Class/Interface
+					classDoc.getMethods().add(methodDoc);
+				}
+				
+				return false;
+			}
+		};
+
+		return visitor;
+	}
+	
+	private String toHTML() {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("<br><font size='5'><b>Classe: </b>" + classDoc.getFullName() + "</font></br>");
+		sb.append("<br><font size='2'>" + classDoc.getComment() + "</font></br>");
+		sb.append("</br>");
+
+		Iterator<Entry<String, String>> itObjectTags = classDoc.getTags().entrySet().iterator();
+		while (itObjectTags.hasNext()) {
+			Map.Entry<String, String> pairs = (Map.Entry<String, String>) itObjectTags.next();
+			
+			if (activeTags.containsKey(pairs.getKey())) {
+				sb.append("<br><b>" + pairs.getKey() + ":</b>" + activeTags.get(pairs.getKey()).getHtml(pairs.getValue()) + "</br>");
+			} else {
+				sb.append("<br><b>" + pairs.getKey() + ":</b>" + pairs.getValue() + "</br>");
+			}
+		}
+
+		sb.append("<br>------------------------------------------------------------------------------------------</br>");
+		sb.append("</br>");
+		for (MethodDoc method : classDoc.getMethods()) {
+			sb.append("<br><font size='4'><b>Método: </b>" + method.getName() + "</font></br>");
+			//sb.append("<br><font size='1'>" + method.getSignature() + "</font></br>");
+			sb.append("<br><font size='2'>" + method.getComment() + "</font></br>");
+			sb.append("</br>");
+
+			Iterator<Entry<String, String>> itMethodTags = method.getTags().entrySet().iterator();
+			while (itMethodTags.hasNext()) {
+				Map.Entry<String, String> pairs = (Map.Entry<String, String>) itMethodTags.next();
+				
+				if (activeTags.containsKey(pairs.getKey())) {
+					sb.append("<br><b>" + pairs.getKey() + ":</b>" + activeTags.get(pairs.getKey()).getHtml(pairs.getValue()) + "</br>");
+				} else {
+					sb.append("<br><b>" + pairs.getKey() + ":</b>" + pairs.getValue() + "</br>");
+				}
+			}
+			sb.append("<br>------------------------------------------------------------------------------------------</br>");
+		}
+
+		return sb.toString();
+	}
 }
