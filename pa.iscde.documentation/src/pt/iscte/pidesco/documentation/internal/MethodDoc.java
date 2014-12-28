@@ -1,44 +1,50 @@
 package pt.iscte.pidesco.documentation.internal;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import pt.iscte.pidesco.documentation.service.ITagComment;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MethodDoc {
 	
-	public static ArrayList<String> validMethodTags = new ArrayList<String>(Arrays.asList("@param", "@retorno", "@excecao"));
-	public static MethodDoc instance;
-	
-	private String methodName;
+	private String name;
+	private String signature;
 	private String comment;
-	private List<ITagComment> tags;
 	
-	public String getMethodName() {
-		return methodName;
+	private Map<String, String> tags;
+	
+	public String getName() {
+		return name;
 	}
-	public void setMethodName(String methodName) {
-		this.methodName = methodName;
+	
+	public void setName(String name) {
+		this.name = name;
 	}
+	
+	public String getSignature() {
+		return signature;
+	}
+	
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
+	
 	public String getComment() {
 		return comment;
 	}
+
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	public List<ITagComment> getTags() {
-		if (tags == null)
-			tags = new ArrayList<ITagComment>();
 
+	public Map<String, String> getTags() {
+		if (tags == null)
+			tags = new HashMap<String, String>();
+		
 		return tags;
 	}
-	public void setTags(List<ITagComment> tags) {
+	
+	public void setTags(Map<String, String> tags) {
 		this.tags = tags;
 	}
-	
-	public static MethodDoc getInstance() {
-		return instance;
-	}
+
 
 }
