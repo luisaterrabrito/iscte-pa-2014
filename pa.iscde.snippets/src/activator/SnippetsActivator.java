@@ -59,7 +59,6 @@ public class SnippetsActivator implements BundleActivator {
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		instance = null;
 		this.context = null;
 		editorServices.removeListener(editorListener);
 	}

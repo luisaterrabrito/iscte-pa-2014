@@ -1,5 +1,6 @@
 package pa.iscde.snippets.external;
 
+import activator.SnippetsActivator;
 import pa.iscde.snippets.gui.SnippetsView;
 
 public class CommandExtensionHelper {
@@ -20,7 +21,8 @@ public class CommandExtensionHelper {
 		SnippetsView.getInstance().setFilterLanguage(language);
 	}
 
-	public static void createNewSnippetCommand(String selectedText) {
-		SnippetsView.getInstance().createNewSnippetCommand(selectedText);
+	public static void createNewSnippetCommand() {
+		SnippetsView.getInstance().createNewSnippetCommand(
+				SnippetsActivator.getInstance().getSelectedText());
 	}
 }

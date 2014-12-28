@@ -40,7 +40,15 @@ public class SnippetContextDefinitionManager {
 		if (definitions.containsKey(c.getTargetSnippet().toLowerCase())) {
 			ArrayList<ContextDefinitionInterface> a = definitions.get(c
 					.getTargetSnippet().toLowerCase());
-			a.add(c);
+			boolean contains = false;
+			for (int i = 0; i < a.size(); i++) {
+				if (a.get(i).getIdentifier().equals(c.getIdentifier())) {
+					contains = true;
+					break;
+				}
+			}
+			if (!contains)
+				a.add(c);
 		} else {
 			ArrayList<ContextDefinitionInterface> a = new ArrayList<>();
 			a.add(c);
@@ -69,8 +77,8 @@ public class SnippetContextDefinitionManager {
 	public ValidateMessage validateSnippet(FileOperations fileOP) {
 		this.fileOP = fileOP;
 		File openFile = SnippetsActivator.getInstance().getOpenFile();
-		if (definitions.containsKey(fileOP.getFileName().toLowerCase())
-				&& openFile != null) {
+		if (openFile != null && fileOP.getFileName() != null
+				&& definitions.containsKey(fileOP.getFileName().toLowerCase())) {
 			String message = "";
 			boolean isValid = true;
 			ArrayList<ContextDefinitionInterface> a = definitions.get(fileOP
@@ -81,7 +89,7 @@ public class SnippetContextDefinitionManager {
 				ValidateMessage validate = definition.validateContext(context);
 				if (!validate.isValid()) {
 					if (i > 0)
-						message.concat(System.lineSeparator());
+						message = message.concat(System.lineSeparator());
 					message = message.concat(definition.getIdentifier()
 							+ System.lineSeparator() + validate.getMessage());
 					isValid = false;
