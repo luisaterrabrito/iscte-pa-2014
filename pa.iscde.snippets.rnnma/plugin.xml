@@ -5,7 +5,7 @@
          point="pa.iscde.filtersearch.SearchProvider">
       <SearchProvider
             SearchProvider="pa.iscde.snippets.rnnma.extension.SnippetsSearchProvider"
-            iconName="pa.iscde.snippets.rnnma.SearchProvider1">
+            iconName="lemon.png">
       </SearchProvider>
    </extension>
 

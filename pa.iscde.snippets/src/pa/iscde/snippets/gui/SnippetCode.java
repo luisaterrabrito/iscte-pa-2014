@@ -51,12 +51,6 @@ public class SnippetCode extends Composite {
 		snippetNameTextBox.setEditable(false);
 		snippetCodeText.setEditable(false);
 		languagesCombo.setEnabled(false);
-		/*
-		 * Uncomment if Rui wins argument snippetCodeText.setBackground(new
-		 * Color(Display.getCurrent(), 255, 255, 255));
-		 * snippetNameTextBox.setBackground(new Color(Display.getCurrent(), 255,
-		 * 255, 255));
-		 */
 	}
 
 	public SnippetCode(Composite viewArea, int style, String s) {
@@ -403,12 +397,14 @@ public class SnippetCode extends Composite {
 	private void insertSnippet() {
 		ValidateMessage message = SnippetContextDefinitionManager.getInstance()
 				.validateSnippet(fileOperations);
-		if (message.isValid())
-			SnippetsActivator.getInstance().insertTextAt(
-					snippetCodeText.getText());
-		else
+		if (message.isValid()) {
+			if (!snippetCodeText.getText().equals("Insert Code Here..."))
+				SnippetsActivator.getInstance().insertTextAt(
+						snippetCodeText.getText());
+		} else {
 			MessageDialog.openError(viewArea.getShell(),
 					"Invalid Snippet Context", message.getMessage());
+		}
 	}
 
 	protected void saveButtonFunction() {
@@ -445,8 +441,7 @@ public class SnippetCode extends Composite {
 		HashMap<String, Variable> variables = getVariables();
 		if (!variables.isEmpty()) {
 			ValueInsertionDialog dialog = new ValueInsertionDialog(
-					viewArea.getShell(),
-					"Value Insertion",
+					viewArea.getShell(), "Value Insertion",
 					"Please fill the boxes with the appropriate values",
 					variables);
 			dialog.create();
@@ -459,8 +454,9 @@ public class SnippetCode extends Composite {
 	}
 
 	protected void setLanguage(String language) {
-		if(languagesCombo.indexOf(language) != -1 && languagesCombo.isEnabled()){ 
-				languagesCombo.select(languagesCombo.indexOf(language));
+		if (languagesCombo.indexOf(language) != -1
+				&& languagesCombo.isEnabled()) {
+			languagesCombo.select(languagesCombo.indexOf(language));
 		}
 	}
 }

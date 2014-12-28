@@ -46,7 +46,7 @@ public class SnippetsView implements PidescoView {
 	public File getSnippetsRootFolder() {
 		return snippetsRootFolder;
 	}
-	
+
 	protected void createExplorer() {
 		if (SnippetsExplorer.getInstance() == null)
 			new SnippetsExplorer(viewArea, SWT.NONE);
@@ -67,41 +67,45 @@ public class SnippetsView implements PidescoView {
 		snippetCodeView = new SnippetCode(viewArea, SWT.NONE, selectedText);
 		viewArea.layout();
 	}
-	
+
 	public void snippetCodeFromSearch(File snp) {
-		SnippetsExplorer.getInstance().hideUnhide();
-		snippetCodeView = new SnippetCode(snp, viewArea, SWT.NONE);
+		if (snippetCodeView != null)
+			snippetCodeView.discardButtonFunction();
+		if (snippetCodeView == null || snippetCodeView.isDisposed())
+			snippetCodeView = new SnippetCode(snp, viewArea, SWT.NONE);
+		if (SnippetsExplorer.getInstance().isVisible())
+			SnippetsExplorer.getInstance().hideUnhide();
 		viewArea.layout();
 	}
-	
-	public SnippetCode getSnippetCode(){
+
+	public SnippetCode getSnippetCode() {
 		return snippetCodeView;
 	}
-	
-	public void saveButtonFunction(){
+
+	public void saveButtonFunction() {
 		if (snippetCodeView != null)
-		snippetCodeView.saveButtonFunction();
+			snippetCodeView.saveButtonFunction();
 	}
-	
-	public void discardButtonFunction(){
+
+	public void discardButtonFunction() {
 		if (snippetCodeView != null)
-		snippetCodeView.discardButtonFunction();
+			snippetCodeView.discardButtonFunction();
 	}
-	
-	public void useButtonFunction(){
+
+	public void useButtonFunction() {
 		if (snippetCodeView != null)
-		snippetCodeView.useButtonFunction();
+			snippetCodeView.useButtonFunction();
 	}
-	
-	public void setFilterLanguage(String language){
+
+	public void setFilterLanguage(String language) {
 		if (snippetCodeView != null)
 			snippetCodeView.setLanguage(language);
 		else if (SnippetsExplorer.getInstance().isVisible()) {
 			SnippetsExplorer.getInstance().setLanguage(language);
 		}
 	}
-	
-	public void createNewSnippetCommand(String selectedText){
+
+	public void createNewSnippetCommand(String selectedText) {
 		if (SnippetsExplorer.getInstance().isVisible()) {
 			SnippetsExplorer.getInstance().hideUnhide();
 			SnippetsView.getInstance().createSnippetCode(selectedText);

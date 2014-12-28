@@ -11,9 +11,8 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Image;
 
-import activator.SnippetsActivator;
 import pa.iscde.filtersearch.providers.SearchProvider;
-import pa.iscde.snippets.gui.SnippetsView;
+import pa.iscde.snippets.external.SearchProviderExtensionHelper;
 
 public class SnippetsSearchProvider implements SearchProvider {
 	private static File snippetsRootFolder;
@@ -79,8 +78,7 @@ public class SnippetsSearchProvider implements SearchProvider {
 	public void doubleClickAction(TreeViewer tree, Object object) {
 		String selected = (String) object;
 		File selectedSnippet = snippets.get(selected);
-		SnippetsActivator.getInstance().openSnippetsView();
-		SnippetsView.getInstance().snippetCodeFromSearch(selectedSnippet);
+		SearchProviderExtensionHelper.snippetCodeFromSearch(selectedSnippet);
 	}
 
 }
