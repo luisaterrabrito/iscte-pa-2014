@@ -12,7 +12,7 @@ public class ObjectDoc {
 	
 	private Map<String, String> tags;
 	
-	//private List<ConstrutorDoc> listConstrutors;
+	private List<ConstrutorDoc> listConstrutors;
 	private List<MethodDoc> listMethods;
 	
 	public String getFullName() {
@@ -41,7 +41,18 @@ public class ObjectDoc {
 	public void setTags(Map<String, String> tags) {
 		this.tags = tags;
 	}
+
+	public List<ConstrutorDoc> getConstrutors() {
+		if (listConstrutors == null)
+			listConstrutors = new ArrayList<ConstrutorDoc>();
+		
+		return listConstrutors;
+	}
 	
+	public void setConstrutors(List<ConstrutorDoc> listConstrutors) {
+		this.listConstrutors = listConstrutors;
+	}
+
 	public List<MethodDoc> getMethods() {
 		if (listMethods == null)
 			listMethods = new ArrayList<MethodDoc>();

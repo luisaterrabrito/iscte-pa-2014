@@ -19,9 +19,9 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
  * 
  *
  */
-public class DocumentationActivator implements BundleActivator {
+public class Activator implements BundleActivator {
 
-	private static DocumentationActivator instance;
+	private static Activator instance;
 	private Set<IDocumentationListener> listeners;
 	private ServiceRegistration<IDocumentationServices> service;
 	
@@ -50,10 +50,10 @@ public class DocumentationActivator implements BundleActivator {
 			@Override
 			public void fileClosed(File file) {
 				DocumentationView view = DocumentationView.getInstance();
-				view.cleanView();
+				view.fillView();
 			}
-		});
 
+		});
 	}
 	
 	public void stop(BundleContext context) throws Exception {
@@ -61,7 +61,7 @@ public class DocumentationActivator implements BundleActivator {
 		service.unregister();
 	}
 	
-	public static DocumentationActivator getInstance() {
+	public static Activator getInstance() {
 		return instance;
 	}
 	

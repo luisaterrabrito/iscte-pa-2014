@@ -57,53 +57,51 @@ public class DocumentationView implements PidescoView {
 
 		browser = new Browser(viewArea, SWT.NONE);
 		
-		//if (javaServices.getOpenedFile() != null){
-		//	this.fillView();
-		//}
+		if (javaServices.getOpenedFile() != null){
+			this.fillView();
+		}
 	}
 
 	public void fillView() {
+		classDoc = new ObjectDoc();
+		
 		this.cleanView();
 
-		classDoc = new ObjectDoc();
+		if (javaServices.getOpenedFile() != null) {
+			ASTVisitor visitor = findDocumentation();
 
-		ASTVisitor visitor = findDocumentation();
-		
-		if(javaServices.getOpenedFile() != null){
 			javaServices.parseFile(javaServices.getOpenedFile(), visitor);
-		}
-		
-		// Apanha e escreve todas as tags
-		// mas se apanhar uma tag de ponto de extensão, utiliza essa!!!
 
-		IExtensionRegistry reg = Platform.getExtensionRegistry();
-		for (IExtension ext : reg.getExtensionPoint(TAGS_EXT_POINT_ID).getExtensions()) {
-			for (IConfigurationElement member : ext.getConfigurationElements()) {
-				try {
-					String tagName = member.getAttribute("name");
-					ITagContentProvider provider = (ITagContentProvider) member.createExecutableExtension("provider");
+			// Apanha e escreve todas as tags
+			// mas se apanhar uma tag de ponto de extensão, utiliza essa!!!
+			IExtensionRegistry reg = Platform.getExtensionRegistry();
+			for (IExtension ext : reg.getExtensionPoint(TAGS_EXT_POINT_ID).getExtensions()) {
+				for (IConfigurationElement member : ext.getConfigurationElements()) {
+					try {
+						String tagName = member.getAttribute("name");
+						ITagContentProvider provider = (ITagContentProvider) member.createExecutableExtension("provider");
 
-					activeTags.put(tagName, provider);
-				} catch (CoreException e) {
-					e.printStackTrace();
+						activeTags.put(tagName, provider);
+					} catch (CoreException e) {
+						e.printStackTrace();
+					}
 				}
 			}
+
+			// Set Text to the Browser in HTML
+			browser.setText(toHTML());
 		}
-		
-		
-		browser.setText(toHTML());
 	}
 	
 	public void cleanView() {
-		// TODO: clean browser view
-		browser.redraw();
+		StringBuilder sb = new StringBuilder();
+		sb.append("<br><font size='4'><b>Nenhum objeto em contexto!</b></font></br>");
+		sb.append("<br>Por favor, abra um ficheiro do Project Explorer...</br>");
 
+		browser.setText(sb.toString());
+		browser.redraw();
 	}
 	
-	public static DocumentationView getInstance() {
-		return instance;
-	}
-
 	/**
 	 * Method responsable to visit every node to get the comments and tags
 	 * @return ASTVisitor
@@ -137,32 +135,60 @@ public class DocumentationView implements PidescoView {
 					}
 				}
 				
-				// Condition to get properties of the construtor TODO
-				
-				// Condition to get properties of a method
+				// Condition to get properties of a contrutor/method
 				if (node.getParent() instanceof MethodDeclaration) {
-					MethodDoc methodDoc = new MethodDoc();
-					methodDoc.setName(((MethodDeclaration) node.getParent()).getName().getFullyQualifiedName());
+					MethodDeclaration method = (MethodDeclaration) node.getParent();
+					
+					if ( method.isConstructor() ) {
+						ConstrutorDoc construtorDoc = new ConstrutorDoc();
+						construtorDoc.setName(method.getName().getFullyQualifiedName());
 
-					// signature TODO
-					//methodDoc.setSignature(((MethodDeclaration) node.getParent()).getName().getIdentifier());
-					
-					for (TagElement tag : (List<TagElement>) node.tags()) {
-						String str = "";
-						for (Object fragment : tag.fragments())
-							str += fragment.toString() + " ";
-						
-						// get tag method description
-						if (tag.getTagName() == null)
-							methodDoc.setComment(str);
-						else {
-							// get all existing tags from method
-							methodDoc.getTags().put(tag.getTagName(), str);
+						// TODO: getSignature from Construtor
+						// By this way, with AST Node it's very difficult to get
+						//methodDoc.setSignature(((MethodDeclaration) node.getParent()).getName().getIdentifier());
+
+						for (TagElement tag : (List<TagElement>) node.tags()) {
+							String str = "";
+							for (Object fragment : tag.fragments())
+								str += fragment.toString() + " ";
+							
+							// get tag construtor description
+							if (tag.getTagName() == null)
+								construtorDoc.setComment(str);
+							else {
+								// get all existing tags from construtor
+								construtorDoc.getTags().put(tag.getTagName(), str);
+							}
 						}
-					}
+						
+						// Add Construtor to Class/Interface
+						classDoc.getConstrutors().add(construtorDoc);
 					
-					// Add Method to Class/Interface
-					classDoc.getMethods().add(methodDoc);
+					} else {
+						MethodDoc methodDoc = new MethodDoc();
+						methodDoc.setName(method.getName().getFullyQualifiedName());
+
+						// TODO: getSignature from Construtor
+						// By this way, with AST Node it's very difficult to get
+						//methodDoc.setSignature(((MethodDeclaration) node.getParent()).getName().getIdentifier());
+						
+						for (TagElement tag : (List<TagElement>) node.tags()) {
+							String str = "";
+							for (Object fragment : tag.fragments())
+								str += fragment.toString() + " ";
+							
+							// get tag method description
+							if (tag.getTagName() == null)
+								methodDoc.setComment(str);
+							else {
+								// get all existing tags from method
+								methodDoc.getTags().put(tag.getTagName(), str);
+							}
+						}
+						
+						// Add Method to Class/Interface
+						classDoc.getMethods().add(methodDoc);
+					}
 				}
 				
 				return false;
@@ -183,17 +209,38 @@ public class DocumentationView implements PidescoView {
 		while (itObjectTags.hasNext()) {
 			Map.Entry<String, String> pairs = (Map.Entry<String, String>) itObjectTags.next();
 			
-			if (activeTags.containsKey(pairs.getKey())) {
-				sb.append("<br><b>" + pairs.getKey() + ":</b>" + activeTags.get(pairs.getKey()).getHtml(pairs.getValue()) + "</br>");
+			if (activeTags.containsKey("@" + pairs.getKey())) {
+				sb.append("<br><b>" + pairs.getKey() + ":</b> " + activeTags.get(pairs.getKey()).getHtml(pairs.getValue()) + "</br>");
 			} else {
-				sb.append("<br><b>" + pairs.getKey() + ":</b>" + pairs.getValue() + "</br>");
+				sb.append("<br><b>" + pairs.getKey() + ":</b> " + pairs.getValue() + "</br>");
 			}
 		}
 
 		sb.append("<br>------------------------------------------------------------------------------------------</br>");
 		sb.append("</br>");
+		for (ConstrutorDoc construtor : classDoc.getConstrutors()) {
+			sb.append("<br><font size='3'><b>Construtor: </b>" + construtor.getName() + "</font></br>");
+			//sb.append("<br><font size='1'>" + construtor.getSignature() + "</font></br>");
+			sb.append("<br><font size='2'>" + construtor.getComment() + "</font></br>");
+			sb.append("</br>");
+
+			Iterator<Entry<String, String>> itMethodTags = construtor.getTags().entrySet().iterator();
+			while (itMethodTags.hasNext()) {
+				Map.Entry<String, String> pairs = (Map.Entry<String, String>) itMethodTags.next();
+				
+				if (activeTags.containsKey("@" + pairs.getKey())) {
+					sb.append("<br><b>" + pairs.getKey() + ":</b> " + activeTags.get(pairs.getKey()).getHtml(pairs.getValue()) + "</br>");
+				} else {
+					sb.append("<br><b>" + pairs.getKey() + ":</b> " + pairs.getValue() + "</br>");
+				}
+			}
+			sb.append("<br>------------------------------------------------------------------------------------------</br>");
+		}
+
+		sb.append("<br>------------------------------------------------------------------------------------------</br>");
+		sb.append("</br>");
 		for (MethodDoc method : classDoc.getMethods()) {
-			sb.append("<br><font size='4'><b>Método: </b>" + method.getName() + "</font></br>");
+			sb.append("<br><font size='3'><b>Método: </b>" + method.getName() + "</font></br>");
 			//sb.append("<br><font size='1'>" + method.getSignature() + "</font></br>");
 			sb.append("<br><font size='2'>" + method.getComment() + "</font></br>");
 			sb.append("</br>");
@@ -202,10 +249,10 @@ public class DocumentationView implements PidescoView {
 			while (itMethodTags.hasNext()) {
 				Map.Entry<String, String> pairs = (Map.Entry<String, String>) itMethodTags.next();
 				
-				if (activeTags.containsKey(pairs.getKey())) {
-					sb.append("<br><b>" + pairs.getKey() + ":</b>" + activeTags.get(pairs.getKey()).getHtml(pairs.getValue()) + "</br>");
+				if (activeTags.containsKey("@" + pairs.getKey())) {
+					sb.append("<br><b>" + pairs.getKey() + ":</b> " + activeTags.get(pairs.getKey()).getHtml(pairs.getValue()) + "</br>");
 				} else {
-					sb.append("<br><b>" + pairs.getKey() + ":</b>" + pairs.getValue() + "</br>");
+					sb.append("<br><b>" + pairs.getKey() + ":</b> " + pairs.getValue() + "</br>");
 				}
 			}
 			sb.append("<br>------------------------------------------------------------------------------------------</br>");
@@ -213,4 +260,9 @@ public class DocumentationView implements PidescoView {
 
 		return sb.toString();
 	}
+	
+	public static DocumentationView getInstance() {
+		return instance;
+	}
+
 }
