@@ -16,4 +16,4 @@ Require-Bundle: pa.iscde,
  org.eclipse.core.resources,
  com.google.guava;bundle-version="15.0.0"
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: pt.iscte.pidesco.documentation.internal.DocumentationActivator
+Bundle-Activator: pt.iscte.pidesco.documentation.internal.Activator
