@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import pa.iscde.documentation.extension.IDocumentationExportProvider;
-import pa.iscde.documentation.internal.ConstrutorDoc;
-import pa.iscde.documentation.internal.MethodDoc;
-import pa.iscde.documentation.internal.ObjectDoc;
+import pa.iscde.documentation.struture.ConstrutorDoc;
+import pa.iscde.documentation.struture.MethodDoc;
+import pa.iscde.documentation.struture.ObjectDoc;
 
 public class ExportToHTML implements IDocumentationExportProvider {
 

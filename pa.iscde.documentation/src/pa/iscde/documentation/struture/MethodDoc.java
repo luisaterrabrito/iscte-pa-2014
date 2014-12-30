@@ -1,11 +1,11 @@
-package pa.iscde.documentation.internal;
+package pa.iscde.documentation.struture;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ConstrutorDoc {
-
+public class MethodDoc {
+	
 	private String name;
 	private String signature;
 	private String comment;

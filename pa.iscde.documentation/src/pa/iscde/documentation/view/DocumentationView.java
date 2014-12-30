@@ -36,9 +36,9 @@ import org.osgi.framework.ServiceReference;
 
 import pa.iscde.documentation.extension.IDocumentationExportProvider;
 import pa.iscde.documentation.extension.ITagContentProvider;
-import pa.iscde.documentation.internal.ConstrutorDoc;
-import pa.iscde.documentation.internal.MethodDoc;
-import pa.iscde.documentation.internal.ObjectDoc;
+import pa.iscde.documentation.struture.ConstrutorDoc;
+import pa.iscde.documentation.struture.MethodDoc;
+import pa.iscde.documentation.struture.ObjectDoc;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
