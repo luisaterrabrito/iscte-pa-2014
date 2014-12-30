@@ -16,9 +16,9 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 /**
+ * This is the activator class for the Documentation ISCDE plugin
  * 
- * 
- *
+ * @author David Franco & João Gonçalves
  */
 public class Activator implements BundleActivator {
 
@@ -26,6 +26,12 @@ public class Activator implements BundleActivator {
 	private Set<IDocumentationListener> listeners;
 	private ServiceRegistration<IDocumentationServices> service;
 	
+	/**
+	 * The starting point of Documentation plugin.
+	 * 
+	 * @param context the ISCDE context in which Documentation will be placed
+	 * @throws exception
+	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 		instance = this;
@@ -63,11 +69,22 @@ public class Activator implements BundleActivator {
 		});
 	}
 	
+	/**
+	 * The ending point of Documentation plugin.
+	 * 
+	 * @param context the ISCDE context in which Documentation is placed
+	 * @throws exception
+	 */
 	public void stop(BundleContext context) throws Exception {
 		instance = null;
 		service.unregister();
 	}
 	
+	/**
+	 * Returns the instance of the Documentation activator
+	 * 
+	 * @return the activator instance
+	 */
 	public static Activator getInstance() {
 		return instance;
 	}
