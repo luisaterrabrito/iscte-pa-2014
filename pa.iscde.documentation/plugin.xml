@@ -21,14 +21,16 @@
          name="Documentation View"
          point="pt.iscte.pidesco.view">
       <view
-            class="pt.iscte.pidesco.documentation.internal.DocumentationView">
+            class="pa.iscde.documentation.internal.DocumentationView">
       </view>
    </extension>
    <extension
+         id="tags"
+         name="Documentation Tags"
          point="pa.iscde.documentation.tags">
       <tag
-            name="mytag"
-            provider="pa.iscde.documentation.TagContentProvider1">
+            name="version"
+            provider="pa.iscde.documentation.internal.tags.VersionTag">
       </tag>
    </extension>
 

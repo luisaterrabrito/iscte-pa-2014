@@ -1,6 +1,7 @@
-package pt.iscte.pidesco.documentation.internal;
+package pa.iscde.documentation.internal;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ConstrutorDoc {
@@ -9,7 +10,7 @@ public class ConstrutorDoc {
 	private String signature;
 	private String comment;
 	
-	private Map<String, String> tags;
+	private Map<String, List<String>> tags;
 	
 	public String getName() {
 		return name;
@@ -35,14 +36,14 @@ public class ConstrutorDoc {
 		this.comment = comment;
 	}
 
-	public Map<String, String> getTags() {
+	public Map<String, List<String>> getTags() {
 		if (tags == null)
-			tags = new HashMap<String, String>();
+			tags = new HashMap<String, List<String>>();
 		
 		return tags;
 	}
 	
-	public void setTags(Map<String, String> tags) {
+	public void setTags(Map<String, List<String>> tags) {
 		this.tags = tags;
 	}
 

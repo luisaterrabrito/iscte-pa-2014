@@ -1,4 +1,4 @@
-package pt.iscte.pidesco.documentation.internal;
+package pa.iscde.documentation.internal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ public class ObjectDoc {
 	private String fullName;
 	private String comment;
 	
-	private Map<String, String> tags;
+	private Map<String, List<String>> tags;
 	
 	private List<ConstrutorDoc> listConstrutors;
 	private List<MethodDoc> listMethods;
@@ -31,14 +31,14 @@ public class ObjectDoc {
 		this.comment = comment;
 	}
 	
-	public Map<String, String> getTags() {
+	public Map<String, List<String>> getTags() {
 		if (tags == null)
-			tags = new HashMap<String, String>();
+			tags = new HashMap<String, List<String>>();
 		
 		return tags;
 	}
 	
-	public void setTags(Map<String, String> tags) {
+	public void setTags(Map<String, List<String>> tags) {
 		this.tags = tags;
 	}
 

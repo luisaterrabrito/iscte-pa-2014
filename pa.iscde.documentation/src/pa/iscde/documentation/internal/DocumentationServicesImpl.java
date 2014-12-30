@@ -1,7 +1,7 @@
-package pt.iscte.pidesco.documentation.internal;
+package pa.iscde.documentation.internal;
 
-import pt.iscte.pidesco.documentation.service.IDocumentationListener;
-import pt.iscte.pidesco.documentation.service.IDocumentationServices;
+import pa.iscde.documentation.service.IDocumentationListener;
+import pa.iscde.documentation.service.IDocumentationServices;
 
 public class DocumentationServicesImpl implements IDocumentationServices {
 
@@ -16,3 +16,4 @@ public class DocumentationServicesImpl implements IDocumentationServices {
 	}
 
 }
+ 
