@@ -1,4 +1,4 @@
-package pa.iscde.documentation.internal;
+package pa.iscde.documentation.view;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,29 +20,42 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-import pa.iscde.documentation.service.ITagContentProvider;
+import pa.iscde.documentation.extension.IDocumentationExportProvider;
+import pa.iscde.documentation.extension.ITagContentProvider;
+import pa.iscde.documentation.internal.ConstrutorDoc;
+import pa.iscde.documentation.internal.MethodDoc;
+import pa.iscde.documentation.internal.ObjectDoc;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 public class DocumentationView implements PidescoView {
 
-	private static final String TAGS_EXT_POINT_ID = "pa.iscde.documentation.tags";
+	private static final String TAG_EXT_POINT_ID = "pa.iscde.documentation.tags";
+	private static final String EXP_EXT_POINT_ID = "pa.iscde.documentation.exports";
 	
 	private static DocumentationView instance;
-
+	
 	private JavaEditorServices javaServices;
-	//private ProjectBrowserServices browserServices;
 
 	private Browser browser;
-	private ObjectDoc classDoc;
+	private Button btnExport;
+	private ObjectDoc objectDoc;
 	private Map<String, ITagContentProvider> activeTags = new HashMap<String, ITagContentProvider>();
-
+	private List<IDocumentationExportProvider> exportToList = new ArrayList<IDocumentationExportProvider>();
 	
 	public DocumentationView() {
 		Bundle bundle = FrameworkUtil.getBundle(DocumentationView.class);
@@ -55,20 +68,27 @@ public class DocumentationView implements PidescoView {
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		instance = this;
-
-		browser = new Browser(viewArea, SWT.NONE);
 		
-		if (javaServices.getOpenedFile() != null){
-			this.fillView();
-		}
+		viewArea.setLayout(new GridLayout(1, false));
+		
+		btnExport = new Button(viewArea, SWT.PUSH);
+		btnExport.setText("Export As...");
+		btnExport.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false));
+		
+		browser = new Browser(viewArea, SWT.NONE);
+		browser.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		
+		this.fillView();
 	}
 
 	public void fillView() {
-		classDoc = new ObjectDoc();
+		objectDoc = new ObjectDoc();
 		
 		this.cleanView();
 
 		if (javaServices.getOpenedFile() != null) {
+			btnExport.setEnabled(true);
+			
 			ASTVisitor visitor = findDocumentation();
 
 			javaServices.parseFile(javaServices.getOpenedFile(), visitor);
@@ -76,7 +96,7 @@ public class DocumentationView implements PidescoView {
 			// Apanha e escreve todas as tags
 			// mas se apanhar uma tag de ponto de extensão, utiliza essa!!!
 			IExtensionRegistry reg = Platform.getExtensionRegistry();
-			for (IExtension ext : reg.getExtensionPoint(TAGS_EXT_POINT_ID).getExtensions()) {
+			for (IExtension ext : reg.getExtensionPoint(TAG_EXT_POINT_ID).getExtensions()) {
 				for (IConfigurationElement member : ext.getConfigurationElements()) {
 					try {
 						String tagName = member.getAttribute("name");
@@ -89,12 +109,73 @@ public class DocumentationView implements PidescoView {
 				}
 			}
 
+			for (IExtension ext : reg.getExtensionPoint(EXP_EXT_POINT_ID).getExtensions()) {
+				for (IConfigurationElement member : ext.getConfigurationElements()) {
+					try {
+						IDocumentationExportProvider provider = (IDocumentationExportProvider) member.createExecutableExtension("provider");
+
+						exportToList.add(provider);
+					} catch (CoreException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
 			// Set Text to the Browser in HTML
 			browser.setText(toHTML());
+			
+			// Set Export Button
+			btnExport.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event e) {
+					switch (e.type) {
+						case SWT.Selection:
+							final Display display = Display.getDefault();
+							final Shell shell = new Shell(display);
+							
+							FileDialog dialog = new FileDialog(shell, SWT.SAVE);
+							dialog.setText("Export To");
+							
+							String[] filterNames = new String[exportToList.size()];
+							String[] filterExtensions = new String[exportToList.size()];
+							for (int i = 0; i < exportToList.size(); i++) {
+								filterNames[i] = exportToList.get(i).getFilterName();
+								filterExtensions[i] = exportToList.get(i).getFilterExtension();
+							}
+							
+							dialog.setFilterNames(filterNames); 
+						    dialog.setFilterExtensions(filterExtensions);
+						    dialog.setFilterPath(System.getProperty("user.home"));
+						    dialog.setFileName("exportTo");
+						    
+						    String fullFileName = dialog.open();
+
+						    if (fullFileName != null) {
+						    	try {
+									exportToList.get(dialog.getFilterIndex()).saveToFile(fullFileName, objectDoc);
+								} catch (Exception e1) {
+									e1.printStackTrace();
+								}
+						    }
+						    
+							while (!shell.isDisposed()) {
+								if (!display.readAndDispatch())
+									display.sleep();
+							}
+							display.dispose();
+							
+							break;
+					}
+				}
+			});
+
+			//////////////////////////////////////////////////////
+
 		}
 	}
 	
 	public void cleanView() {
+		btnExport.setEnabled(false);
+		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<br><font size='4'><b>Nenhum objeto em contexto!</b></font></br>");
 		sb.append("<br>Por favor, abra um ficheiro do Project Explorer...</br>");
@@ -119,7 +200,7 @@ public class DocumentationView implements PidescoView {
 			public boolean visit(Javadoc node) {
 				// Condition to get properties of the class or interface
 				if (node.getParent() instanceof TypeDeclaration) {
-					classDoc.setFullName(((TypeDeclaration) node.getParent()).getName().getFullyQualifiedName());
+					objectDoc.setFullName(((TypeDeclaration) node.getParent()).getName().getFullyQualifiedName());
 
 					for (TagElement tag : (List<TagElement>) node.tags()) {
 						String str = "";
@@ -128,17 +209,17 @@ public class DocumentationView implements PidescoView {
 						
 						// get tag class description
 						if (tag.getTagName() == null)
-							classDoc.setComment(str);
+							objectDoc.setComment(str);
 						else {
 							// get all existing tags from class
-							if ( classDoc.getTags().containsKey(tag.getTagName()) ) {
-								classDoc.getTags().get(tag.getTagName()).add(str);
+							if ( objectDoc.getTags().containsKey(tag.getTagName()) ) {
+								objectDoc.getTags().get(tag.getTagName()).add(str);
 							}
 							else {
 								List<String> arr = new ArrayList<String>();
 								arr.add(str);
 								
-								classDoc.getTags().put(tag.getTagName(), arr);
+								objectDoc.getTags().put(tag.getTagName(), arr);
 							}
 						}
 					}
@@ -179,7 +260,7 @@ public class DocumentationView implements PidescoView {
 						}
 						
 						// Add Construtor to Class/Interface
-						classDoc.getConstrutors().add(construtorDoc);
+						objectDoc.getConstrutors().add(construtorDoc);
 					
 					} else {
 						MethodDoc methodDoc = new MethodDoc();
@@ -212,7 +293,7 @@ public class DocumentationView implements PidescoView {
 						}
 						
 						// Add Method to Class/Interface
-						classDoc.getMethods().add(methodDoc);
+						objectDoc.getMethods().add(methodDoc);
 					}
 				}
 				
@@ -226,18 +307,18 @@ public class DocumentationView implements PidescoView {
 	private String toHTML() {
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("<br><font size='6'><b><i>Classe: </i></b>" + classDoc.getFullName() + "</font>");
-		if ( classDoc.getComment().length() != 0 )
-			sb.append("<br><font size='2'>" + classDoc.getComment() + "</font>");
+		sb.append("<br><font size='6'><b><i>Classe: </i></b>" + objectDoc.getFullName() + "</font>");
+		if ( objectDoc.getComment().length() != 0 )
+			sb.append("<br><font size='2'>" + objectDoc.getComment() + "</font>");
 		sb.append("<br>");
 
-		if ( !classDoc.getTags().isEmpty() ) {
-			writeTagsToHtml(sb, classDoc.getTags().entrySet().iterator());
+		if ( !objectDoc.getTags().isEmpty() ) {
+			writeTagsToHtml(sb, objectDoc.getTags().entrySet().iterator());
 		}
 		sb.append("<br>------------------------------------------------------------------------------------------");
 
-		if ( !classDoc.getConstrutors().isEmpty() ) {
-			for (ConstrutorDoc construtor : classDoc.getConstrutors()) {
+		if ( !objectDoc.getConstrutors().isEmpty() ) {
+			for (ConstrutorDoc construtor : objectDoc.getConstrutors()) {
 				sb.append("<br><font size='4'><b><i>Construtor: </i></b>" + construtor.getName() + "</font>");
 				//sb.append("<br><font size='1'>" + construtor.getSignature() + "</font></br>");
 				if ( construtor.getComment() != null && construtor.getComment().length() > 0 )
@@ -249,8 +330,8 @@ public class DocumentationView implements PidescoView {
 			sb.append("<br>------------------------------------------------------------------------------------------");
 		}
 
-		if ( !classDoc.getMethods().isEmpty() ) {
-			for (MethodDoc method : classDoc.getMethods()) {
+		if ( !objectDoc.getMethods().isEmpty() ) {
+			for (MethodDoc method : objectDoc.getMethods()) {
 				sb.append("<br><font size='4'><b><i>Método: </i></b>" + method.getName() + "</font>");
 				//sb.append("<br><font size='1'>" + method.getSignature() + "</font></br>");
 				if ( method.getComment() != null && method.getComment().length() > 0 )

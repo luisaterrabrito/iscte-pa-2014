@@ -1,6 +1,6 @@
-package pa.iscde.documentation.internal.tags;
+package pa.iscde.documentation.extension.example;
 
-import pa.iscde.documentation.service.ITagContentProvider;
+import pa.iscde.documentation.extension.ITagContentProvider;
 
 public class VersionTag implements ITagContentProvider {
 
