@@ -1,6 +1,6 @@
 package pa.iscde.documentation.extension;
 
-import pa.iscde.documentation.internal.ObjectDoc;
+import pa.iscde.documentation.struture.ObjectDoc;
 
 public interface IDocumentationExportProvider {
 

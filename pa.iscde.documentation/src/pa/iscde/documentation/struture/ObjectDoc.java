@@ -1,4 +1,4 @@
-package pa.iscde.documentation.internal;
+package pa.iscde.documentation.struture;
 
 import java.util.ArrayList;
 import java.util.HashMap;
