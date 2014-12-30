@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="tags" name="JavaDoc tags" schema="schema/tags.exsd"/>
+   <extension-point id="exports" name="JavaDoc Exports" schema="schema/exports.exsd"/>
    <extension
          id="docTeam"
          name="Programador"
@@ -21,7 +22,7 @@
          name="Documentation View"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.documentation.internal.DocumentationView">
+            class="pa.iscde.documentation.view.DocumentationView">
       </view>
    </extension>
    <extension
@@ -30,8 +31,19 @@
          point="pa.iscde.documentation.tags">
       <tag
             name="version"
-            provider="pa.iscde.documentation.internal.tags.VersionTag">
+            provider="pa.iscde.documentation.extension.example.VersionTag">
       </tag>
+   </extension>
+   <extension
+         id="exports"
+         name="Documentation Exports"
+         point="pa.iscde.documentation.exports">
+      <exportTo
+            filterExtension="html"
+            filterName="HTML Files"
+            name="HTML"
+            provider="pa.iscde.documentation.extension.example.ExportToHTML">
+      </exportTo>
    </extension>
 
 </plugin>

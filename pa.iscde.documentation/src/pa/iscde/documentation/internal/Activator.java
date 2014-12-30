@@ -11,6 +11,7 @@ import org.osgi.framework.ServiceRegistration;
 
 import pa.iscde.documentation.service.IDocumentationListener;
 import pa.iscde.documentation.service.IDocumentationServices;
+import pa.iscde.documentation.view.DocumentationView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
@@ -37,6 +38,12 @@ public class Activator implements BundleActivator {
 
 			@Override
 			public void fileOpened(File file) {
+				DocumentationView view = DocumentationView.getInstance();
+				view.fillView();
+			}
+
+			@Override
+			public void fileSaved(File file) {
 				DocumentationView view = DocumentationView.getInstance();
 				view.fillView();
 			}

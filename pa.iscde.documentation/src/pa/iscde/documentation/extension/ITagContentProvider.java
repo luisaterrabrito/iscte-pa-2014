@@ -1,4 +1,4 @@
-package pa.iscde.documentation.service;
+package pa.iscde.documentation.extension;
 
 public interface ITagContentProvider {
 
