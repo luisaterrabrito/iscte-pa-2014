@@ -1,4 +1,4 @@
-package pt.iscte.pidesco.documentation.internal;
+package pa.iscde.documentation.internal;
 
 import java.io.File;
 import java.util.HashSet;
@@ -9,8 +9,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
-import pt.iscte.pidesco.documentation.service.IDocumentationListener;
-import pt.iscte.pidesco.documentation.service.IDocumentationServices;
+import pa.iscde.documentation.service.IDocumentationListener;
+import pa.iscde.documentation.service.IDocumentationServices;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 

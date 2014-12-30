@@ -1,5 +1,6 @@
-package pt.iscte.pidesco.documentation.internal;
+package pa.iscde.documentation.internal;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -25,9 +26,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import pa.iscde.documentation.service.ITagContentProvider;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
-import pt.iscte.pidesco.documentation.service.ITagContentProvider;
 
 public class DocumentationView implements PidescoView {
 
@@ -81,7 +82,7 @@ public class DocumentationView implements PidescoView {
 						String tagName = member.getAttribute("name");
 						ITagContentProvider provider = (ITagContentProvider) member.createExecutableExtension("provider");
 
-						activeTags.put(tagName, provider);
+						activeTags.put("@" + tagName, provider);
 					} catch (CoreException e) {
 						e.printStackTrace();
 					}
@@ -130,7 +131,15 @@ public class DocumentationView implements PidescoView {
 							classDoc.setComment(str);
 						else {
 							// get all existing tags from class
-							classDoc.getTags().put(tag.getTagName(), str);
+							if ( classDoc.getTags().containsKey(tag.getTagName()) ) {
+								classDoc.getTags().get(tag.getTagName()).add(str);
+							}
+							else {
+								List<String> arr = new ArrayList<String>();
+								arr.add(str);
+								
+								classDoc.getTags().put(tag.getTagName(), arr);
+							}
 						}
 					}
 				}
@@ -157,7 +166,15 @@ public class DocumentationView implements PidescoView {
 								construtorDoc.setComment(str);
 							else {
 								// get all existing tags from construtor
-								construtorDoc.getTags().put(tag.getTagName(), str);
+								if ( construtorDoc.getTags().containsKey(tag.getTagName()) ) {
+									construtorDoc.getTags().get(tag.getTagName()).add(str);
+								}
+								else {
+									List<String> arr = new ArrayList<String>();
+									arr.add(str);
+									
+									construtorDoc.getTags().put(tag.getTagName(), arr);
+								}
 							}
 						}
 						
@@ -182,7 +199,15 @@ public class DocumentationView implements PidescoView {
 								methodDoc.setComment(str);
 							else {
 								// get all existing tags from method
-								methodDoc.getTags().put(tag.getTagName(), str);
+								if ( methodDoc.getTags().containsKey(tag.getTagName()) ) {
+									methodDoc.getTags().get(tag.getTagName()).add(str);
+								}
+								else {
+									List<String> arr = new ArrayList<String>();
+									arr.add(str);
+									
+									methodDoc.getTags().put(tag.getTagName(), arr);
+								}
 							}
 						}
 						
@@ -201,64 +226,66 @@ public class DocumentationView implements PidescoView {
 	private String toHTML() {
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("<br><font size='5'><b>Classe: </b>" + classDoc.getFullName() + "</font></br>");
-		sb.append("<br><font size='2'>" + classDoc.getComment() + "</font></br>");
-		sb.append("</br>");
+		sb.append("<br><font size='6'><b><i>Classe: </i></b>" + classDoc.getFullName() + "</font>");
+		if ( classDoc.getComment().length() != 0 )
+			sb.append("<br><font size='2'>" + classDoc.getComment() + "</font>");
+		sb.append("<br>");
 
-		Iterator<Entry<String, String>> itObjectTags = classDoc.getTags().entrySet().iterator();
-		while (itObjectTags.hasNext()) {
-			Map.Entry<String, String> pairs = (Map.Entry<String, String>) itObjectTags.next();
-			
-			if (activeTags.containsKey("@" + pairs.getKey())) {
-				sb.append("<br><b>" + pairs.getKey() + ":</b> " + activeTags.get(pairs.getKey()).getHtml(pairs.getValue()) + "</br>");
-			} else {
-				sb.append("<br><b>" + pairs.getKey() + ":</b> " + pairs.getValue() + "</br>");
+		if ( !classDoc.getTags().isEmpty() ) {
+			writeTagsToHtml(sb, classDoc.getTags().entrySet().iterator());
+		}
+		sb.append("<br>------------------------------------------------------------------------------------------");
+
+		if ( !classDoc.getConstrutors().isEmpty() ) {
+			for (ConstrutorDoc construtor : classDoc.getConstrutors()) {
+				sb.append("<br><font size='4'><b><i>Construtor: </i></b>" + construtor.getName() + "</font>");
+				//sb.append("<br><font size='1'>" + construtor.getSignature() + "</font></br>");
+				if ( construtor.getComment() != null && construtor.getComment().length() > 0 )
+					sb.append("<br><font size='2'>" + construtor.getComment() + "</font>");
+				sb.append("<br>");
+	
+				writeTagsToHtml(sb, construtor.getTags().entrySet().iterator());
 			}
+			sb.append("<br>------------------------------------------------------------------------------------------");
 		}
 
-		sb.append("<br>------------------------------------------------------------------------------------------</br>");
-		sb.append("</br>");
-		for (ConstrutorDoc construtor : classDoc.getConstrutors()) {
-			sb.append("<br><font size='3'><b>Construtor: </b>" + construtor.getName() + "</font></br>");
-			//sb.append("<br><font size='1'>" + construtor.getSignature() + "</font></br>");
-			sb.append("<br><font size='2'>" + construtor.getComment() + "</font></br>");
-			sb.append("</br>");
-
-			Iterator<Entry<String, String>> itMethodTags = construtor.getTags().entrySet().iterator();
-			while (itMethodTags.hasNext()) {
-				Map.Entry<String, String> pairs = (Map.Entry<String, String>) itMethodTags.next();
-				
-				if (activeTags.containsKey("@" + pairs.getKey())) {
-					sb.append("<br><b>" + pairs.getKey() + ":</b> " + activeTags.get(pairs.getKey()).getHtml(pairs.getValue()) + "</br>");
-				} else {
-					sb.append("<br><b>" + pairs.getKey() + ":</b> " + pairs.getValue() + "</br>");
-				}
+		if ( !classDoc.getMethods().isEmpty() ) {
+			for (MethodDoc method : classDoc.getMethods()) {
+				sb.append("<br><font size='4'><b><i>Método: </i></b>" + method.getName() + "</font>");
+				//sb.append("<br><font size='1'>" + method.getSignature() + "</font></br>");
+				if ( method.getComment() != null && method.getComment().length() > 0 )
+					sb.append("<br><font size='2'>" + method.getComment() + "</font>");
+				sb.append("<br>");
+	
+				writeTagsToHtml(sb, method.getTags().entrySet().iterator());
 			}
-			sb.append("<br>------------------------------------------------------------------------------------------</br>");
+			sb.append("<br>------------------------------------------------------------------------------------------");
 		}
-
-		sb.append("<br>------------------------------------------------------------------------------------------</br>");
-		sb.append("</br>");
-		for (MethodDoc method : classDoc.getMethods()) {
-			sb.append("<br><font size='3'><b>Método: </b>" + method.getName() + "</font></br>");
-			//sb.append("<br><font size='1'>" + method.getSignature() + "</font></br>");
-			sb.append("<br><font size='2'>" + method.getComment() + "</font></br>");
-			sb.append("</br>");
-
-			Iterator<Entry<String, String>> itMethodTags = method.getTags().entrySet().iterator();
-			while (itMethodTags.hasNext()) {
-				Map.Entry<String, String> pairs = (Map.Entry<String, String>) itMethodTags.next();
-				
-				if (activeTags.containsKey("@" + pairs.getKey())) {
-					sb.append("<br><b>" + pairs.getKey() + ":</b> " + activeTags.get(pairs.getKey()).getHtml(pairs.getValue()) + "</br>");
-				} else {
-					sb.append("<br><b>" + pairs.getKey() + ":</b> " + pairs.getValue() + "</br>");
-				}
-			}
-			sb.append("<br>------------------------------------------------------------------------------------------</br>");
-		}
-
+		
 		return sb.toString();
+	}
+	
+	private void writeTagsToHtml(StringBuilder sb, Iterator<Entry<String, List<String>>> itTags) {
+		if ( itTags.hasNext() ) {
+			while (itTags.hasNext()) {
+				Map.Entry<String, List<String>> pairs = (Map.Entry<String, List<String>>) itTags.next();
+				
+				if (activeTags.containsKey(pairs.getKey())) {
+					sb.append(activeTags.get(pairs.getKey()).getHtmlTitle());
+					for (String str : pairs.getValue()) {
+						sb.append(activeTags.get(pairs.getKey()).getHtml(str));
+					}
+				} else {
+					sb.append("<br><font size='3'><b>" + pairs.getKey() + ":</font></b>");
+					for (String str : pairs.getValue()) {
+						sb.append("<br><font size='2'>&nbsp;&nbsp;&nbsp;&nbsp;" + str + "</font>");
+					}
+				}
+			}
+			
+			sb.append("<br>");
+		}
+		sb.append("<br>");
 	}
 	
 	public static DocumentationView getInstance() {
