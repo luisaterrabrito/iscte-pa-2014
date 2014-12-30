@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -49,13 +50,14 @@ public class DocumentationView implements PidescoView {
 	
 	private static DocumentationView instance;
 	
+	private Composite viewArea;
 	private JavaEditorServices javaServices;
 
 	private Browser browser;
 	private Button btnExport;
 	private ObjectDoc objectDoc;
 	private Map<String, ITagContentProvider> activeTags = new HashMap<String, ITagContentProvider>();
-	private List<IDocumentationExportProvider> exportToList = new ArrayList<IDocumentationExportProvider>();
+	private Map<String, IDocumentationExportProvider> activeExportToList = new HashMap<String, IDocumentationExportProvider>();
 	
 	public DocumentationView() {
 		Bundle bundle = FrameworkUtil.getBundle(DocumentationView.class);
@@ -68,14 +70,15 @@ public class DocumentationView implements PidescoView {
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		instance = this;
+
+		this.viewArea = viewArea;
+		this.viewArea.setLayout(new GridLayout(1, false));
 		
-		viewArea.setLayout(new GridLayout(1, false));
-		
-		btnExport = new Button(viewArea, SWT.PUSH);
+		btnExport = new Button(this.viewArea, SWT.PUSH);
 		btnExport.setText("Export As...");
 		btnExport.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false));
 		
-		browser = new Browser(viewArea, SWT.NONE);
+		browser = new Browser(this.viewArea, SWT.NONE);
 		browser.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
 		this.fillView();
@@ -104,19 +107,24 @@ public class DocumentationView implements PidescoView {
 
 						activeTags.put("@" + tagName, provider);
 					} catch (CoreException e) {
-						e.printStackTrace();
+						MessageBox messageBox = new MessageBox(viewArea.getShell(), SWT.ICON_ERROR | SWT.OK);
+						messageBox.setText("Error loading extension points!");
+						messageBox.open();
 					}
 				}
 			}
 
+			// Procura pelas extensões de exportação
 			for (IExtension ext : reg.getExtensionPoint(EXP_EXT_POINT_ID).getExtensions()) {
 				for (IConfigurationElement member : ext.getConfigurationElements()) {
 					try {
 						IDocumentationExportProvider provider = (IDocumentationExportProvider) member.createExecutableExtension("provider");
 
-						exportToList.add(provider);
+						activeExportToList.put(provider.getFilterExtension(), provider);
 					} catch (CoreException e) {
-						e.printStackTrace();
+						MessageBox messageBox = new MessageBox(viewArea.getShell(), SWT.ICON_ERROR | SWT.OK);
+						messageBox.setText("Error loading extension points!");
+						messageBox.open();
 					}
 				}
 			}
@@ -134,26 +142,30 @@ public class DocumentationView implements PidescoView {
 							
 							FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 							dialog.setText("Export To");
-							
-							String[] filterNames = new String[exportToList.size()];
-							String[] filterExtensions = new String[exportToList.size()];
-							for (int i = 0; i < exportToList.size(); i++) {
-								filterNames[i] = exportToList.get(i).getFilterName();
-								filterExtensions[i] = exportToList.get(i).getFilterExtension();
-							}
-							
-							dialog.setFilterNames(filterNames); 
-						    dialog.setFilterExtensions(filterExtensions);
-						    dialog.setFilterPath(System.getProperty("user.home"));
+							dialog.setFilterPath(System.getProperty("user.home"));
 						    dialog.setFileName("exportTo");
 						    
-						    String fullFileName = dialog.open();
+						    int i = 0;
+							String[] filterNames = new String[activeExportToList.size()];
+							String[] filterExtensions = new String[activeExportToList.size()];
 
+							for (IDocumentationExportProvider provider : activeExportToList.values()) {
+								filterNames[i] = provider.getFilterName();
+								filterExtensions[i] = provider.getFilterExtension();
+
+								i++;
+							}
+							dialog.setFilterNames(filterNames); 
+						    dialog.setFilterExtensions(filterExtensions);
+						    
+						    String fullFileName = dialog.open();
 						    if (fullFileName != null) {
 						    	try {
-									exportToList.get(dialog.getFilterIndex()).saveToFile(fullFileName, objectDoc);
-								} catch (Exception e1) {
-									e1.printStackTrace();
+						    		activeExportToList.get(dialog.getFilterExtensions()[dialog.getFilterIndex()]).saveToFile(fullFileName, objectDoc);
+								} catch (Exception ex) {
+									MessageBox messageBox = new MessageBox(viewArea.getShell(), SWT.ICON_ERROR | SWT.OK);
+									messageBox.setText("Error saving file:\n" + ex.getMessage());
+									messageBox.open();
 								}
 						    }
 						    
@@ -167,9 +179,6 @@ public class DocumentationView implements PidescoView {
 					}
 				}
 			});
-
-			//////////////////////////////////////////////////////
-
 		}
 	}
 	
