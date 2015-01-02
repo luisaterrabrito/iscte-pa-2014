@@ -4,13 +4,16 @@
 = Introduction =
 
 This plugin is used to create a new documentation tag for the Documentation View. To use this plugin, you'll need to provide a tag, with a name, and an implementation of the object ITagContentProvider, that consists giving a Title and a Description, both in HTML, if you consider that.
+
 If your tag exists in the file that is in context (open in Java Editor), you'll see your implementation of this in Documentation View.
 
 
 = Details =
 
    public String getHtmlTitle()
+
    In this method you will implement the title name that will appear in the Documentation View, when this tag exists.
 
    public StringBuilder getHtml(String description)
+
    In this method you will implement how you want the desctiption appear in the Documentation View, when the tag exists.
