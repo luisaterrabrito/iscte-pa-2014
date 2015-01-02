@@ -8,11 +8,13 @@ This plugin is used to create a new documentation tag for the Documentation View
 If your tag exists in the file that is in context (open in Java Editor), you'll see your implementation of this in Documentation View.
 
 
+
 = Details =
 
    public String getHtmlTitle()
 
    In this method you will implement the title name that will appear in the Documentation View, when this tag exists.
+
 
    public StringBuilder getHtml(String description)
 
