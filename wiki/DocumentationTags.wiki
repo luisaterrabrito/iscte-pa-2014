@@ -10,9 +10,7 @@ If your tag exists in the file that is in context (open in Java Editor), you'll 
 = Details =
 
    public String getHtmlTitle()
-
    In this method you will implement the title name that will appear in the Documentation View, when this tag exists.
 
    public StringBuilder getHtml(String description)
-
    In this method you will implement how you want the desctiption appear in the Documentation View, when the tag exists.
