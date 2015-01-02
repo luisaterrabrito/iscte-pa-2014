@@ -3,9 +3,9 @@
 
 = Introduction =
 
-This plugin is used to create a new documentation tag for the Documentation View. To use this plugin, you'll need to provide a tag, with a name, and an implementation of the interface ITagContentProvider, that consists giving a Title and a Description, both in HTML, if you consider that.
+This extension point is used to create a new documentation tag for the Documentation View. To use this extension, you'll need to provide a name for your extension, and an implementation of the interface ITagContentProvider, that consists giving a Title and a Description, both in HTML.
 
-If your tag exists in the file that is in context (open in Java Editor), you'll see your implementation of this in Documentation View.
+If your tag exists in the file that is in context (opened in Java Editor), you'll see your implementation of this extension in Documentation View.
 
 
 
