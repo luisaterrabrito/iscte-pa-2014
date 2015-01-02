@@ -18,4 +18,4 @@ If your tag exists in the file that is in context (opened in Java Editor), you'l
 
    public StringBuilder getHtml(String description)
 
-   In this method you will implement how you want the desctiption appear in the Documentation View, when the tag exists.
+   In this method you will implement how you want the description appear in the Documentation View, when the tag exists.
