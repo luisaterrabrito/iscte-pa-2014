@@ -15,6 +15,9 @@
          <appinfo>
             <meta.element />
          </appinfo>
+         <documentation>
+            This extension point is to register documentation tags.
+         </documentation>
       </annotation>
       <complexType>
          <sequence minOccurs="1" maxOccurs="unbounded">
@@ -48,18 +51,25 @@
    </element>
 
    <element name="tag">
+      <annotation>
+         <documentation>
+            This extension point is used to create a new documentation tag for the Documentation View. To use this extension, you&apos;ll need to provide a name for your extension, and an implementation of the interface ITagContentProvider, that consists giving a Title and a Description, both in HTML.
+
+If your tag exists in the file that is in context (opened in Java Editor), you&apos;ll see your implementation of this extension in Documentation View.
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Name for your extension.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="provider" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Interface ITagContentProvider that consists giving a Title and a Description, both in HTML.
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":pt.iscte.pidesco.documentation.service.ITagContentProvider"/>

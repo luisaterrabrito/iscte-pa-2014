@@ -9,12 +9,13 @@
          point="pa.iscde.team">
       <member
             name="David Franco"
-            quote="Be Bad!!!"
+            photo="DavidFranco.jpg"
+            quote="&quot;First, solve the problem. Then, write the code.&quot; (by John Johnson)"
             user="dgfoa">
       </member>
       <member
             name="João Gonçalves"
-            user="user">
+            user="jbdqg">
       </member>
    </extension>
    <extension
@@ -22,7 +23,8 @@
          name="Documentation View"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.documentation.view.DocumentationView">
+            class="pa.iscde.documentation.view.DocumentationView"
+            icon="DocumentationIcon.gif">
       </view>
    </extension>
    <extension
@@ -39,8 +41,6 @@
          name="Documentation Exports"
          point="pa.iscde.documentation.exports">
       <exportTo
-            filterExtension="html"
-            filterName="HTML Files"
             name="HTML"
             provider="pa.iscde.documentation.extension.example.ExportToHTML">
       </exportTo>

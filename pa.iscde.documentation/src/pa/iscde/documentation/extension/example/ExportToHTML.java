@@ -10,10 +10,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import pa.iscde.documentation.extension.IDocumentationExportProvider;
-import pa.iscde.documentation.struture.ConstrutorDoc;
-import pa.iscde.documentation.struture.MethodDoc;
-import pa.iscde.documentation.struture.ObjectDoc;
+import pa.iscde.documentation.structure.ConstrutorDoc;
+import pa.iscde.documentation.structure.MethodDoc;
+import pa.iscde.documentation.structure.ObjectDoc;
 
+/**
+ * This is a example of how to add documentation exports for the Documentation View.
+ * 
+ * @author João Gonçalves
+ * @version 01.00
+ */
 public class ExportToHTML implements IDocumentationExportProvider {
 
 	@Override
@@ -27,23 +33,23 @@ public class ExportToHTML implements IDocumentationExportProvider {
 	}
 
 	@Override
-	public void saveToFile(String fullfileName, ObjectDoc doc) throws Exception {
-		File file = new File(fullfileName);
+	public void saveToFile(String fullFileName, ObjectDoc documentation) throws Exception {
+		File file = new File(fullFileName);
 		
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("<br><font size='6'><b><i>Classe: </i></b>" + doc.getFullName() + "</font>");
-		if ( doc.getComment().length() != 0 )
-			sb.append("<br><font size='2'>" + doc.getComment() + "</font>");
+		sb.append("<br><font size='6'><b><i>Classe: </i></b>" + documentation.getName() + "</font>");
+		if ( documentation.getComment().length() != 0 )
+			sb.append("<br><font size='2'>" + documentation.getComment() + "</font>");
 		sb.append("<br>");
 
-		if ( !doc.getTags().isEmpty() ) {
-			writeTagsToHtml(sb, doc.getTags().entrySet().iterator());
+		if ( !documentation.getTags().isEmpty() ) {
+			writeTagsToHtml(sb, documentation.getTags().entrySet().iterator());
 		}
 		sb.append("<br>------------------------------------------------------------------------------------------");
 
-		if ( !doc.getConstrutors().isEmpty() ) {
-			for (ConstrutorDoc construtor : doc.getConstrutors()) {
+		if ( !documentation.getConstrutors().isEmpty() ) {
+			for (ConstrutorDoc construtor : documentation.getConstrutors()) {
 				sb.append("<br><font size='4'><b><i>Construtor: </i></b>" + construtor.getName() + "</font>");
 				if ( construtor.getComment() != null && construtor.getComment().length() > 0 )
 					sb.append("<br><font size='2'>" + construtor.getComment() + "</font>");
@@ -54,8 +60,8 @@ public class ExportToHTML implements IDocumentationExportProvider {
 			sb.append("<br>------------------------------------------------------------------------------------------");
 		}
 
-		if ( !doc.getMethods().isEmpty() ) {
-			for (MethodDoc method : doc.getMethods()) {
+		if ( !documentation.getMethods().isEmpty() ) {
+			for (MethodDoc method : documentation.getMethods()) {
 				sb.append("<br><font size='4'><b><i>Método: </i></b>" + method.getName() + "</font>");
 				if ( method.getComment() != null && method.getComment().length() > 0 )
 					sb.append("<br><font size='2'>" + method.getComment() + "</font>");

@@ -37,14 +37,21 @@ import org.osgi.framework.ServiceReference;
 
 import pa.iscde.documentation.extension.IDocumentationExportProvider;
 import pa.iscde.documentation.extension.ITagContentProvider;
-import pa.iscde.documentation.struture.ConstrutorDoc;
-import pa.iscde.documentation.struture.MethodDoc;
-import pa.iscde.documentation.struture.ObjectDoc;
+import pa.iscde.documentation.structure.ConstrutorDoc;
+import pa.iscde.documentation.structure.MethodDoc;
+import pa.iscde.documentation.structure.ObjectDoc;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
+/**
+ * This class is responsible for creating the Documentation View plugin for ISCDE IDE.
+ * 
+ * @author David Franco & João Gonçalves
+ * @version 01.00
+ */
 public class DocumentationView implements PidescoView {
 
+	// Extensions Points IDs
 	private static final String TAG_EXT_POINT_ID = "pa.iscde.documentation.tags";
 	private static final String EXP_EXT_POINT_ID = "pa.iscde.documentation.exports";
 	
@@ -59,6 +66,9 @@ public class DocumentationView implements PidescoView {
 	private Map<String, ITagContentProvider> activeTags = new HashMap<String, ITagContentProvider>();
 	private Map<String, IDocumentationExportProvider> activeExportToList = new HashMap<String, IDocumentationExportProvider>();
 	
+	/**
+	 * DocumentationView Construtor
+	 */
 	public DocumentationView() {
 		Bundle bundle = FrameworkUtil.getBundle(DocumentationView.class);
 		BundleContext context  = bundle.getBundleContext();
@@ -67,6 +77,12 @@ public class DocumentationView implements PidescoView {
 		javaServices = context.getService(refEditor);
 	}
 
+	/**
+	 * Creates Documentation View GUI
+	 * 
+	 * @param viewArea composite where the contents of the view should be added
+	 * @param imageMap map indexing the images contained in the "images" folder of the plugin 
+	 */
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		instance = this;
@@ -74,16 +90,24 @@ public class DocumentationView implements PidescoView {
 		this.viewArea = viewArea;
 		this.viewArea.setLayout(new GridLayout(1, false));
 		
+		// Add Export Button
 		btnExport = new Button(this.viewArea, SWT.PUSH);
 		btnExport.setText("Export As...");
 		btnExport.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false));
 		
+		// Add Browser
 		browser = new Browser(this.viewArea, SWT.NONE);
 		browser.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
+		// Fill the View
 		this.fillView();
 	}
 
+	/**
+	 * Method responsable to fill the Documentation View.
+	 * 
+	 * Is in here, that we look for extensions points.
+	 */
 	public void fillView() {
 		objectDoc = new ObjectDoc();
 		
@@ -96,8 +120,7 @@ public class DocumentationView implements PidescoView {
 
 			javaServices.parseFile(javaServices.getOpenedFile(), visitor);
 
-			// Apanha e escreve todas as tags
-			// mas se apanhar uma tag de ponto de extensão, utiliza essa!!!
+			// Get and Write all of the tags, but if caught an extension tag, uses that one
 			IExtensionRegistry reg = Platform.getExtensionRegistry();
 			for (IExtension ext : reg.getExtensionPoint(TAG_EXT_POINT_ID).getExtensions()) {
 				for (IConfigurationElement member : ext.getConfigurationElements()) {
@@ -114,7 +137,7 @@ public class DocumentationView implements PidescoView {
 				}
 			}
 
-			// Procura pelas extensões de exportação
+			// Get and Write all of the exportations
 			for (IExtension ext : reg.getExtensionPoint(EXP_EXT_POINT_ID).getExtensions()) {
 				for (IConfigurationElement member : ext.getConfigurationElements()) {
 					try {
@@ -182,34 +205,36 @@ public class DocumentationView implements PidescoView {
 		}
 	}
 	
-	public void cleanView() {
-		btnExport.setEnabled(false);
+	/**
+	 * Method responsable to clean/reset the Documentation View
+	 */
+	private void cleanView() {
+		if (!btnExport.isDisposed())
+			btnExport.setEnabled(false);
 		
-		StringBuilder sb = new StringBuilder();
-		sb.append("<br><font size='4'><b>Nenhum objeto em contexto!</b></font></br>");
-		sb.append("<br>Por favor, abra um ficheiro do Project Explorer...</br>");
-
-		browser.setText(sb.toString());
-		browser.redraw();
+		if (!browser.isDisposed()) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("<br><font size='4'><b>Nenhum objeto em contexto!</b></font></br>");
+			sb.append("<br>Por favor, abra um ficheiro do Project Explorer...</br>");
+	
+			browser.setText(sb.toString());
+		}
 	}
 	
 	/**
 	 * Method responsable to visit every node to get the comments and tags
+	 * 
 	 * @return ASTVisitor
 	 */
 	private ASTVisitor findDocumentation() {
 		ASTVisitor visitor = new ASTVisitor() {
 
-			/**
-			 * Method that visit every node of Javadoc
-			 * @return
-			 */
 			@Override
 			@SuppressWarnings("unchecked")
 			public boolean visit(Javadoc node) {
 				// Condition to get properties of the class or interface
 				if (node.getParent() instanceof TypeDeclaration) {
-					objectDoc.setFullName(((TypeDeclaration) node.getParent()).getName().getFullyQualifiedName());
+					objectDoc.setName(((TypeDeclaration) node.getParent()).getName().getFullyQualifiedName());
 
 					for (TagElement tag : (List<TagElement>) node.tags()) {
 						String str = "";
@@ -313,10 +338,15 @@ public class DocumentationView implements PidescoView {
 		return visitor;
 	}
 	
+	/**
+	 * Produce HTML to show in Documentation View
+	 * 
+	 * @return HTML to show in Documentation View
+	 */
 	private String toHTML() {
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("<br><font size='6'><b><i>Classe: </i></b>" + objectDoc.getFullName() + "</font>");
+		sb.append("<br><font size='6'><b><i>Classe: </i></b>" + objectDoc.getName() + "</font>");
 		if ( objectDoc.getComment().length() != 0 )
 			sb.append("<br><font size='2'>" + objectDoc.getComment() + "</font>");
 		sb.append("<br>");
@@ -355,6 +385,12 @@ public class DocumentationView implements PidescoView {
 		return sb.toString();
 	}
 	
+	/**
+	 * Write documentation tags to html to show in Documentation View
+	 *  
+	 * @param sb - StringBuilder in which will be added the documentation tags
+	 * @param itTags - Iterator with the tags information
+	 */
 	private void writeTagsToHtml(StringBuilder sb, Iterator<Entry<String, List<String>>> itTags) {
 		if ( itTags.hasNext() ) {
 			while (itTags.hasNext()) {
@@ -378,6 +414,11 @@ public class DocumentationView implements PidescoView {
 		sb.append("<br>");
 	}
 	
+	/**
+	 * Retrieves Documentation View
+	 * 
+	 * @return Documentation View instante
+	 */
 	public static DocumentationView getInstance() {
 		return instance;
 	}

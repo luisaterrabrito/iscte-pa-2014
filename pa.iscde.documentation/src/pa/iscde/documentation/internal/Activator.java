@@ -19,6 +19,7 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
  * This is the activator class for the Documentation ISCDE plugin
  * 
  * @author David Franco & João Gonçalves
+ * @version 01.00
  */
 public class Activator implements BundleActivator {
 
