@@ -109,7 +109,7 @@ public class ConfiguratorView implements PidescoView {
 		table = new Table(comp, SWT.BORDER | SWT.V_SCROLL
 				| SWT.H_SCROLL);
 		table.setHeaderVisible(true);
-		table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL,300));
+		table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL,100));
 		String[] titles = { "Propriedades", "Descrição" };
 
 		for (int loopIndex = 0; loopIndex < titles.length; loopIndex++) {
