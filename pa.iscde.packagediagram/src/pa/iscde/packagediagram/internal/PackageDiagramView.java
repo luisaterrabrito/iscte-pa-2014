@@ -109,7 +109,7 @@ public class PackageDiagramView implements PidescoView {
 	 * Refresh the new colors from tool
 	 * @param key
 	 */
-	public void refreshColors(String key) {
+	private void refreshColors(String key) {
 
 		if (colorsMap.containsKey(key)) {
 			ChangeColor changeColor = colorsMap.get(key);
@@ -124,7 +124,7 @@ public class PackageDiagramView implements PidescoView {
 	 * @param key
 	 * @param packageName
 	 */
-	public void refreshActions(String key, String packageName) {
+	private void refreshActions(String key, String packageName) {
 
 		if (actionsMap.containsKey(key)) {
 			ChangeAction changeAction = actionsMap.get(key);
@@ -244,7 +244,7 @@ public class PackageDiagramView implements PidescoView {
 	/**
 	 * Loads all action extensions
 	 */
-	public void loadActionColor() {
+	private void loadActionColor() {
 
 		String label;
 
@@ -275,7 +275,7 @@ public class PackageDiagramView implements PidescoView {
 	/**
 	 * Choose the action
 	 */
-	public static class ChangeAction {
+	private static class ChangeAction {
 		private PackageDiagramActionExtension tempPcae;
 
 		public ChangeAction(PackageDiagramActionExtension pcae) {
