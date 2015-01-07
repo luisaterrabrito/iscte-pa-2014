@@ -5,7 +5,7 @@
    <extension-point id="dependencystyle" name="Dependency Style" schema="schema/dependencyStyle.exsd"/>
    <extension
          id="idConfigurator"
-         name="Configurator"
+         name="Team Identification"
          point="pa.iscde.team">
           <member
             name="João Medeiros"
@@ -20,7 +20,7 @@
    </extension>
    <extension
          id="configurator"
-         name="configurator"
+         name="Configurator View"
          point="pt.iscte.pidesco.view">
       <view
             class="pa.iscde.configurator.view.ConfiguratorView">
@@ -28,7 +28,7 @@
    </extension>
    <extension
          id="propertyprovider"
-         name="Property Provider"
+         name="Property Table"
          point="pa.iscde.configurator.propertyprovider">
       <provider
             class="pa.iscde.configurator.model.interfaces.PropertyProviderImpl">
@@ -39,12 +39,14 @@
    </extension>
    <extension
          id="dependencystyle"
+         name="Custom Style"
          point="pa.iscde.configurator.dependencystyle">
       <styler
             class="pa.iscde.configurator.model.interfaces.DependencyStyleDefault">
       </styler>
    </extension>
    <extension
+         name="Custom Style"
          point="pa.iscde.configurator.dependencystyle">
       <styler
             class="pa.iscde.configurator.model.interfaces.DependencyStyleTeste">
