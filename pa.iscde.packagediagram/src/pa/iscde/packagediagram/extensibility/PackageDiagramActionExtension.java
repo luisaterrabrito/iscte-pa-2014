@@ -10,7 +10,7 @@ public interface PackageDiagramActionExtension {
 	 * @see <b>Example:</b>
 	 * 
 	 * <pre>public void(String packageName) {</pre>
-	 *		<pre><pre>system.out.println(packaName);</pre></pre>
+	 *		<pre><pre>system.out.println(packageName);</pre></pre>
 	 *} 		
 	 */
 	

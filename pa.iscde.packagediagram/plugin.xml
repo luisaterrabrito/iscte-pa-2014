@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="colorSelector" name="color selector" schema="schema/colorSelector.exsd"/>
-   <extension-point id="actionSelector" name="action selector" schema="schema/actionSelector.exsd"/>
+   <extension-point id="colorSelector" name="Color Selector" schema="schema/colorSelector.exsd"/>
+   <extension-point id="actionSelector" name="Action Selector" schema="schema/actionSelector.exsd"/>
    <extension
          id="teampackages"
          name="Team Packages"
