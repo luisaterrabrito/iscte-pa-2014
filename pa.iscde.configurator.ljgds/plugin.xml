@@ -3,7 +3,7 @@
 <plugin>
    <extension
          id="pa.iscde.configurator.ljgds.formularesolvente"
-         name="FormulaResolvente"
+         name="Formula Resolvente"
          point="pa.iscde.packagediagram.colorSelector">
    </extension>
 
