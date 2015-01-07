@@ -65,13 +65,14 @@
       </tool>
    </extension>
    <extension
+         name="Create Category"
          point="pa.iscde.formulas.createcategory">
       <AddCategory
             Name="Exemple">
       </AddCategory>
    </extension>
    <extension
-         name="Formulas"
+         name="Create Formula"
          point="pa.iscde.formulas.createformula">
       <NewFormula
             Category="Basics"
@@ -155,6 +156,7 @@
       </NewFormula>
    </extension>
    <extension
+         name="Equation Draw"
          point="pa.iscde.formulas.newEquationToDraw">
       <newOperation
             newOperation="pa.iscde.formulas.draw.types.MathSqrt">

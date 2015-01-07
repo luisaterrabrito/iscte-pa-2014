@@ -23,5 +23,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: pa.iscde.formulas.activator.FormulasActivator
 Export-Package: pa.iscde.formulas,
  pa.iscde.formulas.draw,
+ pa.iscde.formulas.extensibility,
  pa.iscde.formulas.util,
  pa.iscde.formulas.view
