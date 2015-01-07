@@ -30,7 +30,7 @@
       </view>
    </extension>
    <extension
-         name="Default"
+         name="Change Theme"
          point="pa.iscde.umldiagram.colortheme">
       <theme
             class="pa.iscde.umldiagram.extentionpoint.Default"
@@ -38,7 +38,7 @@
       </theme>
    </extension>
    <extension
-         name="Example"
+         name="Click Option"
          point="pa.iscde.umldiagram.clickoption">
       <coption
             class="pa.iscde.umldiagram.extentionpoint.Example">
