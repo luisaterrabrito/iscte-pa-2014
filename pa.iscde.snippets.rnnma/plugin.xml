@@ -2,6 +2,8 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
+         id="searchSnippets"
+         name="Search Snippets"
          point="pa.iscde.filtersearch.SearchProvider">
       <SearchProvider
             SearchProvider="pa.iscde.snippets.rnnma.extension.SnippetsSearchProvider"
