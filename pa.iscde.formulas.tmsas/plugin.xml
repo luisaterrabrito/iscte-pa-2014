@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
+         name="Search Provider"
          point="pa.iscde.filtersearch.SearchProvider">
       <SearchProvider
             SearchProvider="pa.iscde.formulas.tmsas.MathSearch"
