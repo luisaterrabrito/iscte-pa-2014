@@ -3,7 +3,7 @@
 <plugin>
    <extension
          id="snippetsCommands"
-         name="Snippets Commands"
+         name="Snippets Shortcuts"
          point="pa.iscde.commands.command">
       <command_view
             alt_key="false"
