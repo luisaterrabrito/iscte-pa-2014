@@ -21,5 +21,13 @@
             class="pa.iscde.outline.view.OutlineView">
       </view>
    </extension>
+   <extension
+         name="Button Filter"
+         point="pa.iscde.outline.buttonFilter">
+   </extension>
+   <extension
+         name="Custom Icon"
+         point="pa.iscde.outline.customIcon">
+   </extension>
 
 </plugin>
