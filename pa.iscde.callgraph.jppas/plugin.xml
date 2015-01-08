@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
+         name="Button Filter"
          point="pa.iscde.outline.buttonFilter">
    </extension>
 
