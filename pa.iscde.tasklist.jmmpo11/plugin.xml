@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         name="TODO Color"
+         name="Color Theme"
          point="pa.iscde.umldiagram.colortheme">
       <theme
             class="pa.iscde.tasklist.jmmpo11.TaskListUmlTheme">
