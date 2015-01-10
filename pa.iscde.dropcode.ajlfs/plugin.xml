@@ -2,16 +2,14 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="pa.iscde.snippets.contextdefinition">
-      <member
-            definition="pa.iscde.dropcode.ajlfs.ConditionalExpression">
-      </member>
-   </extension>
-   <extension
-         point="pa.iscde.dropcode.dropbutton">
-      <dropbutton
-            class="pa.iscde.dropcode.ajlfs.ShowSnippet">
-      </dropbutton>
+         id="HexagonAreaID"
+         name="Hexagon Area"
+         point="pa.iscde.formulas.createformula">
+      <NewFormula
+            Category="Basics"
+            addformula="pa.iscde.dropcode.ajlfs.HexagonArea"
+            formula_method="TrapezoidAreaMethod.txt">
+      </NewFormula>
    </extension>
 
 </plugin>
