@@ -1,0 +1,3 @@
+private double trapezoidArea(double b1, double b2, double h){
+	return (h / 2) * (b1 + b2);
+}
