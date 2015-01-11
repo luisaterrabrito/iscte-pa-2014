@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="createnewsnippet" name="Create New Snippet" schema="schema/createnewsnippet.exsd"/>
-   <extension-point id="contextdefinition" name="Context Definition" schema="schema/contextdefinition.exsd"/>
+   <extension-point id="createnewsnippet" name="New Snippet" schema="schema/createnewsnippet.exsd"/>
+   <extension-point id="contextdefinition" name="Snippet Context Definition" schema="schema/contextdefinition.exsd"/>
    <extension
          id="snippets"
          name="Lemony Snippets"
@@ -14,7 +14,7 @@
    </extension>
    <extension
          id="snippets"
-         name="Snippets"
+         name="SnippetsTeam"
          point="pa.iscde.team"
 >
       <member
@@ -31,6 +31,8 @@
       </member>
    </extension>
    <extension
+         id="contextDefinitionTests"
+         name="Context Definition Tests"
          point="pa.iscde.snippets.contextdefinition">
       <member
             definition="contextdefinitiontests.AppendTextInsideProcedure">
