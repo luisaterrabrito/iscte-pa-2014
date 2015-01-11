@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="customIcon" name="Custom Icon Extension" schema="schema/customIcon.exsd"/>
-   <extension-point id="buttonFilter" name="Button Filter Extension" schema="schema/buttonFilter.exsd"/>
+   <extension-point id="customIcon" name="Custom Icon" schema="schema/customIcon.exsd"/>
+   <extension-point id="buttonFilter" name="Button Filter" schema="schema/buttonFilter.exsd"/>
    <extension
          id="OsMelhoresParaSempre"
          name="Os Melhores Mesmo"
          point="pa.iscde.team">
       <member
-            name="oi"
+            name="Jorge Calado"
+            quote="Coiso Coiso"
+            user="jmpsc">
+      <member
+            name="Pedro Sousa"
             quote="Coiso Coiso"
             user="pdcsa">
       </member>
