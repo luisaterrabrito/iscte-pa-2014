@@ -11,16 +11,15 @@ import pa.iscde.stylechecker.model.AbstractStyleRuleExensionProvider;
 public class ImportDeclarationRuleExtentisionsProvider extends
 		AbstractStyleRuleExensionProvider {
 	
-	private static final String IMPORT_DECLARATION_EXT_POINT = "";//TODO;
+	private static final String IMPORT_DECLARATION_EXT_POINT = "pa.iscde.stylechecker.importstyle";//TODO;
 
-	public List<AbstractImportDeclarationRule> getExtentions() {
+	public static List<AbstractImportDeclarationRule> getExtentions() {
 		List<AbstractImportDeclarationRule> rules = new ArrayList<AbstractImportDeclarationRule>();
 		IExtension[] extensions = getExtentions(IMPORT_DECLARATION_EXT_POINT);
 		for (IExtension extension : extensions) {
 			rules.add((AbstractImportDeclarationRule) extension);
 		}
-		return null;
-		
+		return rules;
 	}
 
 }
