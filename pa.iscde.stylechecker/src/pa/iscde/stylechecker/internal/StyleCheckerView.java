@@ -3,20 +3,22 @@ package pa.iscde.stylechecker.internal;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.Status;
-import org.eclipse.equinox.log.Logger;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.internal.Workbench;
-import org.eclipse.ui.statushandlers.StatusManager;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
+import pa.iscde.stylechecker.domain.ImportDeclarationRuleExtentisionsProvider;
 import pa.iscde.stylechecker.domain.ProjectStyleChecker;
 import pa.iscde.stylechecker.domain.StyleCheckerASTVisitor;
+import pa.iscde.stylechecker.internal.extension.AbstractImportDeclarationRule;
 import pa.iscde.stylechecker.model.ui.StyleRuleTableView;
 import pa.iscde.stylechecker.sipke.DummyRule;
 import pt.iscte.pidesco.extensibility.PidescoView;
+import pt.iscte.pidesco.javaeditor.internal.JavaEditorActivator;
+import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 
 
@@ -40,11 +42,22 @@ public class StyleCheckerView  implements PidescoView {
 			setDummyWarnings();
 			
 			ProjectStyleChecker checker = new ProjectStyleChecker(new StyleCheckerASTVisitor());
+			
+			BundleContext context = JavaEditorActivator.getInstance().getContext();
+			ServiceReference<ProjectBrowserServices> ref2 = context.getServiceReference(ProjectBrowserServices.class);
+			ProjectBrowserServices browser = context.getService(ref2);
+			List<AbstractImportDeclarationRule> importExtentions = ImportDeclarationRuleExtentisionsProvider.getExtentions();
+
+			checker.checkRootPackage(browser.getRootPackage());
+			
 			checker.checkWorkSpace();
 			StyleCheckerASTVisitor visitor = checker.getVisitor();
 			List<ImportDeclaration> importDeclarations = visitor.getImportDeclarations();
 			for (ImportDeclaration importDeclaration : importDeclarations) {
 				System.out.println(importDeclaration);
+				for (AbstractImportDeclarationRule importRule : importExtentions) {
+					System.out.println(importRule.check(importDeclaration));
+				}
 			}
 			
 			

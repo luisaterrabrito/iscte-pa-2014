@@ -1,5 +1,10 @@
 package pa.iscde.stylechecker.domain;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.SortedSet;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -15,6 +20,7 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import pt.iscte.pidesco.projectbrowser.model.PackageElement;
+import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 
 public class ProjectStyleChecker {
 
@@ -26,8 +32,10 @@ public class ProjectStyleChecker {
 	}
 	
 	public void checkWorkSpace() {
+		
 		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 		IProject[] projects = workspaceRoot.getProjects();
+		
 		for (IProject project : projects) {
 			if(isJavaProject(project))
 				checkJavaProject(project);
@@ -58,10 +66,30 @@ public class ProjectStyleChecker {
 	}
 	
 	public void checkRootPackage(PackageElement root){
-		root.getChildren();
-		
+		SortedSet<SourceElement> childrens = root.getChildren();
+		for (SourceElement element : childrens) {
+			if(element.isClass()){
+				CompilationUnit cu = parse(readSource(element.getFile()));
+				cu.accept(visitor);
+			}else {
+				if(element.isPackage())
+					checkRootPackage((PackageElement) element);
+			}
+		}
 	}
 	
+	private String readSource(File file) {
+		StringBuilder src = new StringBuilder();
+		try {
+			Scanner scanner = new Scanner(file);
+			while(scanner.hasNextLine())
+				src.append(scanner.nextLine()).append('\n');
+			scanner.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return src.toString();
+	}
 	private void checkPackage(ICompilationUnit[] compilationUnits) {
 		for (ICompilationUnit compUnit : compilationUnits) {
 			 checkJavaFile(compUnit);
@@ -74,11 +102,21 @@ public class ProjectStyleChecker {
 		  parse.accept(getVisitor());
 	}
 	
+
 	
-	private static CompilationUnit parse(ICompilationUnit unit) {
+	
+	private  CompilationUnit parse(ICompilationUnit unit) {
 	    ASTParser parser = ASTParser.newParser(AST.JLS8);
 	    parser.setKind(ASTParser.K_COMPILATION_UNIT);
 	    parser.setSource(unit);
+	    parser.setResolveBindings(true);
+	    return (CompilationUnit) parser.createAST(null);
+	  }
+	
+	private  CompilationUnit parse(String fileContent) {
+	    ASTParser parser = ASTParser.newParser(AST.JLS8);
+	    parser.setKind(ASTParser.K_COMPILATION_UNIT);
+	    parser.setSource(fileContent.toCharArray());
 	    parser.setResolveBindings(true);
 	    return (CompilationUnit) parser.createAST(null);
 	  }

@@ -5,7 +5,7 @@ import org.eclipse.core.runtime.Platform;
 
 public abstract class AbstractStyleRuleExensionProvider {
 	
-	public IExtension[] getExtentions(String extensionId) {
+	public static IExtension[] getExtentions(String extensionId) {
 		return Platform.getExtensionRegistry().getExtensions(extensionId);		
 	}
 
