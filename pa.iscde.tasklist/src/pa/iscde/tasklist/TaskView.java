@@ -26,7 +26,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -75,13 +74,14 @@ public class TaskView implements PidescoView {
 	private String[] views = {"Project", "Package", "Open File"};
 	private File currentFile;
 	private ArrayList<Category> catList;
+	private List<TodoLine> todos;
 	
 	/**
 	 * the constructor for this class, where the several ServiceReferences are instantiated
 	 */
 	public TaskView() {
-		
 		this.type = TaskType.PROJECT;
+		todos = new ArrayList<TodoLine>();
 		
 		Bundle bundle = FrameworkUtil.getBundle(TaskView.class);
 		BundleContext context  = bundle.getBundleContext();
@@ -97,8 +97,11 @@ public class TaskView implements PidescoView {
 			@Override
 			public void fileSaved(File file) {
 				try {
-					if(table != null && !table.isDisposed())
+					if(table != null && !table.isDisposed()){
 						commentReader();
+						populateTable();
+					}
+					
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -107,8 +110,11 @@ public class TaskView implements PidescoView {
 			@Override
 			public void fileOpened(File file) {
 				try {
-					if(table != null && !table.isDisposed())
+					if(table != null && !table.isDisposed()){
 						commentReader();
+						populateTable();
+					}
+					
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -128,6 +134,8 @@ public class TaskView implements PidescoView {
 		catList = new ArrayList<Category>();
 		files = new ArrayList<File>();
 		currentFile = null;
+		
+		
 	}
 	
 	/**
@@ -147,16 +155,47 @@ public class TaskView implements PidescoView {
 		
 		try {
 			commentReader();
+			populateTable();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	//To outside project classes call, so it can get the results from our table
+	public void populateData(){
+		try {
+			commentReader();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	//Populate our table, to insert the values in the correct position, and refresh's the table
+	private void populateTable(){
+		table.removeAll();
+		
+		for (TodoLine todo : todos) {
+			TableItem item = new TableItem(table, SWT.SIMPLE);
+			item.setText(0, todo.packageName);
+			item.setText(1, todo.className);
+			item.setText(2, "" + todo.line);
+			item.setText(3, todo.text);
+			item.setText(4, todo.category.getTag());
+			
+			if(todo.category.getIcon() != null)
+				item.setImage(5, todo.category.getIcon());
+			else
+				item.setText(5, "no icon available");
+		}
+		
+		
+	}
+	
 	//Reads the comments and refreshes the table, accordingly to the TaskType selected at the moment
 	private void commentReader() throws IOException {
-		
+		todos.clear();
 		files.clear();
-		table.removeAll();
 		
 		switch (type) {
 		case PROJECT:
@@ -171,60 +210,40 @@ public class TaskView implements PidescoView {
 			rootFile = javaServices.getOpenedFile().getParentFile();
 			getFiles(rootFile);
 			break;
-		default:
-			break;
 		}
 		
 		//Visitor
 		ASTVisitor visitor = new ASTVisitor() {
-			
-			TableItem item = null;
-			
+			@SuppressWarnings("unchecked")
 			@Override
 			public boolean visit(CompilationUnit node) {
 				for(Comment c : (List<Comment>)(node.getCommentList())){
 					c.accept(this);
-					if(item != null)
-						item.setText(2, "" + node.getLineNumber(c.getStartPosition()));
+					int startLine = node.getLineNumber(c.getStartPosition());
+					for(TodoLine todo: todos)
+						if(todo.line < 0)
+							todo.line = startLine;
 				}
 				return true;
 			}
 			
 			@Override
 			public boolean visit(LineComment node) {
-				
 				String tmp = fileText.substring(node.getStartPosition(), node.getStartPosition() + node.getLength());
 				String[] splitSpace = tmp.split(" ");
 				
 				for(Category c: catList){
+					String catString = null;
 					if(splitSpace[0].substring(2).equals(c.getTag())){
-						
-						item = new TableItem(table, SWT.SIMPLE);
-						
-						item.setText(0, currentFile.getParentFile().getName());
-						item.setText(1, currentFile.getName().substring(0, currentFile.getName().indexOf(".")));
-						item.setText(3, tmp.substring(splitSpace[0].length() + 1));
-						item.setText(4, c.getTag());
-						if(c.getIcon() != null)
-							item.setImage(5, c.getIcon());
-						else
-							item.setText(5, "no icon available");
-						
-					} else {
-						if(splitSpace.length > 1 && splitSpace[1].equals(c.getTag())){
-							
-							item = new TableItem(table, SWT.SIMPLE);
-							
-							item.setText(0, currentFile.getParentFile().getName());
-							item.setText(1, currentFile.getName().substring(0, currentFile.getName().indexOf(".")));
-							item.setText(3, tmp.substring(splitSpace[0].length() + splitSpace[1].length() + 2));
-							item.setText(4, c.getTag());
-							if(c.getIcon() != null)
-								item.setImage(5, c.getIcon());
-							else
-								item.setText(5, "no icon available");
-							
-						}
+						catString = tmp.substring(splitSpace[0].length() + 1);
+					} else if(splitSpace.length > 1 && splitSpace[1].equals(c.getTag())){
+						catString = tmp.substring(splitSpace[0].length() + splitSpace[1].length() + 2);
+					}
+					if(catString != null){
+						String packageName = currentFile.getParentFile().getName();
+						String className = currentFile.getName().substring(0, currentFile.getName().indexOf("."));
+						TodoLine newTodo = new TodoLine(packageName, className, -1, catString, c);
+						todos.add(newTodo);
 					}
 				}
 		        return true;
@@ -314,6 +333,7 @@ public class TaskView implements PidescoView {
 				
 				try {
 					commentReader();
+					populateTable();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -427,7 +447,7 @@ public class TaskView implements PidescoView {
 	}
 
 	//Creates category objects, accordingly to the extensions created
-	private void createCategories(){
+	public void createCategories(){
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
 		
 		for(IExtension ext : reg.getExtensionPoint(EXT_POINT_ID_1).getExtensions()){
@@ -451,6 +471,28 @@ public class TaskView implements PidescoView {
 				Category cat = new Category(tag, name, img, c);
 				catList.add(cat);
 			}	
+		}
+	}
+	
+	//Get a list with the results of the line in our task list table
+	public List<TodoLine> getTodos() {
+		return todos;
+	}
+	
+	//Intermediate structure class, to save the values that are entered in our task list table, so it can be accessible from outside
+	public static class TodoLine{
+		public final String packageName;
+		public final String className;
+		public int line;
+		public final String text;
+		public final Category category;
+		
+		public TodoLine(String packageName, String className, int line, String text, Category category) {
+			this.packageName = packageName;
+			this.className = className;
+			this.line = line;
+			this.text = text;
+			this.category = category;
 		}
 	}
 	
