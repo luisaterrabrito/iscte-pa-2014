@@ -1,7 +1,6 @@
 package pa.iscde.tasklist.extensibility;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
