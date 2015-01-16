@@ -3,7 +3,7 @@
 <plugin>
    <extension
          id="metricsRefreshCommand"
-         name="Metrics Refresh Command"
+         name="Metrics Refresh"
          point="pa.iscde.commands.command">
       <command_view
             alt_key="false"

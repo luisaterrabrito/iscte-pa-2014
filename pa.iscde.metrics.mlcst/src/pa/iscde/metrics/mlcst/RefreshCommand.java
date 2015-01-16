@@ -19,6 +19,7 @@ public class RefreshCommand implements Command{
 		ServiceReference<MetricsService> reference = context
 				.getServiceReference(MetricsService.class);
 		services = context.getService(reference);
+		
 		services.refresh();
 	}
 
