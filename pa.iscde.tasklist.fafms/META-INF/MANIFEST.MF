@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Fafms
+Bundle-SymbolicName: pa.iscde.tasklist.fafms;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: pa.iscde.filtersearch;bundle-version="1.0.0",
+ pa.iscde.tasklist;bundle-version="1.0.0"
+Import-Package: org.eclipse.jdt.core.dom,
+ org.osgi.framework;version="1.8.0",
+ pt.iscte.pidesco.extensibility,
+ pt.iscte.pidesco.javaeditor.service,
+ pt.iscte.pidesco.projectbrowser.model,
+ pt.iscte.pidesco.projectbrowser.service
