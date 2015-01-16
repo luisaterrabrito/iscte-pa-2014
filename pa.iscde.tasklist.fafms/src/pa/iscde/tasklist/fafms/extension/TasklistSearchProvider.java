@@ -78,7 +78,7 @@ public class TasklistSearchProvider implements SearchProvider {
 				String comment = todo.text;
 				Category category = todo.category;
 
-				if(c.getName().equals(className + ".java")){
+				if(c.getName().equals(className + ".java") && c.getName().toUpperCase().contains(text.toUpperCase())){
 					results.add(category.getTag() + " " + comment + " in line " + line);
 				}
 			}
