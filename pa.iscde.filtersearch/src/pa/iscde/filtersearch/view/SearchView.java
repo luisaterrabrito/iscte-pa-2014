@@ -36,15 +36,19 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import pa.iscde.filtersearch.activator.FilterSearchActivator;
 import pa.iscde.filtersearch.externalImages.ExternalImage;
+import pa.iscde.filtersearch.model.FilterSearchModel;
+import pa.iscde.filtersearch.model.FilterSearchModel.FilterSearchTextListener;
 import pa.iscde.filtersearch.providers.ProjectBrowserSearchProvider;
 import pa.iscde.filtersearch.providers.SearchProvider;
 import pa.iscde.filtersearch.providers.ViewContentProvider;
+import pa.iscde.filtersearch.services.FilterSearchService;
 import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
 
-public class SearchView implements PidescoView {
+public class SearchView implements PidescoView,FilterSearchService {
 
 	private final static String NO_RESULTS_FOUND = "No results found.";
 
@@ -56,6 +60,8 @@ public class SearchView implements PidescoView {
 	
 	private TreeViewer tree;	
 	private Text searchText;
+	
+	private FilterSearchModel model;
 
 
 	public SearchView() {
@@ -65,8 +71,23 @@ public class SearchView implements PidescoView {
 		pidescoServices = context.getService(serviceReference_pidesco);
 
 		getProviders();
+		
+		model = FilterSearchActivator.Model();
+		
 	}
 
+	@Override
+	public void createListener(FilterSearchModel model) {
+		this.model = model;
+		model.addListener(new FilterSearchTextListener() {
+			
+			@Override
+			public void TextChanged(Text text) {
+								
+			}
+		});
+	}
+	
 
 	/**
 	 * Acede aos pontos de extensão que implementam a interface SearchProvider e adiciona-os a uma lista
@@ -121,12 +142,13 @@ public class SearchView implements PidescoView {
 		searchText = new Text(viewArea, SWT.SINGLE | SWT.BORDER);
 		searchText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		searchText.addListener(SWT.Modify, new Listener() {
-
+			
 			@Override
 			public void handleEvent(Event event) {
 				if(event.type == SWT.Modify){
 					Text text = (Text)event.widget;
 					loadCategories(text.getText());
+					model.textChangedEvent(text);
 				}
 			}
 		});
@@ -295,4 +317,6 @@ public class SearchView implements PidescoView {
 			textStyle.background = Display.getDefault().getSystemColor(SWT.COLOR_YELLOW);
 		}
 	}
+
+
 }
