@@ -2,7 +2,7 @@
 
 = Introduction =
 
-Executa uma acção conforme a pesquisa feita na = SearchText = . Esta funcionalidade foi feita com base na = OSGI Framework =, assim qualquer extensão terá de ter um Activator. O ponto de extensão permite ter várias extensões pois contêm um repositório de Listeners que implementam a acção proposta pela interface.
+Executa uma acção conforme a pesquisa feita na *SearchText* . Esta funcionalidade foi feita com base na *OSGI Framework*, assim qualquer extensão terá de ter um Activator. O ponto de extensão permite ter várias extensões pois contêm um repositório de Listeners que implementam a acção proposta pela interface.
 
 
 = Details =
