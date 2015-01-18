@@ -1,0 +1,25 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+Executa uma acção conforme a pesquisa feita na = SearchText = . Esta funcionalidade foi feita com base na = OSGI Framework =, assim qualquer extensão terá de ter um Activator. O ponto de extensão permite ter várias extensões pois contêm um repositório de Listeners que implementam a acção proposta pela interface.
+
+
+= Details =
+
+De forma a realizar esta acção necessita de implementar a interface fornecida :
+
+package pa.iscde.filtersearch.services;
+
+import pa.iscde.filtersearch.model.FilterSearchModel;
+
+public interface FilterSearchService {
+	void createListener(FilterSearchModel model);
+}
+
+
+Para a criação do listener (descrito acima) é necessário implementar a seguinte interface :
+
+public interface FilterSearchTextListener{
+		void TextChanged(Text text);
+}
