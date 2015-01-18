@@ -1,4 +1,4 @@
-#summary pa.iscde.perpectives.createPrespective
+#summary pa.iscde.perpectives.perspective
 
 = Introduction =
 
