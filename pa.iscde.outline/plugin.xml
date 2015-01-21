@@ -10,12 +10,11 @@
       <member
             name="Jorge Calado"
             quote="Coiso Coiso"
-            user="jmpsc">
+            user="jmpsc"/>
       <member
             name="Pedro Sousa"
             quote="Coiso Coiso"
-            user="pdcsa">
-      </member>
+            user="pdcsa"/>
    </extension>
    <extension
          id="AMinhaVista"
