@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="perspective" name="Create Prespective" schema="schema/perspective.exsd"/>
+   <extension
+         id="perpectives-switcher"
+         name="Perpective Switcher"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.perspectives.internal.ui.PerspectiveSwitcherView">
+      </view>
+   </extension>
+   <extension
+         id="perpectives_team"
+         name="Perspectives"
+         point="pa.iscde.team">
+      <member
+            name="Henrique Ferreira"
+            user="hmcgf">
+      </member>
+   </extension>
+   <extension
+         id="create-perspective"
+         name="Create Perspective"
+         point="pt.iscte.pidesco.tool">
+      <tool
+            class="pa.iscde.perspectives.internal.ui.NewPerspectiveTool"
+            description="Create new custom perspective"
+            hasState="false"
+            icon="add.gif"
+            view="pa.iscde.perspectives.perpectives-switcher">
+      </tool>
+   </extension>
+   <extension
+         id="default"
+         name="Default Perspectives"
+         point="pa.iscde.perspectives.perspective">
+      <Perpective
+            icon="eclipse_logo.gif"
+            id="eclipse-like"
+            name="Eclipse Like">
+         <View
+               name="pa.iscde.perspectives.View1"
+               postition="LEFT"
+               scale_factor="0.5"
+               view_id="pt.iscte.pidesco.projectbrowser.tree">
+         </View>
+         <View
+               name="pa.iscde.perspectives.View2"
+               postition="RIGHT"
+               scale_factor="0.5"
+               view_id="pa.iscde.teams">
+            <View
+                  postition="BOTTOM"
+                  scale_factor="0.5"
+                  view_id="pa.iscde.perspectives.perpectives-switcher">
+            </View>
+         </View>
+      </Perpective>
+      <Perpective
+            id="test-perspective"
+            name="TestPerspective">
+         <View
+               postition="TOP"
+               scale_factor="0.1"
+               view_id="pa.iscde.perspectives.View1">
+         </View>
+      </Perpective>
+   </extension>
+   <extension
+         id="refresh-perspectives"
+         name="Refresh"
+         point="pt.iscte.pidesco.tool">
+      <tool
+            class="pa.iscde.perspectives.internal.ui.RefreshPerspectivesTool"
+            description="Refresh Perspectives"
+            hasState="false"
+            view="pa.iscde.perspectives.perpectives-switcher">
+      </tool>
+   </extension>
+
+</plugin>
