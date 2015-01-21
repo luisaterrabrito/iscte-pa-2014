@@ -1,5 +1,6 @@
 package pa.iscde.stylechecker.internal.extension;
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 
 
@@ -16,8 +17,9 @@ public class ImportDeclarationNoWildCardRule extends AbstractImportDeclarationRu
 
 	@Override
 	public boolean check(ImportDeclaration node) {
-			System.out.println(node.getName());
-			return !node.getName().getFullyQualifiedName().contains("*");
+			
+			System.out.println(node.toString().contains("*"));
+			return !node.toString().contains("*");
 	}
 	 
 

@@ -1,5 +1,6 @@
 package pa.iscde.stylechecker.internal;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,8 @@ import pa.iscde.stylechecker.model.ui.StyleRuleTableView;
 import pa.iscde.stylechecker.sipke.DummyRule;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.internal.JavaEditorActivator;
+import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
+import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 
@@ -47,16 +50,20 @@ public class StyleCheckerView  implements PidescoView {
 			ServiceReference<ProjectBrowserServices> ref2 = context.getServiceReference(ProjectBrowserServices.class);
 			ProjectBrowserServices browser = context.getService(ref2);
 			List<AbstractImportDeclarationRule> importExtentions = ImportDeclarationRuleExtentisionsProvider.getExtentions();
-
+			importExtentions.addAll(ImportDeclarationRuleExtentisionsProvider.getInternalExtentions());
 			checker.checkRootPackage(browser.getRootPackage());
-			
+			JavaEditorServices editorServices = JavaEditorActivator.getInstance().getServices();
+			File openedFile = editorServices.getOpenedFile();
+
 			checker.checkWorkSpace();
 			StyleCheckerASTVisitor visitor = checker.getVisitor();
 			List<ImportDeclaration> importDeclarations = visitor.getImportDeclarations();
 			for (ImportDeclaration importDeclaration : importDeclarations) {
-				System.out.println(importDeclaration);
 				for (AbstractImportDeclarationRule importRule : importExtentions) {
-					System.out.println(importRule.check(importDeclaration));
+					if(importRule.check(importDeclaration)) {
+					//editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "\nWildcard imports usage can be dangerous \n Use explict imports \n", 38, 19);
+
+					}
 				}
 			}
 			
