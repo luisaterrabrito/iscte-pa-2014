@@ -1,0 +1,206 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="pa.iscde.perspectives" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="pa.iscde.perspectives" id="perspective" name="Prespective"/>
+      </appinfo>
+      <documentation>
+         This extension point allows plugins to create their own perspective for ISCDE.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <choice minOccurs="1" maxOccurs="unbounded">
+            <element ref="Perpective" minOccurs="1" maxOccurs="unbounded"/>
+         </choice>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="View">
+      <complexType>
+         <choice minOccurs="1" maxOccurs="unbounded">
+            <element ref="View"/>
+         </choice>
+         <attribute name="view_id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="scale_factor" use="required">
+            <annotation>
+               <documentation>
+                  The scale_factor attribute defines how much the view will occupy in relation to it&apos;s &quot;father view&quot;.
+For instance:
+
+If we have two views and we want to make them be on top of one another, we can do:
+
+View #1: { view_id: &quot;iscte.pidesco.outline&quot;, position: LEFT, scale_factor: 1} 
+  This view occupies all the screen
+View #2 { view_id: &quot;iscte.pidesco.console&quot;, position: BOTTOM, scale_factor: 0.5} 
+  This splits the screen in half, 50% for View #1 and the other 50% for View #2
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="0.1">
+                  </enumeration>
+                  <enumeration value="0.2">
+                  </enumeration>
+                  <enumeration value="0.3">
+                  </enumeration>
+                  <enumeration value="0.4">
+                  </enumeration>
+                  <enumeration value="0.5">
+                  </enumeration>
+                  <enumeration value="0.6">
+                  </enumeration>
+                  <enumeration value="0.7">
+                  </enumeration>
+                  <enumeration value="0.8">
+                  </enumeration>
+                  <enumeration value="0.9">
+                  </enumeration>
+                  <enumeration value="1.0">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+         <attribute name="postition" use="required">
+            <annotation>
+               <documentation>
+                  Position relative to parent.
+If it is on top of parent, below the parent and next to (right or left)
+
+Options:
+- TOP
+- BOTTOM
+- LEFT
+- RIGHT
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="TOP">
+                  </enumeration>
+                  <enumeration value="BOTTOM">
+                  </enumeration>
+                  <enumeration value="RIGHT">
+                  </enumeration>
+                  <enumeration value="LEFT">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="Perpective">
+      <annotation>
+         <documentation>
+            Represents a prespective.
+It includes the name (mandatory) that will appear on the list, the icon (optional) and the views to be displayed.
+         </documentation>
+      </annotation>
+      <complexType>
+         <choice minOccurs="1" maxOccurs="unbounded">
+            <element ref="View"/>
+         </choice>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Name to identify the perspective
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="icon" type="string">
+            <annotation>
+               <documentation>
+                  Icon that represents the perspective. 
+Optional
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="listener" type="string">
+            <annotation>
+               <documentation>
+                  Allows plugins to add custom behaviours when their perspective is activated or deactivated
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":pa.iscde.perspectives.extensibility.PerspectiveListener"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+
+</schema>
