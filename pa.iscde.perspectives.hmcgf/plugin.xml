@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="perspective-search"
+         name="Perpectives Search Provider"
+         point="pa.iscde.filtersearch.SearchProvider">
+      <SearchProvider
+            SearchProvider="pa.iscde.perspectives.hmcgf.internal.extensions.PerpectiveSearchProvider"
+            iconName="persp_tab.gif">
+      </SearchProvider>
+   </extension>
+   <extension
+         id="perspective-view-command"
+         name="Perspective Switch In Perspective Switcher View"
+         point="pa.iscde.commands.command">
+      <command_editor
+            alt_key="false"
+            command_implementation="pa.iscde.perspectives.hmcgf.internal.extensions.EclipseLikePerspectiveCommand"
+            ctrl_key="true"
+            description="Switches current perspective to Eclipse Like Perspective"
+            key="e"
+            name="Switch to Eclipse Like Perspective">
+      </command_editor>
+   </extension>
+   <extension
+         id="perspective"
+         name="Perspective Switch In Editor"
+         point="pa.iscde.commands.command">
+      <command_view
+            alt_key="false"
+            command_implementation="pa.iscde.perspectives.hmcgf.internal.extensions.EclipseLikePerspectiveCommand"
+            context_view="pa.iscde.perspectives.perpectives-switcher"
+            ctrl_key="true"
+            description="Switches current perspective to Eclipse Like Perspective"
+            key="e"
+            name="Switch to Eclipse Like Perspective">
+      </command_view>
+   </extension>
+
+</plugin>
