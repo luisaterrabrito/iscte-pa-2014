@@ -25,8 +25,15 @@
       </view>
    </extension>
    <extension
-         name="Button Filter"
+         name="Public static methods"
          point="pa.iscde.outline.buttonFilter">
+         <tool
+               class="pa.iscde.outline.internalExtention.PublicStaticMethodsButtonFilter"
+               hint="Show only public static methods"
+               icon="field_public_obj.png"
+               isStatic="true"
+               type="method"
+               visibility="public"/>
    </extension>
    <extension
          name="Custom Icon"
