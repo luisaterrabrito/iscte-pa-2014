@@ -49,5 +49,12 @@ public class StyleCheckerASTVisitor extends ASTVisitor {
 	public List<VariableDeclarationStatement> getVriableDeclarationStatements() {
 		return variableDeclarationStatements;
 	}
+	
+	public void reset() {
+		importDeclarations = new ArrayList<>();
+		tryStatements = new ArrayList<>();
+		variableDeclarationStatements = new ArrayList<>();
+
+	}
 
 }
