@@ -13,8 +13,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -31,7 +32,6 @@ import pa.iscde.stylechecker.extensibility.AbstractTryStatementRule;
 import pa.iscde.stylechecker.extensibility.AbstractVariableDeclarationRule;
 import pa.iscde.stylechecker.internal.rules.AbstractImportDeclarationRule;
 import pa.iscde.stylechecker.model.AbstractStyleRule;
-import pa.iscde.stylechecker.sipke.DummyRule;
 import pa.iscde.stylechecker.utils.SWTResourceManager;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.internal.JavaEditorActivator;
@@ -86,10 +86,6 @@ public class StyleCheckerView  implements PidescoView {
 	tbRules.setHeaderVisible(true);
 	tbRules.setLinesVisible(true);
 	
-	TableColumn tblclmnState = new TableColumn(tbRules, SWT.LEFT);
-	tblclmnState.setMoveable(true);
-	tblclmnState.setWidth(100);
-	tblclmnState.setText("State");
 	
 	TableColumn tblclmnType = new TableColumn(tbRules, SWT.NONE);
 	tblclmnType.setWidth(100);
@@ -113,12 +109,29 @@ public class StyleCheckerView  implements PidescoView {
 		public void widgetSelected(SelectionEvent e) {
 			resetRulesViolationCounter();
 			checkWorkspace(editorServices.getOpenedFile());
+			packAll();
 		}
 		
 		@Override
 		public void widgetDefaultSelected(SelectionEvent e) {	
 		}
 	});
+	
+	tbRules.addListener(SWT.Selection, new Listener() {
+		
+		@Override
+		public void handleEvent(Event event) {
+			if(event.detail==SWT.CHECK) {
+					TableItem[] items = tbRules.getSelection();
+					if(items!= null && items[event.index].getChecked()) {
+						((AbstractStyleRule)items[event.index].getData()).setActive(true);
+					}else {
+						((AbstractStyleRule)items[event.index].getData()).setActive(false);
+					}
+			}
+		}
+	});
+	
 	}
 	
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
@@ -164,6 +177,7 @@ public class StyleCheckerView  implements PidescoView {
 			
 			checkWorkspace(editorServices.getOpenedFile());
 			addRules();
+			tbRules.selectAll();
 			
 	}
 	
@@ -185,7 +199,6 @@ public class StyleCheckerView  implements PidescoView {
 		StyleCheckerASTVisitor visitor = checker.getVisitor();
 		visitor.reset();
 		checker.checkRootPackage(browser.getRootPackage());
-
 		List<ImportDeclaration> importDeclarations = visitor.getImportDeclarations();
 		for (ImportDeclaration importDeclaration : importDeclarations) {
 			for (AbstractImportDeclarationRule importRule : importStatementRules) {
@@ -210,46 +223,30 @@ public class StyleCheckerView  implements PidescoView {
 		for (AbstractTryStatementRule rule : tryStatementRules) {
 			rule.setViolations(0);
 		}
-		
-		TableItem[] items = tbRules.getItems();
-		for (int i = 0; i < items.length; i++) {
-		}
 	}
 	
 
 	public void addRule(AbstractStyleRule rule) {
 		TableItem item = new TableItem(tbRules, SWT.NONE);
-		item.setText(0, rule.getActive()?Constant.RULE_STATE_ACTIVE:Constant.RULE_STATE_STOPPED);
-		item.setText(1, rule.getClass().getSimpleName());
-		item.setText(2, rule.getDescription());
-		item.setText(3, ""+rule.getViolations());
+		item.setText(Constant.TB_ITEN_RULE_NAME_IDX, rule.getClass().getSimpleName());
+		item.setText(Constant.TB_ITEN_RULE_DESC_IDX, rule.getDescription());
+		item.setText(Constant.TB_ITEN_RULE_VIOLATIONS_IDX, ""+rule.getViolations());
 		item.setData(rule);
 		packAll();
 		tbRules.computeSize(SWT.FILL, SWT.FILL);
 	}
-	private void packAll() {		
+	
+	private void packAll() {
+		TableItem[] items = tbRules.getItems();
+		for (int i = 0; i < items.length; i++) {
+			boolean active = ((AbstractStyleRule)items[i].getData()).getActive();
+			if(active) {
+				tbRules.select(i);
+			}
+		}
 		for (int i = 0; i < Constant.TABLE_VIEW_NUM_COLUMNS; i++) {
 	        tbRules.getColumn(i).pack();
 	      }
-	
+		tbRules.update();
 	}
-		
-	public void setDummyWarnings() {
-//		JavaEditorServices editorServices = JavaEditorActivator.getInstance().getServices();
-//		File openedFile = editorServices.getOpenedFile();
-//		
-//		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "\nWildcard imports usage can be dangerous \n Use explict imports \n", 38, 19);
-//		
-//		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "\nMutiple imports statement \n Use one import statment per line \n ", 60, 51);
-//		
-//		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "  Dummy ", 113, 27);
-//		
-//		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "      Multipe variables declaration \n Use one viriable declaration per statement               ", 170, 26);
-//
-//		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "       Dummy Warning             ", 273, 22);
-//
-//		editorServices.addAnnotation(openedFile, AnnotationType.WARNING, "       Dummy Warning             ", 344, 19);
-
-			}	
-
 }
