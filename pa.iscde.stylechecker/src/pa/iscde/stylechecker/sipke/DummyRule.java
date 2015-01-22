@@ -7,14 +7,10 @@ import pa.iscde.stylechecker.model.AbstractStyleRule;
 public class DummyRule extends AbstractStyleRule {
 
 
-	private String description;
 	
 	public DummyRule(String description, int violations, boolean state) {
-		this.description = description;
 		super.setActive(state);
-		//TODO setDescription
-		//TODO setViolations
-	}
+	 }
 	
 
 	@Override
@@ -26,8 +22,13 @@ public class DummyRule extends AbstractStyleRule {
 
 	@Override
 	public String getWarningMessage() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Dummy Warnig";
+	}
+
+
+	@Override
+	public String getDescription() {
+		return "Dummy description";
 	}
 
 }

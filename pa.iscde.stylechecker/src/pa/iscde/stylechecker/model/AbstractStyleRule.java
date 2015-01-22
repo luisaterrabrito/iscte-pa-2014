@@ -4,9 +4,10 @@ import org.eclipse.jdt.core.dom.ASTNode;
 
 public  abstract  class AbstractStyleRule implements IStyleRule {
 	
-	private boolean state;
+	private boolean state =true;
 	private int numbViolations;
-	private String description;
+	
+	
 	
 	/**
 	 * 
@@ -32,20 +33,24 @@ public  abstract  class AbstractStyleRule implements IStyleRule {
 		return this.numbViolations;
 	}
 	
-	
 	/**
 	 * 
-	 * @return Rule description 
+	 * @return number of detected rule violations
 	 */
-	public String getDescription() {
-		return this.description;
+	public int setViolations(int nViolations) {
+		return this.numbViolations = nViolations;
 	}
+	
+	
+
 	
 	
 	public abstract boolean check(ASTNode node) ;
 		
 	
 	public abstract String getWarningMessage() ;
+	
+
 
 	
 

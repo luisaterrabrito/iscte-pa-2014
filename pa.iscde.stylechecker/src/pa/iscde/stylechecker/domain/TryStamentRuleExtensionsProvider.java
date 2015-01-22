@@ -11,17 +11,20 @@ import pa.iscde.stylechecker.model.AbstractStyleRuleExensionProvider;
 
 public class TryStamentRuleExtensionsProvider extends AbstractStyleRuleExensionProvider {
 	
-	
-	private static final String TRY_STAMENT_EXT_POINT = null;
 
-	public List<AbstractTryStatementRule> getExtentions() {
+	public static List<AbstractTryStatementRule> getExtentions() {
 		List<AbstractTryStatementRule> rules = new ArrayList<AbstractTryStatementRule>();
-		IExtension[] extensions = getExtentions(TRY_STAMENT_EXT_POINT);
+		IExtension[] extensions = getExtentions(Constant.EXT_POINT_TRY_CATCH_STM);
 		for (IExtension extension : extensions) {
 			rules.add((AbstractTryStatementRule) extension);
 		}
-		return null;
-		
+		return rules;
+	}
+	
+	public static List<AbstractTryStatementRule> getInternalRules() {
+		List<AbstractTryStatementRule> rules = new ArrayList<AbstractTryStatementRule>();
+		//rules.add(new ImportDeclarationNoWildCardRule());
+		return rules;
 	}
 
 }

@@ -1,4 +1,4 @@
-package pa.iscde.stylechecker.internal.extension;
+package pa.iscde.stylechecker.internal.rules;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
