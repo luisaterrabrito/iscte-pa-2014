@@ -55,11 +55,6 @@ public class PerspectiveServicesImpl implements PerspectiveServices
 		PerspectiveSwitcherView.getInstance().forcePerspectiveListRefresh();
 	}
 	@Override
-	public void createPerspective()
-	{
-		PerspectiveSwitcherView.getInstance().openCreatePerspectiveModal();
-	}
-	@Override
 	public void refreshPidescoViews()
 	{
 		pidescoViews = new ArrayList<String>();
@@ -93,6 +88,7 @@ public class PerspectiveServicesImpl implements PerspectiveServices
 			p.getListener().afterPerspectiveActivation();
 		// change current perspective
 		currentPerspective = p;
+		this.refreshAvailablePerspectives();
 	}
 	/**
 	 * Used to get File where perspectives are stored
@@ -131,7 +127,7 @@ public class PerspectiveServicesImpl implements PerspectiveServices
 				PerspectiveListener listener = null;
 				try
 				{
-					listener = (PerspectiveListener) perspective.createExecutableExtension("class");
+					listener = (PerspectiveListener) perspective.createExecutableExtension("listener");
 				}
 				catch (CoreException e)
 				{
@@ -155,5 +151,23 @@ public class PerspectiveServicesImpl implements PerspectiveServices
 			childrenViews.add(view);
 		}
 		return childrenViews;
+	}
+	@Override
+	public Perspective getPerspectiveFromId(String id)
+	{
+		for (Perspective perspective : getAvailablePerspectives())
+		{
+			if (perspective.getId().equals(id))
+				return perspective;
+		}
+		return null;
+	}
+	@Override
+	public boolean isCurrentPerspective(Perspective p)
+	{
+		if (currentPerspective == null)
+			return false;
+		else
+			return currentPerspective.equals(p);
 	}
 }

@@ -2,9 +2,12 @@ package pa.iscde.perspectives.internal.ui;
 
 import java.util.Map;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -22,9 +25,10 @@ public class PerspectiveSwitcherView implements PidescoView
 	private static PerspectiveSwitcherView	instance;
 	private static PidescoServices			pidescoServices;
 	private static PerspectiveServices		perspectiveServices;
-	private Composite						viewArea;
+	private Shell							shell;
 	private Image							cross;
 	private Table							table;
+	private Composite						viewArea;
 
 	public PerspectiveSwitcherView()
 	{
@@ -38,12 +42,13 @@ public class PerspectiveSwitcherView implements PidescoView
 	{
 		// set singleton instance
 		instance = this;
+		this.shell = viewArea.getShell();
 		this.viewArea = viewArea;
 		createTable();
 	}
 	public void showWarning(String title, String message)
 	{
-		MessageBox messageBox = new MessageBox(viewArea.getShell(), SWT.ICON_WARNING);
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
 		messageBox.setText(title);
 		messageBox.setMessage(message);
 		messageBox.open();
@@ -61,19 +66,17 @@ public class PerspectiveSwitcherView implements PidescoView
 		sourceColumn.setText("Source");
 		sourceColumn.setAlignment(SWT.CENTER);
 		sourceColumn.setWidth(100);
+		TableColumn perspectiveIdColumn = new TableColumn(table, SWT.NONE);
+		perspectiveIdColumn.setText("Unique ID");
+		perspectiveIdColumn.setAlignment(SWT.CENTER);
+		perspectiveIdColumn.setWidth(100);
 		perspectiveServices.refreshAvailablePerspectives();
 		table.addListener(SWT.MouseDoubleClick, new PerspectiveDoubleClickListener());
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		perspectiveColumn.pack();
 		sourceColumn.pack();
-	}
-	/**
-	 * Opens Modal Window used to Create Perspectives
-	 */
-	public void openCreatePerspectiveModal()
-	{
-		new NewPerspectiveModalShell(viewArea.getShell()).open();
+		perspectiveIdColumn.pack();
 	}
 	/**
 	 * Get PerspectiveServices instance
@@ -110,19 +113,30 @@ public class PerspectiveSwitcherView implements PidescoView
 	}
 	public void forcePerspectiveListRefresh()
 	{
+		if(viewArea.isDisposed())
+			return;
 		table.removeAll();
 		for (Perspective p : perspectiveServices.getAvailablePerspectives())
 		{
 			TableItem tItem = new TableItem(table, SWT.None);
-			tItem.setText(new String[] { p.getName(), p.getSourcePlugin() });
+			tItem.setText(new String[] { p.getName(), p.getSourcePlugin(), p.getId() });
 			if (p.isValid())
+			{
 				tItem.setImage(p.getIcon());
+				if (perspectiveServices.isCurrentPerspective(p))
+					tItem.setBackground(new Color(Display.getCurrent(), 125, 255, 125));
+			}
 			else
 			{
 				tItem.setImage(cross);
 				tItem.setGrayed(true);
+				tItem.setBackground(new Color(Display.getCurrent(), 255, 125, 125));
 			}
 			tItem.setData(p);
 		}
+	}
+	public Shell getShell()
+	{
+		return shell;
 	}
 }

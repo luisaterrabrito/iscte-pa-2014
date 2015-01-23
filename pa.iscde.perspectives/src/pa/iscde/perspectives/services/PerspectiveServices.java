@@ -26,11 +26,6 @@ public interface PerspectiveServices
 	public void refreshAvailablePerspectives();
 
 	/**
-	 * Triggers Create Perspective Modal Window
-	 */
-	public void createPerspective();
-
-	/**
 	 * Triggers refresh of loaded pidesco views
 	 */
 	public void refreshPidescoViews();
@@ -43,7 +38,23 @@ public interface PerspectiveServices
 
 	/**
 	 * Changes current perspective if possible (must be a valid one)
+	 * 
 	 * @param p
 	 */
 	public void changePerspective(Perspective p);
+	/**
+	 * Returns a perspective for the supplied unique id
+	 * 
+	 * @param id
+	 * @return the perspective or null if no matches where found
+	 */
+	public Perspective getPerspectiveFromId(String id);
+
+	/**
+	 * Determines if the supplied perspective is activated
+	 * 
+	 * @param p
+	 * @return
+	 */
+	public boolean isCurrentPerspective(Perspective p);
 }
