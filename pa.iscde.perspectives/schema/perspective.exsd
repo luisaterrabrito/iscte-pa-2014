@@ -86,8 +86,6 @@ View #2 { view_id: &quot;iscte.pidesco.console&quot;, position: BOTTOM, scale_fa
                   </enumeration>
                   <enumeration value="0.9">
                   </enumeration>
-                  <enumeration value="1.0">
-                  </enumeration>
                </restriction>
             </simpleType>
          </attribute>

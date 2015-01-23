@@ -7,7 +7,8 @@
          name="Perpective Switcher"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.perspectives.internal.ui.PerspectiveSwitcherView">
+            class="pa.iscde.perspectives.internal.ui.PerspectiveSwitcherView"
+            icon="persp_tab.gif">
       </view>
    </extension>
    <extension
@@ -15,21 +16,11 @@
          name="Perspectives"
          point="pa.iscde.team">
       <member
-            name="Henrique Ferreira"
+            name="Henrique Ferreira - 37808"
+            photo="henrique.jpg"
+            quote="&quot;Powerful you have become, the dark side I sense in you.&quot;"
             user="hmcgf">
       </member>
-   </extension>
-   <extension
-         id="create-perspective"
-         name="Create Perspective"
-         point="pt.iscte.pidesco.tool">
-      <tool
-            class="pa.iscde.perspectives.internal.ui.NewPerspectiveTool"
-            description="Create new custom perspective"
-            hasState="false"
-            icon="add.gif"
-            view="pa.iscde.perspectives.perpectives-switcher">
-      </tool>
    </extension>
    <extension
          id="default"
@@ -38,6 +29,7 @@
       <Perpective
             icon="eclipse_logo.gif"
             id="eclipse-like"
+            listener="pa.iscde.perspectives.internal.EclipseLikePerspectiveListener"
             name="Eclipse Like">
          <View
                name="pa.iscde.perspectives.View1"
@@ -64,6 +56,15 @@
                postition="TOP"
                scale_factor="0.1"
                view_id="pa.iscde.perspectives.View1">
+         </View>
+      </Perpective>
+      <Perpective
+            id="teamwork"
+            name="Teamwork">
+         <View
+               postition="TOP"
+               scale_factor="0.9"
+               view_id="pa.iscde.teams">
          </View>
       </Perpective>
    </extension>
