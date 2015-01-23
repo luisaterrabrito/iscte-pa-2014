@@ -47,6 +47,9 @@ public interface PerspectiveListener
 http://puu.sh/eTsCh/c01cb3c161.png
 
 Perspective (Name: Eclipse Like)
-    View (position="LEFT",scale_factor="0.5",view_id="pt.iscte.pidesco.projectbrowser.tree")
-    View (postition="RIGHT",scale_factor="0.5"view_id="pa.iscde.teams")
-        View (postition="BOTTOM",scale_factor="0.5",view_id="pa.iscde.perspectives.perpectives-switcher")
+
+1 View (position="LEFT",scale_factor="0.5",view_id="pt.iscte.pidesco.projectbrowser.tree")
+
+2 View (postition="RIGHT",scale_factor="0.5"view_id="pa.iscde.teams")
+
+2.1 View (postition="BOTTOM",scale_factor="0.5",view_id="pa.iscde.perspectives.perpectives-switcher")
