@@ -1,8 +1,10 @@
 package pa.iscde.stylechecker.internal;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.swt.SWT;
@@ -57,12 +59,11 @@ public class StyleCheckerView  implements PidescoView {
 	private Table tbRules;
 
 
-	public StyleCheckerView() {
-	
-	}
+	public StyleCheckerView() {	}
 	
 	private void  initButtons(Composite viewArea) {
-		
+	
+	//========================Buttons
 	Group btnsGroup_tools = new Group(viewArea, SWT.NONE);
 	btnsGroup_tools.setFont(SWTResourceManager.getFont(".Helvetica Neue DeskInterface", 11, SWT.NORMAL));
 	GridData gd_btnsGroup_tools = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
@@ -71,12 +72,16 @@ public class StyleCheckerView  implements PidescoView {
 	
 	btnRefresh = new Button(btnsGroup_tools, SWT.NONE);
 	btnRefresh.setBounds(10, 0, 95, 28);
-	btnRefresh.setText("Refresh");
+	btnRefresh.setText(Constant.BTN_REFRESH_LABEL);
 	
 	btnClear = new Button(btnsGroup_tools, SWT.NONE);
+	btnClear.setBounds(111, 0, 95, 28);
+	btnClear.setText(Constant.BTN_CLEAR_LABEL);
 	
 	viewArea.setFont(SWTResourceManager.getFont(".Helvetica Neue DeskInterface", 16, SWT.NORMAL));
 	viewArea.setLayout(new GridLayout(1, false));
+
+	//========================Table
 
 	tbRules = new Table(viewArea, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION);
 	tbRules.setFont(SWTResourceManager.getFont(".Helvetica Neue DeskInterface", 11, SWT.NORMAL));
@@ -89,20 +94,19 @@ public class StyleCheckerView  implements PidescoView {
 	
 	TableColumn tblclmnType = new TableColumn(tbRules, SWT.NONE);
 	tblclmnType.setWidth(100);
-	tblclmnType.setText("Type");
+	tblclmnType.setText(Constant.TB_COL_RULE_TYPE_LABEL);
 	
 	TableColumn tblclmnName = new TableColumn(tbRules, SWT.NONE);
 	tblclmnName.setWidth(100);
-	tblclmnName.setText("Name");
+	tblclmnName.setText(Constant.TB_COL_RULE_DESC_LABEL);
 	
 	TableColumn tblclmnViolactions = new TableColumn(tbRules, SWT.LEFT);
 	tblclmnViolactions.setMoveable(true);
 	tblclmnViolactions.setWidth(100);
-	tblclmnViolactions.setText("# Violations");
+	tblclmnViolactions.setText(Constant.TB_COL_RULE_VIOLATIONS_LABEL);
 	
-	btnClear.setBounds(111, 0, 95, 28);
-	btnClear.setText("Clear");
-	
+	//========================Event Listeners 
+
 	btnRefresh.addSelectionListener(new SelectionListener() {
 		
 		@Override
@@ -122,7 +126,7 @@ public class StyleCheckerView  implements PidescoView {
 		@Override
 		public void handleEvent(Event event) {
 			if(event.detail==SWT.CHECK) {
-					TableItem[] items = tbRules.getSelection();
+					TableItem[] items = tbRules.getItems();
 					if(items!= null && items[event.index].getChecked()) {
 						((AbstractStyleRule)items[event.index].getData()).setActive(true);
 					}else {
@@ -154,7 +158,6 @@ public class StyleCheckerView  implements PidescoView {
 			tryStatementRules = TryStamentRuleExtensionsProvider.getExtentions();
 			tryStatementRules.addAll(TryStamentRuleExtensionsProvider.getInternalRules());
 			
-			//boot check
 			checker.checkRootPackage(browser.getRootPackage());
 			
 			editorServices = JavaEditorActivator.getInstance().getServices();
@@ -162,8 +165,10 @@ public class StyleCheckerView  implements PidescoView {
 				
 				@Override
 				public void fileSaved(File file) {
+					//TODO
 					resetRulesViolationCounter();
-					checkWorkspace(file);				
+					checkWorkspace(file);	
+					packAll();
 				}
 				
 				@Override
@@ -176,13 +181,11 @@ public class StyleCheckerView  implements PidescoView {
 			});
 			
 			checkWorkspace(editorServices.getOpenedFile());
-			addRules();
-			tbRules.selectAll();
-			
+			addRules();			
 	}
 	
 	private void addRules() {
-		
+	
 		for (AbstractImportDeclarationRule rule : importStatementRules) {
 			addRule(rule);;
 		}
@@ -194,8 +197,9 @@ public class StyleCheckerView  implements PidescoView {
 		}
 		
 	}
+	
+	//TODO
 	private void checkWorkspace(File file) {
-		
 		StyleCheckerASTVisitor visitor = checker.getVisitor();
 		visitor.reset();
 		checker.checkRootPackage(browser.getRootPackage());
@@ -203,30 +207,48 @@ public class StyleCheckerView  implements PidescoView {
 		for (ImportDeclaration importDeclaration : importDeclarations) {
 			for (AbstractImportDeclarationRule importRule : importStatementRules) {
 				if(importRule.getActive() && importRule.check(importDeclaration)) {
-					editorServices.addAnnotation(file, AnnotationType.WARNING,importRule.getWarningMessage(), importDeclaration.getStartPosition(), importDeclaration.getLength());
+					String selecteStr = readFile(file, importDeclaration.getStartPosition(), importDeclaration.toString().trim().length());
+					if( selecteStr!= null && selecteStr.trim().equals(importDeclaration.toString().trim())) {
+						editorServices.addAnnotation(file, AnnotationType.WARNING,importRule.getWarningMessage(), 
+								importDeclaration.getStartPosition(), importDeclaration.getLength());
+					}
 					importRule.setViolations(importRule.getViolations()+1);
 				}
 			}
 		}
-		
 	}
 	
+	private String readFile(File f,int offset, int length) {
+		String sourceFile = readSource(f);
+		String selectedStr = sourceFile.substring(offset, offset+length);
+		return selectedStr;
+	}
 	
+
+	private String readSource(File file) {
+		StringBuilder src = new StringBuilder();
+		try {
+			Scanner scanner = new Scanner(file);
+			while(scanner.hasNextLine())
+				src.append(scanner.nextLine()).append('\n');
+			scanner.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return src.toString();
+	}
 	
 	private void resetRulesViolationCounter() {
-		for (AbstractImportDeclarationRule rule : importStatementRules) {
-			rule.setViolations(0);
-		}
-		for (AbstractVariableDeclarationRule rule : variableStatementRules) {
-			rule.setViolations(0);
-		}
-		for (AbstractTryStatementRule rule : tryStatementRules) {
-			rule.setViolations(0);
+		TableItem[] items = tbRules.getItems();
+		for (int i = 0; i < items.length; i++) {
+			((AbstractStyleRule)items[i].getData()).setViolations(0);
+			items[i].setText(Constant.TB_ITEN_RULE_VIOLATIONS_IDX, "0");
 		}
 	}
 	
 
 	public void addRule(AbstractStyleRule rule) {
+		
 		TableItem item = new TableItem(tbRules, SWT.NONE);
 		item.setText(Constant.TB_ITEN_RULE_NAME_IDX, rule.getClass().getSimpleName());
 		item.setText(Constant.TB_ITEN_RULE_DESC_IDX, rule.getDescription());
@@ -240,9 +262,8 @@ public class StyleCheckerView  implements PidescoView {
 		TableItem[] items = tbRules.getItems();
 		for (int i = 0; i < items.length; i++) {
 			boolean active = ((AbstractStyleRule)items[i].getData()).getActive();
-			if(active) {
-				tbRules.select(i);
-			}
+			items[i].setChecked(active);
+			items[i].setText(Constant.TB_ITEN_RULE_VIOLATIONS_IDX, ((AbstractStyleRule)items[i].getData()).getViolations()+"");
 		}
 		for (int i = 0; i < Constant.TABLE_VIEW_NUM_COLUMNS; i++) {
 	        tbRules.getColumn(i).pack();
