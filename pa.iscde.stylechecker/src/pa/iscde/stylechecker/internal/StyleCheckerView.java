@@ -113,7 +113,6 @@ public class StyleCheckerView  implements PidescoView {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			resetRulesViolationCounter();
-			System.out.println(editorServices.getOpenedFile());
 			checkWorkspace(editorServices.getOpenedFile());
 			packAll();
 		}
@@ -159,7 +158,6 @@ public class StyleCheckerView  implements PidescoView {
 			
 			tryStatementRules = TryStamentRuleExtensionsProvider.getExtentions();
 			tryStatementRules.addAll(TryStamentRuleExtensionsProvider.getInternalRules());
-			System.out.println(variableStatementRules);
 			checker.checkRootPackage(browser.getRootPackage());
 			
 			editorServices = JavaEditorActivator.getInstance().getServices();
@@ -205,7 +203,8 @@ public class StyleCheckerView  implements PidescoView {
 		visitor.reset();
 		checker.checkRootPackage(browser.getRootPackage());
 		StyleCheckerASTVisitor openedFileVisitor = new StyleCheckerASTVisitor();
-		editorServices.parseFile(file, openedFileVisitor);
+		if(file!=null)
+			editorServices.parseFile(file, openedFileVisitor);
 		List<ImportDeclaration> importDeclarations = visitor.getImportDeclarations();
 		for (ImportDeclaration importDeclaration : importDeclarations) {
 			for (AbstractImportDeclarationRule importRule : importStatementRules) {
@@ -224,8 +223,6 @@ public class StyleCheckerView  implements PidescoView {
 			for (AbstractVariableDeclarationRule varDeclRule : variableStatementRules) {
 				if(varDeclRule.getActive() && varDeclRule.check(varDeclaration)) {
 					if( isInTheRuleList(openedFileVisitor.getVriableDeclarationStatements(), varDeclaration)) {
-						System.out.println(varDeclaration.getStartPosition() +" - "+varDeclaration.getLength());
-						System.out.println(varDeclaration.toString() +"Var");
 						editorServices.addAnnotation(file, AnnotationType.WARNING,varDeclRule.getWarningMessage(), 
 								varDeclaration.getStartPosition(), varDeclaration.getLength());
 					}
@@ -251,7 +248,7 @@ public class StyleCheckerView  implements PidescoView {
 	private boolean isInTheRuleList(List<? extends ASTNode> list,
 			ASTNode node) {
 		for (ASTNode n : list) {
-			if(n.toString().equals(node.toString()))
+			if(n.toString().equals(node.toString()) && n.getLocationInParent().equals(node.getLocationInParent()))
 				return true;
 		}
 		return false;
