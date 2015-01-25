@@ -3,6 +3,7 @@ package pa.iscde.stylechecker.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 
 import pa.iscde.stylechecker.extensibility.AbstractVariableDeclarationRule;
@@ -14,16 +15,23 @@ public class VariableDeclarationRuleExtentisionsProvider extends
 
 	public static List<AbstractVariableDeclarationRule> getExtentions() {
 		List<AbstractVariableDeclarationRule> rules = new ArrayList<AbstractVariableDeclarationRule>();
-		IExtension[] extensions = getExtentions(Constant.EXT_POINT_VARIABLE_STM);
+		try {
+		IExtension[] extensions = getExtentions(Constant.EXT_POINT_VARIABLE_STMT);
 		for (IExtension extension : extensions) {
-			rules.add((AbstractVariableDeclarationRule) extension);
+			for (IConfigurationElement config : extension.getConfigurationElements()) {			
+					AbstractVariableDeclarationRule rule = (AbstractVariableDeclarationRule) config.createExecutableExtension(Constant.EXT_POINT_VARIABLE_STMT_ATRB_CLASS);
+					rules.add(rule);
+			}
+		}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return rules;
 	}
 	
 	public static List<AbstractVariableDeclarationRule> getInternalRules() {
 		List<AbstractVariableDeclarationRule> rules = new ArrayList<AbstractVariableDeclarationRule>();
-		//rules.add(new ImportDeclarationNoWildCardRule());
+		//TODO
 		return rules;
 	}
 

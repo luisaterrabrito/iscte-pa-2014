@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="importsrules" name="Import Declaration Style" schema="schema/importstyle.exsd"/>
-   <extension-point id="trystatementrule" name="Try Statement Style Rule" schema="schema/trystamentrule.exsd"/>
+   <extension-point id="trystatementrule" name="Try Stament rule" schema="schema/trystatementrule.exsd"/>
+   <extension-point id="variabledeclarationrule" name="Variable Declaration Rules" schema="schema/variabledeclarationrule.exsd"/>
    <extension
          id="StyleChecker"
          name="StyleChecker"
@@ -12,14 +12,4 @@
             icon="stylechecker_icon.gif">
       </view>
    </extension>
-   <extension
-         id="id1"
-         name="name"
-         point="pa.iscde.stylechecker.importsrules">
-      <import_rule
-            class="pa.iscde.stylechecker.internal.rules.ImportDeclarationNoWildCardRule"
-            description="No Wild Card Imports declaration">
-      </import_rule>
-   </extension>
-
 </plugin>

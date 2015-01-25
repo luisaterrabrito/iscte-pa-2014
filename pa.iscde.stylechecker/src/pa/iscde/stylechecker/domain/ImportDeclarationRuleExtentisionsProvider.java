@@ -3,8 +3,6 @@ package pa.iscde.stylechecker.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IExtension;
-
 import pa.iscde.stylechecker.internal.rules.AbstractImportDeclarationRule;
 import pa.iscde.stylechecker.internal.rules.ImportDeclarationNoWildCardRule;
 import pa.iscde.stylechecker.model.AbstractStyleRuleExensionProvider;
@@ -15,10 +13,7 @@ public class ImportDeclarationRuleExtentisionsProvider extends
 
 	public static List<AbstractImportDeclarationRule> getExtentions() {
 		List<AbstractImportDeclarationRule> rules = new ArrayList<AbstractImportDeclarationRule>();
-		IExtension[] extensions = getExtentions(Constant.EXT_POINT_IMPORT_STM);
-		for (IExtension extension : extensions) {
-			rules.add((AbstractImportDeclarationRule) extension);
-		}
+		//TODO check this part again design 
 		return rules;
 	}
 	

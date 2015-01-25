@@ -1,12 +1,13 @@
 package pa.iscde.stylechecker.internal;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.TryStatement;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -48,10 +49,10 @@ import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 public class StyleCheckerView  implements PidescoView {
 	
 	
-	private static List<AbstractImportDeclarationRule> importStatementRules;
-	private static List<AbstractTryStatementRule> tryStatementRules;
-	private static List<AbstractVariableDeclarationRule> variableStatementRules;
-	private static ProjectStyleChecker checker;
+	private  List<AbstractImportDeclarationRule> importStatementRules;
+	private  List<AbstractTryStatementRule> tryStatementRules;
+	private  List<AbstractVariableDeclarationRule> variableStatementRules;
+	private  ProjectStyleChecker checker;
 	private static JavaEditorServices editorServices;
 	private Button btnRefresh;
 	private Button btnClear;
@@ -112,6 +113,7 @@ public class StyleCheckerView  implements PidescoView {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			resetRulesViolationCounter();
+			System.out.println(editorServices.getOpenedFile());
 			checkWorkspace(editorServices.getOpenedFile());
 			packAll();
 		}
@@ -157,7 +159,7 @@ public class StyleCheckerView  implements PidescoView {
 			
 			tryStatementRules = TryStamentRuleExtensionsProvider.getExtentions();
 			tryStatementRules.addAll(TryStamentRuleExtensionsProvider.getInternalRules());
-			
+			System.out.println(variableStatementRules);
 			checker.checkRootPackage(browser.getRootPackage());
 			
 			editorServices = JavaEditorActivator.getInstance().getServices();
@@ -165,7 +167,7 @@ public class StyleCheckerView  implements PidescoView {
 				
 				@Override
 				public void fileSaved(File file) {
-					//TODO
+					//TODO see if there is any way to replace this feature 
 					resetRulesViolationCounter();
 					checkWorkspace(file);	
 					packAll();
@@ -175,7 +177,6 @@ public class StyleCheckerView  implements PidescoView {
 				public void fileOpened(File file) {	}
 				@Override
 				public void fileClosed(File file) {	}
-
 				@Override
 				public void selectionChanged(File file, String text,int offset, int length) {	}
 			});
@@ -198,45 +199,64 @@ public class StyleCheckerView  implements PidescoView {
 		
 	}
 	
-	//TODO
+	//TODO improve this method
 	private void checkWorkspace(File file) {
 		StyleCheckerASTVisitor visitor = checker.getVisitor();
 		visitor.reset();
 		checker.checkRootPackage(browser.getRootPackage());
+		StyleCheckerASTVisitor openedFileVisitor = new StyleCheckerASTVisitor();
+		editorServices.parseFile(file, openedFileVisitor);
 		List<ImportDeclaration> importDeclarations = visitor.getImportDeclarations();
 		for (ImportDeclaration importDeclaration : importDeclarations) {
 			for (AbstractImportDeclarationRule importRule : importStatementRules) {
 				if(importRule.getActive() && importRule.check(importDeclaration)) {
-					String selecteStr = readFile(file, importDeclaration.getStartPosition(), importDeclaration.toString().trim().length());
-					if( selecteStr!= null && selecteStr.trim().equals(importDeclaration.toString().trim())) {
-						editorServices.addAnnotation(file, AnnotationType.WARNING,importRule.getWarningMessage(), 
-								importDeclaration.getStartPosition(), importDeclaration.getLength());
-					}
+					if( isInTheRuleList(openedFileVisitor.getImportDeclarations(),importDeclaration)) {
+					editorServices.addAnnotation(file, AnnotationType.WARNING,importRule.getWarningMessage(), 
+							importDeclaration.getStartPosition(), importDeclaration.getLength());
+				}
 					importRule.setViolations(importRule.getViolations()+1);
+				}
+			}
+		}
+		
+		List<VariableDeclarationStatement> varDeclartions = visitor.getVriableDeclarationStatements();
+		for (VariableDeclarationStatement varDeclaration : varDeclartions) {
+			for (AbstractVariableDeclarationRule varDeclRule : variableStatementRules) {
+				if(varDeclRule.getActive() && varDeclRule.check(varDeclaration)) {
+					if( isInTheRuleList(openedFileVisitor.getVriableDeclarationStatements(), varDeclaration)) {
+						System.out.println(varDeclaration.getStartPosition() +" - "+varDeclaration.getLength());
+						System.out.println(varDeclaration.toString() +"Var");
+						editorServices.addAnnotation(file, AnnotationType.WARNING,varDeclRule.getWarningMessage(), 
+								varDeclaration.getStartPosition(), varDeclaration.getLength());
+					}
+					varDeclRule.setViolations(varDeclRule.getViolations()+1);
+				}
+			}
+		}
+		
+		List<TryStatement> tryDeclartions = visitor.getTryStatements();
+		for (TryStatement tryDeclaration : tryDeclartions) {
+			for (AbstractTryStatementRule tryDeclRule : tryStatementRules) {
+				if(tryDeclRule.getActive() && tryDeclRule.check(tryDeclaration)) {
+					if( isInTheRuleList(openedFileVisitor.getTryStatements(), tryDeclaration)) {
+						editorServices.addAnnotation(file, AnnotationType.WARNING,tryDeclRule.getWarningMessage(), 
+								tryDeclaration.getStartPosition(), tryDeclaration.getLength());
+					}
+					tryDeclRule.setViolations(tryDeclRule.getViolations()+1);
 				}
 			}
 		}
 	}
 	
-	private String readFile(File f,int offset, int length) {
-		String sourceFile = readSource(f);
-		String selectedStr = sourceFile.substring(offset, offset+length);
-		return selectedStr;
-	}
-	
-
-	private String readSource(File file) {
-		StringBuilder src = new StringBuilder();
-		try {
-			Scanner scanner = new Scanner(file);
-			while(scanner.hasNextLine())
-				src.append(scanner.nextLine()).append('\n');
-			scanner.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+	private boolean isInTheRuleList(List<? extends ASTNode> list,
+			ASTNode node) {
+		for (ASTNode n : list) {
+			if(n.toString().equals(node.toString()))
+				return true;
 		}
-		return src.toString();
+		return false;
 	}
+
 	
 	private void resetRulesViolationCounter() {
 		TableItem[] items = tbRules.getItems();

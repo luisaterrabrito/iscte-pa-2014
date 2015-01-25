@@ -3,7 +3,7 @@
 <schema targetNamespace="pa.iscde.stylechecker" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="pa.iscde.stylechecker" id="trystatementrule" name="Try Stament Style Rule"/>
+         <meta.schema plugin="pa.iscde.stylechecker" id="pa.iscde.stylechecker.trystatementrule" name="Try Stament Style Rule"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
@@ -17,6 +17,9 @@
          </appinfo>
       </annotation>
       <complexType>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <element ref="try_stmt"/>
+         </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
@@ -42,6 +45,28 @@
                <appinfo>
                   <meta.attribute translatable="true"/>
                </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="try_stmt">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="pa.iscde.stylechecker.extensibility.AbstractTryStatementRule:"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string">
+            <annotation>
+               <documentation>
+                  Rule description
+               </documentation>
             </annotation>
          </attribute>
       </complexType>
