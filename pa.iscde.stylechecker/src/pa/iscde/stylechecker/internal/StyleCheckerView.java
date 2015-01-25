@@ -248,7 +248,7 @@ public class StyleCheckerView  implements PidescoView {
 	private boolean isInTheRuleList(List<? extends ASTNode> list,
 			ASTNode node) {
 		for (ASTNode n : list) {
-			if(n.toString().equals(node.toString()) && n.getLocationInParent().equals(node.getLocationInParent()))
+			if(n.toString().equals(node.toString()) && n.getStartPosition()==node.getStartPosition())
 				return true;
 		}
 		return false;
