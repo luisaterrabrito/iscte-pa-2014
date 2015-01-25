@@ -76,7 +76,7 @@ public abstract class AbstractVariableDeclarationRule extends AbstractStyleRule{
 
 This rule simple rule only checks if the variable's modifier is private (the violation)
 
-{{
+{{{
 
 public class TestPlugin extends AbstractVariableDeclarationRule {
 
