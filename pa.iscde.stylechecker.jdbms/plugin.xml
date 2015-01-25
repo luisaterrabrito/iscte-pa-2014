@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="Gray"
+         name="GrayClass"
+         point="pa.iscde.umldiagram.colortheme">
+      <theme
+            class="pa.iscde.stylechecker.jdbms.ClassColor">
+      </theme>
+   </extension>
+
+</plugin>
