@@ -23,7 +23,7 @@ public abstract class AbstractVariableDeclarationRule extends AbstractStyleRule{
 			
 	@Override
 	public boolean check(ASTNode node) {
-		return check((VariableDeclarationStatement)node);
+		return check((VariableDeclarationExpression)node);
 	}
 	
 	/**
@@ -31,7 +31,7 @@ public abstract class AbstractVariableDeclarationRule extends AbstractStyleRule{
 	 * @param node the AST Node
 	 * @return - true if the node does not violate the rule otherwise false
 	 */
-	public abstract boolean check(VariableDeclarationStatement node) ;
+	public abstract boolean check(VariableDeclarationExpression node) ;
 	
 	/**
 	 * @return warring message to be displayed on rule violations.
