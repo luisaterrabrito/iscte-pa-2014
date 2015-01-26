@@ -178,9 +178,9 @@ public class StyleCheckerView  implements PidescoView {
 				
 				@Override
 				public void fileSaved(File file) {
-					//TODO see if there is any way to replace this feature 
+					//TODO check with system engineer if is possible to make this feature work 
 					resetRulesViolationCounter();
-					checkWorkspace(file);	
+					checkWorkspace(editorServices.getOpenedFile());	
 					packAll();
 				}
 				
@@ -196,8 +196,11 @@ public class StyleCheckerView  implements PidescoView {
 			addRules();			
 	}
 	
+	/**
+	 * load all system style rules 
+	 */
 	private void addRules() {
-	
+
 		for (AbstractImportDeclarationRule rule : importStatementRules) {
 			addRule(rule);;
 		}
@@ -210,7 +213,10 @@ public class StyleCheckerView  implements PidescoView {
 		
 	}
 	
-	//TODO improve this method
+	/**
+	 *  this method is to responsible for checking the workspace's projects violations and set warnings. 
+	 * @param file - current opened file to be updated with warnings 
+	 */
 	private void checkWorkspace(File file) {
 		StyleCheckerASTVisitor visitor = checker.getVisitor();
 		visitor.reset();
@@ -258,6 +264,13 @@ public class StyleCheckerView  implements PidescoView {
 		}
 	}
 	
+	
+	/**
+	 * 
+	 * @param list - list of ASTNode
+	 * @param node - Current ASTNode
+	 * @return true if list contains node otherwise false
+	 */
 	private boolean isInTheRuleList(List<? extends ASTNode> list,
 			ASTNode node) {
 		for (ASTNode n : list) {
@@ -267,8 +280,11 @@ public class StyleCheckerView  implements PidescoView {
 		return false;
 	}
 
-	
+	/**
+	 * reset the rules violations counters 
+	 */
 	private void resetRulesViolationCounter() {
+		
 		TableItem[] items = tbRules.getItems();
 		for (int i = 0; i < items.length; i++) {
 			((AbstractStyleRule)items[i].getData()).setViolations(0);
@@ -276,7 +292,10 @@ public class StyleCheckerView  implements PidescoView {
 		}
 	}
 	
-
+	/**
+	 *  add a given rule to the plugin view  
+	 * @param rule - given rule
+	 */
 	public void addRule(AbstractStyleRule rule) {
 		
 		TableItem item = new TableItem(tbRules, SWT.NONE);
@@ -288,6 +307,7 @@ public class StyleCheckerView  implements PidescoView {
 		tbRules.computeSize(SWT.FILL, SWT.FILL);
 	}
 	
+	// render calculations
 	private void packAll() {
 		TableItem[] items = tbRules.getItems();
 		for (int i = 0; i < items.length; i++) {
@@ -300,7 +320,10 @@ public class StyleCheckerView  implements PidescoView {
 	      }
 		tbRules.update();
 	}
-
+	
+	/**
+	 * remove all warnings from the opened file 
+	 */
 	private void clearWarnings() {
 		File openedFile = editorServices.getOpenedFile();
 		editorServices.saveFile(openedFile);
