@@ -23,7 +23,7 @@ public class ImportDeclarationNoWildCardRule extends AbstractImportDeclarationRu
 
 	@Override
 	public String getDescription() {
-		return "Checking for wild card imports";
+		return "Wild card imports";
 	}
 	 
 

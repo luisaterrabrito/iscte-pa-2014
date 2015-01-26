@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pa.iscde.stylechecker.internal.rules.AbstractImportDeclarationRule;
+import pa.iscde.stylechecker.internal.rules.ImportDeclarationNoLineWrappingRule;
 import pa.iscde.stylechecker.internal.rules.ImportDeclarationNoWildCardRule;
 import pa.iscde.stylechecker.model.AbstractStyleRuleExensionProvider;
 
@@ -20,6 +21,7 @@ public class ImportDeclarationRuleExtentisionsProvider extends
 	public static List<AbstractImportDeclarationRule> getInternalRules() {
 		List<AbstractImportDeclarationRule> rules = new ArrayList<AbstractImportDeclarationRule>();
 		rules.add(new ImportDeclarationNoWildCardRule());
+		rules.add(new ImportDeclarationNoLineWrappingRule());
 		return rules;
 	}
 
