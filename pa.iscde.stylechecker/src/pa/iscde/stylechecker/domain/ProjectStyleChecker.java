@@ -26,7 +26,7 @@ public class ProjectStyleChecker {
 
 	private StyleCheckerASTVisitor visitor;
 
-
+	
 	public ProjectStyleChecker(StyleCheckerASTVisitor visitor) {
 		this.visitor=visitor;
 	}
