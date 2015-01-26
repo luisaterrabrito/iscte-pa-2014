@@ -29,7 +29,7 @@ public abstract class AbstractVariableDeclarationRule extends AbstractStyleRule{
 	/**
 	 * This method implement the rule logical.
 	 * @param node the AST Node
-	 * @return - true if the node does not violate the rule otherwise false
+	 * @return - true if the node does violate the rule otherwise false
 	 */
 	public abstract boolean check(VariableDeclarationStatement node) ;
 	
