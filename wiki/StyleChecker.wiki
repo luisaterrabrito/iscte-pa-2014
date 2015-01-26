@@ -1,4 +1,4 @@
-#summary StyleChecker is a static java source code analyser.
+#summary pa.iscde.stylechecker.variabledeclarationrule
 
 = Introduction =
 
@@ -8,39 +8,9 @@ Style checker engine was design with propose to support all different ways of ad
 
 = Details =
 
-Any contribution to StyleChecker has to extend one of the following extension points :
+Any variable declaration rule's contribution to StyleChecker has to extend the following extension point :
 
-==Extension point 1 :==
-
-{{{
-/**
- *  
- * @author joaomarques and josevaz
- *
- */
-public abstract class AbstractTryStatementRule extends AbstractStyleRule{
-	
-	@Override
-	public boolean check(ASTNode node) {
-		return check((TryStatement)node);
-	}
-	
-	/**
-	 * This method implements the rule verification logic.
-	 * @param node the AST Node
-	 * @return - true if the node does not violate the rule otherwise false
-	 */
-	public abstract boolean check(TryStatement node) ;
-	
-	/**
-	 * @return warring message to be displayed on rule violations.
-	 */
-	public abstract String getWarningMessage() ;
-	
-}
-}}}
-
-==Extension point 2 :==
+==Extension point  :==
 
 {{{
 
@@ -74,7 +44,7 @@ public abstract class AbstractVariableDeclarationRule extends AbstractStyleRule{
 
 = Examples: =
 
-This rule simple rule only checks if the variable's modifier is private (the violation)
+This simple rule only checks if the variable has the private modifier (a violation)
 
 {{{
 
