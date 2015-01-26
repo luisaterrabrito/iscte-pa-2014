@@ -112,14 +112,27 @@ public class StyleCheckerView  implements PidescoView {
 		
 		@Override
 		public void widgetSelected(SelectionEvent e) {
+			File openedFile = editorServices.getOpenedFile();
+			clearWarnings();
 			resetRulesViolationCounter();
-			checkWorkspace(editorServices.getOpenedFile());
+			checkWorkspace(openedFile);
 			packAll();
 		}
 		
 		@Override
 		public void widgetDefaultSelected(SelectionEvent e) {	
 		}
+	});
+	
+	btnClear.addSelectionListener(new SelectionListener() {
+		
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			clearWarnings();
+
+		}
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {}
 	});
 	
 	tbRules.addListener(SWT.Selection, new Listener() {
@@ -286,5 +299,11 @@ public class StyleCheckerView  implements PidescoView {
 	        tbRules.getColumn(i).pack();
 	      }
 		tbRules.update();
+	}
+
+	private void clearWarnings() {
+		File openedFile = editorServices.getOpenedFile();
+		editorServices.saveFile(openedFile);
+		resetRulesViolationCounter();
 	}
 }
