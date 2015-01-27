@@ -4,7 +4,7 @@
 
 StyleChecker is source code analyser that allow users to see all style's rules violation and to enable or disable the rules that should be used by the style checker analyser engine to validate the code base. 
 
-Style checker engine was design with propose to support all different ways of adding style rules i.e eclipse plugin, plain text file with regular expression (not implemented).
+Style checker engine was design to support all different ways of adding style rules i.e eclipse plugin, plain text file with regular expression (not implemented).
 
 = Details =
 
