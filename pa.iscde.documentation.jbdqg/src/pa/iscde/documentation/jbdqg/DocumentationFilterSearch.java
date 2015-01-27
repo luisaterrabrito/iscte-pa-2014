@@ -31,6 +31,12 @@ import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
+/**
+ * This class is responsible for adding the capability of search in the documentation of the opened files in the editor through the Search Tool
+ * 
+ * @author Jo&atilde;o Gon&ccedil;alves
+ * @version 01.00
+ */
 public class DocumentationFilterSearch implements SearchProvider {
 	
 	private Map<String,File> openedFiles = new HashMap<String, File>();
@@ -294,7 +300,7 @@ public class DocumentationFilterSearch implements SearchProvider {
 										Method mmgetName  = onemethod.getClass().getDeclaredMethod("getName");
 										mmgetName.setAccessible(true);
 										String mname = (String) mmgetName.invoke(onemethod);
-										sb.append("Método: " + mname + "\n");
+										sb.append("M&eacute;todo: " + mname + "\n");
 										
 										Method mmgetSignature  = onemethod.getClass().getDeclaredMethod("getSignature");
 										mmgetSignature.setAccessible(true);
