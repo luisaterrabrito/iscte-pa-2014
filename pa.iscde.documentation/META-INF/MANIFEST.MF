@@ -17,3 +17,5 @@ Require-Bundle: pa.iscde,
  com.google.guava;bundle-version="15.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: pa.iscde.documentation.internal.Activator
+Export-Package: pa.iscde.documentation.service,
+ pa.iscde.documentation.view
