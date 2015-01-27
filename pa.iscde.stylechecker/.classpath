@@ -7,6 +7,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/pt.iscte.pidesco"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pt.iscte.pidesco.javaeditor"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pt.iscte.pidesco.projectbrowser"/>
-	<classpathentry exported="true" kind="lib" path="/Users/joaomarques/Downloads/reflections-0.9.9-RC1-uberjar.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
