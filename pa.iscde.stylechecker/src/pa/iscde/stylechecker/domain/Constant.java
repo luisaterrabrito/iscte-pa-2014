@@ -1,5 +1,6 @@
 package pa.iscde.stylechecker.domain;
 
+
 public class Constant {
 
 	public static final String EXT_POINT_TRY_CATCH_STM = "pa.iscde.stylechecker.trystatementrule";
@@ -27,6 +28,7 @@ public class Constant {
 	public static final String EXT_POINT_VARIABLE_STMT_ATRB_CLASS = "class";
 	public static final String EXT_POINT_TRY_CATCH_STM_ATRB_CLASS = "class";
 	public static final String IMPORT_STM_LINE_WRAPP_WARNING = "\nline wrapping is not recommended for import statements \n";
+	public static final String INTERNAL_RULES_PACKAGE = "pa.iscde.stylechecker.internal.rules";
 
 
 }
