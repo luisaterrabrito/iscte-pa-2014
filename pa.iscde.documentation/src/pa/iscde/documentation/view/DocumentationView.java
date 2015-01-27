@@ -46,7 +46,7 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 /**
  * This class is responsible for creating the Documentation View plugin for ISCDE IDE.
  * 
- * @author David Franco & João Gonçalves
+ * @author David Franco & Joï¿½o Gonï¿½alves
  * @version 01.00
  */
 public class DocumentationView implements PidescoView {
@@ -346,8 +346,14 @@ public class DocumentationView implements PidescoView {
 	private String toHTML() {
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("<br><font size='6'><b><i>Classe: </i></b>" + objectDoc.getName() + "</font>");
-		if ( objectDoc.getComment().length() != 0 )
+		if(objectDoc.getName() != null){
+			sb.append("<br><font size='6'><b><i>Classe: </i></b>" + objectDoc.getName() + "</font>");
+		}else{
+			//erro ocorre (nÃ£o instanciar o objectDoc) ao criar um novo objecto da classe Scanner em JavaEditorServicesImpl (private String readSource(File file))
+			sb.append("<br><font size='6'> Ocorreu um erro ao tentar gerar a documentaÃ§Ã£o. Edite o conteÃºdo do ficheiro e faÃ§a save </font>");
+		}
+				
+		if ( objectDoc.getComment() != null && objectDoc.getComment().length() != 0 )
 			sb.append("<br><font size='2'>" + objectDoc.getComment() + "</font>");
 		sb.append("<br>");
 
@@ -371,7 +377,7 @@ public class DocumentationView implements PidescoView {
 
 		if ( !objectDoc.getMethods().isEmpty() ) {
 			for (MethodDoc method : objectDoc.getMethods()) {
-				sb.append("<br><font size='4'><b><i>Método: </i></b>" + method.getName() + "</font>");
+				sb.append("<br><font size='4'><b><i>Mï¿½todo: </i></b>" + method.getName() + "</font>");
 				//sb.append("<br><font size='1'>" + method.getSignature() + "</font></br>");
 				if ( method.getComment() != null && method.getComment().length() > 0 )
 					sb.append("<br><font size='2'>" + method.getComment() + "</font>");
