@@ -17,7 +17,7 @@ import pa.iscde.documentation.structure.ObjectDoc;
 /**
  * This is a example of how to add documentation exports for the Documentation View.
  * 
- * @author João Gonçalves
+ * @author Joï¿½o Gonï¿½alves
  * @version 01.00
  */
 public class ExportToHTML implements IDocumentationExportProvider {
@@ -29,7 +29,7 @@ public class ExportToHTML implements IDocumentationExportProvider {
 
 	@Override
 	public String getFilterExtension() {
-		return "html";
+		return ".html";
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class ExportToHTML implements IDocumentationExportProvider {
 
 		if ( !documentation.getMethods().isEmpty() ) {
 			for (MethodDoc method : documentation.getMethods()) {
-				sb.append("<br><font size='4'><b><i>Método: </i></b>" + method.getName() + "</font>");
+				sb.append("<br><font size='4'><b><i>Mï¿½todo: </i></b>" + method.getName() + "</font>");
 				if ( method.getComment() != null && method.getComment().length() > 0 )
 					sb.append("<br><font size='2'>" + method.getComment() + "</font>");
 				sb.append("<br>");
