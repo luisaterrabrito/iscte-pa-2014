@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: dgfoa
+Bundle-SymbolicName: pa.iscde.documentation.dgfoa;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: pa.iscde.filtersearch;bundle-version="1.0.0",
+ pt.iscte.pidesco;bundle-version="0.1.0",
+ pt.iscte.pidesco.projectbrowser;bundle-version="0.1.0",
+ pt.iscte.pidesco.javaeditor;bundle-version="1.1.0"
+Import-Package: org.osgi.framework;version="1.8.0",
+ pa.iscde.filtersearch.providers
