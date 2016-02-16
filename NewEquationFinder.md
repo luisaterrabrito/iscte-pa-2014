@@ -1,0 +1,36 @@
+# Introduction #
+
+Este extension point permite identificar novas operações feitas no código java que podem ser desenhadas no formato latex na janela.
+A interface a ser implementada é a seguinte:
+
+# Details #
+
+```
+
+
+
+/**
+ * Interface used by the extension point.
+ * @author Gonçalo Horta & Tiago Saraiva
+ *
+ */
+public interface DrawEquationsProvider {
+	
+	/**
+	 * Insert the string to be replaced in your java code
+	 * Example : "Math.sqrt"
+	 * @return javaType
+	 */
+	public String setJavaOperation();
+	
+	/**
+	 * Replaces the java formath for the latext format in the line
+	 * Example : \\sqrt
+	 * @return latexType
+	 */
+	public String setOperationLatexFormat(String line);
+
+}
+
+
+```

@@ -1,0 +1,3 @@
+# Team registration #
+
+Every team should include in their main component an extension to the extension point **pa.iscde.team**. Please, use a nice photo :-)

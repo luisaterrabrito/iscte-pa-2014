@@ -1,0 +1,21 @@
+# Introduction #
+
+This extension point is used to export the active contents presented in Documentation View. To use this extension, you'll need to provide a name for your extension, and a implementation of the interface IDocumentationExportProvider, that consists giving a filter name, a filter extension, and a save to file method.
+
+
+
+# Details #
+
+> public String getFilterName()
+
+> In this method, you'll need to implement the filter name, for example, HTML Files.
+
+
+> public String getFilterExtension()
+
+> In this method, you'll need to implement the filter extension, for example, html.
+
+
+> public void saveToFile(String fullfileName, ObjectDoc doc) throws Exception
+
+> In this method, you'll need to implement the save file, that consists receiving the fullname file (full path) and an ObjectDoc that already have the structure and all the information that you need to produce your exportation.

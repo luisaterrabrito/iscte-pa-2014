@@ -1,0 +1,3 @@
+# Details #
+
+Change a icon for a specific type of method, return or field for your own custom icon.

@@ -1,0 +1,8 @@
+# Introduction #
+
+Este extension point permite adicionar tipos de informação à que já é mostrada na tabela de informações, presente na nossa view. Esta informação(propriedade) será dada apenas aos nós pretendidos.
+
+
+# Details #
+
+A extensão criada tem que implementar a Interface PropertyProvider e, assim, indicar as propriedades que pretende inserir e o que apresentar para cada uma das propriedades. Ao fazer a Extension ao Extension Point tem que ser indicada qual a classe que vai implementar essa interface e quais os componentes a que serão aplicados esse tipo de informação.

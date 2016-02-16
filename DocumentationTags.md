@@ -1,0 +1,18 @@
+# Introduction #
+
+This extension point is used to create a new documentation tag for the Documentation View. To use this extension, you'll need to provide a name for your extension, and an implementation of the interface ITagContentProvider, that consists giving a Title and a Description, both in HTML.
+
+If your tag exists in the file that is in context (opened in Java Editor), you'll see your implementation of this extension in Documentation View.
+
+
+
+# Details #
+
+> public String getHtmlTitle()
+
+> In this method you will implement the title name that will appear in the Documentation View.
+
+
+> public StringBuilder getHtml(String description)
+
+> In this method you will implement how you want the description appear in the Documentation View.

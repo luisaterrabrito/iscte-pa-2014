@@ -1,0 +1,7 @@
+# Introduction #
+
+This extension allows you to receive the Call Graph diagram structure and process it as you want.
+
+# Details #
+
+You will need to implement ExportButton? and override the export(Method, List, List) method. The display object can be useful if you need to create a new window (browse, for example). The Call Graph structure is explained in the javadoc documentation.

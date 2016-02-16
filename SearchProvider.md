@@ -1,0 +1,48 @@
+# Introduction #
+
+Este ponto de extensão permite que o utilizador adicione o seu projecto ao conjunto de outros projectos que também implementam este ponto, de modo a efectuar pesquisas dentro dos mesmos.
+
+Por forma a realizar uma pesquisa, o utilizador tem disponível um campo de texto e, a cada caractér inserido/eliminado, os resultados são filtrados automáticamente. No entanto, cabe ao utilizador decidir alguns aspectos em relação aos resultados de pesquisa do seu projecto, sendo eles:
+
+  1. Consoante o texto introduzido no campo de pesquisa, que resultados devem aparecer;
+> 2. Que icon deve ter cada tipo de objecto que aparece nos resultados;
+
+> 3. Que acção deve acontecer ao efectuar um duplo clique em cima de um resultado.
+
+
+
+# Details #
+Tem que se extender a class de Formula
+
+```
+
+public interface SearchProvider {
+	
+	/**
+	 * Consoante o texto introduzida no campo de pesquisa (a String text), serão devolvidos os
+	 * resultados pretendidos em forma de uma lista de objectos. Esses resultados serão definidos
+	 * pela classe que implementa a interface.
+	 * @param text
+	 * @return lista de resultados definidos pela classe que implementa a interface
+	 */
+	List<Object> getResults(String text);
+	
+	/**
+	 * Define o ícone (do tipo Image) de um Object recebido como argumento (object). Essa atribuição 
+	 * está a cargo da classe que implementa a interface. O ícone relativo ao projecto não é definido 
+	 * aqui, este deve ser atribuída aquando da extensão ao ponto de extensão no campo "iconName".
+	 * @param object
+	 * @return do icon do tipo Image referente ao object
+	 */
+	Image setImage(Object object);
+	
+	/**
+	 * Método onde é definida acção a executar aquando um duplo clique no object (tipo Object) de uma
+	 * referida árvore (Treeviewer tree), ambos passados como argumentos. 
+	 * @param tree
+	 * @param object
+	 */
+	void doubleClickAction(TreeViewer tree, Object object); 
+}
+
+```

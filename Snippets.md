@@ -1,0 +1,10 @@
+# Introduction #
+
+This extension point allows for the creation of snippets programmatically, it can be useful to create routines to upload new snippets from time to time.
+
+This extension has 4 attributes: name (Mandatory), code (Mandatory), language(Optional) and New (Optional)
+
+The "name" attribute should be filled with the desired name for the snippet.
+The "code" attribute should be filled with the desired snippet code.
+The "language" attribute should be filled with the desired snippet language, in case it doesn't exists a new language will be created and if it is undefined it will default to "Unknown" language.
+The "new" attribute is a boolean that is used to indicate that the snippet is a new version of an already existing snippet, if set "true" the it will alter the existing version of the snippet. If the snippet doesn't exist it will be created.

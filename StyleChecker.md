@@ -1,0 +1,82 @@
+# Introduction #
+
+StyleChecker is source code analyser that allow users to see all style's rules violation and to enable or disable the rules that should be used by the style checker analyser engine to validate the code base.
+
+Style checker engine was design to support all different ways of adding style rules i.e eclipse plugin, plain text file with regular expression (not implemented).
+
+# Details #
+
+Any variable declaration rule's contribution to StyleChecker has to extend the following extension point :
+
+## Extension point  : ##
+
+```
+
+/**
+ * 
+ * @author joaomarques and josevaz
+ *
+ */
+public abstract class AbstractVariableDeclarationRule extends AbstractStyleRule{
+			
+	@Override
+	public boolean check(ASTNode node) {
+		return check((VariableDeclarationStatement)node);
+	}
+	
+	/**
+	 * This method implement the rule logical.
+	 * @param node the AST Node
+	 * @return - true if the node does violate the rule otherwise false
+	 */
+	public abstract boolean check(VariableDeclarationStatement node) ;
+	
+	/**
+	 * @return warring message to be displayed on rule violations.
+	 */
+	public abstract String getWarningMessage() ;
+	
+}
+
+```
+
+# Examples: #
+
+This simple rule only checks if the variable has the private modifier (a violation)
+
+```
+
+public class TestPlugin extends AbstractVariableDeclarationRule {
+
+	@Override
+	public String getDescription() {
+		return "Teste Rule";
+	}
+
+	@Override
+	public boolean check(VariableDeclarationStatement node) {
+		return node.modifiers().contains(Modifier.PRIVATE);
+	}
+
+	@Override
+	public String getWarningMessage() {
+		return "Teste Message";
+	}
+
+}
+
+```
+
+
+
+# Links and Literature #
+
+### Eclipse AST/ JDT Resources ###
+http://eclipse.org/articles/article.php?file=Article-JavaCodeManipulation_AST/index.html
+
+http://help.eclipse.org/juno/index.jsp?topic=%2Forg.eclipse.jdt.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjdt%2Fcore%2Fdom%2FASTNode.html
+
+### Coding Styles/Conventions Resources ###
+http://www.oracle.com/technetwork/java/codeconvtoc-136057.html
+
+http://google-styleguide.googlecode.com/svn/trunk/javaguide.html

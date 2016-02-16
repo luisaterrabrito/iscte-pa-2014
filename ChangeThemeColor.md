@@ -1,0 +1,44 @@
+This extension point offers other plugins the ability to create and change the theme of the UML Diagram that we provied.
+
+Requirements: a class that implements our interface (see below):
+
+### Interface details ###
+
+```
+public interface UmlTheme {
+	/**
+	 * enum avaible to set classType
+	 */
+	public enum ClassType{
+		CLASS, ENUM, INTERFACE, ALL, NONE;
+	}
+
+	/**
+	 * If you want to give a certain class a color, just set the classType NONE or NULL.
+	 * If you want to give a certain type of class a color, just set the classname empty or null and the classtype you want.
+	 * If you want to give a class name and type, this will only work if the class name and class type is correct.
+	 * If you want to give all classes a color, the classtype must be "ALL".
+	 * @param className- simple class name
+	 * example: class "MyClass.java" , className="MyClass"
+	 * @param type - must be available in getter getClassType()
+	 * example: classType=interface
+	 * @return swt.color
+	 */
+	public Color getColor(String className, ClassType type);
+	
+	/**
+	 * 
+	 * @return className defined
+	 */
+	public String getClassName();
+	
+	
+	
+	/**
+	 * 
+	 * @return classType defined
+	 */
+	public ClassType getClassType();
+}
+
+```

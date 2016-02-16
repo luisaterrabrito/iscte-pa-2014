@@ -1,0 +1,16 @@
+# Introduction #
+
+This extension point offers other plugins the ability to create and set a new action when the user double-clicks on an item in the task table. It requires a class that implements the interface CategoryAction and a string with the categories that can execute the action.
+
+# Details #
+
+```
+public interface CategoryAction {
+	
+	/*
+	 * The method used to implement the desired action.
+	 */
+	public void executeAction(File file, JavaEditorServices javaServices);
+	
+}
+```

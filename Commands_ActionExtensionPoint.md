@@ -1,0 +1,15 @@
+# Introduction #
+
+This point extension will allow you to add actions to manipulate existing commands in the command view.
+
+<img src='http://i59.tinypic.com/2jcevq.png' alt='Action' />
+
+
+# Details #
+
+
+To use this extension point you must indicate a button label and create a class that implements the Action interface.
+
+This interface contains an action method in which is called whenever the button is pressed.
+
+In order to allow you to manipulate Commands, use the CommandDataAdaptor which contains in the main functions that can be use on the Commands View.
